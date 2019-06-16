@@ -1,0 +1,19 @@
+{
+  "name": "prepdd",
+  "private": true,
+  "dependencies": {
+    "@babel/preset-react": "^7.0.0",
+    "@rails/webpacker": "^4.0.7",
+    "@types/react": "^16.8.20",
+    "@types/react-dom": "^16.8.4",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "ts-loader": "^6.0.2",
+    "typescript": "^3.5.2"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.7.1"
+  }
+}
