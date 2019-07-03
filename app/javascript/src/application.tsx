@@ -1,15 +1,14 @@
 import ApolloClient from 'apollo-client';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM, {render} from 'react-dom';
 import Router from './Router';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 
 function getCSRFToken(): string {
-  return document
-    .querySelector('meta[name="csrf-token"]')
-    .getAttribute('content');
+  const el = document.querySelector('meta[name="csrf-token"]');
+  return (el && el.getAttribute('content')) || '';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cache: new InMemoryCache(),
   });
 
-  ReactDOM.render(
+  render(
     <ApolloProvider client={client}>
       <Router />
     </ApolloProvider>,

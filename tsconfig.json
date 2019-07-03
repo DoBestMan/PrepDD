@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "importHelpers": true,
+    "jsx": "react",
     "lib": ["es6", "dom"],
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
-    "target": "es5",
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+    "target": "es5"
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false

@@ -1,18 +1,21 @@
-import React from 'react';
+import LoadingFallback from './LoadingFallback';
+import NotFoundPage from './NotFoundPage';
+import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter, Link} from '@reach/router';
-import SignInPage from './SignInPage';
 
-const Home = props => <div>Home</div>;
-const Dash = props => <div>Dash</div>;
-const NotFound = props => <div>404 Not Found</div>;
+const SignInPage = lazy(() => import('./SignInPage'));
+const Home = (props: {path?: string}) => <div>Home</div>;
+const Dash = (props: {path?: string}) => <div>Dash</div>;
 
 export default function Router() {
   return (
-    <ReachRouter>
-      <Home path="/" />
-      <Dash path="/dashboard" />
-      <SignInPage path="/signin" />
-      <NotFound default />
-    </ReachRouter>
+    <Suspense fallback={<LoadingFallback />}>
+      <ReachRouter>
+        <Home path="/" />
+        <Dash path="/dashboard" />
+        <SignInPage path="/signin" />
+        <NotFoundPage default />
+      </ReachRouter>
+    </Suspense>
   );
 }
