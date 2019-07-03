@@ -1,17 +1,34 @@
+import ApolloClient from 'apollo-client';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Router from './Router';
+import {ApolloProvider} from 'react-apollo';
+import {createHttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
 
-const r: any = React;
-const ConcurrentMode = r.unstable_ConcurrentMode;
+function getCSRFToken(): string {
+  return document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+  const link = createHttpLink({
+    credentials: 'same-origin',
+    headers: {
+      'X-CSRF-Token': getCSRFToken(),
+    },
+  });
+
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+  });
+
   ReactDOM.render(
-    // <React.StrictMode>
-    <ConcurrentMode>
+    <ApolloProvider client={client}>
       <Router />
-    </ConcurrentMode>,
-    // </React.StrictMode>
+    </ApolloProvider>,
     document.body.appendChild(document.createElement('div'))
   );
 });
