@@ -6,6 +6,11 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
 
   def resolve(email: nil, password: nil)
     user = User.find_for_database_authentication(email: email)
+    session = context[:session]
+
+    unless !session[:current_user_id]
+      return GraphQL::ExecutionError.new('Already signed in') 
+    end
 
     unless user 
       return GraphQL::ExecutionError.new('User not found') 
@@ -15,6 +20,7 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
       return GraphQL::ExecutionError.new('Incorrect Email/Password')
     end
 
+    session[:current_user_id] = user.id
     user
   end
 end
