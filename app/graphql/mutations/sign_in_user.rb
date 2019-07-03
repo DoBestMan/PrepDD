@@ -9,12 +9,10 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
     session = context[:session]
 
     unless !session[:current_user_id]
-      return GraphQL::ExecutionError.new('Already signed in') 
+      return GraphQL::ExecutionError.new('Already signed in')
     end
 
-    unless user 
-      return GraphQL::ExecutionError.new('User not found') 
-    end
+    return GraphQL::ExecutionError.new('User not found') unless user
 
     unless user.valid_password?(password)
       return GraphQL::ExecutionError.new('Incorrect Email/Password')
