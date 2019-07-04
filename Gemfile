@@ -10,7 +10,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 gem 'turbolinks', '~> 5'
 gem 'graphql'
-gem 'graphiql-rails'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
