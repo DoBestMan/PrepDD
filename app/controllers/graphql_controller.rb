@@ -3,8 +3,12 @@ class GraphqlController < ApplicationController
     variables = ensure_hash(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = { session: session }
-    # current_user: current_user,
+    context = {
+      # sign_out: sign_out
+      session: session,
+      # current_user: current_user,
+      controller: self
+    }
 
     result =
       PrepddSchema.execute(

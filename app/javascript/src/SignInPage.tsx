@@ -6,17 +6,20 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {gql} from 'apollo-boost';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
+import FlashMessage from './ui/FlashMessage';
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
-      email
+      user {
+        email
+      }
     }
   }
 `;
@@ -33,6 +36,9 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  flash: {
+    marginBottom: theme.spacing(1),
+  },
   form: {
     width: '100%',
     marginTop: theme.spacing(1),
@@ -45,18 +51,41 @@ const useStyles = makeStyles(theme => ({
 export default function SignInPage(props: {path?: string}) {
   const classes = useStyles({});
 
-  const [state, setState] = useState({
+  const [state, setState] = useState<{
+    email: string;
+    password: string;
+    remember: boolean;
+    errors: readonly {message: string}[];
+  }>({
     email: '',
     password: '',
     remember: false,
+    errors: [],
   });
 
-  const [signInUser, {error, data}] = useMutation(SIGN_IN_USER, {
+  const [signInUser, {loading, error, data}] = useMutation(SIGN_IN_USER, {
     variables: {
       email: state.email,
       password: state.password,
     },
   });
+
+  // Copy errors results to state after they come back from the server
+  useEffect(() => {
+    if (error) {
+      setState(state => ({...state, errors: error.graphQLErrors}));
+    }
+  }, [error && error.graphQLErrors]);
+
+  const onClearError = useCallback(
+    error => {
+      setState(state => ({
+        ...state,
+        errors: state.errors.filter(e => e !== error),
+      }));
+    },
+    [setState]
+  );
 
   const onSubmit = useCallback(
     e => {
@@ -83,6 +112,15 @@ export default function SignInPage(props: {path?: string}) {
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
+          {state.errors.map((error, index) => (
+            <FlashMessage
+              key={index}
+              className={classes.flash}
+              onClose={() => onClearError(error)}
+              variant="error"
+              message={error.message}
+            />
+          ))}
           <TextField
             variant="outlined"
             margin="normal"
