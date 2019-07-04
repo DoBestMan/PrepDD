@@ -1,0 +1,21 @@
+{
+  "addons": ["heroku-postgresql"],
+  "env": {},
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "prepdd",
+  "scripts": {
+    "postdeploy": "bundle exec rake db:migrate db:seed"
+  },
+  "stack": "heroku-18",
+  "environments": {
+    "test": {
+      "addons": ["heroku-postgresql:in-dyno"],
+      "scripts": {},
+      "env": {}
+    }
+  }
+}
