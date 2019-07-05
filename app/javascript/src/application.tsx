@@ -5,6 +5,8 @@ import Router from './Router';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
+import {ThemeProvider} from '@material-ui/styles';
+import theme from './config/theme';
 
 function getCSRFToken(): string {
   const el = document.querySelector('meta[name="csrf-token"]');
@@ -26,7 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   render(
     <ApolloProvider client={client}>
-      <Router />
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
     </ApolloProvider>,
     document.body.appendChild(document.createElement('div'))
   );
