@@ -1,24 +1,12 @@
-# README
+# PREPDD
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
 
-Things you may want to cover:
+1. Install chruby (optional)
+2. Install gems: `bundle install`
+3. Install node deps: `yarn install`
+4. Set up database: `bundle exec rake db:migrate db:seed`
 
-* Ruby version
+## Deployment
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Making a pull request automatically create a one-off review app in Heroku. Changes merged into master are automatically deployed to staging.
