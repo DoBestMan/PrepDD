@@ -7,6 +7,7 @@ import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ThemeProvider} from '@material-ui/styles';
 import theme from './config/theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 function getCSRFToken(): string {
   const el = document.querySelector('meta[name="csrf-token"]');
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   render(
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Router />
       </ThemeProvider>
     </ApolloProvider>,

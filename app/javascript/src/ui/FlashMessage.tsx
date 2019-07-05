@@ -52,9 +52,14 @@ export interface Props {
   variant: keyof typeof variantIcon;
 }
 
-export default function FlashMessage(props: Props) {
+export default function FlashMessage({
+  className,
+  message,
+  onClose,
+  variant,
+  ...other
+}: Props) {
   const classes = useStyles();
-  const {className, message, onClose, variant, ...other} = props;
   const Icon = variantIcon[variant];
 
   return (
@@ -68,14 +73,16 @@ export default function FlashMessage(props: Props) {
         </span>
       }
       action={[
-        <IconButton
-          key="close"
-          aria-label="Close"
-          color="inherit"
-          onClick={onClose}
-        >
-          <CloseIcon className={classes.icon} />
-        </IconButton>,
+        onClose ? (
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            onClick={onClose}
+          >
+            <CloseIcon className={classes.icon} />
+          </IconButton>
+        ) : null,
       ]}
       {...other}
     />
