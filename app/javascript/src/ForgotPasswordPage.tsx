@@ -59,10 +59,11 @@ function SuccessMessage() {
           <FlashMessage
             className={classes.flash}
             variant="success"
-            message="Email kinda sent"
+            message="Email sent"
           />
           <Typography variant="body1">
-            Please check your email for a link to reset your password.
+            Please check your email for a instructions on resetting your
+            password.
           </Typography>
         </div>
       </div>
