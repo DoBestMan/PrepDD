@@ -15,13 +15,14 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
-const SIGN_IN_USER = gql`
-  mutation($email: String!, $password: String!) {
-    signInUser(email: $email, password: $password) {
+const SIGN_UP_USER = gql`
+  mutation($fullName: String!, $email: String!, $password: String!) {
+    signUpUser(fullName: $fullName, email: $email, password: $password) {
       user {
         email
       }
       errors {
+        path
         message
       }
       success
@@ -48,42 +49,51 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInPage(props: {path?: string}) {
+export default function SignUpPage(props: {path?: string}) {
   const classes = useStyles({});
 
   const [state, setState] = useState<{
+    fullName: string;
     email: string;
     password: string;
-    remember: boolean;
   }>({
+    fullName: '',
     email: '',
     password: '',
-    remember: false,
   });
 
-  const [signInUser, {loading, data}] = useMutation(SIGN_IN_USER, {
+  const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
     variables: {
+      fullName: state.fullName,
       email: state.email,
       password: state.password,
     },
   });
-  const errors: ({message: string})[] | null = idx(
-    data,
-    x => x.signInUser.errors
-  );
 
   useEffect(() => {
-    if (idx(data, x => x.signInUser.success)) {
+    if (idx(data, x => x.signUpUser.success)) {
       navigate('/dashboard');
     }
   }, [data]);
 
+  function errorFor(path: string) {
+    const errors = idx(data, x => x.signUpUser.errors);
+    if (!errors) {
+      return;
+    }
+    const error = errors.find((e: {path: string}) => e.path === path);
+    if (!error) {
+      return;
+    }
+    return error.message;
+  }
+
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
-      signInUser();
+      signUpUser();
     },
-    [signInUser]
+    [signUpUser]
   );
 
   const onChangeInput = useCallback(
@@ -98,28 +108,38 @@ export default function SignInPage(props: {path?: string}) {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign up
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errors &&
-            errors.map((error, index) => (
-              <FlashMessage
-                key={index}
-                className={classes.flash}
-                variant="warning"
-                message={error.message}
-              />
-            ))}
+          {errorFor('root') && (
+            <FlashMessage
+              className={classes.flash}
+              variant="warning"
+              message={errorFor('root')}
+            />
+          )}
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            id="email"
+            label="Full Name"
+            name="fullName"
+            autoFocus
+            error={!!errorFor('fullName')}
+            helperText={errorFor('fullName')}
+            onChange={onChangeInput}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
+            error={!!errorFor('email')}
+            helperText={errorFor('email')}
             onChange={onChangeInput}
           />
           <TextField
@@ -130,21 +150,12 @@ export default function SignInPage(props: {path?: string}) {
             name="password"
             label="Password"
             type="password"
-            id="password"
             autoComplete="current-password"
+            error={!!errorFor('password')}
+            helperText={errorFor('password')}
             onChange={onChangeInput}
           />
-          <FormControlLabel
-            control={
-              <Checkbox
-                value="remember"
-                name="remember"
-                color="primary"
-                onChange={onChangeInput}
-              />
-            }
-            label="Remember me"
-          />
+
           <Button
             type="submit"
             fullWidth
@@ -152,17 +163,12 @@ export default function SignInPage(props: {path?: string}) {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Sign Up
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link component={RouterLink} variant="body2" to="/password_reset">
-                Forgot password?
-              </Link>
-            </Grid>
+          <Grid container justify="center">
             <Grid item>
-              <Link component={RouterLink} variant="body2" to="/">
-                {"Don't have an account? Sign Up"}
+              <Link component={RouterLink} variant="body2" to="/signin">
+                {'Already have an account? Sign In'}
               </Link>
             </Grid>
           </Grid>

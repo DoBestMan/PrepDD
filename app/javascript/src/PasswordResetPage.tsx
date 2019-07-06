@@ -15,14 +15,13 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
-const SIGN_UP_USER = gql`
-  mutation($fullName: String!, $email: String!, $password: String!) {
-    signUpUser(fullName: $fullName, email: $email, password: $password) {
+const SIGN_IN_USER = gql`
+  mutation($email: String!, $password: String!) {
+    signInUser(email: $email, password: $password) {
       user {
         email
       }
       errors {
-        path
         message
       }
       success
@@ -49,51 +48,42 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function HomePage(props: {path?: string}) {
+export default function PasswordReset(props: {path?: string}) {
   const classes = useStyles({});
 
   const [state, setState] = useState<{
-    fullName: string;
     email: string;
     password: string;
+    remember: boolean;
   }>({
-    fullName: '',
     email: '',
     password: '',
+    remember: false,
   });
 
-  const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
+  const [signInUser, {loading, data}] = useMutation(SIGN_IN_USER, {
     variables: {
-      fullName: state.fullName,
       email: state.email,
       password: state.password,
     },
   });
+  const errors: ({message: string})[] | null = idx(
+    data,
+    x => x.signInUser.errors
+  );
 
   useEffect(() => {
-    if (idx(data, x => x.signUpUser.success)) {
+    if (idx(data, x => x.signInUser.success)) {
       navigate('/dashboard');
     }
   }, [data]);
 
-  function errorFor(path: string) {
-    const errors = idx(data, x => x.signUpUser.errors);
-    if (!errors) {
-      return;
-    }
-    const error = errors.find((e: {path: string}) => e.path === path);
-    if (!error) {
-      return;
-    }
-    return error.message;
-  }
-
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
-      signUpUser();
+      signInUser();
     },
-    [signUpUser]
+    [signInUser]
   );
 
   const onChangeInput = useCallback(
@@ -108,54 +98,30 @@ export default function HomePage(props: {path?: string}) {
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
-          Sign up
+          Reset password
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errorFor('root') && (
-            <FlashMessage
-              className={classes.flash}
-              variant="error"
-              message={errorFor('root')}
-            />
-          )}
+          {errors &&
+            errors.map((error, index) => (
+              <FlashMessage
+                key={index}
+                className={classes.flash}
+                variant="error"
+                message={error.message}
+              />
+            ))}
           <TextField
             variant="outlined"
             margin="normal"
             required
             fullWidth
-            label="Full Name"
-            name="fullName"
-            autoFocus
-            error={!!errorFor('fullName')}
-            helperText={errorFor('fullName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
+            id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
-            error={!!errorFor('email')}
-            helperText={errorFor('email')}
+            autoFocus
             onChange={onChangeInput}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            error={!!errorFor('password')}
-            helperText={errorFor('password')}
-            onChange={onChangeInput}
-          />
-
           <Button
             type="submit"
             fullWidth
@@ -163,15 +129,8 @@ export default function HomePage(props: {path?: string}) {
             color="primary"
             className={classes.submit}
           >
-            Sign Up
+            Send reset email
           </Button>
-          <Grid container justify="center">
-            <Grid item>
-              <Link component={RouterLink} variant="body2" to="/signin">
-                {'Already have an account? Sign In'}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>

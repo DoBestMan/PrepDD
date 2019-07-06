@@ -4,7 +4,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   argument :password, String, required: true
 
   field :user, Types::UserType, null: true
-  field :errors, [Types::UserError], null: false
+  field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
   def resolve(full_name: nil, email: nil, password: nil)
