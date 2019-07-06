@@ -2,7 +2,7 @@ class Mutations::SignOutUser < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(email: nil, password: nil)
+  def resolve
     response = { errors: [] }
 
     unless context[:controller].user_signed_in?

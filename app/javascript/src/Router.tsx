@@ -4,9 +4,9 @@ import NotFoundPage from './NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
-const Dashboard = (props: {path?: string}) => <div>Dashboard</div>;
 const SignInPage = lazy(() => import('./SignInPage'));
 const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage'));
+const DashboardPage = lazy(() => import('./DashboardPage'));
 
 export default function Router() {
   return (
@@ -15,7 +15,7 @@ export default function Router() {
         <SignUpPage path="/" />
         <SignInPage path="/signin" />
         <ForgotPasswordPage path="/forgot" />
-        <Dashboard path="/dashboard" />
+        <DashboardPage path="/dashboard" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>
