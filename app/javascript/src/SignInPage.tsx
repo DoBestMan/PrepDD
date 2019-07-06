@@ -156,7 +156,7 @@ export default function SignInPage(props: {path?: string}) {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link component={RouterLink} variant="body2" to="/password_reset">
+              <Link component={RouterLink} variant="body2" to="/forgot">
                 Forgot password?
               </Link>
             </Grid>

@@ -6,7 +6,7 @@ import {Router as ReachRouter} from '@reach/router';
 
 const Dashboard = (props: {path?: string}) => <div>Dashboard</div>;
 const SignInPage = lazy(() => import('./SignInPage'));
-const PasswordResetPage = lazy(() => import('./PasswordResetPage'));
+const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage'));
 
 export default function Router() {
   return (
@@ -14,7 +14,7 @@ export default function Router() {
       <ReachRouter>
         <SignUpPage path="/" />
         <SignInPage path="/signin" />
-        <PasswordResetPage path="/password_reset" />
+        <ForgotPasswordPage path="/forgot" />
         <Dashboard path="/dashboard" />
         <NotFoundPage default />
       </ReachRouter>

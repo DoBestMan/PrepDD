@@ -15,13 +15,11 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
-const SIGN_IN_USER = gql`
-  mutation($email: String!, $password: String!) {
-    signInUser(email: $email, password: $password) {
-      user {
-        email
-      }
+const SEND_REST_PASSWORD_INSTRUCTIONS = gql`
+  mutation($email: String!) {
+    sendResetPasswordInstructions(email: $email) {
       errors {
+        path
         message
       }
       success
@@ -48,42 +46,66 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PasswordReset(props: {path?: string}) {
+function SuccessMessage() {
+  const classes = useStyles({});
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <div className={classes.paper}>
+        <Typography component="h1" variant="h5">
+          Reset password
+        </Typography>
+        <div className={classes.form}>
+          <FlashMessage
+            className={classes.flash}
+            variant="success"
+            message="Email kinda sent"
+          />
+          <Typography variant="body1">
+            Please check your email for a link to reset your password.
+          </Typography>
+        </div>
+      </div>
+    </Container>
+  );
+}
+
+export default function ForgotPasswordPage(props: {path?: string}) {
   const classes = useStyles({});
 
   const [state, setState] = useState<{
     email: string;
-    password: string;
-    remember: boolean;
   }>({
     email: '',
-    password: '',
-    remember: false,
   });
 
-  const [signInUser, {loading, data}] = useMutation(SIGN_IN_USER, {
-    variables: {
-      email: state.email,
-      password: state.password,
-    },
-  });
-  const errors: ({message: string})[] | null = idx(
-    data,
-    x => x.signInUser.errors
+  const [sendResetPasswordInstructions, {loading, data}] = useMutation(
+    SEND_REST_PASSWORD_INSTRUCTIONS,
+    {
+      variables: {
+        email: state.email,
+      },
+    }
   );
 
-  useEffect(() => {
-    if (idx(data, x => x.signInUser.success)) {
-      navigate('/dashboard');
+  function errorFor(path: string) {
+    const errors = idx(data, x => x.sendResetPasswordInstructions.errors);
+    if (!errors) {
+      return;
     }
-  }, [data]);
+    const error = errors.find((e: {path: string}) => e.path === path);
+    if (!error) {
+      return;
+    }
+    return error.message;
+  }
 
   const onSubmit = useCallback(
     e => {
       e.preventDefault();
-      signInUser();
+      sendResetPasswordInstructions();
     },
-    [signInUser]
+    [sendResetPasswordInstructions]
   );
 
   const onChangeInput = useCallback(
@@ -94,6 +116,15 @@ export default function PasswordReset(props: {path?: string}) {
     [setState]
   );
 
+  console.log(
+    'success',
+    idx(data, data => data.sendResetPasswordInstructions.success)
+  );
+
+  if (idx(data, data => data.sendResetPasswordInstructions.success)) {
+    return <SuccessMessage />;
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -101,15 +132,6 @@ export default function PasswordReset(props: {path?: string}) {
           Reset password
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errors &&
-            errors.map((error, index) => (
-              <FlashMessage
-                key={index}
-                className={classes.flash}
-                variant="error"
-                message={error.message}
-              />
-            ))}
           <TextField
             variant="outlined"
             margin="normal"
@@ -120,6 +142,8 @@ export default function PasswordReset(props: {path?: string}) {
             name="email"
             autoComplete="email"
             autoFocus
+            error={!!errorFor('email')}
+            helperText={errorFor('email')}
             onChange={onChangeInput}
           />
           <Button
