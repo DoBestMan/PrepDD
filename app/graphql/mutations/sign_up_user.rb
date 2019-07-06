@@ -36,6 +36,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     end
 
     if user.persisted?
+      context[:controller].sign_in(user)
       response[:user] = user
       response[:success] = true
     end
