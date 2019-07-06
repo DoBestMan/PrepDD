@@ -3,6 +3,6 @@ class Types::UserError < GraphQL::Schema::Object
 
   field :message, String, null: false, description: 'A description of the error'
   field :path,
-        String,
+        [String],
         null: true, description: 'Which input value this error came from'
 end

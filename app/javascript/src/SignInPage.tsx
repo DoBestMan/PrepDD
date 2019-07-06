@@ -2,23 +2,27 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
+import FlashMessage from './ui/FlashMessage';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import idx from 'idx';
 import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {gql} from 'apollo-boost';
+import {Link as RouterLink} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
-import FlashMessage from './ui/FlashMessage';
-import {Link as RouterLink} from '@reach/router';
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
       user {
         email
+      }
+      errors {
+        message
       }
     }
   }
@@ -56,12 +60,16 @@ export default function SignInPage(props: {path?: string}) {
     remember: false,
   });
 
-  const [signInUser, {loading, error, data}] = useMutation(SIGN_IN_USER, {
+  const [signInUser, {loading, data}] = useMutation(SIGN_IN_USER, {
     variables: {
       email: state.email,
       password: state.password,
     },
   });
+  const errors: ({message: string})[] | null = idx(
+    data,
+    x => x.signInUser.errors
+  );
 
   const onSubmit = useCallback(
     e => {
@@ -86,8 +94,8 @@ export default function SignInPage(props: {path?: string}) {
           Sign in
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {error &&
-            error.graphQLErrors.map((error, index) => (
+          {errors &&
+            errors.map((error, index) => (
               <FlashMessage
                 key={index}
                 className={classes.flash}
