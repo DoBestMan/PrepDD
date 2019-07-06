@@ -11,7 +11,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {gql} from 'apollo-boost';
-import {Link as RouterLink} from '@reach/router';
+import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
@@ -24,6 +24,7 @@ const SIGN_IN_USER = gql`
       errors {
         message
       }
+      success
     }
   }
 `;
@@ -70,6 +71,12 @@ export default function SignInPage(props: {path?: string}) {
     data,
     x => x.signInUser.errors
   );
+
+  useEffect(() => {
+    if (idx(data, x => x.signInUser.success)) {
+      navigate('/dashboard');
+    }
+  }, [data]);
 
   const onSubmit = useCallback(
     e => {

@@ -4,12 +4,14 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
 
   field :user, Types::UserType, null: true
   field :errors, [Types::UserError], null: false
+  field :success, Boolean, null: false
 
   def resolve(email: nil, password: nil)
-    response = { user: nil, errors: [] }
+    response = { errors: [] }
 
     if context[:controller].user_signed_in?
       response[:errors].push({ path: '', message: 'Already signed in.' })
+      response[:success] = false
       return response
     end
 
@@ -19,11 +21,13 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
       response[:errors].push(
         { path: '', message: 'Incorrect email or password.' }
       )
+      response[:success] = false
       return response
     end
 
     context[:controller].sign_in(user)
     response[:user] = user
+    response[:success] = true
     response
   end
 end

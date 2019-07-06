@@ -5,15 +5,15 @@ import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
 const SignInPage = lazy(() => import('./SignInPage'));
-const Dash = (props: {path?: string}) => <div>Dash</div>;
+const Dashboard = (props: {path?: string}) => <div>Dashboard</div>;
 
 export default function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ReachRouter>
         <HomePage path="/" />
-        <Dash path="/dashboard" />
         <SignInPage path="/signin" />
+        <Dashboard path="/dashboard" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

@@ -5,12 +5,14 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
 
   field :user, Types::UserType, null: true
   field :errors, [Types::UserError], null: false
+  field :success, Boolean, null: false
 
   def resolve(full_name: nil, email: nil, password: nil)
-    response = { user: nil, errors: [] }
+    response = { errors: [] }
 
     if context[:controller].user_signed_in?
-      response[:errors].push({ path: [], message: 'Already signed in.' })
+      response[:errors].push({ path: 'root', message: 'Already signed in.' })
+      response[:success] = false
       return response
     end
 
@@ -29,10 +31,15 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
         response[:errors].push(
           { path: path.to_s.camelcase(:lower), message: message }
         )
+        response[:success] = false
       end
     end
 
-    response[:user] = user
+    if user.persisted?
+      response[:user] = user
+      response[:success] = true
+    end
+
     response
   end
 end
