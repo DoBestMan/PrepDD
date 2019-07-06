@@ -1,13 +1,12 @@
 class Mutations::SignUpUser < GraphQL::Schema::Mutation
-  argument :firstName, String, required: true
-  argument :lastName, String, required: true
+  argument :fullName, String, required: true
   argument :email, String, required: true
   argument :password, String, required: true
 
   field :user, Types::UserType, null: true
   field :errors, [Types::UserError], null: false
 
-  def resolve(first_name: nil, last_name: nil, email: nil, password: nil)
+  def resolve(full_name: nil, email: nil, password: nil)
     response = { user: nil, errors: [] }
 
     if context[:controller].user_signed_in?
@@ -18,8 +17,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     user =
       User.create(
         {
-          first_name: first_name,
-          last_name: last_name,
+          full_name: full_name,
           email: email,
           password: password,
           password_confirmation: password

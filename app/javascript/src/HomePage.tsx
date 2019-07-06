@@ -15,18 +15,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
 const SIGN_UP_USER = gql`
-  mutation(
-    $firstName: String!
-    $lastName: String!
-    $email: String!
-    $password: String!
-  ) {
-    signUpUser(
-      firstName: $firstName
-      lastName: $lastName
-      email: $email
-      password: $password
-    ) {
+  mutation($fullName: String!, $email: String!, $password: String!) {
+    signUpUser(fullName: $fullName, email: $email, password: $password) {
       user {
         email
       }
@@ -61,25 +51,18 @@ export default function HomePage(props: {path?: string}) {
   const classes = useStyles({});
 
   const [state, setState] = useState<{
-    firstName: string;
-    lastName: string;
+    fullName: string;
     email: string;
     password: string;
-    remember: boolean;
-    errors: readonly {message: string}[];
   }>({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     password: '',
-    remember: false,
-    errors: [],
   });
 
   const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
     variables: {
-      firstName: state.firstName,
-      lastName: state.lastName,
+      fullName: state.fullName,
       email: state.email,
       password: state.password,
     },
@@ -125,22 +108,11 @@ export default function HomePage(props: {path?: string}) {
             margin="normal"
             required
             fullWidth
-            label="First Name"
-            name="firstName"
+            label="Full Name"
+            name="fullName"
             autoFocus
-            error={!!errorFor('firstName')}
-            helperText={errorFor('firstName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Last Name"
-            name="lastName"
-            error={!!errorFor('lastName')}
-            helperText={errorFor('lastName')}
+            error={!!errorFor('fullName')}
+            helperText={errorFor('fullName')}
             onChange={onChangeInput}
           />
           <TextField
