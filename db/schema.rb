@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2019_07_08_151108) do
     t.bigint "broker_co_id"
     t.bigint "subscription_id"
     t.boolean "is_active"
+    t.string "encryption_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

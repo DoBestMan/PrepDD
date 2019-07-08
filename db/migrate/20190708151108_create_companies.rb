@@ -6,7 +6,8 @@ class CreateCompanies < ActiveRecord::Migration[5.2]
       t.bigint :broker_co_id
       t.bigint :subscription_id
       t.boolean :is_active
-      
+      t.string :encryption_key
+
       t.timestamps
     end
   end
