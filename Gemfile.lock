@@ -68,6 +68,8 @@ GEM
       nokogiri (~> 1.8)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
+    data_migrate (5.3.2)
+      rails (>= 4.2)
     devise (4.6.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -201,6 +203,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   chromedriver-helper
+  data_migrate
   devise
   graphiql-rails
   graphql
