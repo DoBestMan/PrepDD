@@ -7,5 +7,8 @@ class User < ApplicationRecord
          :rememberable,
          :validatable
 
+  has_many :roles_users
+  has_many :users, through: :roles_users
+
   validates :full_name, presence: true
 end
