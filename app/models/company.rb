@@ -5,6 +5,6 @@ class Company < ApplicationRecord
   before_create :generate_encryption_key
 
   def generate_encryption_key
-    self.encryption_key = SecureRandom.urlsafe_base64(32)
+    self.encryption_key = SecureRandom.urlsafe_base64(256)
   end
 end
