@@ -10,17 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_08_203644) do
+ActiveRecord::Schema.define(version: 2019_07_10_202528) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
-    t.bigint "parent_id"
-    t.bigint "broker_co_id"
-    t.bigint "subscription_id"
+    t.integer "parent_id"
+    t.integer "broker_co_id"
+    t.integer "subscription_id"
     t.boolean "is_active"
     t.string "encryption_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "owner_id"
+    t.index ["owner_id"], name: "index_companies_on_owner_id"
+  end
+
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
   end
 
   create_table "roles", force: :cascade do |t|
@@ -48,6 +53,8 @@ ActiveRecord::Schema.define(version: 2019_07_08_203644) do
     t.datetime "updated_at", null: false
     t.string "full_name", default: "", null: false
     t.string "display_name", default: "", null: false
+    t.integer "company_id"
+    t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

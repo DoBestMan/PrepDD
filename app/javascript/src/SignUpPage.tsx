@@ -16,8 +16,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
 const SIGN_UP_USER = gql`
-  mutation($fullName: String!, $email: String!, $password: String!) {
-    signUpUser(fullName: $fullName, email: $email, password: $password) {
+  mutation($fullName: String!, $email: String!, $password: String!, $companyName: String!) {
+    signUpUser(fullName: $fullName, email: $email, password: $password, companyName: $companyName) {
       user {
         email
       }
@@ -56,10 +56,12 @@ export default function SignUpPage(props: {path?: string}) {
     fullName: string;
     email: string;
     password: string;
+    companyName: string;
   }>({
     fullName: '',
     email: '',
     password: '',
+    companyName: '',
   });
 
   const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
@@ -67,6 +69,7 @@ export default function SignUpPage(props: {path?: string}) {
       fullName: state.fullName,
       email: state.email,
       password: state.password,
+      companyName: state.companyName
     },
   });
 
@@ -128,6 +131,18 @@ export default function SignUpPage(props: {path?: string}) {
             autoFocus
             error={!!errorFor('fullName')}
             helperText={errorFor('fullName')}
+            onChange={onChangeInput}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Company Name"
+            name="companyName"
+            autoFocus
+            error={!!errorFor('companyName')}
+            helperText={errorFor('companyName')}
             onChange={onChangeInput}
           />
           <TextField
