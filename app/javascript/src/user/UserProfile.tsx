@@ -5,6 +5,20 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
+
 function TabContainer(props) {
   return (
       <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -115,6 +129,21 @@ export default function CustomizedTabs() {
     setValue(newValue);
   }
 
+  function FormRow() {
+    return (
+        <React.Fragment>
+          <Grid item xs={8}>
+            <Paper className={classes.paper}>
+              <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.bigAvatar} />
+            </Paper>
+          </Grid>
+          <Grid item xs={4}>
+            <Paper className={classes.paper}>Password</Paper>
+          </Grid>
+        </React.Fragment>
+    );
+  }
+
   return (
       <div className={classes.root}>
         <div className={classes.demo1}>
@@ -125,10 +154,15 @@ export default function CustomizedTabs() {
         </div>
 
         {value === 0 && <TabContainer>
-          <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.bigAvatar} />
+          <Grid container spacing={1}>
+            <Grid container item xs={12} spacing={3}>
+              <FormRow />
+            </Grid>
+          </Grid>
         </TabContainer>}
         {value === 1 && <TabContainer>
         </TabContainer>}
+
       </div>
   );
 }
