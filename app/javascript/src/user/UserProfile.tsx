@@ -14,6 +14,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 
 
 const useStyles = makeStyles(theme => ({
@@ -149,23 +150,55 @@ export default function CustomizedTabs() {
             <Paper className={classes.paper}>
               <TextField
                   id="outlined-dense"
-                  label="Password"
+                  label="First Name"
                   className={clsx(classes.textField, classes.dense)}
                   margin="dense"
                   variant="outlined"
-                  type={"password"}
-                  value={"password"}
+                  type={"text"}
+              />
+
+
+              <TextField
+                  id="outlined-dense"
+                  label="Last Name"
+                  className={clsx(classes.textField, classes.dense)}
+                  margin="dense"
+                  variant="outlined"
+                  type={"text"}
               />
 
               <TextField
                   id="outlined-dense"
-                  label="Confirm Password"
+                  label="Company Name"
                   className={clsx(classes.textField, classes.dense)}
                   margin="dense"
                   variant="outlined"
-                  type={"password"}
-                  value={"password"}
+                  type={"text"}
               />
+
+              <TextField
+                  id="outlined-dense"
+                  label="Bio"
+                  className={clsx(classes.textField, classes.dense)}
+                  margin="dense"
+                  variant="outlined"
+                  type={"textarea"}
+              />
+
+              <TextField
+                  id="outlined-dense"
+                  label="Email"
+                  className={clsx(classes.textField, classes.dense)}
+                  margin="dense"
+                  variant="outlined"
+                  type={"text"}
+              />
+
+              <div>
+                <Button variant="contained" color="primary" className={classes.button}>
+                  Save Changes
+                </Button>
+              </div>
 
             </Paper>
           </Grid>
@@ -202,7 +235,7 @@ export default function CustomizedTabs() {
             />
             <div>
               <Button variant="contained" color="primary" className={classes.button}>
-                Update
+                Update Password
               </Button>
             </div>
           </Grid>
