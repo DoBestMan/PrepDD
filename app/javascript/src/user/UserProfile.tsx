@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -7,6 +8,13 @@ import Avatar from '@material-ui/core/Avatar';
 
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -132,13 +140,71 @@ export default function CustomizedTabs() {
   function FormRow() {
     return (
         <React.Fragment>
-          <Grid item xs={8}>
+          <Grid item xs={1}>
             <Paper className={classes.paper}>
               <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.bigAvatar} />
             </Paper>
           </Grid>
+            <Grid item xs={7}>
+            <Paper className={classes.paper}>
+              <TextField
+                  id="outlined-dense"
+                  label="Password"
+                  className={clsx(classes.textField, classes.dense)}
+                  margin="dense"
+                  variant="outlined"
+                  type={"password"}
+                  value={"password"}
+              />
+
+              <TextField
+                  id="outlined-dense"
+                  label="Confirm Password"
+                  className={clsx(classes.textField, classes.dense)}
+                  margin="dense"
+                  variant="outlined"
+                  type={"password"}
+                  value={"password"}
+              />
+
+            </Paper>
+          </Grid>
+
           <Grid item xs={4}>
-            <Paper className={classes.paper}>Password</Paper>
+            <Typography variant="h6" gutterBottom>
+              Password must contain
+            </Typography>
+            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+                              label="At least 1 uppercase letter" />
+            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+                              label="At least 1 special character" />
+            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+                              label="More than 8 total characters" />
+
+            <TextField
+                id="outlined-dense"
+                label="Password"
+                className={clsx(classes.textField, classes.dense)}
+                margin="dense"
+                variant="outlined"
+                type={"password"}
+                value={"password"}
+            />
+
+            <TextField
+                id="outlined-dense"
+                label="Confirm Password"
+                className={clsx(classes.textField, classes.dense)}
+                margin="dense"
+                variant="outlined"
+                type={"password"}
+                value={"password"}
+            />
+            <div>
+              <Button variant="contained" color="primary" className={classes.button}>
+                Update
+              </Button>
+            </div>
           </Grid>
         </React.Fragment>
     );
@@ -147,6 +213,9 @@ export default function CustomizedTabs() {
   return (
       <div className={classes.root}>
         <div className={classes.demo1}>
+          <Typography variant="h5" component="h2">
+            Profile
+          </Typography>
           <AntTabs value={value} onChange={handleChange}>
             <AntTab label="Personal Information" />
             <AntTab label="Notification Settings" />
