@@ -17,17 +17,6 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-}));
-
 function TabContainer(props) {
   return (
       <Typography component="div" style={{ padding: 8 * 3 }}>
@@ -104,20 +93,13 @@ const StyledTab = withStyles(theme => ({
   },
 }))(props => <Tab disableRipple {...props} />);
 
-const useStyles = makeStyles({
-  avatar: {
-    margin: 10,
-  },
-  bigAvatar: {
-    margin: 10,
-    width: 60,
-    height: 60,
-  },
-});
-
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(1),
+    color: theme.palette.text.secondary,
   },
   typography: {
     padding: theme.spacing(3),
@@ -128,6 +110,20 @@ const useStyles = makeStyles(theme => ({
   demo2: {
     backgroundColor: '#2e1534',
   },
+  avatar: {
+    margin: 10,
+  },
+  denseFirst: {
+    marginRight: '4%',
+  },
+  bigAvatar: {
+    margin: 10,
+    width: 60,
+    height: 60,
+  },
+  buttonsCustom:{
+    marginTop: 30,
+  }
 }));
 
 export default function CustomizedTabs() {
@@ -151,10 +147,11 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="First Name"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={clsx(classes.textField, classes.dense, classes.denseFirst, )}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
+                  style = {{width: '48%'}}
               />
 
 
@@ -165,6 +162,7 @@ export default function CustomizedTabs() {
                   margin="dense"
                   variant="outlined"
                   type={"text"}
+                  style = {{width: '48%'}}
               />
 
               <TextField
@@ -174,6 +172,7 @@ export default function CustomizedTabs() {
                   margin="dense"
                   variant="outlined"
                   type={"text"}
+                  fullWidth={true}
               />
 
               <TextField
@@ -182,7 +181,10 @@ export default function CustomizedTabs() {
                   className={clsx(classes.textField, classes.dense)}
                   margin="dense"
                   variant="outlined"
-                  type={"textarea"}
+                  multiline={true}
+                  rows={2}
+                  rowsMax={4}
+                  fullWidth={true}
               />
 
               <TextField
@@ -192,10 +194,11 @@ export default function CustomizedTabs() {
                   margin="dense"
                   variant="outlined"
                   type={"text"}
+                  fullWidth={true}
               />
 
               <div>
-                <Button variant="contained" color="primary" className={classes.button}>
+                <Button variant="contained" color="primary" className={clsx(classes.button, classes.buttonsCustom)}>
                   Save Changes
                 </Button>
               </div>
@@ -222,6 +225,7 @@ export default function CustomizedTabs() {
                 variant="outlined"
                 type={"password"}
                 value={"password"}
+                fullWidth={true}
             />
 
             <TextField
@@ -231,10 +235,10 @@ export default function CustomizedTabs() {
                 margin="dense"
                 variant="outlined"
                 type={"password"}
-                value={"password"}
+                fullWidth={true}
             />
             <div>
-              <Button variant="contained" color="primary" className={classes.button}>
+              <Button variant="contained" color="primary" className={clsx(classes.button, classes.buttonsCustom)}>
                 Update Password
               </Button>
             </div>
@@ -263,6 +267,7 @@ export default function CustomizedTabs() {
           </Grid>
         </TabContainer>}
         {value === 1 && <TabContainer>
+          Notification Settings
         </TabContainer>}
 
       </div>
