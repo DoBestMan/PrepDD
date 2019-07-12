@@ -225,7 +225,6 @@ export default function CustomizedTabs() {
                 variant="outlined"
                 type={"password"}
                 value={"password"}
-                fullWidth={true}
             />
 
             <TextField
@@ -235,7 +234,7 @@ export default function CustomizedTabs() {
                 margin="dense"
                 variant="outlined"
                 type={"password"}
-                fullWidth={true}
+                value={"password"}
             />
             <div>
               <Button variant="contained" color="primary" className={clsx(classes.button, classes.buttonsCustom)}>

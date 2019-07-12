@@ -19,7 +19,7 @@ export default function Router() {
         <ForgotPasswordPage path="/forgot" />
         <DashboardPage path="/dashboard" />
         <UserProfile path="/user/profile" />
-        <UserProfile path="/team/management" />
+        <TeamManagement path="/team/management" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

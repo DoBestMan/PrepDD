@@ -1,237 +1,175 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-
+import PropTypes from 'prop-types';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button';
-
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
+const useStyles1 = makeStyles(theme => ({
+    root: {
+        flexShrink: 0,
+        color: theme.palette.text.secondary,
+        marginLeft: theme.spacing(2.5),
+    },
 }));
 
-function TabContainer(props) {
-  return (
-      <Typography component="div" style={{ padding: 8 * 3 }}>
-        {props.children}
-      </Typography>
-  );
+function TablePaginationActions(props) {
+    const classes = useStyles1();
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onChangePage } = props;
+
+    function handleFirstPageButtonClick(event) {
+        onChangePage(event, 0);
+    }
+
+    function handleBackButtonClick(event) {
+        onChangePage(event, page - 1);
+    }
+
+    function handleNextButtonClick(event) {
+        onChangePage(event, page + 1);
+    }
+
+    function handleLastPageButtonClick(event) {
+        onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    }
+
+    return (
+        <div className={classes.root}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="First Page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="Previous Page">
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="Next Page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="Last Page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </div>
+    );
 }
 
-const AntTabs = withStyles({
-  root: {
-    borderBottom: '1px solid #e8e8e8',
-  },
-  indicator: {
-    backgroundColor: '#1890ff',
-  },
-})(Tabs);
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onChangePage: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};
 
-const AntTab = withStyles(theme => ({
-  root: {
-    textTransform: 'none',
-    minWidth: 72,
-    fontWeight: theme.typography.fontWeightRegular,
-    marginRight: theme.spacing(4),
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:hover': {
-      color: '#40a9ff',
-      opacity: 1,
-    },
-    '&$selected': {
-      color: '#1890ff',
-      fontWeight: theme.typography.fontWeightMedium,
-    },
-    '&:focus': {
-      color: '#40a9ff',
-    },
-  },
-  selected: {},
-}))(props => <Tab disableRipple {...props} />);
+function createData(name, calories, fat) {
+    return { name, calories, fat };
+}
 
-const StyledTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      maxWidth: 40,
-      width: '100%',
-      backgroundColor: '#635ee7',
+const rows = [
+    createData('Cupcake', 305, 3.7),
+    createData('Donut', 452, 25.0),
+    createData('Eclair', 262, 16.0),
+    createData('Frozen yoghurt', 159, 6.0),
+    createData('Gingerbread', 356, 16.0),
+    createData('Honeycomb', 408, 3.2),
+    createData('Ice cream sandwich', 237, 9.0),
+    createData('Jelly Bean', 375, 0.0),
+    createData('KitKat', 518, 26.0),
+    createData('Lollipop', 392, 0.2),
+    createData('Marshmallow', 318, 0),
+    createData('Nougat', 360, 19.0),
+    createData('Oreo', 437, 18.0),
+].sort((a, b) => (a.calories < b.calories ? -1 : 1));
+
+const useStyles2 = makeStyles(theme => ({
+    root: {
+        width: '100%',
+        marginTop: theme.spacing(3),
     },
-  },
-})(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
-
-const StyledTab = withStyles(theme => ({
-  root: {
-    textTransform: 'none',
-    color: '#fff',
-    fontWeight: theme.typography.fontWeightRegular,
-    fontSize: theme.typography.pxToRem(15),
-    marginRight: theme.spacing(1),
-    '&:focus': {
-      opacity: 1,
+    table: {
+        minWidth: 500,
     },
-  },
-}))(props => <Tab disableRipple {...props} />);
-
-const useStyles = makeStyles({
-  avatar: {
-    margin: 10,
-  },
-  bigAvatar: {
-    margin: 10,
-    width: 60,
-    height: 60,
-  },
-});
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  typography: {
-    padding: theme.spacing(3),
-  },
-  demo1: {
-    backgroundColor: theme.palette.background.paper,
-  },
-  demo2: {
-    backgroundColor: '#2e1534',
-  },
+    tableWrapper: {
+        overflowX: 'auto',
+    },
 }));
 
-export default function CustomizedTabs() {
-  const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+export default function CustomPaginationActionsTable() {
+    const classes = useStyles2();
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-  function FormRow() {
+    function handleChangePage(event, newPage) {
+        setPage(newPage);
+    }
+
+    function handleChangeRowsPerPage(event) {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    }
+
     return (
-        <React.Fragment>
-          <Grid item xs={2}>
-            <Paper className={classes.paper}>
-              <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.bigAvatar} />
-            </Paper>
-          </Grid>
-            <Grid item xs={6}>
-            <Paper className={classes.paper}>
-              <TextField
-                  id="outlined-dense"
-                  label="Password"
-                  className={clsx(classes.textField, classes.dense)}
-                  margin="dense"
-                  variant="outlined"
-                  type={"password"}
-                  value={"password"}
-              />
+        <Paper className={classes.root}>
+            <div className={classes.tableWrapper}>
+                <Table className={classes.table}>
+                    <TableBody>
+                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => (
+                            <TableRow key={row.name}>
+                                <TableCell component="th" scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">{row.calories}</TableCell>
+                                <TableCell align="right">{row.fat}</TableCell>
+                            </TableRow>
+                        ))}
 
-              <TextField
-                  id="outlined-dense"
-                  label="Confirm Password"
-                  className={clsx(classes.textField, classes.dense)}
-                  margin="dense"
-                  variant="outlined"
-                  type={"password"}
-                  value={"password"}
-              />
-
-            </Paper>
-          </Grid>
-
-          <Grid item xs={4}>
-            <Typography variant="h6" gutterBottom>
-              Password must contain
-            </Typography>
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
-                              label="At least 1 uppercase letter" />
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
-                              label="At least 1 special character" />
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
-                              label="More than 8 total characters" />
-
-            <TextField
-                id="outlined-dense"
-                label="Password"
-                className={clsx(classes.textField, classes.dense)}
-                margin="dense"
-                variant="outlined"
-                type={"password"}
-                value={"password"}
-            />
-
-            <TextField
-                id="outlined-dense"
-                label="Confirm Password"
-                className={clsx(classes.textField, classes.dense)}
-                margin="dense"
-                variant="outlined"
-                type={"password"}
-                value={"password"}
-            />
-            <div>
-              <Button variant="contained" color="primary" className={classes.button}>
-                Update
-              </Button>
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 48 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25]}
+                                colSpan={3}
+                                count={rows.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: { 'aria-label': 'Rows per page' },
+                                    native: true,
+                                }}
+                                onChangePage={handleChangePage}
+                                onChangeRowsPerPage={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
+                </Table>
             </div>
-          </Grid>
-        </React.Fragment>
+        </Paper>
     );
-  }
-
-  return (
-      <div className={classes.root}>
-        <div className={classes.demo1}>
-          <Typography variant="h5" component="h2">
-            Profile
-          </Typography>
-          <AntTabs value={value} onChange={handleChange}>
-            <AntTab label="Personal Information" />
-            <AntTab label="Notification Settings" />
-          </AntTabs>
-        </div>
-
-        {value === 0 && <TabContainer>
-          <Grid container spacing={1}>
-            <Grid container item xs={12} spacing={3}>
-              <FormRow />
-            </Grid>
-          </Grid>
-        </TabContainer>}
-        {value === 1 && <TabContainer>
-        </TabContainer>}
-
-      </div>
-  );
 }
