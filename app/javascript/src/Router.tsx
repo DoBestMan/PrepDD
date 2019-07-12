@@ -9,6 +9,7 @@ const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage'));
 const DashboardPage = lazy(() => import('./DashboardPage'));
 const UserProfile = lazy(() => import('./user/UserProfile'));
 const TeamManagement = lazy(() => import('./team/TeamManagement'));
+const CompanySubscription = lazy(() => import('./company/CompanySubscription'));
 
 export default function Router() {
   return (
@@ -20,6 +21,7 @@ export default function Router() {
         <DashboardPage path="/dashboard" />
         <UserProfile path="/user/profile" />
         <TeamManagement path="/team/management" />
+        <CompanySubscription path="/company/subscription" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function SwitchLabels() {
+export default function CompanySubscription() {
     const classes = useStyles();
     const [state, setState] = React.useState({
         Watermarking: false,
