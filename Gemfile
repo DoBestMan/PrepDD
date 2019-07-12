@@ -14,14 +14,13 @@ gem 'graphql'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 
-# Authentication
+#auth
+gem 'pundit'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 
-#
-gem "pundit"
 
 #Performance
 gem 'data_migrate'
