@@ -19,7 +19,6 @@ gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'
-gem 'omniauth-linkedin'
 
 #
 gem "pundit"
