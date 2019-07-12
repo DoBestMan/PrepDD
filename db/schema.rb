@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_10_202528) do
+ActiveRecord::Schema.define(version: 2019_07_12_213325) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_07_10_202528) do
     t.string "full_name", default: "", null: false
     t.string "display_name", default: "", null: false
     t.integer "company_id"
+    t.string "uuid"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
