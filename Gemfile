@@ -13,8 +13,18 @@ gem 'turbolinks', '~> 5'
 gem 'graphql'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
+
+# Authentication
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-linkedin'
+
+#
 gem "pundit"
+
+#Performance
 gem 'data_migrate'
 
 group :development, :test do
