@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function CompanySubscription() {
+export default function CompanySubscription(props: {path?: string}) {
     const classes = useStyles();
     const [state, setState] = React.useState({
         Watermarking: false,
