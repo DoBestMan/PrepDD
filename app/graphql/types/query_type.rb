@@ -3,12 +3,14 @@ module Types
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 
-    field :users,
-          [UserType],
-          null: false, description: 'List all users in the application'
+    field :current_user,
+          CurrentUserType,
+          null: true, description: 'The currently logged in user'
 
-    def users
-      User.all
+    def current_user
+      {id: 'current_user',
+      user: context[:controller].current_user
+      }
     end
   end
 end

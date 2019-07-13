@@ -2,6 +2,7 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
   argument :email, String, required: true
   argument :password, String, required: true
 
+  field :current_user, Types::CurrentUserType, null: true
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
@@ -27,6 +28,10 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
 
     context[:controller].sign_in(user)
     response[:user] = user
+    response[:current_user] = {
+      id: 'current_user',
+      user: user
+    }
     response[:success] = true
     response
   end

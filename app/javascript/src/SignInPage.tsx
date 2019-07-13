@@ -14,14 +14,29 @@ import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
+// import {useQuery} from 'react-apollo';
+
+// export const USER_FRAGMENT = gql`
+//   fragment UserFragment on User {
+//     id
+//     fullName
+//     email
+//   }
+// `;
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
-      user {
-        email
+      currentUser {
+        id
+        user {
+          id
+          fullName
+          email
+        }
       }
       errors {
+        path
         message
       }
       success
@@ -72,11 +87,18 @@ export default function SignInPage(props: {path?: string}) {
     x => x.signInUser.errors
   );
 
-  useEffect(() => {
-    if (idx(data, x => x.signInUser.success)) {
-      navigate('/dashboard');
-    }
-  }, [data]);
+  // const {loading: currentUserLoading, data: currentUserData} = useQuery(
+  //   CURRENT_USER
+  // );
+
+  // const currentUser = idx(currentUserData, data => data.currentUser);
+  // console.log('currentUser', currentUser);
+
+  // useEffect(() => {
+  //   if (idx(data, x => x.signInUser.success)) {
+  //     navigate('/dashboard');
+  //   }
+  // }, [data]);
 
   const onSubmit = useCallback(
     e => {
