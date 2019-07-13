@@ -24,9 +24,7 @@ const useStyles = makeStyles(theme => ({
         minWidth: 650,
     },
     avatar: {
-        display: 'inline'
-    },
-    avatar: {
+        display: 'inline',
         margin: 10,
     },
     purpleAvatar: {
@@ -55,7 +53,7 @@ const rows = [
     createData('User Three', 'SS', 'Member', 'PrepDD'),
 ];
 
-export default function SimpleTable() {
+export default function TeamManagement(props: {path?: string}) {
     const classes = useStyles();
 
     return (
