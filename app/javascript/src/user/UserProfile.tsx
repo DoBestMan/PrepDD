@@ -78,7 +78,7 @@ const StyledTabs = withStyles({
       backgroundColor: '#635ee7',
     },
   },
-})(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+})
 
 const StyledTab = withStyles(theme => ({
   root: {
@@ -123,10 +123,16 @@ const useStyles = makeStyles(theme => ({
   },
   buttonsCustom:{
     marginTop: 30,
-  }
+  },
+  textField: {
+    marginTop: 1,
+  },
+  button: {
+    marginTop: 1,
+  },
 }));
 
-export default function CustomizedTabs() {
+export default function CustomizedTabs(props: {path?: string}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -134,7 +140,7 @@ export default function CustomizedTabs() {
     setValue(newValue);
   }
 
-  function FormRow() {
+  function FormRow(props: {path?: string}) {
     return (
         <React.Fragment>
           <Grid item xs={1}>
@@ -147,7 +153,6 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="First Name"
-                  className={clsx(classes.textField, classes.dense, classes.denseFirst, )}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
@@ -158,7 +163,7 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="Last Name"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={clsx(classes.textField)}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
@@ -168,7 +173,7 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="Company Name"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={clsx(classes.textField)}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
@@ -178,7 +183,7 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="Bio"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={clsx(classes.textField)}
                   margin="dense"
                   variant="outlined"
                   multiline={true}
@@ -190,7 +195,7 @@ export default function CustomizedTabs() {
               <TextField
                   id="outlined-dense"
                   label="Email"
-                  className={clsx(classes.textField, classes.dense)}
+                  className={clsx(classes.textField)}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
@@ -210,17 +215,17 @@ export default function CustomizedTabs() {
             <Typography variant="h6" gutterBottom>
               Password must contain
             </Typography>
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+            <FormControlLabel disabled control={<Checkbox checked value="checkedD" />}
                               label="At least 1 uppercase letter" />
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+            <FormControlLabel disabled control={<Checkbox checked value="checkedD" />}
                               label="At least 1 special character" />
-            <FormControlLabel disabled control={<Checkbox checked={} value="checkedD" />}
+            <FormControlLabel disabled control={<Checkbox checked value="checkedD" />}
                               label="More than 8 total characters" />
 
             <TextField
                 id="outlined-dense"
                 label="Password"
-                className={clsx(classes.textField, classes.dense)}
+                className={clsx(classes.textField)}
                 margin="dense"
                 variant="outlined"
                 type={"password"}
@@ -230,7 +235,7 @@ export default function CustomizedTabs() {
             <TextField
                 id="outlined-dense"
                 label="Confirm Password"
-                className={clsx(classes.textField, classes.dense)}
+                className={clsx(classes.textField)}
                 margin="dense"
                 variant="outlined"
                 type={"password"}
@@ -253,8 +258,8 @@ export default function CustomizedTabs() {
             Profile
           </Typography>
           <AntTabs value={value} onChange={handleChange}>
-            <AntTab label="Personal Information" />
-            <AntTab label="Notification Settings" />
+            <AntTab label={"Personal Information"} />
+            <AntTab label={"Notification Settings"} />
           </AntTabs>
         </div>
 
