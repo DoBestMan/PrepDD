@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_12_213325) do
+ActiveRecord::Schema.define(version: 2019_07_15_093652) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
@@ -55,8 +55,17 @@ ActiveRecord::Schema.define(version: 2019_07_12_213325) do
     t.string "display_name", default: "", null: false
     t.integer "company_id"
     t.string "uuid"
+    t.integer "notification_id"
+    t.integer "notification_scope"
+    t.integer "notification_frequency"
+    t.datetime "notification_time"
+    t.datetime "notification_day"
+    t.integer "active_state_id"
+    t.string "user_token"
+    t.string "bio"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["notification_id"], name: "index_users_on_notification_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
