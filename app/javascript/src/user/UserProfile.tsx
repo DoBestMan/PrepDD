@@ -5,22 +5,20 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
-
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+
+
+import UserNotification from './UserNotification'
 
 
 function TabContainer(props) {
@@ -254,7 +252,7 @@ export default function CustomizedTabs(props: {path?: string}) {
                     {rows.map(row => (
                         <TableRow key={row.companies}>
                           <TableCell className={clsx(classes.companyAvatar)} component="th" scope="row">
-                            <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.smallAvatar} />
+                            <Avatar className={classes.smallAvatar}> A </Avatar>
                             <Typography className={clsx(classes.companyName)} variant="h6" component="h6">
                               {row.companies}
                             </Typography>
@@ -325,8 +323,8 @@ export default function CustomizedTabs(props: {path?: string}) {
             Profile
           </Typography>
           <AntTabs value={value} onChange={handleChange}>
-            {/*<AntTab label={"Personal Information"} />*/}
-            {/*<AntTab label={"Notification Settings"} />*/}
+            <AntTab />
+            <AntTab  />
           </AntTabs>
         </div>
 
@@ -336,9 +334,12 @@ export default function CustomizedTabs(props: {path?: string}) {
               <FormRow />
             </Grid>
           </Grid>
+
+          {/*Alert Notifications*/}
         </TabContainer>}
         {value === 1 && <TabContainer>
-          Notification Settings
+
+          <UserNotification />
         </TabContainer>}
 
       </div>
