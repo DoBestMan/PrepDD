@@ -14,7 +14,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 
 function TabContainer(props) {
@@ -97,6 +103,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
+  table: {
+    minWidth: 650,
+  },
   paper: {
     padding: theme.spacing(1),
     color: theme.palette.text.secondary,
@@ -121,6 +130,11 @@ const useStyles = makeStyles(theme => ({
     width: 60,
     height: 60,
   },
+  smallAvatar: {
+    margin: 10,
+    width: 35,
+    height: 35,
+  },
   textField: {
     marginTop: 20,
   },
@@ -130,7 +144,31 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: 20,
   },
+  companyTable: {
+    marginTop: 30,
+  },
+  companyAvatar: {
+    display: 'inline-flex',
+    width: '100%'
+  },
+  companyName: {
+    fontWeight: 'bold',
+    marginTop: 20,
+    fontSize: 16,
+    marginLeft: 10,
+  }
 }));
+
+function createData(companies, teams) {
+  return { companies, teams };
+}
+
+
+const rows = [
+  createData('PrepDD', 'Finance, Legal, Equity'),
+  createData('G2 Crowd', 'M&M, Debt')
+];
+
 
 export default function CustomizedTabs(props: {path?: string}) {
   const classes = useStyles();
@@ -148,7 +186,7 @@ export default function CustomizedTabs(props: {path?: string}) {
               <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.bigAvatar} />
             </Paper>
           </Grid>
-            <Grid item xs={7}>
+          <Grid item xs={7}>
             <Paper className={classes.paper}>
               <TextField
                   id="outlined-dense"
@@ -204,12 +242,39 @@ export default function CustomizedTabs(props: {path?: string}) {
                   fullWidth={true}
               />
 
+              <div className={classes.companyTable}>
+                <Table className={classes.table}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Company (s) </TableCell>
+                      <TableCell align="left">Team(s)</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map(row => (
+                        <TableRow key={row.companies}>
+                          <TableCell className={clsx(classes.companyAvatar)} component="th" scope="row">
+                            <Avatar alt="Remy Sharp" src="/images/avatar.jpg" className={classes.smallAvatar} />
+                            <Typography className={clsx(classes.companyName)} variant="h6" component="h6">
+                              {row.companies}
+                            </Typography>
+                          </TableCell>
+                          <TableCell align="left">
+                            <Typography className={clsx(classes.companyName)} variant="h6" component="h6">
+                              {row.teams}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
               <div>
                 <Button variant="contained" color="primary" className={clsx(classes.button)}>
                   Save Changes
                 </Button>
               </div>
-
             </Paper>
           </Grid>
 
