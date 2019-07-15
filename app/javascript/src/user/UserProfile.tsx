@@ -121,14 +121,14 @@ const useStyles = makeStyles(theme => ({
     width: 60,
     height: 60,
   },
-  buttonsCustom:{
-    marginTop: 30,
-  },
   textField: {
-    marginTop: 1,
+    marginTop: 20,
+  },
+  textCustom: {
+    marginLeft: '4%',
   },
   button: {
-    marginTop: 1,
+    marginTop: 20,
   },
 }));
 
@@ -153,17 +153,19 @@ export default function CustomizedTabs(props: {path?: string}) {
               <TextField
                   id="outlined-dense"
                   label="First Name"
+                  className={clsx(classes.textField)}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
                   style = {{width: '48%'}}
+                  value={'Aijaz Khan'}
               />
 
 
               <TextField
                   id="outlined-dense"
                   label="Last Name"
-                  className={clsx(classes.textField)}
+                  className={clsx(classes.textCustom, classes.textField)}
                   margin="dense"
                   variant="outlined"
                   type={"text"}
@@ -203,7 +205,7 @@ export default function CustomizedTabs(props: {path?: string}) {
               />
 
               <div>
-                <Button variant="contained" color="primary" className={clsx(classes.button, classes.buttonsCustom)}>
+                <Button variant="contained" color="primary" className={clsx(classes.button)}>
                   Save Changes
                 </Button>
               </div>
@@ -242,7 +244,7 @@ export default function CustomizedTabs(props: {path?: string}) {
                 value={"password"}
             />
             <div>
-              <Button variant="contained" color="primary" className={clsx(classes.button, classes.buttonsCustom)}>
+              <Button variant="contained" color="primary" className={clsx(classes.button)}>
                 Update Password
               </Button>
             </div>
@@ -258,8 +260,8 @@ export default function CustomizedTabs(props: {path?: string}) {
             Profile
           </Typography>
           <AntTabs value={value} onChange={handleChange}>
-            <AntTab label={"Personal Information"} />
-            <AntTab label={"Notification Settings"} />
+            {/*<AntTab label={"Personal Information"} />*/}
+            {/*<AntTab label={"Notification Settings"} />*/}
           </AntTabs>
         </div>
 
