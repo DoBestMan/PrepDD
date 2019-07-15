@@ -8,6 +8,7 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from "@material-ui/core/Typography";
 import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -66,6 +67,23 @@ const useStyles = makeStyles(theme => ({
     },
     notificationSelect: {
         width: '100%',
+    },
+    notificationGrid: {
+        marginTop: 30,
+        marginBottom: 30,
+        width: '100%'
+    },
+    notificationSub: {
+        float: 'left',
+        width: '50%',
+    },
+    notificationSub2: {
+        float: 'left',
+        width: '50%',
+        textAlign: 'right',
+    },
+    divider: {
+        border: '0.5 solid rgba(0, 0, 0, 0.12)'
     }
 }));
 
@@ -150,20 +168,74 @@ export default function UserNotification(props: {path?: string}) {
                     <Divider />
                 </form>
             </div>
-            <Divider />
-            <div className={classes.notificationSelect}>
-                <Typography variant="h5" component="h2">
-                    Alert Notifications
-                </Typography>
 
-                <Divider />
-                <div className={classes.noteTitle}>
+            <div className={classes.notificationGrid}>
+                <div className={classes.notificationSub}>
                     <Typography variant="h5" component="h2">
-                        Alert Notifications
+                        Added into new team
                     </Typography>
                 </div>
-                <Divider />
+
+                <div className={classes.notificationSub2}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={true}
+                                onChange={handleChange}
+                                value="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label={''}
+                    />
+                </div>
             </div>
+
+
+            <div className={classes.notificationGrid}>
+                <div className={classes.notificationSub}>
+                    <Typography variant="h5" component="h2">
+                        New file added
+                    </Typography>
+                </div>
+
+                <div className={classes.notificationSub2}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={true}
+                                onChange={handleChange}
+                                value="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label={''}
+                    />
+                </div>
+            </div>
+
+            <div className={classes.notificationGrid}>
+                <div className={classes.notificationSub}>
+                    <Typography variant="h5" component="h2">
+                        New task in existing list
+                    </Typography>
+                </div>
+
+                <div className={classes.notificationSub2}>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={true}
+                                onChange={handleChange}
+                                value="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label={''}
+                    />
+                </div>
+            </div>
+
         </div>
     );
 }
