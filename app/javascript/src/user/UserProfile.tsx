@@ -323,8 +323,8 @@ export default function CustomizedTabs(props: {path?: string}) {
             Profile
           </Typography>
           <AntTabs value={value} onChange={handleChange}>
-            <AntTab />
-            <AntTab  />
+            <AntTab label='Personal Information'/>
+            <AntTab label='Notification Settings' />
           </AntTabs>
         </div>
 

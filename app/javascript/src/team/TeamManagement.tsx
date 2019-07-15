@@ -18,6 +18,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+
 const options = [
     'Parent Company',
     'Broker',
@@ -33,6 +35,12 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
         alignItems: 'center',
         overflowX: 'auto',
+    },
+    list: {
+        width: 450,
+    },
+    fullList: {
+        width: 'auto',
     },
     button: {
         margin: theme.spacing(1),
@@ -112,8 +120,40 @@ const rows = [
 
 export default function TeamManagement(props: {path?: string}) {
     const classes = useStyles();
+
+    const [state, setState] = React.useState({
+        right: false,
+    });
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+
+    const toggleDrawer = (side, open) => event => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setState({ ...state, [side]: open });
+    };
+
+
+
+    const sideList = side => (
+        <div
+            className={classes.list}
+            role="presentation"
+            onClick={toggleDrawer(side, false)}
+            onKeyDown={toggleDrawer(side, false)}
+        >
+            <div>
+                <Avatar className={classes.purpleAvatar}>A</Avatar>
+                <Typography className={classes.nameCustom} variant="body2" gutterBottom>
+                    Test User 1 (In Progress)
+                </Typography>
+            </div>
+        </div>
+    );
+
+
 
     function handleClick(event) {
         setAnchorEl(event.currentTarget);
@@ -202,6 +242,16 @@ export default function TeamManagement(props: {path?: string}) {
                     ))}
                 </TableBody>
             </Table>
+
+            <Button onClick={toggleDrawer('right', true)}>Open User Drawer</Button>
+            <SwipeableDrawer
+                anchor="right"
+                open={state.right}
+                onClose={toggleDrawer('right', false)}
+                onOpen={toggleDrawer('right', true)}
+            >
+                {sideList('right')}
+            </SwipeableDrawer>
         </Paper>
     );
 }
