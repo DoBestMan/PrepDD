@@ -1,5 +1,6 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -12,13 +13,25 @@ import { deepPurple } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
-
-import IconButton from '@material-ui/core/IconButton';
+;
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+
+import Drawer from '@material-ui/core/Drawer';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';;
 
 const options = [
     'Parent Company',
@@ -26,7 +39,9 @@ const options = [
     'Assign broker',
 ];
 
+const drawerWidth = 240;
 const ITEM_HEIGHT = 48;
+
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -35,6 +50,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(3),
         alignItems: 'center',
         overflowX: 'auto',
+    },
+    rootShifted:{
+        width: `calc(100% - ${drawerWidth}px)`,
     },
     list: {
         width: 450,
@@ -104,7 +122,57 @@ const useStyles = makeStyles(theme => ({
     },
     selectDrop: {
         display: 'inline',
-    }
+    },
+    appBar: {
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: drawerWidth,
+    },
+    title: {
+        flexGrow: 1,
+    },
+    hide: {
+        display: 'none',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerHeader: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+        justifyContent: 'flex-start',
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        marginRight: -drawerWidth,
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginRight: 0,
+    },
 
 }));
 
@@ -120,38 +188,25 @@ const rows = [
 
 export default function TeamManagement(props: {path?: string}) {
     const classes = useStyles();
+    const theme = useTheme();
 
     const [state, setState] = React.useState({
         right: false,
     });
+
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-
-    const toggleDrawer = (side, open) => event => {
-        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
-
-        setState({ ...state, [side]: open });
-    };
+    const open2 = Boolean(anchorEl);
 
 
+    const [open, setOpen] = React.useState(false);
 
-    const sideList = side => (
-        <div
-            className={classes.list}
-            role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
-        >
-            <div>
-                <Avatar className={classes.purpleAvatar}>A</Avatar>
-                <Typography className={classes.nameCustom} variant="body2" gutterBottom>
-                    Test User 1 (In Progress)
-                </Typography>
-            </div>
-        </div>
-    );
+    function handleDrawerOpen() {
+        setOpen(true);
+    }
+
+    function handleDrawerClose() {
+        setOpen(false);
+    }
 
 
 
@@ -164,7 +219,7 @@ export default function TeamManagement(props: {path?: string}) {
     }
 
     return (
-        <Paper className={classes.root}>
+        <Paper className={clsx(classes.root, classes.rootShifted)}>
 
             <div className={classes.search}>
                 <div className={classes.searchIcon}>
@@ -197,7 +252,7 @@ export default function TeamManagement(props: {path?: string}) {
                         id="long-menu"
                         anchorEl={anchorEl}
                         keepMounted
-                        open={open}
+                        open={open2}
                         onClose={handleClose}
                         PaperProps={{
                             style: {
@@ -243,15 +298,51 @@ export default function TeamManagement(props: {path?: string}) {
                 </TableBody>
             </Table>
 
-            <Button onClick={toggleDrawer('right', true)}>Open User Drawer</Button>
-            <SwipeableDrawer
-                anchor="right"
-                open={state.right}
-                onClose={toggleDrawer('right', false)}
-                onOpen={toggleDrawer('right', true)}
-            >
-                {sideList('right')}
-            </SwipeableDrawer>
+            <div className={classes.root}>
+
+                <Toolbar>
+                    <Typography variant="h6" noWrap className={classes.title}>
+                        Persistent drawer
+                    </Typography>
+                    <IconButton
+                        color="inherit"
+                        aria-label="Open drawer"
+                        edge="end"
+                        onClick={handleDrawerOpen}
+                        className={clsx(open && classes.hide)}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Toolbar>
+
+                <Drawer
+                    className={classes.drawer}
+                    variant="persistent"
+                    anchor="right"
+                    open={open}
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <div className={classes.drawerHeader}>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                        </IconButton>
+                    </div>
+
+                    <div>
+                        <Avatar className={classes.purpleAvatar}>A</Avatar>
+                        <Typography className={classes.nameCustom} variant="body2" gutterBottom>
+                            Test User 1 (In Progress)
+                        </Typography>
+                    </div>
+                </Drawer>
+            </div>
         </Paper>
     );
 }
+
+
+
+
+
