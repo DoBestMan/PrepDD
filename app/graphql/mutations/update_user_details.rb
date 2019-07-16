@@ -12,19 +12,19 @@ module Mutations
       response = { errors: [] }
 
       user =
-          User.update(
-              {
-                  full_name: full_name,
-                  email: email,
-                  password: password,
-                  password_confirmation: password
-              }
-          )
+        User.update(
+          {
+            full_name: full_name,
+            email: email,
+            password: password,
+            password_confirmation: password
+          }
+        )
 
       user.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
-              { path: path.to_s.camelcase(:lower), message: message }
+            { path: path.to_s.camelcase(:lower), message: message }
           )
           response[:success] = false
         end

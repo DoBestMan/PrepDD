@@ -16,8 +16,18 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
 const SIGN_UP_USER = gql`
-  mutation($fullName: String!, $email: String!, $password: String!, $companyName: String!) {
-    signUpUser(fullName: $fullName, email: $email, password: $password, companyName: $companyName) {
+  mutation(
+    $fullName: String!
+    $email: String!
+    $password: String!
+    $companyName: String!
+  ) {
+    signUpUser(
+      fullName: $fullName
+      email: $email
+      password: $password
+      companyName: $companyName
+    ) {
       user {
         email
       }
@@ -69,7 +79,7 @@ export default function SignUpPage(props: {path?: string}) {
       fullName: state.fullName,
       email: state.email,
       password: state.password,
-      companyName: state.companyName
+      companyName: state.companyName,
     },
   });
 

@@ -15,8 +15,8 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
-import { GoogleLogin } from 'react-google-login';
-import { LinkedIn }  from 'react-linkedin-login-oauth2';
+import {GoogleLogin} from 'react-google-login';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     background: '#007bb6',
     color: 'white',
     height: 43,
-  }
+  },
 }));
 
 export default function SignInPage(props: {path?: string}) {
@@ -111,10 +111,9 @@ export default function SignInPage(props: {path?: string}) {
     [setState]
   );
 
-
-  const responseGoogle = (response) => {
+  const responseGoogle = response => {
     console.log(response);
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -181,24 +180,24 @@ export default function SignInPage(props: {path?: string}) {
         <Grid container>
           <Grid item xs>
             <GoogleLogin
-                clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-                className={classes.socialGmail}
+              clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+              className={classes.socialGmail}
             />
           </Grid>
 
           <Grid item>
             <LinkedIn
-                clientId="81lx5we2omq9xh"
-                onFailure={responseGoogle}
-                onSuccess={responseGoogle}
-                redirectUri="http://localhost:3000/linkedin"
-                className={classes.socialLinkedIn}
+              clientId="81lx5we2omq9xh"
+              onFailure={responseGoogle}
+              onSuccess={responseGoogle}
+              redirectUri="http://localhost:3000/linkedin"
+              className={classes.socialLinkedIn}
             >
-           Login LinkedIn
+              Login LinkedIn
             </LinkedIn>
           </Grid>
         </Grid>
@@ -216,7 +215,6 @@ export default function SignInPage(props: {path?: string}) {
           </Grid>
         </Grid>
       </div>
-
     </Container>
   );
 }

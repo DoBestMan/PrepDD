@@ -27,12 +27,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
         }
       )
 
-    company =
-      user.owned_companies.create(
-        {
-          name: company_name
-        }
-    )
+    company = user.owned_companies.create({ name: company_name })
 
     user.errors.messages.each do |path, messages|
       messages.each do |message|

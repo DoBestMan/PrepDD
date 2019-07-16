@@ -1,8 +1,8 @@
 class Company < ApplicationRecord
-  belongs_to :parent, :class_name => 'Company', optional: true
-  has_many :children, :class_name => 'Company', :foreign_key => 'parent_id'
-  belongs_to :owner, :class_name => "User"
-  has_many :employees, :class_name => "User", :dependent => :destroy
+  belongs_to :parent, class_name: 'Company', optional: true
+  has_many :children, class_name: 'Company', foreign_key: 'parent_id'
+  belongs_to :owner, class_name: 'User'
+  has_many :employees, class_name: 'User', dependent: :destroy
 
   validates :name, presence: true
   validates :parent_id, presence: true
