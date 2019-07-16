@@ -10,6 +10,7 @@ const DashboardPage = lazy(() => import('./DashboardPage'));
 const UserProfile = lazy(() => import('./user/UserProfile'));
 const TeamManagement = lazy(() => import('./team/TeamManagement'));
 const CompanySubscription = lazy(() => import('./company/CompanySubscription'));
+const CompanySettings = lazy(() => import('./company/CompanySettings'));
 
 export default function Router() {
   return (
@@ -22,6 +23,7 @@ export default function Router() {
         <UserProfile path="/user/profile" />
         <TeamManagement path="/team/management" />
         <CompanySubscription path="/company/subscription" />
+        <CompanySettings path="/company/settings" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>
