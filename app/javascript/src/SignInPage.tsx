@@ -16,6 +16,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
 import { GoogleLogin } from 'react-google-login';
+import { LinkedIn }  from 'react-linkedin-login-oauth2';
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
@@ -48,10 +49,19 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-  SocialButton: {
-    width: '46%',
+  socialGmail: {
+    width: 170,
     textAlign: 'center',
     marginBottom: 10,
+    height: 43,
+  },
+  socialLinkedIn: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    background: '#007bb6',
+    color: 'white',
+    height: 43,
   }
 }));
 
@@ -176,19 +186,20 @@ export default function SignInPage(props: {path?: string}) {
                 onSuccess={responseGoogle}
                 onFailure={responseGoogle}
                 cookiePolicy={'single_host_origin'}
-                className={classes.SocialButton}
+                className={classes.socialGmail}
             />
           </Grid>
 
           <Grid item>
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.SocialButton}>
-              LinkedIn
-            </Button>
+            <LinkedIn
+                clientId="81lx5we2omq9xh"
+                onFailure={responseGoogle}
+                onSuccess={responseGoogle}
+                redirectUri="http://localhost:3000/linkedin"
+                className={classes.socialLinkedIn}
+            >
+           Login LinkedIn
+            </LinkedIn>
           </Grid>
         </Grid>
 

@@ -168,7 +168,7 @@ const rows = [
 ];
 
 
-export default function CustomizedTabs(props: {path?: string}) {
+export default function UserProfile(props: {path?: string}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -323,8 +323,8 @@ export default function CustomizedTabs(props: {path?: string}) {
             Profile
           </Typography>
           <AntTabs value={value} onChange={handleChange}>
-            <AntTab label='Personal Information'/>
-            <AntTab label='Notification Settings' />
+            <AntTab />
+            <AntTab />
           </AntTabs>
         </div>
 
