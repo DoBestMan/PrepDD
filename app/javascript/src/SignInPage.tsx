@@ -15,6 +15,8 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
+import { GoogleLogin } from 'react-google-login';
+
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
@@ -46,6 +48,11 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  SocialButton: {
+    width: '46%',
+    textAlign: 'center',
+    marginBottom: 10,
+  }
 }));
 
 export default function SignInPage(props: {path?: string}) {
@@ -93,6 +100,11 @@ export default function SignInPage(props: {path?: string}) {
     },
     [setState]
   );
+
+
+  const responseGoogle = (response) => {
+    console.log(response);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -154,20 +166,46 @@ export default function SignInPage(props: {path?: string}) {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link component={RouterLink} variant="body2" to="/forgot">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link component={RouterLink} variant="body2" to="/">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
+
+        <Grid container>
+          <Grid item xs>
+            <GoogleLogin
+                clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                buttonText="Login"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={'single_host_origin'}
+                className={classes.SocialButton}
+            />
+          </Grid>
+
+          <Grid item>
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.SocialButton}>
+              LinkedIn
+            </Button>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs>
+            <Link component={RouterLink} variant="body2" to="/forgot">
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link component={RouterLink} variant="body2" to="/">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
       </div>
+
     </Container>
   );
 }
