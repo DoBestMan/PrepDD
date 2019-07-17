@@ -1,6 +1,8 @@
 {
   "addons": ["heroku-postgresql"],
-  "env": {},
+  "env": {
+    "HEROKU_DEBUG_RAILS_RUNNER": 1
+  },
   "formation": {
     "web": {
       "quantity": 1
