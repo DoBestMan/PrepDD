@@ -1,5 +1,5 @@
 module Types
-  class CompanyType < Types::BaseObject
+  class CompanyType < GraphQL::Schema::Object
     field :id, ID, null: false
     field :parent_id, ID, null: false
     field :broker_co_id, ID, null: false
