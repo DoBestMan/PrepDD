@@ -14,9 +14,9 @@ ActiveRecord::Schema.define(version: 2019_07_15_093652) do
 
   create_table "companies", force: :cascade do |t|
     t.string "name"
-    t.integer "parent_id"
-    t.integer "broker_co_id"
-    t.integer "subscription_id"
+    t.bigint "parent_id"
+    t.bigint "broker_co_id"
+    t.bigint "subscription_id"
     t.boolean "is_active"
     t.string "encryption_key"
     t.datetime "created_at", null: false
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 2019_07_15_093652) do
     t.string "display_name", default: "", null: false
     t.integer "company_id"
     t.string "uuid"
+    t.string "token_id"
+    t.string "social_login_provider"
     t.integer "notification_id"
     t.integer "notification_scope"
     t.integer "notification_frequency"

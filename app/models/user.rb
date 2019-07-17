@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable,
-         :validatable
+         :validatable, authentication_keys: {email: true, login: false}
 
   has_many :roles_users
   has_many :users, through: :roles_users
