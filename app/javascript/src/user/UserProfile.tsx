@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Tab, {TabProps} from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Paper from '@material-ui/core/Paper';
@@ -67,7 +67,7 @@ const AntTab = withStyles(theme => ({
     },
   },
   selected: {},
-}))(props => <Tab disableRipple {...props} />);
+}))((props: TabProps) => <Tab disableRipple {...props} />);
 
 const StyledTabs = withStyles({
   indicator: {
@@ -351,8 +351,8 @@ export default function UserProfile(props: {path?: string}) {
           Profile
         </Typography>
         <AntTabs value={value} onChange={handleChange}>
-          <AntTab label= 'Personal Information'/>
-          <AntTab label= 'Notification Settings'/>
+          <AntTab label="Personal Information" />
+          <AntTab label="Notification Settings" />
         </AntTabs>
       </div>
 
