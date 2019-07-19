@@ -13,9 +13,24 @@ gem 'turbolinks', '~> 5'
 gem 'graphql'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
+
+#Auth
+gem 'pundit'
 gem 'devise'
-gem "pundit"
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-linkedin-oauth2'
+
+
+#Performance
 gem 'data_migrate'
+
+#Third-Party
+gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk-s3', '~> 1'
+gem 'aws-sdk-kms'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

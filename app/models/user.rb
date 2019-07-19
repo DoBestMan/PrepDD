@@ -5,11 +5,14 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable,
-         :validatable
+         :validatable, authentication_keys: {email: true, login: false}
 
   has_many :roles_users
+  has_many :teams_users
   has_many :users, through: :roles_users
-  has_many :owned_companies, :class_name => "Company", :foreign_key => "owner_id", :dependent => :destroy
+  has_many :teams, through: :teams_users
+  has_many :owned_companies,
+           class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
   belongs_to :company, optional: true
 
   validates :full_name, presence: true

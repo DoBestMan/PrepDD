@@ -15,9 +15,22 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
+import {GoogleLogin} from 'react-google-login';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
+
 const SIGN_UP_USER = gql`
-  mutation($fullName: String!, $email: String!, $password: String!, $companyName: String!) {
-    signUpUser(fullName: $fullName, email: $email, password: $password, companyName: $companyName) {
+  mutation(
+    $fullName: String!
+    $email: String!
+    $password: String!
+    $companyName: String!
+  ) {
+    signUpUser(
+      fullName: $fullName
+      email: $email
+      password: $password
+      companyName: $companyName
+    ) {
       user {
         email
       }
@@ -47,6 +60,22 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  socialGmail: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    height: 43,
+  },
+  socialLinkedIn: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    background: '#007bb6',
+    color: 'white',
+    height: 43,
+    border: 2,
+    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px'
+  },
 }));
 
 export default function SignUpPage(props: {path?: string}) {
@@ -57,11 +86,13 @@ export default function SignUpPage(props: {path?: string}) {
     email: string;
     password: string;
     companyName: string;
+    socialLogin: boolean;
   }>({
     fullName: '',
     email: '',
     password: '',
     companyName: '',
+    socialLogin: false,
   });
 
   const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
@@ -69,7 +100,7 @@ export default function SignUpPage(props: {path?: string}) {
       fullName: state.fullName,
       email: state.email,
       password: state.password,
-      companyName: state.companyName
+      companyName: state.companyName,
     },
   });
 
@@ -92,94 +123,155 @@ export default function SignUpPage(props: {path?: string}) {
   }
 
   const onSubmit = useCallback(
-    e => {
-      e.preventDefault();
-      signUpUser();
-    },
-    [signUpUser]
+      e => {
+        e.preventDefault();
+        signUpUser();
+      },
+      [signUpUser]
   );
 
   const onChangeInput = useCallback(
-    e => {
-      const {name, value} = e.target;
-      setState(state => ({...state, [name]: value}));
-    },
-    [setState]
+      e => {
+        const {name, value} = e.target;
+        setState(state => ({...state, [name]: value}));
+      },
+      [setState]
   );
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errorFor('root') && (
-            <FlashMessage
-              className={classes.flash}
-              variant="warning"
-              message={errorFor('root')}
-            />
-          )}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Full Name"
-            name="fullName"
-            autoFocus
-            error={!!errorFor('fullName')}
-            helperText={errorFor('fullName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Company Name"
-            name="companyName"
-            autoFocus
-            error={!!errorFor('companyName')}
-            helperText={errorFor('companyName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            error={!!errorFor('email')}
-            helperText={errorFor('email')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            error={!!errorFor('password')}
-            helperText={errorFor('password')}
-            onChange={onChangeInput}
-          />
+  const responseGoogle = response => {
+    console.log(response);
+  };
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
+  const successGoogle = response => {
+    console.log(response);
+    if(response.profileObj){
+      console.log('was here')
+      setState(state => ({...state, email: response.profileObj.email}));
+      setState(state => ({...state, fullName: response.profileObj.name}));
+      setState(state => ({...state, socialLogin: true}));
+    }
+  };
+
+  const failGoogle = response => {
+    console.log(response);
+  };
+
+  return (
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form className={classes.form} noValidate onSubmit={onSubmit}>
+            {errorFor('root') && (
+                <FlashMessage
+                    className={classes.flash}
+                    variant="warning"
+                    message={errorFor('root')}
+                />
+            )}
+
+            { state.socialLogin &&(
+
+                <FlashMessage
+                    className={classes.flash}
+                    variant="info"
+                    message={'Add company name'}
+                />
+            )}
+
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Full Name"
+                name="fullName"
+                autoFocus
+                value={state.fullName}
+                error={!!errorFor('fullName')}
+                helperText={errorFor('fullName')}
+                onChange={onChangeInput}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Company Name"
+                name="companyName"
+                autoFocus
+                error={!!errorFor('companyName')}
+                helperText={errorFor('companyName')}
+                onChange={onChangeInput}
+            />
+            <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={state.email}
+                error={!!errorFor('email')}
+                helperText={errorFor('email')}
+                onChange={onChangeInput}
+            />
+            { !state.socialLogin &&(
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    autoComplete="current-password"
+                    error={!!errorFor('password')}
+                    helperText={errorFor('password')}
+                    onChange={onChangeInput}
+                />
+            )}
+
+            <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+            >
+              Sign Up
+            </Button>
+          </form>
+
+          { !state.socialLogin &&(
+              <Grid container>
+                <Grid item xs>
+                  <GoogleLogin
+                      clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                      buttonText="Sign Up Gmail"
+                      onSuccess={successGoogle}
+                      onFailure={failGoogle}
+                      cookiePolicy={'single_host_origin'}
+                      className={classes.socialGmail}
+                  />
+                </Grid>
+
+                <Grid item>
+                  <LinkedIn
+                      clientId="81lx5we2omq9xh"
+                      onFailure={responseGoogle}
+                      onSuccess={responseGoogle}
+                      redirectUri="http://localhost:3000/linkedin"
+                      className={classes.socialLinkedIn}
+                  >
+                    Sign Up LinkedIn
+                  </LinkedIn>
+                </Grid>
+              </Grid>
+          )}
+
           <Grid container justify="center">
             <Grid item>
               <Link component={RouterLink} variant="body2" to="/signin">
@@ -187,8 +279,8 @@ export default function SignUpPage(props: {path?: string}) {
               </Link>
             </Grid>
           </Grid>
-        </form>
-      </div>
-    </Container>
+
+        </div>
+      </Container>
   );
 }
