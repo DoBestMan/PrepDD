@@ -5,7 +5,6 @@ class Company < ApplicationRecord
   has_many :employees, class_name: 'User', dependent: :destroy
 
   validates :name, presence: true
-  validates :parent_id, presence: true
 
   before_create :generate_encryption_key
 
