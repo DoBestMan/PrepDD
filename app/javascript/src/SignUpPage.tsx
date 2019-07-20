@@ -10,13 +10,13 @@ import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import {GoogleLogin} from 'react-google-login';
 import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
-
-import {GoogleLogin} from 'react-google-login';
-import {LinkedIn} from 'react-linkedin-login-oauth2';
+import {useRequireGuest} from './hooks/auth';
 
 const SIGN_UP_USER = gql`
   mutation(
@@ -80,6 +80,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUpPage(props: {path?: string}) {
+  useRequireGuest();
+
   const classes = useStyles({});
 
   const [state, setState] = useState<{

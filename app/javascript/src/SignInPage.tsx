@@ -10,22 +10,13 @@ import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import {GoogleLogin} from 'react-google-login';
 import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
-// import {useQuery} from 'react-apollo';
-
-// export const USER_FRAGMENT = gql`
-//   fragment UserFragment on User {
-//     id
-//     fullName
-//     email
-//   }
-// `;
-
-import {GoogleLogin} from 'react-google-login';
-import {LinkedIn} from 'react-linkedin-login-oauth2';
+import {useRequireGuest} from './hooks/auth';
 
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
@@ -81,6 +72,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignInPage(props: {path?: string}) {
+  useRequireGuest();
+
   const classes = useStyles({});
 
   const [state, setState] = useState<{
@@ -103,19 +96,6 @@ export default function SignInPage(props: {path?: string}) {
     data,
     x => x.signInUser.errors
   );
-
-  // const {loading: currentUserLoading, data: currentUserData} = useQuery(
-  //   CURRENT_USER
-  // );
-
-  // const currentUser = idx(currentUserData, data => data.currentUser);
-  // console.log('currentUser', currentUser);
-
-  // useEffect(() => {
-  //   if (idx(data, x => x.signInUser.success)) {
-  //     navigate('/dashboard');
-  //   }
-  // }, [data]);
 
   const onSubmit = useCallback(
     e => {

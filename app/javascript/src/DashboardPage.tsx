@@ -1,21 +1,22 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import clsx from 'clsx';
-import idx from 'idx';
-import {makeStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import AppBar from '@material-ui/core/AppBar';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import clsx from 'clsx';
+import Container from '@material-ui/core/Container';
+import Drawer from '@material-ui/core/Drawer';
+import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import idx from 'idx';
+import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import React, {useState, useCallback, useEffect} from 'react';
+import Toolbar from '@material-ui/core/Toolbar';
 import {gql} from 'apollo-boost';
+import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
+import {useRequireSignIn} from './hooks/auth';
 
 const SIGN_OUT_USER = gql`
   mutation {
@@ -66,7 +67,6 @@ const useStyles = makeStyles(theme => ({
   menuButtonHidden: {
     display: 'none',
   },
-
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -112,6 +112,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function DashboardPage(props: {path?: string}) {
+  useRequireSignIn();
+
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {

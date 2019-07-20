@@ -1,7 +1,6 @@
 import SignUpPage from './SignUpPage';
 import LoadingFallback from './LoadingFallback';
 import NotFoundPage from './NotFoundPage';
-import AuthController from './controllers/AuthController';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
@@ -15,21 +14,18 @@ const CompanySettings = lazy(() => import('./company/CompanySettings'));
 
 export default function Router() {
   return (
-    <>
-      <AuthController />
-      <Suspense fallback={<LoadingFallback />}>
-        <ReachRouter>
-          <SignUpPage path="/" />
-          <SignInPage path="/signin" />
-          <ForgotPasswordPage path="/forgot" />
-          <DashboardPage path="/dashboard" />
-          <UserProfile path="/user/profile" />
-          <TeamManagement path="/team/management" />
-          <CompanySubscription path="/company/subscription" />
-          <CompanySettings path="/company/settings" />
-          <NotFoundPage default />
-        </ReachRouter>
-      </Suspense>
-    </>
+    <Suspense fallback={<LoadingFallback />}>
+      <ReachRouter>
+        <SignUpPage path="/" />
+        <SignInPage path="/signin" />
+        <ForgotPasswordPage path="/forgot" />
+        <DashboardPage path="/dashboard" />
+        <UserProfile path="/user/profile" />
+        <TeamManagement path="/team/management" />
+        <CompanySubscription path="/company/subscription" />
+        <CompanySettings path="/company/settings" />
+        <NotFoundPage default />
+      </ReachRouter>
+    </Suspense>
   );
 }
