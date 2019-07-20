@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+require 'fileutils'
+require 'etc'
+include FileUtils
+
+DIRECTORIES = %w[app bin config db lib spec storage test].join(',')
+
+EXTENSIONS = %w[js rb ts tsx].join(',')
+
+APP_ROOT = File.expand_path('..', __dir__)
+
+chdir APP_ROOT do
+  files = Dir.glob("{#{DIRECTORIES}}/**/*.{#{EXTENSIONS}}")
+  group_size = (files.size.to_f / Etc.nprocessors.to_f).ceil
+
+  pids =
+    files.each_slice(group_size).map do |slice|
+      spawn("./node_modules/.bin/prettier --write #{slice.join(' ')}")
+    end
+
+  pids.each { |pid| Process.wait pid }
+end
