@@ -200,7 +200,6 @@ export default function SignUpPage(props: {path?: string}) {
             fullWidth
             label="Company Name"
             name="companyName"
-            autoFocus
             error={!!errorFor('companyName')}
             helperText={errorFor('companyName')}
             onChange={onChangeInput}
