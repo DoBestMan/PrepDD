@@ -1,9 +1,9 @@
-import SignUpPage from './SignUpPage';
 import LoadingFallback from './LoadingFallback';
 import NotFoundPage from './NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
+const SignUpPage = lazy(() => import('./SignUpPage'));
 const SignInPage = lazy(() => import('./SignInPage'));
 const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage'));
 const DashboardPage = lazy(() => import('./DashboardPage'));
