@@ -8,9 +8,7 @@ module Types
           null: true, description: 'The currently logged in user'
 
     def current_user
-      {id: 'current_user',
-      user: context[:controller].current_user
-      }
+      { id: 'current_user', user: context[:controller].current_user }
     end
   end
 end

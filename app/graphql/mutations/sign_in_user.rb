@@ -28,10 +28,7 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
 
     context[:controller].sign_in(user)
     response[:user] = user
-    response[:current_user] = {
-      id: 'current_user',
-      user: user
-    }
+    response[:current_user] = { id: 'current_user', user: user }
     response[:success] = true
     response
   end
