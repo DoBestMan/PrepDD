@@ -2,12 +2,13 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   argument :fullName, String, required: true
   argument :email, String, required: true
   argument :password, String, required: true
+  argument :companyName, String, required: true
 
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(full_name: nil, email: nil, password: nil)
+  def resolve(full_name: nil, email: nil, password: nil, company_name: nil)
     response = { errors: [] }
 
     if context[:controller].user_signed_in?
@@ -32,6 +33,19 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
           { path: path.to_s.camelcase(:lower), message: message }
         )
         response[:success] = false
+      end
+    end
+
+    if user.valid?
+      company = user.owned_companies.create({ name: company_name })
+
+      company.errors.messages.each do |path, messages|
+        messages.each do |message|
+          response[:errors].push(
+            { path: path.to_s.camelcase(:lower), message: message }
+          )
+          response[:success] = false
+        end
       end
     end
 

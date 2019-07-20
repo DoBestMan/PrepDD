@@ -24,6 +24,9 @@ import {useMutation} from 'react-apollo';
 //   }
 // `;
 
+import {GoogleLogin} from 'react-google-login';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
+
 const SIGN_IN_USER = gql`
   mutation($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
@@ -60,6 +63,20 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  socialGmail: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    height: 43,
+  },
+  socialLinkedIn: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    background: '#007bb6',
+    color: 'white',
+    height: 43,
   },
 }));
 
@@ -115,6 +132,10 @@ export default function SignInPage(props: {path?: string}) {
     },
     [setState]
   );
+
+  const responseGoogle = response => {
+    console.log(response);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -176,19 +197,45 @@ export default function SignInPage(props: {path?: string}) {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link component={RouterLink} variant="body2" to="/forgot">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link component={RouterLink} variant="body2" to="/">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
+
+        <Grid container>
+          <Grid item xs>
+            <GoogleLogin
+              clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={'single_host_origin'}
+              className={classes.socialGmail}
+            />
+          </Grid>
+
+          <Grid item>
+            <LinkedIn
+              clientId="81lx5we2omq9xh"
+              onFailure={responseGoogle}
+              onSuccess={responseGoogle}
+              redirectUri="http://localhost:3000/linkedin"
+              className={classes.socialLinkedIn}
+            >
+              Login LinkedIn
+            </LinkedIn>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs>
+            <Link component={RouterLink} variant="body2" to="/forgot">
+              Forgot password?
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link component={RouterLink} variant="body2" to="/">
+              {"Don't have an account? Sign Up"}
+            </Link>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   );

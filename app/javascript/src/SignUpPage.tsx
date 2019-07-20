@@ -15,9 +15,22 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
+import {GoogleLogin} from 'react-google-login';
+import {LinkedIn} from 'react-linkedin-login-oauth2';
+
 const SIGN_UP_USER = gql`
-  mutation($fullName: String!, $email: String!, $password: String!) {
-    signUpUser(fullName: $fullName, email: $email, password: $password) {
+  mutation(
+    $fullName: String!
+    $email: String!
+    $password: String!
+    $companyName: String!
+  ) {
+    signUpUser(
+      fullName: $fullName
+      email: $email
+      password: $password
+      companyName: $companyName
+    ) {
       user {
         email
       }
@@ -47,6 +60,23 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  socialGmail: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    height: 43,
+  },
+  socialLinkedIn: {
+    width: 170,
+    textAlign: 'center',
+    marginBottom: 10,
+    background: '#007bb6',
+    color: 'white',
+    height: 43,
+    border: 2,
+    boxShadow:
+      'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
+  },
 }));
 
 export default function SignUpPage(props: {path?: string}) {
@@ -56,10 +86,14 @@ export default function SignUpPage(props: {path?: string}) {
     fullName: string;
     email: string;
     password: string;
+    companyName: string;
+    socialLogin: boolean;
   }>({
     fullName: '',
     email: '',
     password: '',
+    companyName: '',
+    socialLogin: false,
   });
 
   const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
@@ -67,6 +101,7 @@ export default function SignUpPage(props: {path?: string}) {
       fullName: state.fullName,
       email: state.email,
       password: state.password,
+      companyName: state.companyName,
     },
   });
 
@@ -104,6 +139,24 @@ export default function SignUpPage(props: {path?: string}) {
     [setState]
   );
 
+  const responseGoogle = response => {
+    console.log(response);
+  };
+
+  const successGoogle = response => {
+    console.log(response);
+    if (response.profileObj) {
+      console.log('was here');
+      setState(state => ({...state, email: response.profileObj.email}));
+      setState(state => ({...state, fullName: response.profileObj.name}));
+      setState(state => ({...state, socialLogin: true}));
+    }
+  };
+
+  const failGoogle = response => {
+    console.log(response);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -118,6 +171,15 @@ export default function SignUpPage(props: {path?: string}) {
               message={errorFor('root')}
             />
           )}
+
+          {state.socialLogin && (
+            <FlashMessage
+              className={classes.flash}
+              variant="info"
+              message={'Add company name'}
+            />
+          )}
+
           <TextField
             variant="outlined"
             margin="normal"
@@ -126,8 +188,21 @@ export default function SignUpPage(props: {path?: string}) {
             label="Full Name"
             name="fullName"
             autoFocus
+            value={state.fullName}
             error={!!errorFor('fullName')}
             helperText={errorFor('fullName')}
+            onChange={onChangeInput}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Company Name"
+            name="companyName"
+            autoFocus
+            error={!!errorFor('companyName')}
+            helperText={errorFor('companyName')}
             onChange={onChangeInput}
           />
           <TextField
@@ -138,23 +213,26 @@ export default function SignUpPage(props: {path?: string}) {
             label="Email Address"
             name="email"
             autoComplete="email"
+            value={state.email}
             error={!!errorFor('email')}
             helperText={errorFor('email')}
             onChange={onChangeInput}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            autoComplete="current-password"
-            error={!!errorFor('password')}
-            helperText={errorFor('password')}
-            onChange={onChangeInput}
-          />
+          {!state.socialLogin && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              error={!!errorFor('password')}
+              helperText={errorFor('password')}
+              onChange={onChangeInput}
+            />
+          )}
 
           <Button
             type="submit"
@@ -165,14 +243,42 @@ export default function SignUpPage(props: {path?: string}) {
           >
             Sign Up
           </Button>
-          <Grid container justify="center">
+        </form>
+
+        {!state.socialLogin && (
+          <Grid container>
+            <Grid item xs>
+              <GoogleLogin
+                clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                buttonText="Sign Up Gmail"
+                onSuccess={successGoogle}
+                onFailure={failGoogle}
+                cookiePolicy={'single_host_origin'}
+                className={classes.socialGmail}
+              />
+            </Grid>
+
             <Grid item>
-              <Link component={RouterLink} variant="body2" to="/signin">
-                {'Already have an account? Sign In'}
-              </Link>
+              <LinkedIn
+                clientId="81lx5we2omq9xh"
+                onFailure={responseGoogle}
+                onSuccess={responseGoogle}
+                redirectUri="http://localhost:3000/linkedin"
+                className={classes.socialLinkedIn}
+              >
+                Sign Up LinkedIn
+              </LinkedIn>
             </Grid>
           </Grid>
-        </form>
+        )}
+
+        <Grid container justify="center">
+          <Grid item>
+            <Link component={RouterLink} variant="body2" to="/signin">
+              {'Already have an account? Sign In'}
+            </Link>
+          </Grid>
+        </Grid>
       </div>
     </Container>
   );
