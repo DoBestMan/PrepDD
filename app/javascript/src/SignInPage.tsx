@@ -113,7 +113,7 @@ export default function SignInPage(props: {path?: string}) {
     [setState]
   );
 
-  const responseGoogle = response => {
+  const responseGoogle = (response: any) => {
     console.log(response);
   };
 

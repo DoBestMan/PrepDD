@@ -17,9 +17,14 @@ const CURRENT_USER = gql`
   }
 `;
 
-function useCurrentUserLoaded(onLoadComplete) {
+type CurrentUser = any; /*TODO*/
+
+function useCurrentUserLoaded(onLoadComplete: CurrentUser /*TODO*/) {
   const {loading, data} = useQuery(CURRENT_USER);
-  const currentUser = idx(data, data => data.currentUser.user);
+  const currentUser: CurrentUser = idx(
+    data,
+    data => data.currentUser.user
+  ); /*TODO*/
 
   useEffect(() => {
     if (loading) {
@@ -30,7 +35,7 @@ function useCurrentUserLoaded(onLoadComplete) {
 }
 
 export function useRequireSignIn() {
-  useCurrentUserLoaded(currentUser => {
+  useCurrentUserLoaded((currentUser: CurrentUser) => {
     if (!currentUser) {
       console.log('must be signed in... redirecting to /signin');
       navigate('/signin');
@@ -39,7 +44,7 @@ export function useRequireSignIn() {
 }
 
 export function useRequireGuest() {
-  useCurrentUserLoaded(currentUser => {
+  useCurrentUserLoaded((currentUser: CurrentUser) => {
     if (currentUser) {
       console.log('already signed in... redirecting to /dashboard');
       navigate('/dashboard');

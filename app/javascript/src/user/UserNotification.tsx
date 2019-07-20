@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -91,9 +91,10 @@ export default function UserNotification(props: {path?: string}) {
   const classes = useStyles();
   const [frequency, setFrequency] = React.useState('');
 
-  const handleChange = event => {
+  const handleChange = useCallback(event => {
     setFrequency(event.target.value);
-  };
+  }, []);
+
   return (
     <div className={classes.root}>
       <div className={classes.noteTitle}>

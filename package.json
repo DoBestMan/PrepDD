@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "^0.14.0",
+    "apollo": "^2.16.0",
     "prettier": "^1.18.2",
     "webpack-dev-server": "^3.7.1"
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -41,9 +41,13 @@ export default function CompanySettings(props: {path?: string}) {
     checkedC: false,
   });
 
-  const handleChange = name => event => {
-    setState({...state, [name]: event.target.checked});
-  };
+  const createCheckboxChangeHandler = (name: string) =>
+    useCallback(event => {
+      setState({...state, [name]: event.target.checked});
+    }, []);
+  const handleChangeCheckedA = createCheckboxChangeHandler('checkedA');
+  const handleChangeCheckedB = createCheckboxChangeHandler('checkedB');
+  const handleChangeCheckedC = createCheckboxChangeHandler('checkedC');
 
   return (
     <div className={classes.root}>
@@ -163,7 +167,7 @@ export default function CompanySettings(props: {path?: string}) {
                   <TableCell align="right">
                     <Switch
                       checked={state.checkedA}
-                      onChange={handleChange('checkedA')}
+                      onChange={handleChangeCheckedA}
                       value="checkedA"
                       color="primary"
                       inputProps={{'aria-label': 'primary checkbox'}}
@@ -180,7 +184,7 @@ export default function CompanySettings(props: {path?: string}) {
                   <TableCell align="right">
                     <Switch
                       checked={state.checkedB}
-                      onChange={handleChange('checkedB')}
+                      onChange={handleChangeCheckedB}
                       value="checkedB"
                       color="primary"
                       inputProps={{'aria-label': 'primary checkbox'}}
@@ -197,7 +201,7 @@ export default function CompanySettings(props: {path?: string}) {
                   <TableCell align="right">
                     <Switch
                       checked={state.checkedC}
-                      onChange={handleChange('checkedC')}
+                      onChange={handleChangeCheckedC}
                       value="checkedC"
                       color="primary"
                       inputProps={{'aria-label': 'primary checkbox'}}

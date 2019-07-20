@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import clsx from 'clsx';
 import {fade, makeStyles, useTheme} from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -77,7 +77,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   search: {
-    // display: 'inline',
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -168,7 +167,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function createData(name, team, role, company) {
+function createData(name: string, team: string, role: string, company: string) {
   return {name, team, role, company};
 }
 
@@ -182,30 +181,22 @@ export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles();
   const theme = useTheme();
 
-  const [state, setState] = React.useState({
-    right: false,
-  });
-
+  const [state, setState] = React.useState({right: false});
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const open2 = Boolean(anchorEl);
-
   const [open, setOpen] = React.useState(false);
 
-  function handleDrawerOpen() {
+  const handleDrawerOpen = useCallback(() => {
     setOpen(true);
-  }
-
-  function handleDrawerClose() {
+  }, []);
+  const handleDrawerClose = useCallback(() => {
     setOpen(false);
-  }
-
-  function handleClick(event) {
+  }, []);
+  const handleClick = useCallback(event => {
     setAnchorEl(event.currentTarget);
-  }
-
-  function handleClose() {
+  }, []);
+  const handleClose = useCallback(() => {
     setAnchorEl(null);
-  }
+  }, []);
 
   return (
     <Paper className={clsx(classes.root, classes.rootShifted)}>
@@ -239,7 +230,7 @@ export default function TeamManagement(props: {path?: string}) {
             id="long-menu"
             anchorEl={anchorEl}
             keepMounted
-            open={open2}
+            open={Boolean(anchorEl)}
             onClose={handleClose}
             PaperProps={{
               style: {

@@ -141,11 +141,11 @@ export default function SignUpPage(props: {path?: string}) {
     [setState]
   );
 
-  const responseGoogle = response => {
+  const responseGoogle = (response: any) => {
     console.log(response);
   };
 
-  const successGoogle = response => {
+  const successGoogle = (response: any) => {
     console.log(response);
     if (response.profileObj) {
       console.log('was here');
@@ -155,7 +155,7 @@ export default function SignUpPage(props: {path?: string}) {
     }
   };
 
-  const failGoogle = response => {
+  const failGoogle = (response: any) => {
     console.log(response);
   };
 

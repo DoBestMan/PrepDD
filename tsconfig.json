@@ -12,7 +12,8 @@
     "sourceMap": true,
     "strict": true,
     "target": "es5",
-    "noImplicitAny": false
+    "noImplicitAny": true,
+    "typeRoots": ["node_modules/@types", "app/javascript/third_party_types"]
   },
   "exclude": ["**/*.spec.ts", "node_modules", "vendor", "public"],
   "compileOnSave": false

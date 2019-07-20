@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
@@ -15,12 +15,12 @@ const useStyles = makeStyles({
 
 export default function CompanySubscription(props: {path?: string}) {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    Watermarking: false,
-  });
-  const handleChange = name => event => {
-    setState({...state, [name]: event.target.checked});
-  };
+
+  const [state, setState] = React.useState({watermarking: false});
+
+  const handleWatermarkingChange = useCallback(event => {
+    setState({...state, watermarking: event.target.checked});
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -36,8 +36,8 @@ export default function CompanySubscription(props: {path?: string}) {
         <FormControlLabel
           control={
             <Switch
-              checked={state.Watermarking}
-              onChange={handleChange('Watermarking')}
+              checked={state.watermarking}
+              onChange={handleWatermarkingChange}
               value="Watermarking"
               color="primary"
             />

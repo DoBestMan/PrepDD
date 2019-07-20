@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, ReactNode} from 'react';
 import clsx from 'clsx';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -19,7 +19,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 import UserNotification from './UserNotification';
 
-function TabContainer(props) {
+function TabContainer(props: {children: ReactNode}) {
   return (
     <Typography component="div" style={{padding: 8 * 3}}>
       {props.children}
@@ -155,7 +155,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function createData(companies, teams) {
+function createData(companies: string, teams: string) {
   return {companies, teams};
 }
 
@@ -168,9 +168,9 @@ export default function UserProfile(props: {path?: string}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  function handleChange(event, newValue) {
+  const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
-  }
+  }, []);
 
   function FormRow(props: {path?: string}) {
     return (
