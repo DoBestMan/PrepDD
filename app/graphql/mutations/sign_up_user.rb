@@ -18,19 +18,19 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     end
 
     user =
-        User.create(
-            {
-                full_name: full_name,
-                email: email,
-                password: password,
-                password_confirmation: password
-            }
-        )
+      User.create(
+        {
+          full_name: full_name,
+          email: email,
+          password: password,
+          password_confirmation: password
+        }
+      )
 
     user.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(
-            { path: path.to_s.camelcase(:lower), message: message }
+          { path: path.to_s.camelcase(:lower), message: message }
         )
         response[:success] = false
       end
@@ -42,7 +42,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       company.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
-              { path: path.to_s.camelcase(:lower), message: message }
+            { path: path.to_s.camelcase(:lower), message: message }
           )
           response[:success] = false
         end

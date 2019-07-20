@@ -74,7 +74,8 @@ const useStyles = makeStyles(theme => ({
     color: 'white',
     height: 43,
     border: 2,
-    boxShadow: 'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px'
+    boxShadow:
+      'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
   },
 }));
 
@@ -123,19 +124,19 @@ export default function SignUpPage(props: {path?: string}) {
   }
 
   const onSubmit = useCallback(
-      e => {
-        e.preventDefault();
-        signUpUser();
-      },
-      [signUpUser]
+    e => {
+      e.preventDefault();
+      signUpUser();
+    },
+    [signUpUser]
   );
 
   const onChangeInput = useCallback(
-      e => {
-        const {name, value} = e.target;
-        setState(state => ({...state, [name]: value}));
-      },
-      [setState]
+    e => {
+      const {name, value} = e.target;
+      setState(state => ({...state, [name]: value}));
+    },
+    [setState]
   );
 
   const responseGoogle = response => {
@@ -144,8 +145,8 @@ export default function SignUpPage(props: {path?: string}) {
 
   const successGoogle = response => {
     console.log(response);
-    if(response.profileObj){
-      console.log('was here')
+    if (response.profileObj) {
+      console.log('was here');
       setState(state => ({...state, email: response.profileObj.email}));
       setState(state => ({...state, fullName: response.profileObj.name}));
       setState(state => ({...state, socialLogin: true}));
@@ -157,130 +158,128 @@ export default function SignUpPage(props: {path?: string}) {
   };
 
   return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <form className={classes.form} noValidate onSubmit={onSubmit}>
-            {errorFor('root') && (
-                <FlashMessage
-                    className={classes.flash}
-                    variant="warning"
-                    message={errorFor('root')}
-                />
-            )}
-
-            { state.socialLogin &&(
-
-                <FlashMessage
-                    className={classes.flash}
-                    variant="info"
-                    message={'Add company name'}
-                />
-            )}
-
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Full Name"
-                name="fullName"
-                autoFocus
-                value={state.fullName}
-                error={!!errorFor('fullName')}
-                helperText={errorFor('fullName')}
-                onChange={onChangeInput}
+    <Container component="main" maxWidth="xs">
+      <div className={classes.paper}>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
+          {errorFor('root') && (
+            <FlashMessage
+              className={classes.flash}
+              variant="warning"
+              message={errorFor('root')}
             />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Company Name"
-                name="companyName"
-                autoFocus
-                error={!!errorFor('companyName')}
-                helperText={errorFor('companyName')}
-                onChange={onChangeInput}
-            />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={state.email}
-                error={!!errorFor('email')}
-                helperText={errorFor('email')}
-                onChange={onChangeInput}
-            />
-            { !state.socialLogin &&(
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    error={!!errorFor('password')}
-                    helperText={errorFor('password')}
-                    onChange={onChangeInput}
-                />
-            )}
-
-            <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-            >
-              Sign Up
-            </Button>
-          </form>
-
-          { !state.socialLogin &&(
-              <Grid container>
-                <Grid item xs>
-                  <GoogleLogin
-                      clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-                      buttonText="Sign Up Gmail"
-                      onSuccess={successGoogle}
-                      onFailure={failGoogle}
-                      cookiePolicy={'single_host_origin'}
-                      className={classes.socialGmail}
-                  />
-                </Grid>
-
-                <Grid item>
-                  <LinkedIn
-                      clientId="81lx5we2omq9xh"
-                      onFailure={responseGoogle}
-                      onSuccess={responseGoogle}
-                      redirectUri="http://localhost:3000/linkedin"
-                      className={classes.socialLinkedIn}
-                  >
-                    Sign Up LinkedIn
-                  </LinkedIn>
-                </Grid>
-              </Grid>
           )}
 
-          <Grid container justify="center">
+          {state.socialLogin && (
+            <FlashMessage
+              className={classes.flash}
+              variant="info"
+              message={'Add company name'}
+            />
+          )}
+
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Full Name"
+            name="fullName"
+            autoFocus
+            value={state.fullName}
+            error={!!errorFor('fullName')}
+            helperText={errorFor('fullName')}
+            onChange={onChangeInput}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Company Name"
+            name="companyName"
+            autoFocus
+            error={!!errorFor('companyName')}
+            helperText={errorFor('companyName')}
+            onChange={onChangeInput}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            value={state.email}
+            error={!!errorFor('email')}
+            helperText={errorFor('email')}
+            onChange={onChangeInput}
+          />
+          {!state.socialLogin && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              autoComplete="current-password"
+              error={!!errorFor('password')}
+              helperText={errorFor('password')}
+              onChange={onChangeInput}
+            />
+          )}
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign Up
+          </Button>
+        </form>
+
+        {!state.socialLogin && (
+          <Grid container>
+            <Grid item xs>
+              <GoogleLogin
+                clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                buttonText="Sign Up Gmail"
+                onSuccess={successGoogle}
+                onFailure={failGoogle}
+                cookiePolicy={'single_host_origin'}
+                className={classes.socialGmail}
+              />
+            </Grid>
+
             <Grid item>
-              <Link component={RouterLink} variant="body2" to="/signin">
-                {'Already have an account? Sign In'}
-              </Link>
+              <LinkedIn
+                clientId="81lx5we2omq9xh"
+                onFailure={responseGoogle}
+                onSuccess={responseGoogle}
+                redirectUri="http://localhost:3000/linkedin"
+                className={classes.socialLinkedIn}
+              >
+                Sign Up LinkedIn
+              </LinkedIn>
             </Grid>
           </Grid>
+        )}
 
-        </div>
-      </Container>
+        <Grid container justify="center">
+          <Grid item>
+            <Link component={RouterLink} variant="body2" to="/signin">
+              {'Already have an account? Sign In'}
+            </Link>
+          </Grid>
+        </Grid>
+      </div>
+    </Container>
   );
 }
