@@ -17,7 +17,7 @@ const CURRENT_USER = gql`
   }
 `;
 
-function useCurrentUserLoaded(onLoadComplete: (any) => {}) {
+function useCurrentUserLoaded(onLoadComplete) {
   const {loading, data} = useQuery(CURRENT_USER);
   const currentUser = idx(data, data => data.currentUser.user);
 
@@ -29,16 +29,20 @@ function useCurrentUserLoaded(onLoadComplete: (any) => {}) {
   }, [loading, currentUser]);
 }
 
-export const useRequireSignIn = useCurrentUserLoaded(() => {
-  if (!currentUser) {
-    console.log('must be signed in... redirecting to /signin');
-    navigate('/signin');
-  }
-});
+export function useRequireSignIn() {
+  useCurrentUserLoaded(currentUser => {
+    if (!currentUser) {
+      console.log('must be signed in... redirecting to /signin');
+      navigate('/signin');
+    }
+  });
+}
 
-export const useRequireGuest = useCurrentUserLoaded(() => {
-  if (currentUser) {
-    console.log('already signed in... redirecting to /dashboard');
-    navigate('/dashboard');
-  }
-});
+export function useRequireGuest() {
+  useCurrentUserLoaded(currentUser => {
+    if (currentUser) {
+      console.log('already signed in... redirecting to /dashboard');
+      navigate('/dashboard');
+    }
+  });
+}
