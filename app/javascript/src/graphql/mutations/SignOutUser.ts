@@ -1,20 +1,14 @@
-import {gql} from 'apollo-boost';
-import {useMutation} from 'react-apollo';
+import {createMutationHook, gql} from '../graphqlHelpers';
 import {SignOutUser} from './__generated__/SignOutUser';
 
-export function useSignOutUser<SignOutUser>(variables: {}) {
-  return useMutation(
-    gql`
-      mutation SignOutUser {
-        signOutUser {
-          errors {
-            path
-            message
-          }
-          success
-        }
+export const useSignOutUser = createMutationHook<SignOutUser, {}>(gql`
+  mutation SignOutUser {
+    signOutUser {
+      errors {
+        path
+        message
       }
-    `,
-    {variables}
-  );
-}
+      success
+    }
+  }
+`);
