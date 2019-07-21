@@ -1,53 +1,34 @@
 import idx from 'idx';
 import React, {useCallback, useEffect, useState} from 'react';
-import {gql} from 'apollo-boost';
 import {Location, redirectTo, navigate} from '@reach/router';
-import {useQuery} from 'react-apollo';
+import {useCurrentUser, User} from '../graphql/queries/CurrentUser';
 
-const CURRENT_USER = gql`
-  {
-    currentUser {
-      id
-      user {
-        id
-        fullName
-        email
+function createCurrentUserLoadedHook(
+  onLoadComplete: (currentUser: User | void | null) => void
+): () => void {
+  return function() {
+    const {loading, data} = useCurrentUser({});
+    const currentUser = idx(data, data => data.currentUser.user);
+
+    useEffect(() => {
+      if (loading) {
+        return;
       }
-    }
+      onLoadComplete(currentUser);
+    }, [loading, currentUser]);
+  };
+}
+
+export const useRequireSignIn = createCurrentUserLoadedHook(currentUser => {
+  if (!currentUser) {
+    console.log('must be signed in... redirecting to /signin');
+    navigate('/signin');
   }
-`;
+});
 
-type CurrentUser = any; /*TODO*/
-
-function useCurrentUserLoaded(onLoadComplete: CurrentUser /*TODO*/) {
-  const {loading, data} = useQuery(CURRENT_USER);
-  const currentUser: CurrentUser = idx(
-    data,
-    data => data.currentUser.user
-  ); /*TODO*/
-
-  useEffect(() => {
-    if (loading) {
-      return;
-    }
-    onLoadComplete(currentUser);
-  }, [loading, currentUser]);
-}
-
-export function useRequireSignIn() {
-  useCurrentUserLoaded((currentUser: CurrentUser) => {
-    if (!currentUser) {
-      console.log('must be signed in... redirecting to /signin');
-      navigate('/signin');
-    }
-  });
-}
-
-export function useRequireGuest() {
-  useCurrentUserLoaded((currentUser: CurrentUser) => {
-    if (currentUser) {
-      console.log('already signed in... redirecting to /dashboard');
-      navigate('/dashboard');
-    }
-  });
-}
+export const useRequireGuest = createCurrentUserLoadedHook(currentUser => {
+  if (currentUser) {
+    console.log('already signed in... redirecting to /dashboard');
+    navigate('/dashboard');
+  }
+});

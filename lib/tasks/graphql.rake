@@ -4,7 +4,7 @@
 namespace :graphql do
   desc 'Remove generated files'
   task :clean do
-    rm_rf ['./__generated__/', *Dir.glob('app/**/__generated__/')]
+    rm_rf ['./__generated__', *Dir.glob('app/**/__generated__')]
   end
 
   desc 'Generate typescript definitions'
@@ -17,7 +17,9 @@ namespace :graphql do
       '--localSchemaFile=schema.graphql',
       '--includes=app/javascript/src/graphql/**/*.{ts,tsx}',
       '--target=typescript',
-      '--tagName=gql'
+      '--tagName=gql',
+      '--globalTypesFile=app/javascript/src/graphql/__generated__/globalTypes.ts',
+      # '--outputFlat'
     )
   end
 

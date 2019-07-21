@@ -10,22 +10,9 @@ import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
-import {useMutation} from 'react-apollo';
-
-const SEND_RESET_PASSWORD_INSTRUCTIONS = gql`
-  mutation ForgotPasswordPage_SendResetPasswordInstructions($email: String!) {
-    sendResetPasswordInstructions(email: $email) {
-      errors {
-        path
-        message
-      }
-      success
-    }
-  }
-`;
+import {useSendPasswordResetInstructions} from './graphql/mutations/SendPasswordResetInstructions';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -80,14 +67,12 @@ export default function ForgotPasswordPage(props: {path?: string}) {
     email: '',
   });
 
-  const [sendResetPasswordInstructions, {loading, data}] = useMutation(
-    SEND_RESET_PASSWORD_INSTRUCTIONS,
-    {
-      variables: {
-        email: state.email,
-      },
-    }
-  );
+  const [
+    sendResetPasswordInstructions,
+    {loading, data},
+  ] = useSendPasswordResetInstructions({
+    email: state.email,
+  });
 
   function errorFor(path: string) {
     const errors = idx(data, x => x.sendResetPasswordInstructions.errors);

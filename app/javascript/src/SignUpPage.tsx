@@ -11,37 +11,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {GoogleLogin} from 'react-google-login';
-import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
-import {useMutation} from 'react-apollo';
 import {useRequireGuest} from './hooks/auth';
-
-const SIGN_UP_USER = gql`
-  mutation SignUpPage_SignUpUser(
-    $fullName: String!
-    $email: String!
-    $password: String!
-    $companyName: String!
-  ) {
-    signUpUser(
-      fullName: $fullName
-      email: $email
-      password: $password
-      companyName: $companyName
-    ) {
-      user {
-        email
-      }
-      errors {
-        path
-        message
-      }
-      success
-    }
-  }
-`;
+import {useSignUpUser} from './graphql/mutations/SignUpUser';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -98,13 +72,11 @@ export default function SignUpPage(props: {path?: string}) {
     socialLogin: false,
   });
 
-  const [signUpUser, {loading, data}] = useMutation(SIGN_UP_USER, {
-    variables: {
-      fullName: state.fullName,
-      email: state.email,
-      password: state.password,
-      companyName: state.companyName,
-    },
+  const [signUpUser, {loading, data}] = useSignUpUser({
+    fullName: state.fullName,
+    email: state.email,
+    password: state.password,
+    companyName: state.companyName,
   });
 
   useEffect(() => {
