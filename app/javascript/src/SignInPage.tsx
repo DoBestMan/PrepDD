@@ -17,9 +17,10 @@ import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 import {useRequireGuest} from './hooks/auth';
+import signInUser from './graphql/mutations/SignInUser';
 
 const SIGN_IN_USER = gql`
-  mutation($email: String!, $password: String!) {
+  mutation SignInPage_SignInUser($email: String!, $password: String!) {
     signInUser(email: $email, password: $password) {
       currentUser {
         id
@@ -86,12 +87,16 @@ export default function SignInPage(props: {path?: string}) {
     remember: false,
   });
 
-  const [signInUser, {loading, data}] = useMutation(SIGN_IN_USER, {
-    variables: {
-      email: state.email,
-      password: state.password,
-    },
+  const [signInUser, {loading, data}] = signInUser({
+    email: state.email,
+    password: state.password,
   });
+  // useMutation(SIGN_IN_USER, {
+  //   variables: {
+  //     email: state.email,
+  //     password: state.password,
+  //   },
+  // });
   const errors: ({message: string})[] | null = idx(
     data,
     x => x.signInUser.errors

@@ -15,8 +15,8 @@ import {Link as RouterLink, navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useMutation} from 'react-apollo';
 
-const SEND_REST_PASSWORD_INSTRUCTIONS = gql`
-  mutation($email: String!) {
+const SEND_RESET_PASSWORD_INSTRUCTIONS = gql`
+  mutation ForgotPasswordPage_SendResetPasswordInstructions($email: String!) {
     sendResetPasswordInstructions(email: $email) {
       errors {
         path
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage(props: {path?: string}) {
   });
 
   const [sendResetPasswordInstructions, {loading, data}] = useMutation(
-    SEND_REST_PASSWORD_INSTRUCTIONS,
+    SEND_RESET_PASSWORD_INSTRUCTIONS,
     {
       variables: {
         email: state.email,

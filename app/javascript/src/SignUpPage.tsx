@@ -19,7 +19,7 @@ import {useMutation} from 'react-apollo';
 import {useRequireGuest} from './hooks/auth';
 
 const SIGN_UP_USER = gql`
-  mutation(
+  mutation SignUpPage_SignUpUser(
     $fullName: String!
     $email: String!
     $password: String!

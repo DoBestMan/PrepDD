@@ -19,7 +19,7 @@ import {useMutation} from 'react-apollo';
 import {useRequireSignIn} from './hooks/auth';
 
 const SIGN_OUT_USER = gql`
-  mutation DashboardPageSignOutUserMutation {
+  mutation DashboardPage_SignOutUser {
     signOutUser {
       errors {
         path
