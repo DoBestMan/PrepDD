@@ -1,6 +1,6 @@
 import idx from 'idx';
-import React, {useCallback, useEffect, useState} from 'react';
-import {Location, redirectTo, navigate} from '@reach/router';
+import {useEffect} from 'react';
+import {navigate} from '@reach/router';
 import {useCurrentUser, User} from '../graphql/queries/CurrentUser';
 
 function createCurrentUserLoadedHook(

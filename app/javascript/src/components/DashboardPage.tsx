@@ -7,15 +7,14 @@ import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import idx from 'idx';
-import Link from '@material-ui/core/Link';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, {useState, useCallback, useEffect} from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import {makeStyles} from '@material-ui/core/styles';
-import {useSignOutUser} from './graphql/mutations/SignOutUser';
-import {useRequireSignIn} from './hooks/auth';
+import {useSignOutUser} from '../graphql/mutations/SignOutUser';
+import {useRequireSignIn} from '../hooks/auth';
 
 const drawerWidth = 240;
 
@@ -98,7 +97,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function DashboardPage(props: {path?: string}) {
+export default function DashboardPage(_props: {path?: string}) {
   useRequireSignIn();
 
   const classes = useStyles();
@@ -109,7 +108,6 @@ export default function DashboardPage(props: {path?: string}) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -124,7 +122,7 @@ export default function DashboardPage(props: {path?: string}) {
     setAnchorEl(null);
   }, []);
 
-  const [signOutUser, {loading, data}] = useSignOutUser({});
+  const [signOutUser, {data}] = useSignOutUser({});
 
   const onClickSignOut = useCallback(() => {
     onCloseUserMenu();

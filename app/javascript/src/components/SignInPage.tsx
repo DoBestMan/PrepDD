@@ -1,21 +1,20 @@
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
-import FlashMessage from './ui/FlashMessage';
+import FlashMessage from './FlashMessage';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {GoogleLogin} from 'react-google-login';
-import {Link as RouterLink, navigate} from '@reach/router';
+import {Link as RouterLink} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from './hooks/auth';
-import {useSignInUser} from './graphql/mutations/SignInUser';
+import {useRequireGuest} from '../hooks/auth';
+import {useSignInUser} from '../graphql/mutations/SignInUser';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -50,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInPage(props: {path?: string}) {
+export default function SignInPage(_props: { path?: string }) {
   useRequireGuest();
 
   const classes = useStyles({});
@@ -65,7 +64,7 @@ export default function SignInPage(props: {path?: string}) {
     remember: false,
   });
 
-  const [signInUser, {loading, data}] = useSignInUser({
+  const [signInUser, {data}] = useSignInUser({
     email: state.email,
     password: state.password,
   });

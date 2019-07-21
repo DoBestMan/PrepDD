@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-client';
 import React from 'react';
-import ReactDOM, {render} from 'react-dom';
-import Router from './Router';
+import {render} from 'react-dom';
+import Router from './components/Router';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
