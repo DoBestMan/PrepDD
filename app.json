@@ -17,7 +17,9 @@
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
       "scripts": {},
-      "env": {}
+      "env": {
+        "RAILS_ENV": "heroku_test"
+      }
     }
   }
 }

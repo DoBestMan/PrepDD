@@ -20,7 +20,10 @@ test:
   <<: *default
   database: db/test.sqlite3
 
-production:
+production: &production
   adapter: postgresql
   url: <%= ENV['DATABASE_URL'] %>
+
+heroku_test:
+  <<: *production
 

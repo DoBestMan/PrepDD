@@ -32,7 +32,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-kms'
 
-group :development, :test do
+group :development, :test, :heroku_test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.8'
   gem 'shoulda', '~> 3.6'
@@ -50,7 +50,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-group :test do
+group :test, :heroku_test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
