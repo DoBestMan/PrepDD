@@ -13,22 +13,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import React, {useState, useCallback, useEffect} from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
-import {gql} from 'apollo-boost';
 import {makeStyles} from '@material-ui/core/styles';
-import {useMutation} from 'react-apollo';
+import {useSignOutUser} from './graphql/mutations/SignOutUser';
 import {useRequireSignIn} from './hooks/auth';
-
-const SIGN_OUT_USER = gql`
-  mutation DashboardPage_SignOutUser {
-    signOutUser {
-      errors {
-        path
-        message
-      }
-      success
-    }
-  }
-`;
 
 const drawerWidth = 240;
 
@@ -137,9 +124,7 @@ export default function DashboardPage(props: {path?: string}) {
     setAnchorEl(null);
   }, []);
 
-  const [signOutUser, {loading, data}] = useMutation(SIGN_OUT_USER, {
-    variables: {},
-  });
+  const [signOutUser, {loading, data}] = useSignOutUser({});
 
   const onClickSignOut = useCallback(() => {
     onCloseUserMenu();

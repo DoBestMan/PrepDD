@@ -11,33 +11,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {GoogleLogin} from 'react-google-login';
-import {gql} from 'apollo-boost';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
-import {useMutation} from 'react-apollo';
 import {useRequireGuest} from './hooks/auth';
-import signInUser from './graphql/mutations/SignInUser';
-
-const SIGN_IN_USER = gql`
-  mutation SignInPage_SignInUser($email: String!, $password: String!) {
-    signInUser(email: $email, password: $password) {
-      currentUser {
-        id
-        user {
-          id
-          fullName
-          email
-        }
-      }
-      errors {
-        path
-        message
-      }
-      success
-    }
-  }
-`;
+import {useSignInUser} from './graphql/mutations/SignInUser';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -87,20 +65,12 @@ export default function SignInPage(props: {path?: string}) {
     remember: false,
   });
 
-  const [signInUser, {loading, data}] = signInUser({
+  const [signInUser, {loading, data}] = useSignInUser({
     email: state.email,
     password: state.password,
   });
-  // useMutation(SIGN_IN_USER, {
-  //   variables: {
-  //     email: state.email,
-  //     password: state.password,
-  //   },
-  // });
-  const errors: ({message: string})[] | null = idx(
-    data,
-    x => x.signInUser.errors
-  );
+
+  const errors = idx(data, x => x.signInUser.errors);
 
   const onSubmit = useCallback(
     e => {
