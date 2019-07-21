@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.3'
 
 gem 'rails', '~> 5.2.3'
-gem 'sqlite3', groups: [:development, :test]
+gem 'sqlite3', groups: [:development]
 gem 'pg', group: :production
 gem 'puma', '~> 4.0.1'
 gem 'uglifier', '>= 1.3.0'
@@ -32,7 +32,7 @@ gem 'aws-sdk-rails', '~> 2'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-kms'
 
-group :development, :test, :heroku_test do
+group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.8'
   gem 'shoulda', '~> 3.6'
@@ -50,7 +50,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-group :test, :heroku_test do
+group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
