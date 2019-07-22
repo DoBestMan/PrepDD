@@ -3,10 +3,11 @@ import NotFoundPage from './NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
-const SignUpPage = lazy(() => import('./SignUpPage'));
-const SignInPage = lazy(() => import('./SignInPage'));
-const ForgotPasswordPage = lazy(() => import('./ForgotPasswordPage'));
-const DashboardPage = lazy(() => import('./DashboardPage'));
+const SignUpPage = lazy(() => import('./auth/SignUpPage'));
+const SignInPage = lazy(() => import('./auth/SignInPage'));
+const ForgotPasswordPage = lazy(() => import('./auth/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./auth/ResetPasswordPage'));
+const DashboardPage = lazy(() => import('./dashboard/DashboardPage'));
 const UserProfile = lazy(() => import('./user/UserProfile'));
 const TeamManagement = lazy(() => import('./team/TeamManagement'));
 const CompanySubscription = lazy(() => import('./company/CompanySubscription'));
@@ -19,6 +20,7 @@ export default function Router() {
         <SignUpPage path="/" />
         <SignInPage path="/signin" />
         <ForgotPasswordPage path="/forgot" />
+        <ResetPasswordPage path="/reset_password/:token" />
         <DashboardPage path="/dashboard" />
         <UserProfile path="/user/profile" />
         <TeamManagement path="/team/management" />

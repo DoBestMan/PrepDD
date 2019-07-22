@@ -1,12 +1,12 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import FlashMessage from './FlashMessage';
+import FlashMessage from '../common/FlashMessage';
 import idx from 'idx';
 import React, {useCallback, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import {useSendPasswordResetInstructions} from '../graphql/mutations/SendPasswordResetInstructions';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
+import {useSendPasswordResetInstructions} from '../../graphql/mutations/SendPasswordResetInstructions';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -52,21 +52,13 @@ function SuccessMessage() {
   );
 }
 
-export default function ForgotPasswordPage(_props: {path?: string}) {
+function ForgotPasswordPage(_props: {path?: string}) {
   const classes = useStyles({});
-
-  const [state, setState] = useState<{
-    email: string;
-  }>({
-    email: '',
-  });
-
+  const [state, setState] = useState<{email: string}>({email: ''});
   const [
     sendResetPasswordInstructions,
     {data},
-  ] = useSendPasswordResetInstructions({
-    email: state.email,
-  });
+  ] = useSendPasswordResetInstructions({email: state.email});
 
   function errorFor(path: string) {
     const errors = idx(data, x => x.sendResetPasswordInstructions.errors);
@@ -140,3 +132,5 @@ export default function ForgotPasswordPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default ForgotPasswordPage;

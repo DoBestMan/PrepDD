@@ -10,3 +10,8 @@
 ## Deployment
 
 Making a pull request automatically create a one-off review app in Heroku. Changes merged into master are automatically deployed to staging.
+
+## Rake tasks
+
+- **rake graphql:gen** Generates typescript definitions for graphql queries
+- **rake format:write** Autoformats source files

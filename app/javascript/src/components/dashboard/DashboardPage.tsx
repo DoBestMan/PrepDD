@@ -13,8 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import React, {useState, useCallback, useEffect} from 'react';
 import Toolbar from '@material-ui/core/Toolbar';
 import {makeStyles} from '@material-ui/core/styles';
-import {useSignOutUser} from '../graphql/mutations/SignOutUser';
-import {useRequireSignIn} from '../hooks/auth';
+import {useSignOutUser} from '../../graphql/mutations/SignOutUser';
+import {useRequireSignIn} from '../../hooks/auth';
 
 const drawerWidth = 240;
 

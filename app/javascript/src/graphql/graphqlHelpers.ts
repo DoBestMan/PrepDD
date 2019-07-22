@@ -3,7 +3,7 @@ import {useQuery, useMutation} from 'react-apollo';
 import {DocumentNode} from 'graphql';
 import {QueryResult, MutationTuple} from 'react-apollo';
 
-export {gql};
+export {gql, useQuery};
 
 export function createQueryHook<TData, TVariables>(
   query: DocumentNode

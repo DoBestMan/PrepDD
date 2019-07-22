@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
-import FlashMessage from './FlashMessage';
+import FlashMessage from '../common/FlashMessage';
 import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
@@ -11,8 +11,8 @@ import {GoogleLogin} from 'react-google-login';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../hooks/auth';
-import {useSignUpUser} from '../graphql/mutations/SignUpUser';
+import {useRequireGuest} from '../../hooks/auth';
+import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -77,7 +77,7 @@ export default function SignUpPage(_props: {path?: string}) {
   });
 
   useEffect(() => {
-    if (idx(data, x => x.signUpUser.success)) {
+    if (idx(data, data => data.signUpUser.success)) {
       navigate('/dashboard');
     }
   }, [data]);
