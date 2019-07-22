@@ -1,7 +1,7 @@
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
-import FlashMessage from './FlashMessage';
+import FlashMessage from '../common/FlashMessage';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
@@ -13,8 +13,8 @@ import {GoogleLogin} from 'react-google-login';
 import {Link as RouterLink} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../hooks/auth';
-import {useSignInUser} from '../graphql/mutations/SignInUser';
+import {useRequireGuest} from '../../hooks/auth';
+import {useSignInUser} from '../../graphql/mutations/SignInUser';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInPage(_props: { path?: string }) {
+export default function SignInPage(_props: {path?: string}) {
   useRequireGuest();
 
   const classes = useStyles({});

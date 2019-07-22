@@ -15,14 +15,13 @@ namespace :graphql do
       'apollo',
       'codegen:generate',
       '--localSchemaFile=schema.graphql',
-      '--includes=app/javascript/src/graphql/**/*.{ts,tsx}',
+      '--includes=app/javascript/src/**/*.{ts,tsx}',
       '--target=typescript',
       '--tagName=gql',
-      '--globalTypesFile=app/javascript/src/graphql/__generated__/globalTypes.ts',
-      # '--outputFlat'
+      '--globalTypesFile=app/javascript/src/graphql/__generated__/globalTypes.ts'
     )
   end
 
   desc 'Run all steps to generate typescript definitions'
-  task gen: %w[clean types schema:dump]
+  task gen: %w[clean schema:dump types]
 end

@@ -3,12 +3,8 @@ namespace :format do
     DIRECTORIES = %w[app bin config db lib spec storage test].join(',')
     EXTENSIONS = %w[js rake rb ts tsx].join(',')
 
-    Signal.trap("INT") { 
-      exit
-    }
-    Signal.trap("TERM") {
-      exit
-    }
+    Signal.trap('INT') { exit }
+    Signal.trap('TERM') { exit }
 
     files =
       Dir.glob("{#{DIRECTORIES}}/**/*.{#{EXTENSIONS}}").filter do |file|

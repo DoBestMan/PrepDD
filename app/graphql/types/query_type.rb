@@ -7,8 +7,23 @@ module Types
           CurrentUserType,
           null: true, description: 'The currently logged in user'
 
+    field :user_for_password_reset,
+          UserForPasswordResetType,
+          null: true,
+          description: 'Information for resetting a users password' do
+      argument :token,
+               String,
+               required: true,
+               description:
+                 'The reset token received from a forgot password email'
+    end
+
     def current_user
       { id: 'current_user', user: context[:controller].current_user }
+    end
+
+    def user_for_password_reset(token:)
+      User.where(reset_password_token: token).first
     end
   end
 end

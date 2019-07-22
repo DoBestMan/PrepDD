@@ -36,6 +36,16 @@ type Query {
   The currently logged in user
   """
   currentUser: CurrentUser
+
+  """
+  Information for resetting a users password
+  """
+  userForPasswordReset(
+    """
+    The reset token received from a forgot password email
+    """
+    token: String!
+  ): UserForPasswordReset
 }
 
 """
@@ -151,4 +161,12 @@ type User {
   email: String!
   fullName: String!
   id: ID!
+}
+
+"""
+User with limited fields for the password reset screen
+"""
+type UserForPasswordReset {
+  email: String!
+  resetPasswordPeriodValid: Boolean
 }
