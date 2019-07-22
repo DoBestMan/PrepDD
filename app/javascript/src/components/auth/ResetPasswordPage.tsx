@@ -33,7 +33,7 @@ export default function ResetPasswordPage({
   token?: string;
 }) {
   const classes = useStyles({});
-  const {_loading, data} = useUserForPasswordReset({token});
+  const {loading, data} = useUserForPasswordReset({token});
   const email = idx(data, data => data.userForPasswordReset.email);
 
   return (
