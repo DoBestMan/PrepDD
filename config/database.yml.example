@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: mila_medical
+  database: prepdd_development
 
 production: &production
   adapter: postgresql
