@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +12,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_17_200930) do
+ActiveRecord::Schema.define(version: 20_190_717_200_930) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension 'plpgsql'
+
   create_table 'companies', force: :cascade do |t|
     t.string 'name'
     t.bigint 'parent_id'
@@ -20,12 +25,8 @@ ActiveRecord::Schema.define(version: 2019_07_17_200930) do
     t.string 'encryption_key'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.integer 'owner_id'
-    t.index %w[owner_id], name: 'index_companies_on_owner_id'
-  end
-
-  create_table 'data_migrations',
-               primary_key: 'version', id: :string, force: :cascade do |t|
+    t.bigint 'owner_id'
+    t.index ['owner_id'], name: 'index_companies_on_owner_id'
   end
 
   create_table 'roles', force: :cascade do |t|
@@ -35,12 +36,12 @@ ActiveRecord::Schema.define(version: 2019_07_17_200930) do
   end
 
   create_table 'roles_users', force: :cascade do |t|
-    t.integer 'user_id'
-    t.integer 'role_id'
+    t.bigint 'user_id'
+    t.bigint 'role_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index %w[role_id], name: 'index_roles_users_on_role_id'
-    t.index %w[user_id], name: 'index_roles_users_on_user_id'
+    t.index ['role_id'], name: 'index_roles_users_on_role_id'
+    t.index ['user_id'], name: 'index_roles_users_on_user_id'
   end
 
   create_table 'teams', force: :cascade do |t|
@@ -51,12 +52,12 @@ ActiveRecord::Schema.define(version: 2019_07_17_200930) do
   end
 
   create_table 'teams_users', force: :cascade do |t|
-    t.integer 'user_id'
-    t.integer 'team_id'
+    t.bigint 'user_id'
+    t.bigint 'team_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
-    t.index %w[team_id], name: 'index_teams_users_on_team_id'
-    t.index %w[user_id], name: 'index_teams_users_on_user_id'
+    t.index ['team_id'], name: 'index_teams_users_on_team_id'
+    t.index ['user_id'], name: 'index_teams_users_on_user_id'
   end
 
   create_table 'users', force: :cascade do |t|
@@ -69,11 +70,11 @@ ActiveRecord::Schema.define(version: 2019_07_17_200930) do
     t.datetime 'updated_at', null: false
     t.string 'full_name', default: '', null: false
     t.string 'display_name', default: '', null: false
-    t.integer 'company_id'
+    t.bigint 'company_id'
     t.string 'uuid'
     t.string 'token_id'
     t.string 'social_login_provider'
-    t.integer 'notification_id'
+    t.bigint 'notification_id'
     t.integer 'notification_scope'
     t.integer 'notification_frequency'
     t.datetime 'notification_time'
@@ -81,10 +82,9 @@ ActiveRecord::Schema.define(version: 2019_07_17_200930) do
     t.integer 'active_state_id'
     t.string 'user_token'
     t.string 'bio'
-    t.index %w[company_id], name: 'index_users_on_company_id'
-    t.index %w[email], name: 'index_users_on_email', unique: true
-    t.index %w[notification_id], name: 'index_users_on_notification_id'
-    t.index %w[reset_password_token],
-            name: 'index_users_on_reset_password_token', unique: true
+    t.index ['company_id'], name: 'index_users_on_company_id'
+    t.index ['email'], name: 'index_users_on_email', unique: true
+    t.index ['notification_id'], name: 'index_users_on_notification_id'
+    t.index ['reset_password_token'], name: 'index_users_on_reset_password_token', unique: true
   end
 end
