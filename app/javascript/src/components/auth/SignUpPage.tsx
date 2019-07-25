@@ -169,17 +169,6 @@ export default function SignUpPage(_props: {path?: string}) {
             margin="normal"
             required
             fullWidth
-            label="Company Name"
-            name="companyName"
-            error={!!errorFor('companyName')}
-            helperText={errorFor('companyName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
             label="Email Address"
             name="email"
             autoComplete="email"
