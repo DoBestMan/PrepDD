@@ -3,6 +3,7 @@ import NotFoundPage from './NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
 
+const CreateCompanyPage = lazy(() => import('./auth/CreateCompanyPage'));
 const SignUpPage = lazy(() => import('./auth/SignUpPage'));
 const SignInPage = lazy(() => import('./auth/SignInPage'));
 const ForgotPasswordPage = lazy(() => import('./auth/ForgotPasswordPage'));
@@ -17,7 +18,8 @@ export default function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ReachRouter>
-        <SignUpPage path="/" />
+        <CreateCompanyPage path="/" />
+        <SignUpPage path="/signup" />
         <SignInPage path="/signin" />
         <ForgotPasswordPage path="/forgot" />
         <ResetPasswordPage path="/reset_password/:token" />
