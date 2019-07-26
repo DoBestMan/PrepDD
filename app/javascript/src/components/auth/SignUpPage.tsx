@@ -13,6 +13,13 @@ import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
+import Paper from '@material-ui/core/Paper';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+
+import CircleChecked from '@material-ui/icons/CheckCircleOutline';
+import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
+import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -48,6 +55,13 @@ const useStyles = makeStyles(theme => ({
     boxShadow:
       'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
   },
+  passwordValid: {
+    marginLeft: 50,
+    marginTop: 50,
+  },
+  greenCheck: {
+    color: 'green',
+  }
 }));
 
 export default function SignUpPage(_props: {path?: string}) {
@@ -61,12 +75,18 @@ export default function SignUpPage(_props: {path?: string}) {
     password: string;
     companyName: string;
     socialLogin: boolean;
+    hasUpperCase: boolean;
+    hasSpecialChar: boolean;
+    hasEightChar: boolean
   }>({
     fullName: '',
     email: '',
     password: '',
     companyName: '',
     socialLogin: false,
+    hasUpperCase: false,
+    hasSpecialChar: false,
+    hasEightChar: false,
   });
 
   const [signUpUser, {data}] = useSignUpUser({
@@ -106,6 +126,25 @@ export default function SignUpPage(_props: {path?: string}) {
     e => {
       const {name, value} = e.target;
       setState(state => ({...state, [name]: value}));
+      if (name == 'password'){
+        if(value.match(/[A-Z]/)){
+          setState(state => ({...state, hasUpperCase: true}));
+        } else {
+          setState(state => ({...state, hasUpperCase: false}));
+        }
+
+        if(value.length >= 8){
+          setState(state => ({...state, hasEightChar: true}));
+        } else {
+          setState(state => ({...state, hasEightChar: false}));
+        }
+
+        if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)){
+          setState(state => ({...state, hasSpecialChar: true}));
+        } else {
+          setState(state => ({...state, hasSpecialChar: false}));
+        }
+      }
     },
     [setState]
   );
@@ -129,113 +168,151 @@ export default function SignUpPage(_props: {path?: string}) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="lg">
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errorFor('root') && (
-            <FlashMessage
-              className={classes.flash}
-              variant="warning"
-              message={errorFor('root')}
-            />
-          )}
+        <Grid container spacing={5}>
+          <Grid item xs={3}>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <form className={classes.form} noValidate onSubmit={onSubmit}>
+              {errorFor('root') && (
+                <FlashMessage
+                  className={classes.flash}
+                  variant="warning"
+                  message={errorFor('root')}
+                />
+              )}
 
-          {state.socialLogin && (
-            <FlashMessage
-              className={classes.flash}
-              variant="info"
-              message={'Add company name'}
-            />
-          )}
+              {state.socialLogin && (
+                <FlashMessage
+                  className={classes.flash}
+                  variant="info"
+                  message={'Add company name'}
+                />
+              )}
 
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Full Name"
-            name="fullName"
-            autoFocus
-            value={state.fullName}
-            error={!!errorFor('fullName')}
-            helperText={errorFor('fullName')}
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            value={state.email}
-            error={!!errorFor('email')}
-            helperText={errorFor('email')}
-            onChange={onChangeInput}
-          />
-          {!state.socialLogin && (
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              autoComplete="current-password"
-              error={!!errorFor('password')}
-              helperText={errorFor('password')}
-              onChange={onChangeInput}
-            />
-          )}
-
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
-        </form>
-
-        {!state.socialLogin && (
-          <Grid container>
-            <Grid item xs>
-              <GoogleLogin
-                clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-                buttonText="Sign Up Gmail"
-                onSuccess={successGoogle}
-                onFailure={failGoogle}
-                cookiePolicy={'single_host_origin'}
-                className={classes.socialGmail}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Full Name"
+                name="fullName"
+                autoFocus
+                value={state.fullName}
+                error={!!errorFor('fullName')}
+                helperText={errorFor('fullName')}
+                onChange={onChangeInput}
               />
-            </Grid>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                value={state.email}
+                error={!!errorFor('email')}
+                helperText={errorFor('email')}
+                onChange={onChangeInput}
+              />
+              {!state.socialLogin && (
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  error={!!errorFor('password')}
+                  helperText={errorFor('password')}
+                  onChange={onChangeInput}
+                />
+              )}
 
-            <Grid item>
-              <LinkedIn
-                clientId="81lx5we2omq9xh"
-                onFailure={responseGoogle}
-                onSuccess={responseGoogle}
-                redirectUri="http://localhost:3000/linkedin"
-                className={classes.socialLinkedIn}
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
               >
-                Sign Up LinkedIn
-              </LinkedIn>
+                Sign Up
+              </Button>
+            </form>
+
+            {!state.socialLogin && (
+              <Grid container>
+                <Grid item xs>
+                  <GoogleLogin
+                    clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                    buttonText="Sign Up Gmail"
+                    onSuccess={successGoogle}
+                    onFailure={failGoogle}
+                    cookiePolicy={'single_host_origin'}
+                    className={classes.socialGmail}
+                  />
+                </Grid>
+
+                <Grid item>
+                  <LinkedIn
+                    clientId="81lx5we2omq9xh"
+                    onFailure={responseGoogle}
+                    onSuccess={responseGoogle}
+                    redirectUri="http://localhost:3000/linkedin"
+                    className={classes.socialLinkedIn}
+                  >
+                    Sign Up LinkedIn
+                  </LinkedIn>
+                </Grid>
+              </Grid>
+            )}
+
+            <Grid container justify="center">
+              <Grid item>
+                <Link component={RouterLink} variant="body2" to="/signin">
+                  {'Already have an account? Sign In'}
+                </Link>
+              </Grid>
             </Grid>
           </Grid>
-        )}
-
-        <Grid container justify="center">
-          <Grid item>
-            <Link component={RouterLink} variant="body2" to="/signin">
-              {'Already have an account? Sign In'}
-            </Link>
+          <Grid className={classes.passwordValid} item xs={3}>
+            <Typography variant="h6" gutterBottom>
+              Password must contain
+            </Typography>
+            <FormControlLabel
+              disabled
+              control={<Checkbox
+                icon={<CircleUnchecked />}
+                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
+                checked={state.hasUpperCase}
+                value={state.hasUpperCase} />}
+              label="At least 1 uppercase letter"
+            />
+            <FormControlLabel
+              disabled
+              control={<Checkbox
+                icon={<CircleUnchecked />}
+                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
+                checked={state.hasSpecialChar}
+                value={state.hasSpecialChar} />}
+              label="At least 1 special character"
+            />
+            <FormControlLabel
+              disabled
+              control={<Checkbox
+                icon={<CircleUnchecked />}
+                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
+                checked={state.hasEightChar}
+                value={state.hasEightChar} />}
+              label="More than 8 total characters"
+            />
           </Grid>
         </Grid>
       </div>
