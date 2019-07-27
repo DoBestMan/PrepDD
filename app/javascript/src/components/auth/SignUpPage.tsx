@@ -43,6 +43,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     marginBottom: 10,
     height: 43,
+    borderRadius: 5,
   },
   socialLinkedIn: {
     width: 170,
@@ -52,6 +53,7 @@ const useStyles = makeStyles(theme => ({
     color: 'white',
     height: 43,
     border: 2,
+    borderRadius: 5,
     boxShadow:
       'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
   },
