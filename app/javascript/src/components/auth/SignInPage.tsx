@@ -58,6 +58,13 @@ const useStyles = makeStyles(theme => ({
     marginRight: 10,
     display: 'inline',
     fontWeight: 'bold',
+  },
+  prepLink:{
+    textDecoration: 'none',
+    color: '#3f51b5',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
   }
 }));
 
@@ -200,7 +207,7 @@ export default function SignInPage(_props: {path?: string}) {
             </Link>
           </Grid>
           <Grid item>
-            <a href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+            <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
           </Grid>
         </Grid>
       </div>
