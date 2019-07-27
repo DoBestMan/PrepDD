@@ -39,15 +39,16 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
   socialGmail: {
-    width: 170,
+    fontSize: 15,
+    width: '100%',
     textAlign: 'center',
     marginBottom: 10,
     height: 43,
     borderRadius: 5,
   },
   socialLinkedIn: {
-    width: 170,
-    textAlign: 'center',
+    fontSize: 15,
+    width: '100%',
     marginBottom: 10,
     background: '#007bb6',
     color: 'white',
@@ -63,6 +64,11 @@ const useStyles = makeStyles(theme => ({
   },
   greenCheck: {
     color: 'green',
+  },
+  linkedInText: {
+    marginRight: 10,
+    display: 'inline',
+    fontWeight: 'bold',
   }
 }));
 
@@ -251,7 +257,7 @@ export default function SignUpPage(_props: {path?: string}) {
 
             {!state.socialLogin && (
               <Grid container>
-                <Grid item xs>
+                <Grid item xs={12} lg={6} md={12}>
                   <GoogleLogin
                     clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
                     buttonText="Sign Up Gmail"
@@ -262,7 +268,7 @@ export default function SignUpPage(_props: {path?: string}) {
                   />
                 </Grid>
 
-                <Grid item>
+                <Grid item xs={12} lg={6} md={12}>
                   <LinkedIn
                     clientId="81lx5we2omq9xh"
                     onFailure={responseGoogle}
@@ -270,6 +276,9 @@ export default function SignUpPage(_props: {path?: string}) {
                     redirectUri="http://localhost:3000/linkedin"
                     className={classes.socialLinkedIn}
                   >
+                    <Typography className={classes.linkedInText} component="h1" variant="h5">
+                      in
+                    </Typography>
                     Sign Up LinkedIn
                   </LinkedIn>
                 </Grid>
