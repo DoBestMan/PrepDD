@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
   },
   socialGmail: {
     fontSize: 15,
-    width: '100%',
+    width: '90%',
     textAlign: 'center',
     marginBottom: 10,
     height: 43,
@@ -48,7 +48,8 @@ const useStyles = makeStyles(theme => ({
   },
   socialLinkedIn: {
     fontSize: 15,
-    width: '100%',
+    width: '90%',
+    marginLeft: '10%',
     marginBottom: 10,
     background: '#007bb6',
     color: 'white',
@@ -257,7 +258,7 @@ export default function SignUpPage(_props: {path?: string}) {
 
             {!state.socialLogin && (
               <Grid container>
-                <Grid item xs={12} lg={6} md={12}>
+                <Grid item xs={6} lg={6} md={6}>
                   <GoogleLogin
                     clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
                     buttonText="Sign Up Gmail"
@@ -268,7 +269,7 @@ export default function SignUpPage(_props: {path?: string}) {
                   />
                 </Grid>
 
-                <Grid item xs={12} lg={6} md={12}>
+                <Grid item xs={6} lg={6} md={6}>
                   <LinkedIn
                     clientId="81lx5we2omq9xh"
                     onFailure={responseGoogle}
