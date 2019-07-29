@@ -34,19 +34,38 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
   socialGmail: {
-    width: 170,
+    fontSize: 15,
+    width: '90%',
     textAlign: 'center',
     marginBottom: 10,
     height: 43,
+    borderRadius: 5,
   },
   socialLinkedIn: {
-    width: 170,
-    textAlign: 'center',
+    fontSize: 15,
+    width: '90%',
+    marginLeft: '10%',
     marginBottom: 10,
     background: '#007bb6',
     color: 'white',
     height: 43,
+    border: 2,
+    borderRadius: 5,
+    boxShadow:
+      'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
   },
+  linkedInText: {
+    marginRight: 10,
+    display: 'inline',
+    fontWeight: 'bold',
+  },
+  prepLink:{
+    textDecoration: 'none',
+    color: '#3f51b5',
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  }
 }));
 
 export default function SignInPage(_props: {path?: string}) {
@@ -99,14 +118,14 @@ export default function SignInPage(_props: {path?: string}) {
         </Typography>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
           {errors &&
-            errors.map((error, index) => (
-              <FlashMessage
-                key={index}
-                className={classes.flash}
-                variant="warning"
-                message={error.message}
-              />
-            ))}
+          errors.map((error, index) => (
+            <FlashMessage
+              key={index}
+              className={classes.flash}
+              variant="warning"
+              message={error.message}
+            />
+          ))}
           <TextField
             variant="outlined"
             margin="normal"
@@ -154,10 +173,10 @@ export default function SignInPage(_props: {path?: string}) {
         </form>
 
         <Grid container>
-          <Grid item xs>
+          <Grid item xs={6} lg={6} md={6}>
             <GoogleLogin
               clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-              buttonText="Login"
+              buttonText="Sign Up Gmail"
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
               cookiePolicy={'single_host_origin'}
@@ -165,7 +184,7 @@ export default function SignInPage(_props: {path?: string}) {
             />
           </Grid>
 
-          <Grid item>
+          <Grid item xs={6} lg={6} md={6}>
             <LinkedIn
               clientId="81lx5we2omq9xh"
               onFailure={responseGoogle}
@@ -173,7 +192,10 @@ export default function SignInPage(_props: {path?: string}) {
               redirectUri="http://localhost:3000/linkedin"
               className={classes.socialLinkedIn}
             >
-              Login LinkedIn
+              <Typography className={classes.linkedInText} component="h1" variant="h5">
+                in
+              </Typography>
+              Sign Up LinkedIn
             </LinkedIn>
           </Grid>
         </Grid>
@@ -185,9 +207,7 @@ export default function SignInPage(_props: {path?: string}) {
             </Link>
           </Grid>
           <Grid item>
-            <Link component={RouterLink} variant="body2" to="/">
-              {"Don't have an account? Sign Up"}
-            </Link>
+            <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
           </Grid>
         </Grid>
       </div>
