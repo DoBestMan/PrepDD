@@ -50,6 +50,7 @@ export default function CreateCompanyPage(_props: {path?: string}) {
     e => {
       const {name, value} = e.target;
       setState(state => ({...state, [name]: value}));
+      localStorage.setItem('CompanyName', value);
     },
     [setState]
   );
