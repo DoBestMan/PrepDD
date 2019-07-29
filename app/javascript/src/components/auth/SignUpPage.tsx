@@ -98,6 +98,7 @@ export default function SignUpPage(_props: {path?: string}) {
     hasEightChar: false,
   });
 
+
   const [signUpUser, {data}] = useSignUpUser({
     fullName: state.fullName,
     email: state.email,
@@ -107,10 +108,17 @@ export default function SignUpPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
+      localStorage.removeItem('CompanyName');
       navigate('/dashboard');
     }
   }, [data]);
 
+  useEffect(() => {
+    const company = localStorage.hasOwnProperty('CompanyName')? localStorage.getItem('CompanyName') : '';
+    if(company !== null){
+      setState(state => ({...state, companyName: company}));
+    }
+  });
   function errorFor(path: string) {
     const errors = idx(data, x => x.signUpUser.errors);
     if (!errors) {
