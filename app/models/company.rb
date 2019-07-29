@@ -4,7 +4,7 @@ class Company < ApplicationRecord
   has_many :children, class_name: 'Company', foreign_key: 'parent_id'
   belongs_to :owner, class_name: 'User'
   has_many :employees, class_name: 'User', dependent: :destroy
-  belongs_to :subscription
+  belongs_to :subscription, optional: true
 
   validates :name, presence: true
 
