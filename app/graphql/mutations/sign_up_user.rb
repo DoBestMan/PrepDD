@@ -36,7 +36,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       end
     end
 
-    if user.valid?
+    if user.valid? && company_name.present?
       company = user.owned_companies.create({ name: company_name })
 
       company.errors.messages.each do |path, messages|
