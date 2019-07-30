@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_211803) do
     t.datetime "updated_at", null: false
     t.bigint "owner_id"
     t.string "s3_location"
+    t.string "kms_key_id"
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
