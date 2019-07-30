@@ -45,4 +45,8 @@ export interface SignInUser {
 export interface SignInUserVariables {
   email: string;
   password: string;
+  socialLogin: boolean;
+  provider: string;
+  tokenID: string;
+  uuID: string;
 }

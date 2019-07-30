@@ -77,15 +77,27 @@ export default function SignInPage(_props: {path?: string}) {
     email: string;
     password: string;
     remember: boolean;
+    socialLogin: boolean;
+    tokenID: string;
+    provider: string;
+    uuID: string;
   }>({
     email: '',
     password: '',
     remember: false,
+    socialLogin: false,
+    tokenID: '',
+    provider: '',
+    uuID: ''
   });
 
   const [signInUser, {data}] = useSignInUser({
     email: state.email,
     password: state.password,
+    socialLogin: state.socialLogin,
+    tokenID: state.tokenID,
+    provider: state.provider,
+    uuID: state.uuID,
   });
 
   const errors = idx(data, x => x.signInUser.errors);
@@ -108,6 +120,19 @@ export default function SignInPage(_props: {path?: string}) {
 
   const responseGoogle = (response: any) => {
     console.log(response);
+  };
+
+  const successGoogle = (response: any) => {
+    if (response.profileObj) {
+      setState(state => ({...state,
+        email: response.profileObj.email,
+        socialLogin: true,
+        provider: 'gmail',
+        tokenID: response.tokenId,
+        uuID: response.googleId
+      }));
+    }
+    signInUser();
   };
 
   return (
@@ -177,7 +202,7 @@ export default function SignInPage(_props: {path?: string}) {
             <GoogleLogin
               clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
               buttonText="Sign Up Gmail"
-              onSuccess={responseGoogle}
+              onSuccess={successGoogle}
               onFailure={responseGoogle}
               cookiePolicy={'single_host_origin'}
               className={classes.socialGmail}

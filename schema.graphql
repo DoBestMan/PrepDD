@@ -23,7 +23,7 @@ type FormError {
 
 type Mutation {
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
-  signInUser(email: String!, password: String!): SignInUserPayload
+  signInUser(email: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
   signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
   updateUserDetails(input: UpdateUserDetailsInput!): UpdateUserDetailsPayload

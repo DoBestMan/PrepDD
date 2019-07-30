@@ -5,8 +5,22 @@ export const useSignInUser = createMutationHook<
   SignInUser,
   SignInUserVariables
 >(gql`
-  mutation SignInUser($email: String!, $password: String!) {
-    signInUser(email: $email, password: $password) {
+  mutation SignInUser(
+    $email: String!,
+    $password: String!,
+    $socialLogin: Boolean!
+    $provider: String!
+    $tokenID: String!
+    $uuID: String!
+    ) {
+    signInUser(
+    email: $email,
+    password: $password,
+    socialLogin: $socialLogin,
+    provider: $provider,
+    tokenID: $tokenID,
+    uuID: $uuID,
+    ){
       currentUser {
         id
         user {
