@@ -3,12 +3,17 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   argument :email, String, required: true
   argument :password, String, required: true
   argument :companyName, String, required: true
+  argument :socialLogin, Boolean, required: true
+  argument :tokenID, String, required: true
+  argument :provider, String, required: true
+  argument :uuID, String, required: true
 
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(full_name: nil, email: nil, password: nil, company_name: nil)
+  def resolve(full_name: nil, email: nil, password: nil, company_name: nil, social_login: nil,
+              token_id: nil, provider: nil, uu_id: nil)
     response = { errors: [] }
 
     if context[:controller].user_signed_in?
@@ -23,7 +28,10 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
           full_name: full_name,
           email: email,
           password: password,
-          password_confirmation: password
+          password_confirmation: password,
+          token_id: token_id,
+          social_login_provider: provider,
+          uuid: uu_id
         }
       )
 
@@ -52,7 +60,9 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     if user.persisted?
       context[:controller].sign_in(user)
       response[:user] = user
+      response[:current_user] = { id: 'current_user', user: user }
       response[:success] = true
+      response
     end
 
     response
