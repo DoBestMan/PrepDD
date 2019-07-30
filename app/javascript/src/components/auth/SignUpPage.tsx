@@ -182,12 +182,14 @@ export default function SignUpPage(_props: {path?: string}) {
 
   const successGoogle = (response: any) => {
     if (response.profileObj) {
-      setState(state => ({...state, email: response.profileObj.email}));
-      setState(state => ({...state, fullName: response.profileObj.name}));
-      setState(state => ({...state, socialLogin: true}));
-      setState(state => ({...state, provider: 'gmail'}));
-      setState(state => ({...state, tokenID: response.tokenId}));
-      setState(state => ({...state, uuID: response.googleId}));
+      setState(state => ({...state,
+        email: response.profileObj.email,
+        fullName: response.profileObj.name,
+        socialLogin: true,
+        provider: 'gmail',
+        tokenID: response.tokenId,
+        uuID: response.googleId
+      }));
       signUpUser();
     }
   };
