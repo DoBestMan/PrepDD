@@ -39,4 +39,8 @@ export interface SignUpUserVariables {
   email: string;
   password: string;
   companyName: string;
+  socialLogin: boolean;
+  provider: string;
+  tokenID: string;
+  uuID: string;
 }

@@ -84,6 +84,9 @@ export default function SignUpPage(_props: {path?: string}) {
     password: string;
     companyName: string;
     socialLogin: boolean;
+    tokenID: string;
+    provider: string;
+    uuID: string;
     hasUpperCase: boolean;
     hasSpecialChar: boolean;
     hasEightChar: boolean
@@ -93,6 +96,9 @@ export default function SignUpPage(_props: {path?: string}) {
     password: '',
     companyName: '',
     socialLogin: false,
+    tokenID: '',
+    provider: '',
+    uuID: '',
     hasUpperCase: false,
     hasSpecialChar: false,
     hasEightChar: false,
@@ -104,6 +110,10 @@ export default function SignUpPage(_props: {path?: string}) {
     email: state.email,
     password: state.password,
     companyName: state.companyName,
+    socialLogin: state.socialLogin,
+    tokenID: state.tokenID,
+    provider: state.provider,
+    uuID: state.uuID,
   });
 
   useEffect(() => {
@@ -171,12 +181,14 @@ export default function SignUpPage(_props: {path?: string}) {
   };
 
   const successGoogle = (response: any) => {
-    console.log(response);
     if (response.profileObj) {
-      console.log('was here');
       setState(state => ({...state, email: response.profileObj.email}));
       setState(state => ({...state, fullName: response.profileObj.name}));
       setState(state => ({...state, socialLogin: true}));
+      setState(state => ({...state, provider: 'gmail'}));
+      setState(state => ({...state, tokenID: response.tokenId}));
+      setState(state => ({...state, uuID: response.googleId}));
+      signUpUser();
     }
   };
 

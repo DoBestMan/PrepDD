@@ -25,7 +25,7 @@ type Mutation {
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
   signInUser(email: String!, password: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
-  signUpUser(companyName: String!, email: String!, fullName: String!, password: String!): SignUpUserPayload
+  signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
   updateUserDetails(input: UpdateUserDetailsInput!): UpdateUserDetailsPayload
   updateUserNotificatiosn(input: UpdateUserNotificatiosnInput!): UpdateUserNotificatiosnPayload
   updateUserPassword(input: UpdateUserPasswordInput!): UpdateUserPasswordPayload
