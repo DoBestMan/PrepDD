@@ -27,7 +27,7 @@ gem 'omniauth-linkedin-oauth2'
 gem 'data_migrate'
 
 #Third-Party
-gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-kms'
 
