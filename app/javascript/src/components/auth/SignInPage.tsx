@@ -135,6 +135,15 @@ export default function SignInPage(_props: {path?: string}) {
     signInUser();
   };
 
+  const successLinkedIn = (data: any) => {
+    setState(state => ({...state,
+      socialLogin: true,
+      provider: 'linkedIn',
+      tokenID:  data.code,
+    }));
+    signInUser();
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
@@ -201,7 +210,7 @@ export default function SignInPage(_props: {path?: string}) {
           <Grid item xs={6} lg={6} md={6}>
             <GoogleLogin
               clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-              buttonText="Sign Up Gmail"
+              buttonText="Sign In Gmail"
               onSuccess={successGoogle}
               onFailure={responseGoogle}
               cookiePolicy={'single_host_origin'}
@@ -213,14 +222,14 @@ export default function SignInPage(_props: {path?: string}) {
             <LinkedIn
               clientId="81lx5we2omq9xh"
               onFailure={responseGoogle}
-              onSuccess={responseGoogle}
+              onSuccess={successLinkedIn}
               redirectUri="http://localhost:3000/linkedin"
               className={classes.socialLinkedIn}
             >
               <Typography className={classes.linkedInText} component="h1" variant="h5">
                 in
               </Typography>
-              Sign Up LinkedIn
+              Sign In LinkedIn
             </LinkedIn>
           </Grid>
         </Grid>

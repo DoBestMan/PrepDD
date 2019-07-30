@@ -2,6 +2,7 @@ import LoadingFallback from './LoadingFallback';
 import NotFoundPage from './NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
+import { LinkedInPopUp } from 'react-linkedin-login-oauth2';
 
 const CreateCompanyPage = lazy(() => import('./auth/CreateCompanyPage'));
 const SignUpPage = lazy(() => import('./auth/SignUpPage'));
@@ -28,6 +29,7 @@ export default function Router() {
         <TeamManagement path="/team/management" />
         <CompanySubscription path="/company/subscription" />
         <CompanySettings path="/company/settings" />
+        <LinkedInPopUp path="/linkedin" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

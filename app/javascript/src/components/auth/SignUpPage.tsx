@@ -198,6 +198,15 @@ export default function SignUpPage(_props: {path?: string}) {
     console.log(response);
   };
 
+  const successLinkedIn = (data: any) => {
+    setState(state => ({...state,
+      socialLogin: true,
+      provider: 'linkedIn',
+      tokenID:  data.code,
+    }));
+    signUpUser();
+  }
+
   return (
     <Container component="main" maxWidth="lg">
       <div className={classes.paper}>
@@ -243,21 +252,19 @@ export default function SignUpPage(_props: {path?: string}) {
                 helperText={errorFor('email')}
                 onChange={onChangeInput}
               />
-              {!state.socialLogin && (
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  error={!!errorFor('password')}
-                  helperText={errorFor('password')}
-                  onChange={onChangeInput}
-                />
-              )}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                error={!!errorFor('password')}
+                helperText={errorFor('password')}
+                onChange={onChangeInput}
+              />
 
               <Button
                 type="submit"
@@ -270,7 +277,6 @@ export default function SignUpPage(_props: {path?: string}) {
               </Button>
             </form>
 
-            {!state.socialLogin && (
               <Grid container>
                 <Grid item xs={6} lg={6} md={6}>
                   <GoogleLogin
@@ -287,7 +293,7 @@ export default function SignUpPage(_props: {path?: string}) {
                   <LinkedIn
                     clientId="81lx5we2omq9xh"
                     onFailure={responseGoogle}
-                    onSuccess={responseGoogle}
+                    onSuccess={successLinkedIn}
                     redirectUri="http://localhost:3000/linkedin"
                     className={classes.socialLinkedIn}
                   >
@@ -298,7 +304,6 @@ export default function SignUpPage(_props: {path?: string}) {
                   </LinkedIn>
                 </Grid>
               </Grid>
-            )}
 
             <Grid container justify="center">
               <Grid item>
