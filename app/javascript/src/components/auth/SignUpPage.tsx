@@ -203,14 +203,6 @@ export default function SignUpPage(_props: {path?: string}) {
                 />
               )}
 
-              {state.socialLogin && (
-                <FlashMessage
-                  className={classes.flash}
-                  variant="info"
-                  message={'Add company name'}
-                />
-              )}
-
               <TextField
                 variant="outlined"
                 margin="normal"
