@@ -13,7 +13,7 @@ class Mutations::CreateCompany < GraphQL::Schema::Mutation
     else
       company = Company.create({ name: name })
     end
-    
+
     company.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(
