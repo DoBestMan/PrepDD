@@ -8,6 +8,7 @@ class Company < ApplicationRecord
 
   validates :name, presence: true
 
+  before_create :generate_encryption_key
   after_create :create_s3, :create_kms
 
   def create_s3
@@ -40,9 +41,12 @@ class Company < ApplicationRecord
 
     if kms
       self.kms_key_id = kms.key_metadata.key_id
-      self.encryption_key = kms.key_metadata.arn
+      self.kms_key = kms.key_metadata.arn
       save!
     end
   end
 
+  def generate_encryption_key
+    self.encryption_key = SecureRandom.urlsafe_base64(256)
+  end
 end

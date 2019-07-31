@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_211803) do
     t.bigint "owner_id"
     t.string "s3_location"
     t.string "kms_key_id"
+    t.string "kms_key"
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
