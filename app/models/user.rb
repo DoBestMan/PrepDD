@@ -10,7 +10,7 @@ class User < ApplicationRecord
 
   has_many :roles_users
   has_many :teams_users
-  has_many :users, through: :roles_users
+  has_many :roles, through: :roles_users
   has_many :teams, through: :teams_users
   has_many :owned_companies,
            class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
