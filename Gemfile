@@ -25,6 +25,7 @@ gem 'omniauth-linkedin-oauth2'
 
 #Performance
 gem 'data_migrate'
+gem 'activerecord-session_store'
 
 #Third-Party
 gem 'aws-sdk', '~> 3'
