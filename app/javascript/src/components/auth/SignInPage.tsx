@@ -65,6 +65,9 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       textDecoration: 'underline',
     },
+  },
+  signInTitle: {
+    textAlign: 'center',
   }
 }));
 
@@ -145,103 +148,111 @@ export default function SignInPage(_props: {path?: string}) {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="lg">
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          {errors &&
-          errors.map((error, index) => (
-            <FlashMessage
-              key={index}
-              className={classes.flash}
-              variant="warning"
-              message={error.message}
-            />
-          ))}
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={onChangeInput}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={onChangeInput}
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                value="remember"
-                name="remember"
-                color="primary"
+        <Grid container spacing={5}>
+          <Grid item xs={3}>
+          </Grid>
+          <Grid item xs={5}>
+            <div className={classes.signInTitle}>
+              <Typography component="h1" variant="h5">
+                Sign in
+              </Typography>
+            </div>
+            <form className={classes.form} noValidate onSubmit={onSubmit}>
+              {errors &&
+              errors.map((error, index) => (
+                <FlashMessage
+                  key={index}
+                  className={classes.flash}
+                  variant="warning"
+                  message={error.message}
+                />
+              ))}
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
                 onChange={onChangeInput}
               />
-            }
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-        </form>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={onChangeInput}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    name="remember"
+                    color="primary"
+                    onChange={onChangeInput}
+                  />
+                }
+                label="Remember me"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Sign In
+              </Button>
+            </form>
 
-        <Grid container>
-          <Grid item xs={6} lg={6} md={6}>
-            <GoogleLogin
-              clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-              buttonText="Sign In Gmail"
-              onSuccess={successGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={'single_host_origin'}
-              className={classes.socialGmail}
-            />
-          </Grid>
+            <Grid container>
+              <Grid item xs={6} lg={6} md={6}>
+                <GoogleLogin
+                  clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                  buttonText="Sign In Gmail"
+                  onSuccess={successGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={'single_host_origin'}
+                  className={classes.socialGmail}
+                />
+              </Grid>
 
-          <Grid item xs={6} lg={6} md={6}>
-            <LinkedIn
-              clientId="81lx5we2omq9xh"
-              onFailure={responseGoogle}
-              onSuccess={successLinkedIn}
-              redirectUri="http://localhost:3000/linkedin"
-              className={classes.socialLinkedIn}
-            >
-              <Typography className={classes.linkedInText} component="h1" variant="h5">
-                in
-              </Typography>
-              Sign In LinkedIn
-            </LinkedIn>
-          </Grid>
-        </Grid>
+              <Grid item xs={6} lg={6} md={6}>
+                <LinkedIn
+                  clientId="81lx5we2omq9xh"
+                  onFailure={responseGoogle}
+                  onSuccess={successLinkedIn}
+                  redirectUri="http://localhost:3000/linkedin"
+                  className={classes.socialLinkedIn}
+                >
+                  <Typography className={classes.linkedInText} component="h1" variant="h5">
+                    in
+                  </Typography>
+                  Sign In LinkedIn
+                </LinkedIn>
+              </Grid>
+            </Grid>
 
-        <Grid container>
-          <Grid item xs>
-            <Link component={RouterLink} variant="body2" to="/forgot">
-              Forgot password?
-            </Link>
-          </Grid>
-          <Grid item>
-            <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+            <Grid container>
+              <Grid item xs>
+                <Link component={RouterLink} variant="body2" to="/forgot">
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </div>

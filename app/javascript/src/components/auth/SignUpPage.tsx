@@ -70,6 +70,12 @@ const useStyles = makeStyles(theme => ({
     marginRight: 10,
     display: 'inline',
     fontWeight: 'bold',
+  },
+  socialButtons: {
+    width: '100%'
+  },
+  signUpTitle: {
+    textAlign: 'center',
   }
 }));
 
@@ -214,9 +220,11 @@ export default function SignUpPage(_props: {path?: string}) {
           <Grid item xs={3}>
           </Grid>
           <Grid item xs={5}>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
+            <div className={classes.signUpTitle}>
+              <Typography component="h1" variant="h5">
+                Sign up
+              </Typography>
+            </div>
             <form className={classes.form} noValidate onSubmit={onSubmit}>
               {errorFor('root') && (
                 <FlashMessage
@@ -277,33 +285,33 @@ export default function SignUpPage(_props: {path?: string}) {
               </Button>
             </form>
 
-              <Grid container>
-                <Grid item xs={6} lg={6} md={6}>
-                  <GoogleLogin
-                    clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
-                    buttonText="Sign Up Gmail"
-                    onSuccess={successGoogle}
-                    onFailure={failGoogle}
-                    cookiePolicy={'single_host_origin'}
-                    className={classes.socialGmail}
-                  />
-                </Grid>
-
-                <Grid item xs={6} lg={6} md={6}>
-                  <LinkedIn
-                    clientId="81lx5we2omq9xh"
-                    onFailure={responseGoogle}
-                    onSuccess={successLinkedIn}
-                    redirectUri="http://localhost:3000/linkedin"
-                    className={classes.socialLinkedIn}
-                  >
-                    <Typography className={classes.linkedInText} component="h1" variant="h5">
-                      in
-                    </Typography>
-                    Sign Up LinkedIn
-                  </LinkedIn>
-                </Grid>
+            <Grid className={classes.socialButtons}  container>
+              <Grid item xs={6} lg={6} md={6}>
+                <GoogleLogin
+                  clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
+                  buttonText="Sign Up Gmail"
+                  onSuccess={successGoogle}
+                  onFailure={failGoogle}
+                  cookiePolicy={'single_host_origin'}
+                  className={classes.socialGmail}
+                />
               </Grid>
+
+              <Grid item xs={6} lg={6} md={6}>
+                <LinkedIn
+                  clientId="81lx5we2omq9xh"
+                  onFailure={responseGoogle}
+                  onSuccess={successLinkedIn}
+                  redirectUri="http://localhost:3000/linkedin"
+                  className={classes.socialLinkedIn}
+                >
+                  <Typography className={classes.linkedInText} component="h1" variant="h5">
+                    in
+                  </Typography>
+                  Sign Up LinkedIn
+                </LinkedIn>
+              </Grid>
+            </Grid>
 
             <Grid container justify="center">
               <Grid item>
