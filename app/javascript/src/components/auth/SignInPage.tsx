@@ -103,6 +103,10 @@ export default function SignInPage(_props: {path?: string}) {
     uuID: state.uuID,
   });
 
+  interface linkedInResponse {
+    code: string
+  }
+
   const errors = idx(data, x => x.signInUser.errors);
 
   const onSubmit = useCallback(
@@ -121,7 +125,7 @@ export default function SignInPage(_props: {path?: string}) {
     [setState]
   );
 
-  const responseGoogle = (response: any) => {
+  const responseGoogle = (response: string) => {
     console.log(response);
   };
 
@@ -138,11 +142,11 @@ export default function SignInPage(_props: {path?: string}) {
     signInUser();
   };
 
-  const successLinkedIn = (data: any) => {
+  const successLinkedIn = (response: linkedInResponse) => {
     setState(state => ({...state,
       socialLogin: true,
       provider: 'linkedIn',
-      tokenID:  data.code,
+      tokenID:  response.code,
     }));
     signInUser();
   }

@@ -122,6 +122,11 @@ export default function SignUpPage(_props: {path?: string}) {
     uuID: state.uuID,
   });
 
+  interface linkedInResponse {
+    code: string
+  }
+
+
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
       navigate('/dashboard');
@@ -182,7 +187,7 @@ export default function SignUpPage(_props: {path?: string}) {
     [setState]
   );
 
-  const responseGoogle = (response: any) => {
+  const responseGoogle = (response: string) => {
     console.log(response);
   };
 
@@ -200,11 +205,11 @@ export default function SignUpPage(_props: {path?: string}) {
     }
   };
 
-  const failGoogle = (response: any) => {
+  const failGoogle = (response: string) => {
     console.log(response);
   };
 
-  const successLinkedIn = (data: any) => {
+  const successLinkedIn = (data: linkedInResponse) => {
     setState(state => ({...state,
       socialLogin: true,
       provider: 'linkedIn',
