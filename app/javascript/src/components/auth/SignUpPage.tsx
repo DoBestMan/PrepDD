@@ -124,15 +124,15 @@ export default function SignUpPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
-      localStorage.removeItem('CompanyName');
       navigate('/dashboard');
     }
   }, [data]);
 
   useEffect(() => {
-    const company = localStorage.hasOwnProperty('CompanyName')? localStorage.getItem('CompanyName') : '';
-    if(company !== null){
-      setState(state => ({...state, companyName: company}));
+    const url = new URL(window.location.href);
+    const companyName = url.searchParams.get('companyName');
+    if(companyName !== null){
+      setState(state => ({...state, companyName: companyName}));
     }
   });
   function errorFor(path: string) {

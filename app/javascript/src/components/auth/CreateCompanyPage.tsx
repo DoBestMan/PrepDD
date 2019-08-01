@@ -51,8 +51,7 @@ export default function CreateCompanyPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.createCompany.success)) {
-      localStorage.setItem('CompanyName', state.name);
-      navigate('/signup');
+      navigate('/signup?companyName='+ state.name);
     }
   }, [data]);
 
