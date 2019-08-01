@@ -5,6 +5,11 @@
     "test": "jest",
     "test-watch": "jest --watch"
   },
+  "jest": {
+    "roots": [
+      "/app/javascript/src/__tests__/"
+    ]
+  },
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
