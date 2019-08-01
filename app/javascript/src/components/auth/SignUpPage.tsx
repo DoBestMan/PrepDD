@@ -302,7 +302,7 @@ export default function SignUpPage(_props: {path?: string}) {
                   clientId="81lx5we2omq9xh"
                   onFailure={responseGoogle}
                   onSuccess={successLinkedIn}
-                  redirectUri="http://localhost:3000/linkedin"
+                  redirectUri={ new URL('/linkedin', window.location.href) }
                   className={classes.socialLinkedIn}
                 >
                   <Typography className={classes.linkedInText} component="h1" variant="h5">
