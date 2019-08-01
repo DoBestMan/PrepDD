@@ -304,7 +304,7 @@ export default function SignUpPage(_props: {path?: string}) {
 
               <Grid item xs={6} lg={6} md={6}>
                 <LinkedIn
-                  clientId="81lx5we2omq9xh"
+                  clientId="867vhof1bgd0vm"
                   onFailure={responseGoogle}
                   onSuccess={successLinkedIn}
                   redirectUri={ new URL('/linkedin', window.location.href) }
