@@ -16,7 +16,7 @@ class Company < ApplicationRecord
     require 'aws-sdk-s3'
 
     begin
-      s3 = Aws::S3::Client.new(region: 'us-west-2')
+      s3 = Aws::S3::Client.new
       bucket = s3.create_bucket(bucket: "prepdd-#{self.name.downcase}")
     rescue
       errors.add(:name, :blank, message: "Not Able to create s3 bucket")
