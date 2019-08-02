@@ -22,6 +22,10 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       return response
     end
 
+    if social_login
+      password = Devise.friendly_token[0,20]
+    end
+
     user =
       User.create(
         {
