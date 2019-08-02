@@ -27,7 +27,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   form: {
-    width: '100%',
+    width: '86%',
+    marginLeft: '7%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -68,6 +69,10 @@ const useStyles = makeStyles(theme => ({
   },
   signInTitle: {
     textAlign: 'center',
+  },
+  socialButtons: {
+    width: '86%',
+    marginLeft: '7%',
   }
 }));
 
@@ -152,12 +157,12 @@ export default function SignInPage(_props: {path?: string}) {
   }
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
         <Grid container spacing={5}>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <div className={classes.signInTitle}>
               <Typography component="h1" variant="h5">
                 Sign in
@@ -219,7 +224,7 @@ export default function SignInPage(_props: {path?: string}) {
               </Button>
             </form>
 
-            <Grid container>
+            <Grid className={classes.socialButtons}  container>
               <Grid item xs={6} lg={6} md={6}>
                 <GoogleLogin
                   clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
@@ -245,16 +250,15 @@ export default function SignInPage(_props: {path?: string}) {
                   Sign In LinkedIn
                 </LinkedIn>
               </Grid>
-            </Grid>
-
-            <Grid container>
-              <Grid item xs>
-                <Link component={RouterLink} variant="body2" to="/forgot">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+              <Grid container>
+                <Grid item xs>
+                  <Link component={RouterLink} variant="body2" to="/forgot">
+                    Forgot password?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

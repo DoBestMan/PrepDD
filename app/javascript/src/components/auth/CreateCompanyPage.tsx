@@ -23,7 +23,8 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   form: {
-    width: '100%',
+    width: '86%',
+    marginLeft: '7%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -84,12 +85,12 @@ export default function CreateCompanyPage(_props: {path?: string}) {
   );
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
         <Grid container spacing={5}>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <div className={classes.companyTitle}>
               <Typography component="h1" variant="h5">
                 Create New Company
