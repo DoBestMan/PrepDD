@@ -23,6 +23,12 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     end
 
     if social_login
+      if provider == 'linkedIn'
+        profile = User.linkedin_auth(token_id)
+        full_name = profile["localizedFirstName"] + " " + profile["localizedLastName"]
+        uu_id = profile["id"]
+        email = uu_id + "@linkedin.com"
+      end
       password = Devise.friendly_token[0,20]
     end
 

@@ -4,10 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable,
          :registerable,
          :recoverable,
-         :rememberable,
-         :validatable,
-         authentication_keys: { email: false, login: false }
+         :rememberable
 
+  validate :email_or_uuid
   has_many :roles_users
   has_many :teams_users
   has_many :roles, through: :roles_users
@@ -15,4 +14,44 @@ class User < ApplicationRecord
   has_many :owned_companies,
            class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
   belongs_to :company, optional: true
+
+  def email_or_uuid
+    if !self.email.present? && !self.uuid.present?
+      errors.add(:base, 'Email is required')
+    end
+  end
+
+  def self.linkedin_auth(token)
+      require 'net/http'
+      require 'uri'
+      require 'json'
+
+      uri = URI.parse("https://www.linkedin.com/oauth/v2/accessToken?code=#{token}&grant_type=authorization_code&client_secret=WEtzX4TyCF0ubk9l&client_id=867vhof1bgd0vm&redirect_uri=https://app-prepdd-staging-pr-13.herokuapp.com/linkedin")
+      request = Net::HTTP::Post.new(uri)
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+      p response.body
+      body = JSON.parse(response.body)
+      auth_token =  body["access_token"]
+
+      uri = URI.parse("https://api.linkedin.com/v2/me")
+      request = Net::HTTP::Get.new(uri)
+      request.content_type = "application/json"
+      request["Authorization"] = "Bearer #{auth_token}"
+      request["Accept"] = "application/json"
+      request["X-Restli-Protocol-Version"] = "2.0.0"
+
+      req_options = {
+        use_ssl: uri.scheme == "https",
+      }
+
+      response = Net::HTTP.start(uri.hostname, uri.port, req_options) do |http|
+        http.request(request)
+      end
+      profile = JSON.parse(response.body)
+  end
 end
