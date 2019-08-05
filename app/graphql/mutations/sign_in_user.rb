@@ -21,6 +21,10 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
     end
 
     if social_login.present? && token_id
+      if provider == 'linkedIn'
+        profile = User.linkedin_auth(token_id)
+        uu_id = profile["id"]
+      end
       user = User.find_by_uuid(uu_id)
       user&.update(token_id: token_id)
 
