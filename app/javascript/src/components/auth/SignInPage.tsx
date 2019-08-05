@@ -241,7 +241,8 @@ export default function SignInPage(_props: {path?: string}) {
                   clientId="867vhof1bgd0vm"
                   onFailure={responseGoogle}
                   onSuccess={successLinkedIn}
-                  redirectUri={ new URL('/linkedin', window.location.href) }
+                  redirectUri={ `${ new URL('/linkedin', window.location.href) }` }
+                  scope="r_liteprofile r_emailaddress"
                   className={classes.socialLinkedIn}
                 >
                   <Typography className={classes.linkedInText} component="h1" variant="h5">

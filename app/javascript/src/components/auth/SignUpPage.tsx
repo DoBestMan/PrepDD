@@ -240,6 +240,14 @@ export default function SignUpPage(_props: {path?: string}) {
                 />
               )}
 
+              {errorFor('uuid') && (
+                <FlashMessage
+                  className={classes.flash}
+                  variant="warning"
+                  message={errorFor('uuid')}
+                />
+              )}
+
               <TextField
                 variant="outlined"
                 margin="normal"
