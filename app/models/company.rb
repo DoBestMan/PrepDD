@@ -10,22 +10,10 @@ class Company < ApplicationRecord
   validates :name, uniqueness: true
 
   before_create :generate_encryption_key
-  after_create :create_s3, :create_kms
+  after_create :create_s3_kms
 
-  def create_s3
-    require 'aws-sdk-s3'
-
-    begin
-      s3 = Aws::S3::Client.new
-      bucket = s3.create_bucket(bucket: "prepdd-#{self.name.downcase}")
-    rescue
-      errors.add(:name, :blank, message: "Not Able to create s3 bucket")
-    end
-
-    if bucket
-      self.s3_location = bucket.location
-      save!
-    end
+  def create_s3_kms
+    CompanyS3BucketCreationWorker.perform_async(self.id)
   end
 
   def create_kms
