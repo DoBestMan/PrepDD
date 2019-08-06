@@ -17,8 +17,7 @@ RSpec.describe Company, type: :model do
   describe '#callback' do
     # Company callback
     describe '#method' do
-      it { is_expected.to callback(:create_s3).after(:create) }
-      it { is_expected.to callback(:create_kms).after(:create) }
+      it { is_expected.to callback(:create_s3_kms).after(:create) }
       it { is_expected.to callback(:generate_encryption_key).before(:create) }
     end
   end
