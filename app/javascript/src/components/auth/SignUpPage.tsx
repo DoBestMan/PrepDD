@@ -7,7 +7,11 @@ import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {GoogleLogin} from 'react-google-login';
+import {
+  GoogleLogin,
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {makeStyles} from '@material-ui/core/styles';
@@ -190,16 +194,22 @@ export default function SignUpPage(_props: {path?: string}) {
     console.log(response);
   };
 
-  const successGoogle = (response: any) => {
-    if (response.profileObj) {
+  function isGoogleLoginResponse(arg: any): arg is GoogleLoginResponse {
+    return arg.getBasicProfile !== undefined;
+  }
+
+  const successGoogle = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
+    if (isGoogleLoginResponse(response)) {
       setState(state => ({
         ...state,
-        email: response.profileObj.email,
-        fullName: response.profileObj.name,
+        email: response.getBasicProfile().getEmail(),
+        fullName: response.getBasicProfile().getName(),
         socialLogin: true,
         provider: 'gmail',
-        tokenID: response.tokenId,
-        uuID: response.googleId,
+        tokenID: response.getAuthResponse().id_token,
+        uuID: response.getBasicProfile().getId(),
       }));
       signUpUser();
     }
