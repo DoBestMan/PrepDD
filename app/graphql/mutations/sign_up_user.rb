@@ -3,12 +3,17 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   argument :email, String, required: true
   argument :password, String, required: true
   argument :companyName, String, required: true
+  argument :socialLogin, Boolean, required: true
+  argument :tokenID, String, required: true
+  argument :provider, String, required: true
+  argument :uuID, String, required: true
 
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(full_name: nil, email: nil, password: nil, company_name: nil)
+  def resolve(full_name: nil, email: nil, password: nil, company_name: nil, social_login: nil,
+              token_id: nil, provider: nil, uu_id: nil)
     response = { errors: [] }
 
     if context[:controller].user_signed_in?
@@ -17,13 +22,26 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       return response
     end
 
+    if social_login
+      if provider == 'linkedIn'
+        profile = User.linkedin_auth(token_id)
+        full_name = profile["localizedFirstName"] + " " + profile["localizedLastName"]
+        uu_id = profile["id"]
+        email = uu_id + "@linkedin.com"
+      end
+      password = Devise.friendly_token[0,20]
+    end
+
     user =
       User.create(
         {
           full_name: full_name,
           email: email,
           password: password,
-          password_confirmation: password
+          password_confirmation: password,
+          token_id: token_id,
+          social_login_provider: provider,
+          uuid: uu_id
         }
       )
 
@@ -36,10 +54,12 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       end
     end
 
-    if user.valid?
-      company = user.owned_companies.create({ name: company_name })
+    if user.valid? && company_name.present?
+      company = Company.find_by_name(company_name)
+      company&.owner = user
+      company&.save!
 
-      company.errors.messages.each do |path, messages|
+      company&.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
             { path: path.to_s.camelcase(:lower), message: message }
@@ -52,7 +72,9 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     if user.persisted?
       context[:controller].sign_in(user)
       response[:user] = user
+      response[:current_user] = { id: 'current_user', user: user }
       response[:success] = true
+      response
     end
 
     response

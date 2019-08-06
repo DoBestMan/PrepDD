@@ -25,9 +25,10 @@ gem 'omniauth-linkedin-oauth2'
 
 #Performance
 gem 'data_migrate'
+gem 'activerecord-session_store'
 
 #Third-Party
-gem 'aws-sdk-rails', '~> 2'
+gem 'aws-sdk', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-kms'
 
@@ -36,8 +37,10 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'shoulda', '~> 3.6'
   gem 'shoulda-matchers', '~> 3.0'
+  gem 'shoulda-callback-matchers'
   gem 'factory_bot_rails', '~> 5.0.2'
   gem 'faker'
+  gem 'pry', '~> 0.12.2'
 end
 
 group :development do

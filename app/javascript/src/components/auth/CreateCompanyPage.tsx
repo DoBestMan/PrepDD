@@ -1,11 +1,17 @@
-import React, {useCallback, useState} from 'react';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import FlashMessage from '../common/FlashMessage';
+import Grid from '@material-ui/core/Grid';
+import idx from 'idx';
+import * as React from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {navigate} from '@reach/router';
 import {makeStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
+import {Link as RouterLink, navigate} from '@reach/router';
+
+import {useCompanyCreate} from "../../graphql/mutations/CreateCompany";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -18,32 +24,57 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1),
   },
   form: {
-    width: '100%',
+    width: '86%',
+    marginLeft: '7%',
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  companyTitle: {
+    textAlign: 'center',
+  }
 }));
 
 export default function CreateCompanyPage(_props: {path?: string}) {
-  useRequireGuest();
 
   const classes = useStyles({});
 
   const [state, setState] = useState<{
-    companyName: string;
+    name: string
   }>({
-    companyName: '',
+    name: ''
   });
+
+
+  const [createCompany, {data}] = useCompanyCreate({
+    name: state.name,
+  });
+
+  useEffect(() => {
+    if (idx(data, data => data.createCompany.success)) {
+      navigate('/signup?companyName='+ state.name);
+    }
+  }, [data]);
+
+  function errorFor(path: string) {
+    const errors = idx(data, x => x.createCompany.errors);
+    if (!errors) {
+      return;
+    }
+    const error = errors.find((e: {path: string}) => e.path === path);
+    if (!error) {
+      return;
+    }
+    return error.message;
+  }
 
   const onSubmit = useCallback(
     e => {
-      console.log('called...');
       e.preventDefault();
-      navigate('/signup');
+      createCompany();
     },
-    [],
+    [createCompany]
   );
 
   const onChangeInput = useCallback(
@@ -55,31 +86,54 @@ export default function CreateCompanyPage(_props: {path?: string}) {
   );
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
-        <Typography component="h1" variant="h5">
-          New Company
-        </Typography>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            label="Company Name"
-            name="companyName"
-            onChange={onChangeInput}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Continue
-          </Button>
-        </form>
+        <Grid container spacing={5}>
+          <Grid item xs={4}>
+          </Grid>
+          <Grid item xs={4}>
+            <div className={classes.companyTitle}>
+              <Typography component="h1" variant="h5">
+                Create New Company
+              </Typography>
+            </div>
+            <form className={classes.form} noValidate onSubmit={onSubmit}>
+              {errorFor('root') && (
+                <FlashMessage
+                  className={classes.flash}
+                  variant="warning"
+                  message={errorFor('root')}
+                />
+              )}
+
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                label="Company Name"
+                name="name"
+                autoFocus
+                value={state.name}
+                error={!!errorFor('name')}
+                helperText={errorFor('name')}
+                onChange={onChangeInput}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                className={classes.submit}
+              >
+                Continue
+              </Button>
+            </form>
+
+
+          </Grid>
+        </Grid>
       </div>
     </Container>
   );

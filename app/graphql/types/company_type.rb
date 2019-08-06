@@ -6,6 +6,6 @@ module Types
     field :subscription_id, ID, null: false
     field :owner_id, ID, null: false
     field :is_active, Boolean, null: false
-    field :email, String, null: false
+    field :name, String, null: false
   end
 end

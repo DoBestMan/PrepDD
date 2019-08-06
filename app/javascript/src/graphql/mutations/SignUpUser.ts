@@ -10,12 +10,20 @@ export const useSignUpUser = createMutationHook<
     $email: String!
     $password: String!
     $companyName: String!
+    $socialLogin: Boolean!
+    $provider: String!
+    $tokenID: String!
+    $uuID: String!
   ) {
     signUpUser(
       fullName: $fullName
       email: $email
       password: $password
       companyName: $companyName
+      socialLogin: $socialLogin
+      provider: $provider
+      tokenID: $tokenID
+      uuID: $uuID
     ) {
       user {
         email
