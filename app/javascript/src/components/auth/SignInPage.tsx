@@ -60,7 +60,7 @@ const useStyles = makeStyles(theme => ({
     display: 'inline',
     fontWeight: 'bold',
   },
-  prepLink:{
+  prepLink: {
     textDecoration: 'none',
     color: '#3f51b5',
     '&:hover': {
@@ -73,7 +73,7 @@ const useStyles = makeStyles(theme => ({
   socialButtons: {
     width: '86%',
     marginLeft: '7%',
-  }
+  },
 }));
 
 export default function SignInPage(_props: {path?: string}) {
@@ -96,7 +96,7 @@ export default function SignInPage(_props: {path?: string}) {
     socialLogin: false,
     tokenID: '',
     provider: '',
-    uuID: ''
+    uuID: '',
   });
 
   const [signInUser, {data}] = useSignInUser({
@@ -109,7 +109,7 @@ export default function SignInPage(_props: {path?: string}) {
   });
 
   interface linkedInResponse {
-    code: string
+    code: string;
   }
 
   const errors = idx(data, x => x.signInUser.errors);
@@ -136,32 +136,33 @@ export default function SignInPage(_props: {path?: string}) {
 
   const successGoogle = (response: any) => {
     if (response.profileObj) {
-      setState(state => ({...state,
+      setState(state => ({
+        ...state,
         email: response.profileObj.email,
         socialLogin: true,
         provider: 'gmail',
         tokenID: response.tokenId,
-        uuID: response.googleId
+        uuID: response.googleId,
       }));
     }
     signInUser();
   };
 
   const successLinkedIn = (response: linkedInResponse) => {
-    setState(state => ({...state,
+    setState(state => ({
+      ...state,
       socialLogin: true,
       provider: 'linkedIn',
-      tokenID:  response.code,
+      tokenID: response.code,
     }));
     signInUser();
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
         <Grid container spacing={5}>
-          <Grid item xs={4}>
-          </Grid>
+          <Grid item xs={4}></Grid>
           <Grid item xs={4}>
             <div className={classes.signInTitle}>
               <Typography component="h1" variant="h5">
@@ -170,14 +171,14 @@ export default function SignInPage(_props: {path?: string}) {
             </div>
             <form className={classes.form} noValidate onSubmit={onSubmit}>
               {errors &&
-              errors.map((error, index) => (
-                <FlashMessage
-                  key={index}
-                  className={classes.flash}
-                  variant="warning"
-                  message={error.message}
-                />
-              ))}
+                errors.map((error, index) => (
+                  <FlashMessage
+                    key={index}
+                    className={classes.flash}
+                    variant="warning"
+                    message={error.message}
+                  />
+                ))}
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -224,7 +225,7 @@ export default function SignInPage(_props: {path?: string}) {
               </Button>
             </form>
 
-            <Grid className={classes.socialButtons}  container>
+            <Grid className={classes.socialButtons} container>
               <Grid item xs={6} lg={6} md={6}>
                 <GoogleLogin
                   clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
@@ -241,11 +242,15 @@ export default function SignInPage(_props: {path?: string}) {
                   clientId="867vhof1bgd0vm"
                   onFailure={responseGoogle}
                   onSuccess={successLinkedIn}
-                  redirectUri={ `${ new URL('/linkedin', window.location.href) }` }
+                  redirectUri={`${new URL('/linkedin', window.location.href)}`}
                   scope="r_liteprofile r_emailaddress"
                   className={classes.socialLinkedIn}
                 >
-                  <Typography className={classes.linkedInText} component="h1" variant="h5">
+                  <Typography
+                    className={classes.linkedInText}
+                    component="h1"
+                    variant="h5"
+                  >
                     in
                   </Typography>
                   Sign In LinkedIn
@@ -258,7 +263,12 @@ export default function SignInPage(_props: {path?: string}) {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <a className={classes.prepLink} href={'https://www.prepdd.com/pricing'}>{"Don't have an account? Sign Up"}</a>
+                  <a
+                    className={classes.prepLink}
+                    href={'https://www.prepdd.com/pricing'}
+                  >
+                    {"Don't have an account? Sign Up"}
+                  </a>
                 </Grid>
               </Grid>
             </Grid>

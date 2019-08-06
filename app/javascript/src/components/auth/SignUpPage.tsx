@@ -14,8 +14,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import CircleChecked from '@material-ui/icons/CheckCircleOutline';
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
@@ -77,7 +77,7 @@ const useStyles = makeStyles(theme => ({
   },
   signUpTitle: {
     textAlign: 'center',
-  }
+  },
 }));
 
 export default function SignUpPage(_props: {path?: string}) {
@@ -96,7 +96,7 @@ export default function SignUpPage(_props: {path?: string}) {
     uuID: string;
     hasUpperCase: boolean;
     hasSpecialChar: boolean;
-    hasEightChar: boolean
+    hasEightChar: boolean;
   }>({
     fullName: '',
     email: '',
@@ -111,7 +111,6 @@ export default function SignUpPage(_props: {path?: string}) {
     hasEightChar: false,
   });
 
-
   const [signUpUser, {data}] = useSignUpUser({
     fullName: state.fullName,
     email: state.email,
@@ -124,9 +123,8 @@ export default function SignUpPage(_props: {path?: string}) {
   });
 
   interface linkedInResponse {
-    code: string
+    code: string;
   }
-
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
@@ -137,7 +135,7 @@ export default function SignUpPage(_props: {path?: string}) {
   useEffect(() => {
     const url = new URL(window.location.href);
     const companyName = url.searchParams.get('companyName');
-    if(companyName !== null){
+    if (companyName !== null) {
       setState(state => ({...state, companyName: companyName}));
     }
   });
@@ -165,20 +163,20 @@ export default function SignUpPage(_props: {path?: string}) {
     e => {
       const {name, value} = e.target;
       setState(state => ({...state, [name]: value}));
-      if (name == 'password'){
-        if(value.match(/[A-Z]/)){
+      if (name == 'password') {
+        if (value.match(/[A-Z]/)) {
           setState(state => ({...state, hasUpperCase: true}));
         } else {
           setState(state => ({...state, hasUpperCase: false}));
         }
 
-        if(value.length >= 8){
+        if (value.length >= 8) {
           setState(state => ({...state, hasEightChar: true}));
         } else {
           setState(state => ({...state, hasEightChar: false}));
         }
 
-        if(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)){
+        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) {
           setState(state => ({...state, hasSpecialChar: true}));
         } else {
           setState(state => ({...state, hasSpecialChar: false}));
@@ -194,13 +192,14 @@ export default function SignUpPage(_props: {path?: string}) {
 
   const successGoogle = (response: any) => {
     if (response.profileObj) {
-      setState(state => ({...state,
+      setState(state => ({
+        ...state,
         email: response.profileObj.email,
         fullName: response.profileObj.name,
         socialLogin: true,
         provider: 'gmail',
         tokenID: response.tokenId,
-        uuID: response.googleId
+        uuID: response.googleId,
       }));
       signUpUser();
     }
@@ -211,20 +210,20 @@ export default function SignUpPage(_props: {path?: string}) {
   };
 
   const successLinkedIn = (data: linkedInResponse) => {
-    setState(state => ({...state,
+    setState(state => ({
+      ...state,
       socialLogin: true,
       provider: 'linkedIn',
-      tokenID:  data.code,
+      tokenID: data.code,
     }));
     signUpUser();
-  }
+  };
 
   return (
     <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
         <Grid container spacing={5}>
-          <Grid item xs={4}>
-          </Grid>
+          <Grid item xs={4}></Grid>
           <Grid item xs={4}>
             <div className={classes.signUpTitle}>
               <Typography component="h1" variant="h5">
@@ -299,7 +298,7 @@ export default function SignUpPage(_props: {path?: string}) {
               </Button>
             </form>
 
-            <Grid className={classes.socialButtons}  container>
+            <Grid className={classes.socialButtons} container>
               <Grid item xs={6} lg={6} md={6}>
                 <GoogleLogin
                   clientId="1090849701177-kq5gufe0g2vssa71lu9jkg1tid11k6ib.apps.googleusercontent.com"
@@ -316,11 +315,15 @@ export default function SignUpPage(_props: {path?: string}) {
                   clientId="867vhof1bgd0vm"
                   onFailure={responseGoogle}
                   onSuccess={successLinkedIn}
-                  redirectUri={ `${ new URL('/linkedin', window.location.href) }` }
+                  redirectUri={`${new URL('/linkedin', window.location.href)}`}
                   className={classes.socialLinkedIn}
                   scope="r_liteprofile r_emailaddress"
                 >
-                  <Typography className={classes.linkedInText} component="h1" variant="h5">
+                  <Typography
+                    className={classes.linkedInText}
+                    component="h1"
+                    variant="h5"
+                  >
                     in
                   </Typography>
                   Sign Up LinkedIn
@@ -342,29 +345,44 @@ export default function SignUpPage(_props: {path?: string}) {
             </Typography>
             <FormControlLabel
               disabled
-              control={<Checkbox
-                icon={<CircleUnchecked />}
-                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
-                checked={state.hasUpperCase}
-                value={state.hasUpperCase} />}
+              control={
+                <Checkbox
+                  icon={<CircleUnchecked />}
+                  checkedIcon={
+                    <CircleCheckedFilled className={classes.greenCheck} />
+                  }
+                  checked={state.hasUpperCase}
+                  value={state.hasUpperCase}
+                />
+              }
               label="At least 1 uppercase letter"
             />
             <FormControlLabel
               disabled
-              control={<Checkbox
-                icon={<CircleUnchecked />}
-                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
-                checked={state.hasSpecialChar}
-                value={state.hasSpecialChar} />}
+              control={
+                <Checkbox
+                  icon={<CircleUnchecked />}
+                  checkedIcon={
+                    <CircleCheckedFilled className={classes.greenCheck} />
+                  }
+                  checked={state.hasSpecialChar}
+                  value={state.hasSpecialChar}
+                />
+              }
               label="At least 1 special character"
             />
             <FormControlLabel
               disabled
-              control={<Checkbox
-                icon={<CircleUnchecked />}
-                checkedIcon={<CircleCheckedFilled className={classes.greenCheck}/>}
-                checked={state.hasEightChar}
-                value={state.hasEightChar} />}
+              control={
+                <Checkbox
+                  icon={<CircleUnchecked />}
+                  checkedIcon={
+                    <CircleCheckedFilled className={classes.greenCheck} />
+                  }
+                  checked={state.hasEightChar}
+                  value={state.hasEightChar}
+                />
+              }
               label="More than 8 total characters"
             />
           </Grid>
