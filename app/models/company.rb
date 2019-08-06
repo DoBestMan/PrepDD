@@ -14,25 +14,7 @@ class Company < ApplicationRecord
 
   def create_s3_kms
     CompanyS3BucketCreationWorker.perform_async(self.id)
-  end
-
-  def create_kms
-    require 'aws-sdk-kms'
-
-    begin
-      client = Aws::KMS::Client.new
-      kms = client.create_key({ tags: [ {
-                                          tag_key: 'CompanyName', tag_value: self.name.downcase
-                                        },],})
-    rescue
-      errors.add(:name, :blank, message: "Not Able to create KMS")
-    end
-
-    if kms
-      self.kms_key_id = kms.key_metadata.key_id
-      self.kms_key = kms.key_metadata.arn
-      save!
-    end
+    CompanyKmsCreationWorker.perform_async(self.id)
   end
 
   def generate_encryption_key
