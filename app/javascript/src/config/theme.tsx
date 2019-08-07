@@ -5,7 +5,7 @@ const defaultTheme = createMuiTheme();
 export default createMuiTheme({
   transitions: {
     // So we have `transition: none;` everywhere
-    create: () => 'none',
+    // create: () => 'none',
   },
   typography: {
     fontFamily: [
@@ -33,8 +33,8 @@ export default createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         '*, *::before, *::after': {
-          transition: 'none !important',
-          animation: 'none !important',
+          // transition: 'none !important',
+          // animation: 'none !important',
         },
       },
     },

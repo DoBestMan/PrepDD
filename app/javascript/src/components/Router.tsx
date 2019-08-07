@@ -14,6 +14,7 @@ const UserProfile = lazy(() => import('./user/UserProfile'));
 const TeamManagement = lazy(() => import('./team/TeamManagement'));
 const CompanySubscription = lazy(() => import('./company/CompanySubscription'));
 const CompanySettings = lazy(() => import('./company/CompanySettings'));
+const ListsPage = lazy(() => import('./list/ListsPage'))
 
 export default function Router() {
   return (
@@ -30,6 +31,7 @@ export default function Router() {
         <CompanySubscription path="/company/subscription" />
         <CompanySettings path="/company/settings" />
         <LinkedInPopUp path="/linkedin" />
+        <ListsPage path="/lists" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>
