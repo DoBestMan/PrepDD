@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import MoreIcon from '@material-ui/icons/MoreHoriz'
 
-import { StyledTabs, StyledTab } from './styled/content'
-import FilesPane from '../components/FilesPane'
+import { StyledTabs, StyledTab } from './styled'
+import FilesPane from './FilesPane'
 
 const panelWidth = 539
 

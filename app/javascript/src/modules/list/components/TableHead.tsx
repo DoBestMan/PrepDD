@@ -7,7 +7,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel'
 import {
   StyledTableCell, 
   StyledCheckBox
-} from './styled/content'
+} from './styled'
 
 const headRows = [
   { id: 'company', numeric: false, disablePadding: true, label: 'Company' },
@@ -35,7 +35,7 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         <StyledTableCell padding="checkbox">
-          <img src="assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
+          <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
           <StyledCheckBox 
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}

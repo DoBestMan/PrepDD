@@ -16,7 +16,7 @@ import {
   StyledListItemIcon, 
   StyledListItemText,
   StyledListSubheader,
-} from './styled/layout'
+} from './styled'
 
 const useStyles = makeStyles(theme => ({
   root: {

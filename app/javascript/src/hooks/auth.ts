@@ -29,6 +29,6 @@ export const useRequireSignIn = createCurrentUserLoadedHook(currentUser => {
 export const useRequireGuest = createCurrentUserLoadedHook(currentUser => {
   if (currentUser) {
     console.log('already signed in... redirecting to /dashboard');
-    navigate('/dashboard');
+    navigate('/app');
   }
 });

@@ -90,7 +90,7 @@ export default function FilesPane(props) {
             <TableRow key={`files-${index}`}>
               <TableCell alight="left">
                 <div className={classes.flex}>
-                  <img src="assets/img/logos/excel.svg" alt="Excel" />
+                  <img src="../assets/img/logos/excel.svg" alt="Excel" />
                   <span className={classes.title}>{row.title}</span>
                   <div className={classes.grow} />
                   <span className={classes.modify}>{row.modified}</span>

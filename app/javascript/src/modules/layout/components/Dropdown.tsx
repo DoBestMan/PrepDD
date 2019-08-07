@@ -61,7 +61,7 @@ export default function Dropdown() {
             variant="inherit"
             onClick={toggleMenu}
           >
-            <img src="assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
+            <img src="../assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
             <span className={classes.pl12}>Microsoft</span>
             <div className={classes.grow} />
             <i className="fa fa-caret-down"></i>
@@ -73,7 +73,7 @@ export default function Dropdown() {
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
+                <img src="../assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
                 <span className={classes.pl12}>Microsoft</span>
               </Typography>
               <Typography 
@@ -81,7 +81,7 @@ export default function Dropdown() {
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="assets/img/logos/prepdd-logo.svg" alt="Microsoft" width="24" height="24" />
+                <img src="../assets/img/logos/prepdd-logo.svg" alt="Microsoft" width="24" height="24" />
                 <span className={classes.pl12}>PrepDD</span>
               </Typography>
               <Typography 
@@ -89,7 +89,7 @@ export default function Dropdown() {
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="assets/img/logos/g2-logo.svg" alt="Microsoft" width="24" height="24" />
+                <img src="../assets/img/logos/g2-logo.svg" alt="Microsoft" width="24" height="24" />
                 <span className={classes.pl12}>G2 Crowd</span>
               </Typography>
             </Paper>

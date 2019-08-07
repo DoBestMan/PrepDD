@@ -5,16 +5,16 @@ import TableBody from '@material-ui/core/TableBody'
 import TablePagination from '@material-ui/core/TablePagination'
 import Paper from '@material-ui/core/Paper'
 
-import ListDetailPage from './ListDetailPage'
-import EnhancedTableToolbar from './TableToolbar'
-import EnhancedTableHead from './TableHead'
+import DetailPage from './components/DetailPage'
+import EnhancedTableToolbar from './components/TableToolbar'
+import EnhancedTableHead from './components/TableHead'
 import {
   StyledButton, 
   StyledTableRow, 
   StyledTableCell, 
   StyledCheckBox
-} from './styled/content'
-import useStyles from './ListsContent-Style'
+} from './components/styled'
+import useStyles from './style'
 
 function createData(company, name, status, statusText, modified) {
   return { company, name, status, statusText, modified}
@@ -171,8 +171,8 @@ export default function EnhancedTable() {
                       <StyledTableCell padding="checkbox">
                         <div className={classes.flex}>
                           { isItemSelected ?
-                            <img src="assets/img/logos/drag-black.svg" alt="Drag" /> :
-                            <img src="assets/img/logos/drag.svg" alt="Drag" />
+                            <img src="../assets/img/logos/drag-black.svg" alt="Drag" /> :
+                            <img src="../assets/img/logos/drag.svg" alt="Drag" />
                           }
                           <StyledCheckBox
                             checked={isItemSelected}
@@ -183,8 +183,8 @@ export default function EnhancedTable() {
                       <StyledTableCell id={labelId} scope="row">
                         <div className={classes.flex}>
                           { row.company === "G2 Crowd" ?
-                            <img src="assets/img/logos/g2-logo.svg" alt="G2 Crowd" width="18" height="18" /> :
-                            <img src="assets/img/logos/prepdd-logo.svg" alt="PrepDD" width="18" height="18" />
+                            <img src="../assets/img/logos/g2-logo.svg" alt="G2 Crowd" width="18" height="18" /> :
+                            <img src="../assets/img/logos/prepdd-logo.svg" alt="PrepDD" width="18" height="18" />
                           }
                           <span style={{marginLeft: "5px"}}>{row.company}</span>
                         </div>
@@ -238,7 +238,7 @@ export default function EnhancedTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <ListDetailPage open={isOpen()}/>
+      <DetailPage open={isOpen()}/>
     </div>
   )
 }

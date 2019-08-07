@@ -1,13 +1,13 @@
 import ApolloClient from 'apollo-client';
 import React from 'react';
 import {render} from 'react-dom';
-import Router from './components/Router';
 import {ApolloProvider} from 'react-apollo';
 import {createHttpLink} from 'apollo-link-http';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {ThemeProvider} from '@material-ui/styles';
-import theme from './config/theme';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import App from './containers/app';
+import theme from './config/theme';
 
 function getCSRFToken(): string {
   const el = document.querySelector('meta[name="csrf-token"]');
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Router />
+        <App />
       </ThemeProvider>
     </ApolloProvider>,
     document.body.appendChild(document.createElement('div'))

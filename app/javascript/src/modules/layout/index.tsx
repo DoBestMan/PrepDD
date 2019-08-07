@@ -23,15 +23,18 @@ import AddIcon from '@material-ui/icons/Add'
 import {
   StyledButton,
   StyledBadge
-} from './components/styled/layout'
+} from './components/styled'
 import { MainListItems, AdminListItems } from './components/NavbarItems'
 import Dropdown from './components/Dropdown'
-import ListsContent from './components/ListsContent'
-import { useStyles } from './ListsPage-Style'
+import { useStyles } from './style'
 
-export default function Dashboard() {
+export default function Layout(props) {
+  const { children } = props
+
   const classes = useStyles()
+
   const [open, setOpen] = React.useState(true)
+
   const toggleDrawer = () => {
     setOpen(!open)
   }
@@ -91,7 +94,7 @@ export default function Dashboard() {
         <List disablePadding>
           <ListItem className={clsx(classes.paddingOpen, !open && classes.paddingClose)} disableGutters>
             <ListItemIcon>
-              <img src="assets/img/logos/prepdd-logo.svg" alt="PrepDD"/>
+              <img src="../assets/img/logos/prepdd-logo.svg" alt="PrepDD"/>
             </ListItemIcon>
             <ListItemText>
               <span className={classes.mark}>
@@ -118,7 +121,7 @@ export default function Dashboard() {
       <PlayCircleOutline className={clsx(open && classes.arrowOpen, !open && classes.arrowClose)} onClick={toggleDrawer}/>
 
       <main className={clsx(classes.content, !open && classes.contentOpen)} >
-        <ListsContent />
+        { children }
       </main>
     </div>
   )
