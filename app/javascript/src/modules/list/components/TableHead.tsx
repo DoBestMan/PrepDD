@@ -3,31 +3,59 @@ import PropTypes from 'prop-types'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
+import useStyles from '../style'
 
 import {
   StyledTableCell, 
   StyledCheckBox
-} from './styled/content'
+} from './styled'
 
-const headRows = [
+interface Data {
+  company: string;
+  name: string; 
+  status: string;
+  statusText: string;
+  modified: string;
+}
+
+interface HeadRow {
+  id: keyof Data;
+  label: string;
+  numeric: boolean;
+  disablePadding: boolean;
+}
+
+const headRows: HeadRow[] = [
   { id: 'company', numeric: false, disablePadding: true, label: 'Company' },
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'statusText', numeric: false, disablePadding: true, label: 'Status' },
   { id: 'modified', numeric: false, disablePadding: true, label: 'Modified' }
 ]
 
-const EnhancedTableHead = (props) => {
+type Order = 'asc' | 'desc'
+
+interface EnhancedTableProps {
+  classes: ReturnType<typeof useStyles>;
+  numSelected: number;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  order: Order;
+  orderBy: string;
+  rowCount: number;
+}
+
+const EnhancedTableHead = (props: EnhancedTableProps) => {
   const { 
     classes, 
-    onSelectAllClick, 
     order, 
     orderBy, 
     numSelected, 
     rowCount, 
-    onRequestSort 
+    onRequestSort,
+    onSelectAllClick, 
   } = props
 
-  const createSortHandler = property => event => {
+  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property)
   }
 
@@ -35,7 +63,7 @@ const EnhancedTableHead = (props) => {
     <TableHead>
       <TableRow>
         <StyledTableCell padding="checkbox">
-          <img src="assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
+          <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
           <StyledCheckBox 
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}

@@ -1,6 +1,5 @@
 import React from 'react'
 import clsx from 'clsx'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -23,22 +22,24 @@ import AddIcon from '@material-ui/icons/Add'
 import {
   StyledButton,
   StyledBadge
-} from './components/styled/layout'
+} from './components/styled'
 import { MainListItems, AdminListItems } from './components/NavbarItems'
 import Dropdown from './components/Dropdown'
-import ListsContent from './components/ListsContent'
-import { useStyles } from './ListsPage-Style'
+import useStyles from './style'
 
-export default function Dashboard() {
+export default function Layout(props: {path?: string, children: object}) {
+  const { children } = props
+
   const classes = useStyles()
-  const [open, setOpen] = React.useState(true)
+
+  const [open, setOpen] = React.useState<boolean>(true)
+
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar 
         className={clsx(classes.appBar, open && classes.appBarShift)}
         position="fixed" 
@@ -91,7 +92,7 @@ export default function Dashboard() {
         <List disablePadding>
           <ListItem className={clsx(classes.paddingOpen, !open && classes.paddingClose)} disableGutters>
             <ListItemIcon>
-              <img src="assets/img/logos/prepdd-logo.svg" alt="PrepDD"/>
+              <img src="../assets/img/logos/prepdd-logo.svg" alt="PrepDD"/>
             </ListItemIcon>
             <ListItemText>
               <span className={classes.mark}>
@@ -118,7 +119,7 @@ export default function Dashboard() {
       <PlayCircleOutline className={clsx(open && classes.arrowOpen, !open && classes.arrowClose)} onClick={toggleDrawer}/>
 
       <main className={clsx(classes.content, !open && classes.contentOpen)} >
-        <ListsContent />
+        { children }
       </main>
     </div>
   )

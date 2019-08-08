@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import MoreIcon from '@material-ui/icons/MoreHoriz'
 
-import { StyledTabs, StyledTab } from './styled/content'
-import FilesPane from '../components/FilesPane'
+import { StyledTabs, StyledTab } from './styled'
+import FilesPane from './FilesPane'
 
 const panelWidth = 539
 
@@ -50,7 +50,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const TabPanel = (props) => {
+interface TabPanelProps {
+  children?: React.ReactNode, 
+  value: any, 
+  index: any
+}
+
+const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props
 
   return (
@@ -67,11 +73,11 @@ const TabPanel = (props) => {
   )
 }
 
-export default function ListDetailPage(props) {
+export default function ListDetailPage(props: {open: boolean}) {
   const classes = useStyles()
   const [index, setIndex] = React.useState(2)
 
-  const handleChange = (event, newIndex) => {
+  const handleChange = (event: unknown, newIndex: number) => {
     setIndex(newIndex)
   }
   
