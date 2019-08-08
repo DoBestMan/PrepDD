@@ -33,7 +33,7 @@ const BootstrapInput = withStyles(theme => ({
       'BlinkMacSystemFont',
       '"Segoe UI"',
       'Roboto',
-      '"Helvetica Neue"',
+      '"Montserrat Neue"',
       'Arial',
       'sans-serif',
       '"Apple Color Emoji"',

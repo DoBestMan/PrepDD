@@ -4,9 +4,9 @@ import TableRow from '@material-ui/core/TableRow'
 const StyledTableRow = withStyles({
   root: {
     padding: '0px 24px 0px 24px',
-    fontFamily: 'Helvetica',
-    fontWeight: 800, 
-    fontSize: '15px',
+    fontFamily: 'Montserrat',
+    fontWeight: 600, 
+    fontSize: '12px',
     color: '#606060',
     '&$selected, &$hover:hover': {
       color: '#FFFFFF',

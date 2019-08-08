@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
       })
     },
     table: {
-      minWidth: 750
+      minWidth: 750,
+      tableLayout: 'fixed'
     },
     tableWrapper: {
       overflowX: 'auto',
@@ -76,7 +77,12 @@ const useStyles = makeStyles((theme: Theme) =>
     low: {
       backgroundColor: '#81AFFF'
     },
-  }),
+    textFlow: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden', 
+      textOverflow: 'ellipsis'
+    }
+  })
 );
 
-export default useStyles;
+export default useStyles

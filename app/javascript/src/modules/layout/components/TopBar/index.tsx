@@ -1,12 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { useMediaQuery } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
@@ -49,15 +50,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
       marginLeft: 0,
       width: '100%',
+      background: '#F2F2F2',
+      borderRadius: '3px',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '15px',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: 'auto',
       },
-      background: '#F2F2F2',
-      borderRadius: '3px',
-      fontFamily: 'Helvetica',
-      fontWeight: 800, 
-      fontSize: '15px'
     },
     searchIcon: {
       width: theme.spacing(7),
@@ -70,9 +71,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inputRoot: {
       height: 42, 
-      fontFamily: 'Helvetica',
+      fontFamily: 'Montserrat',
       fontSize: '15px',
-      fontWeight: 800, 
+      fontWeight: 'bold', 
       color: 'black'
     },
     inputInput: {
@@ -88,8 +89,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '91px',
       background: '#3A84FF',
       borderRadius: '3px',
-      fontFamily: 'Helvetica',
-      fontWeight: 800, 
+      fontFamily: 'Montserrat',
+      fontWeight: 'bold', 
       fontSize: '15px',
       color: '#FFFFFF',
       textAlign: 'center',
@@ -112,6 +113,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TopBar(props: {open: boolean}) {
   const { open } = props;
   const classes = useStyles();
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+    defaultMatches: true
+  });
 
   return (
     <AppBar 
@@ -122,19 +127,23 @@ export default function TopBar(props: {open: boolean}) {
       <Toolbar className={classes.toolbar} disableGutters>
         <Dropdown />
 
-        <div className={clsx(classes.search, classes.grow)}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <InputBase
-            placeholder="Search for lists, request, or files"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{"aria-label": "search"}}
-          />
-        </div>
+        { isDesktop ? (
+          <div className={clsx(classes.search, classes.grow)}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search for lists, request, or files"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{"aria-label": "search"}}
+            />
+          </div> ) : (
+            <div className={classes.grow} />
+          )
+        }
 
         <Typography variant="inherit">
           <Button className={classes.inviteButton}>

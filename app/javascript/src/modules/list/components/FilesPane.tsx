@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '10px'
     },
     modify: {
-      fontFamily: 'Helvetica',
+      fontFamily: 'Montserrat',
       fontSize: '15px',
       color: '#606060',
       lineHeight: '20px',

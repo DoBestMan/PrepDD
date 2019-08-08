@@ -14,9 +14,9 @@ const useStyles = makeStyles(theme => ({
     boxSizing: 'border-box',
     padding: '24px 24px 19px 24px',
     borderRight: '1px solid #D8D8D8',
-    fontFamily: 'Helvetica',
+    fontFamily: 'Montserrat',
     fontSize: '18px',
-    fontWeight: 800, 
+    fontWeight: 'bold', 
     color: '#2C2C2C',
     [theme.breakpoints.up('sm')]: {
       display: 'flex',

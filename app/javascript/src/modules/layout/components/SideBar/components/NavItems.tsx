@@ -3,9 +3,6 @@ import clsx from 'clsx'
 import { Link } from '@reach/router';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import Button from '@material-ui/core/Button'
-import { colors } from '@material-ui/core'
 import AccessTime from '@material-ui/icons/AccessTime'
 import ListAlt from '@material-ui/icons/ListAlt'
 import CheckBox from '@material-ui/icons/CheckBox'
@@ -15,9 +12,6 @@ import SupervisorAccount from '@material-ui/icons/SupervisorAccount'
 import Settings from '@material-ui/icons/Settings'
 import Cached from '@material-ui/icons/Cached'
 
-import StyledListItem from './StyledListItem';
-import StyledListItemIcon from './StyledListItemIcon';
-import StyledListItemText from './StyledListItemText';
 import StyledListSubheader from './StyledListSubheader';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -25,20 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'block'
     },
-    selected: {
-      color: 'white'
-    },
-    selectedText: {
-      fontFamily: 'Helvetica',
-      fontWeight: 800, 
-      fontSize: '15px',
-      color: 'white'    
-    },
     invisible: {
       display: 'none'
     },
-    
-
     item: {
       display: 'flex',
       padding: '9px 24px 9px 24px',
@@ -47,9 +30,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'none',
       letterSpacing: 0,
       width: '100%',
-      fontFamily: 'Helvetica',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
       fontSize: '15px',
-      fontWeight: 800,
       '&$selected, &$selected:hover': {
         color: '#FFFFFF',
         background: '#3A84FF'
@@ -69,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     active: {
       color: '#FFFFFF',
       background: '#3A84FF',
-      fontWeight: 800,
+      fontWeight: 'bold',
       '& $icon': {
         color: 'white'
       },
@@ -77,19 +60,38 @@ const useStyles = makeStyles((theme: Theme) =>
         background: '#3A84FF'
       }
     }
-}))
+  })
+);
+
+const MainPages = [
+  {
+    title: 'Priority', 
+    href: '/app',
+    icon: <AccessTime />
+  },
+  {
+    title: 'Lists', 
+    href: '/app/lists', 
+    icon: <ListAlt />
+  },
+  {
+    title: 'Tasks', 
+    href: '/app/tasks', 
+    icon: <CheckBox />
+  }
+]
 
 const CustomerLink = React.forwardRef((props: any, ref: any) => (
-    <Link 
-      ref={ref}
-      style={{ flexGrow: 1 }}
-      {...props}
-      getProps = {({ isCurrent }) => {
-        return {
-          className: isCurrent ? `${props.className} ${props.activeclassname}` : props.className
-        }
-      }}
-    />
+  <Link 
+    ref={ref}
+    style={{ flexGrow: 1 }}
+    {...props}
+    getProps = {({ isCurrent }) => {
+      return {
+        className: isCurrent ? `${props.className} ${props.activeclassname}` : props.className
+      }
+    }}
+  />
 ));
 
 export const MainListItems = (props: {open: boolean}) => {
@@ -103,18 +105,20 @@ export const MainListItems = (props: {open: boolean}) => {
         activeclassname={classes.active}
         component={CustomerLink}
         to={'/app'}
-        disableGutters>
-          <div className={classes.icon}>
-            <AccessTime />
-          </div>
-          <span className={clsx(!open && classes.invisible)}>Priority</span>
+        disableGutters
+      >
+        <div className={classes.icon}>
+          <AccessTime />
+        </div>
+        <span className={clsx(!open && classes.invisible)}>Priority</span>
       </ListItem>
       <ListItem 
         className={classes.item} 
         activeclassname={classes.active}
         component={CustomerLink}
         to={'/app/list'}
-        disableGutters>
+        disableGutters
+      >
         <div className={classes.icon}>
           <ListAlt />
         </div>

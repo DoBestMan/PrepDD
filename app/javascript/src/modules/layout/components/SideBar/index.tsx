@@ -17,9 +17,9 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     mark: {
-      fontFamily: 'Helvetica',
+      fontFamily: 'Montserrat',
       fontSize: '18px',
-      fontWeight: 800, 
+      fontWeight: 'bold', 
       color: '#0E3B5C',
       lineHeight: '48px'
     },
