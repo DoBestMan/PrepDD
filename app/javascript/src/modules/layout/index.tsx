@@ -1,6 +1,5 @@
 import React from 'react'
 import clsx from 'clsx'
-import CssBaseline from '@material-ui/core/CssBaseline'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -26,14 +25,14 @@ import {
 } from './components/styled'
 import { MainListItems, AdminListItems } from './components/NavbarItems'
 import Dropdown from './components/Dropdown'
-import { useStyles } from './style'
+import useStyles from './style'
 
-export default function Layout(props) {
+export default function Layout(props: {path?: string, children: object}) {
   const { children } = props
 
   const classes = useStyles()
 
-  const [open, setOpen] = React.useState(true)
+  const [open, setOpen] = React.useState<boolean>(true)
 
   const toggleDrawer = () => {
     setOpen(!open)
@@ -41,7 +40,6 @@ export default function Layout(props) {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <AppBar 
         className={clsx(classes.appBar, open && classes.appBarShift)}
         position="fixed" 

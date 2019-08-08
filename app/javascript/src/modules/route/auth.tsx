@@ -9,7 +9,7 @@ const SignInPage = lazy(() => import('../auth/SignInPage'));
 const ForgotPasswordPage = lazy(() => import('../auth/ForgotPasswordPage'));
 const ResetPasswordPage = lazy(() => import('../auth/ResetPasswordPage'));
 
-export default function Router() {
+export default function Router(props: {path: string}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ReachRouter>

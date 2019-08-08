@@ -17,6 +17,6 @@ const StyledListItem = withStyles({
     }
   },
   selected: {}
-})(props => <ListItem {...props}/>)
+})(ListItem);
 
 export default StyledListItem

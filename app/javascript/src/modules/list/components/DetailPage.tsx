@@ -50,7 +50,13 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const TabPanel = (props) => {
+interface TabPanelProps {
+  children?: React.ReactNode, 
+  value: any, 
+  index: any
+}
+
+const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props
 
   return (
@@ -67,11 +73,11 @@ const TabPanel = (props) => {
   )
 }
 
-export default function ListDetailPage(props) {
+export default function ListDetailPage(props: {open: boolean}) {
   const classes = useStyles()
   const [index, setIndex] = React.useState(2)
 
-  const handleChange = (event, newIndex) => {
+  const handleChange = (event: unknown, newIndex: number) => {
     setIndex(newIndex)
   }
   

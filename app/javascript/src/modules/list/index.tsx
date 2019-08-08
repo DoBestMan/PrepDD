@@ -16,7 +16,21 @@ import {
 } from './components/styled'
 import useStyles from './style'
 
-function createData(company, name, status, statusText, modified) {
+interface Data {
+  company: string;
+  name: string; 
+  status: string;
+  statusText: string;
+  modified: string;
+}
+
+function createData(
+  company: string, 
+  name: string, 
+  status: string, 
+  statusText: string, 
+  modified: string
+  ): Data {
   return { company, name, status, statusText, modified}
 }
 
@@ -41,7 +55,7 @@ const rows = [
   createData('PrepDD', 'List Title', 'high', 'Complete', 'Edited 5 hours ago'),
 ]
 
-function desc(a, b, orderBy) {
+function desc<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1
   }
@@ -51,8 +65,8 @@ function desc(a, b, orderBy) {
   return 0
 }
 
-function stableSort(array, cmp) {
-  const stabilizedThis = array.map((el, index) => [el, index])
+function stableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
+  const stabilizedThis = array.map((el, index) => [el, index] as [T, number])
   stabilizedThis.sort((a, b) => {
     const order = cmp(a[0], b[0])
     if (order !== 0) return order
@@ -61,39 +75,44 @@ function stableSort(array, cmp) {
   return stabilizedThis.map(el => el[0])
 }
 
-function getSorting(order, orderBy) {
+type Order = 'asc' | 'desc'
+
+function getSorting<K extends keyof any>(
+  order: Order, 
+  orderBy: K
+  ): (a: { [key in K]: number | string }, b: { [key in K]: number | string }) => number {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy)
 }
 
-export default function EnhancedTable() {
+export default function List(props: {path?: string}) {
   const classes = useStyles()
-  const [order, setOrder] = React.useState('asc')
-  const [orderBy, setOrderBy] = React.useState('company')
-  const [selected, setSelected] = React.useState([])
+  const [order, setOrder] = React.useState<Order>('asc')
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('company')
+  const [selected, setSelected] = React.useState<number[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
-  function handleRequestSort(event, property) {
+  function handleRequestSort(event: React.MouseEvent<unknown>, property: keyof Data) {
     const isDesc = orderBy === property && order === 'desc'
     setOrder(isDesc ? 'asc' : 'desc')
     setOrderBy(property)
   }
 
-  function handleSelectAllClick(event) {
+  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.checked) {
-      const newSelecteds = rows.map((row, index) => index)
+      const newSelecteds = rows.map((row: Data, index: number) => index)
       setSelected(newSelecteds)
       return
     }
     setSelected([])
   }
 
-  function handleClick(event, name) {
-    const selectedIndex = selected.indexOf(name)
-    let newSelected = []
+  function handleClick(event: React.MouseEvent<unknown>, id: number) {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected: number[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name)
+      newSelected = newSelected.concat(selected, id)
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1))
     } else if (selectedIndex === selected.length - 1) {
@@ -108,22 +127,22 @@ export default function EnhancedTable() {
     setSelected(newSelected)
   }
 
-  function handleChangePage(event, newPage) {
+  function handleChangePage(event: unknown, newPage: number) {
     setPage(newPage)
   }
 
-  function handleChangeRowsPerPage(event) {
+  function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
 
-  const isSelected = id => selected.indexOf(id) !== -1
+  const isSelected = (id: number) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
 
-  const renderStatus = (status) => {
+  const renderStatus = (status: string) => {
     if (status === 'high') {
       return <div className={clsx(classes.high, classes.statusBadge)} />
     } else if (status === 'medium') {
@@ -136,7 +155,7 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <div className={classes.tableWrapper}>
           <Table
             className={classes.table}
@@ -154,14 +173,14 @@ export default function EnhancedTable() {
             <TableBody>
               {stableSort(rows, getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+                .map((row: Data, index: number) => {
                   const isItemSelected = isSelected(index)
                   const labelId = `enhanced-table-checkbox-${index}`
 
                   return (
                     <StyledTableRow
                       hover
-                      onClick={event => handleClick(event, index)}
+                      onClick={(event: React.MouseEvent<unknown>) => handleClick(event, index)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

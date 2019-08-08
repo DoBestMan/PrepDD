@@ -36,9 +36,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export const MainListItems = (props) => {
+export const MainListItems = (props: {open: boolean}) => {
   const { open } = props
-  const classes = useStyles()
+  const classes = useStyles({})
 
   return (
     <React.Fragment>
@@ -90,7 +90,7 @@ export const MainListItems = (props) => {
   )
 }
 
-export const AdminListItems = (props) => {
+export const AdminListItems = (props: {open: boolean}) => {
   const {open} = props
   const classes = useStyles()
 

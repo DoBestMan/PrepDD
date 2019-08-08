@@ -1,25 +1,22 @@
 import LoadingFallback from '../../components/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
-import Layout from '../layout';
 
-const DashboardPage = lazy(() => import('../dashboard'));
-const UserRoutes = lazy(() => import('./user'));
+const Layout = lazy(() => import('../layout'));
 const CompanyRoutes = lazy(() => import('./company'));
 const TeamRoutes = lazy(() => import('./team'));
+const UserRoutes = lazy(() => import('./user'));
 const ListRoutes = lazy(() => import('./list'));
 
-export default function Router() {
-  console.log('asdfsd');
+export default function Router(props: {path: string}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <Layout>
+      <Layout >
         <ReachRouter>
-          <UserRoutes path="/user/*" />
           <CompanyRoutes path="/company/*" />
           <TeamRoutes path="/team/*" />
+          <UserRoutes path="/user/*" />
           <ListRoutes path="/list/*" />
-          <DashboardPage path="/" />
         </ReachRouter>
       </Layout>
     </Suspense>
