@@ -6,7 +6,7 @@ const StyledTab = withStyles(theme => ({
   root: {
     minWidth: 36, 
     padding: 0, 
-    fontSize: '15px',
+    fontSize: '12px',
     fontWeight: 'bold', 
     color: '#606060',
     fontFamily: 'Montserrat',

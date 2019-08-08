@@ -8,7 +8,7 @@ const StyledBadge = withStyles({
     background: '#FF507C',
     fontFamily: 'Montserrat',
     fontWeight: 'bold', 
-    fontSize: '15px',
+    fontSize: '12px',
     color: '#FFFFFF',
     letterSpacing: '0',
     textAlign: 'center'

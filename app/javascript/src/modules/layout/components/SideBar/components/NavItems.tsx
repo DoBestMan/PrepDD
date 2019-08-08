@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       fontFamily: 'Montserrat',
       fontWeight: 600,
-      fontSize: '15px',
+      fontSize: '12px',
       '&$selected, &$selected:hover': {
         color: '#FFFFFF',
         background: '#3A84FF'

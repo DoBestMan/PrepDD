@@ -11,7 +11,7 @@ const StyledButton = withStyles({
     borderRadius: '3px',
     fontFamily: 'Montserrat',
     fontWeight: 'bold', 
-    fontSize: '15px',
+    fontSize: '12px',
     color: '#3A84FF',
     textAlign: 'center',
     '&:hover': {

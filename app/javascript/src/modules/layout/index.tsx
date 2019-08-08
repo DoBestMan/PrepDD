@@ -5,7 +5,7 @@ import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import PlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
-const drawerWidth = 240
+const drawerWidth = 210
 const miniDrawerWidth = 72
 const topBarHeight = 73
 

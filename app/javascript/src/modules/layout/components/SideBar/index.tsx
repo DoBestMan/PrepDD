@@ -12,7 +12,7 @@ import AddIcon from '@material-ui/icons/Add'
 import { MainListItems, AdminListItems } from './components/NavItems'
 import StyledButton from './components/StyledButton';
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({

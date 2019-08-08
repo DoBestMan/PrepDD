@@ -33,7 +33,7 @@ import MailIcon from '@material-ui/icons/Mail';
 
 const options = ['Parent Company', 'Broker', 'Assign broker'];
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 const ITEM_HEIGHT = 48;
 
 const useStyles = makeStyles(theme => ({

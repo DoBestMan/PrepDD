@@ -15,7 +15,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 
-const drawerWidth = 240
+const drawerWidth = 210
 const miniDrawerWidth = 72
 const topBarHeight = 73
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       fontFamily: 'Montserrat',
       fontWeight: 600,
-      fontSize: '15px',
+      fontSize: '12px',
       [theme.breakpoints.up('sm')]: {
         marginLeft: theme.spacing(3),
         width: 'auto',
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
     inputRoot: {
       height: 42, 
       fontFamily: 'Montserrat',
-      fontSize: '15px',
+      fontSize: '12px',
       fontWeight: 'bold', 
       color: 'black'
     },
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       fontFamily: 'Montserrat',
       fontWeight: 'bold', 
-      fontSize: '15px',
+      fontSize: '12px',
       color: '#FFFFFF',
       textAlign: 'center',
       textTransform: 'capitalize'

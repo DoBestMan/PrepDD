@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
   socialGmail: {
-    fontSize: 15,
+    fontSize: '12px',
     width: '90%',
     textAlign: 'center',
     marginBottom: 10,
@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: 5,
   },
   socialLinkedIn: {
-    fontSize: 15,
+    fontSize: '12px',
     width: '90%',
     marginLeft: '10%',
     marginBottom: 10,

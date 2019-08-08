@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     modify: {
       fontFamily: 'Montserrat',
-      fontSize: '15px',
+      fontSize: '12px',
       color: '#606060',
       lineHeight: '20px',
       marginRight: '20px'
