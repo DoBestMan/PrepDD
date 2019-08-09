@@ -12,8 +12,6 @@ import SupervisorAccount from '@material-ui/icons/SupervisorAccount'
 import Settings from '@material-ui/icons/Settings'
 import Cached from '@material-ui/icons/Cached'
 
-import StyledListSubheader from './StyledListSubheader';
-
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -59,11 +57,17 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:hover': {
         background: '#3A84FF'
       }
+    },
+
+    textFlow: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden', 
+      textOverflow: 'ellipsis'
     }
   })
 );
 
-const MainPages = [
+const mainPages = [
   {
     title: 'Priority', 
     href: '/app',
@@ -78,6 +82,34 @@ const MainPages = [
     title: 'Tasks', 
     href: '/app/tasks', 
     icon: <CheckBox />
+  },
+  {
+    title: 'Files', 
+    href: '/app/files',
+    icon: <LayersIcon />
+  }
+]
+
+const adminPages = [
+  {
+    title: 'Profile',
+    href: '/app/user', 
+    icon: <Person />
+  },
+  {
+    title: 'Team Management', 
+    href: '/app/team', 
+    icon: <SupervisorAccount />
+  },
+  {
+    title: 'Company Settings', 
+    href: '/app/settings', 
+    icon: <Settings />
+  },
+  {
+    title: 'Billing', 
+    href: '/app/billing', 
+    icon: <Cached />
   }
 ]
 
@@ -100,54 +132,21 @@ export const MainListItems = (props: {open: boolean}) => {
 
   return (
     <React.Fragment>
-      <ListItem 
-        className={classes.item} 
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app'}
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <AccessTime />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Priority</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item} 
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app/list'}
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <ListAlt />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Lists</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item} 
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app/tasks'}
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <CheckBox />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Tasks</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item} 
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app/files'}
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <LayersIcon />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Files</span>
-      </ListItem>
+      { mainPages.map(item => (
+          <ListItem 
+            className={classes.item} 
+            activeclassname={classes.active}
+            component={CustomerLink}
+            to={item.href}
+            disableGutters
+          >
+            <div className={classes.icon}>
+              {item.icon}
+            </div>
+            <div className={clsx(classes.textFlow, !open && classes.invisible)}>{item.title}</div>
+          </ListItem>
+        ))
+      }
     </React.Fragment>
   )
 }
@@ -158,53 +157,21 @@ export const AdminListItems = (props: {open: boolean}) => {
 
   return (
     <React.Fragment>
-      <StyledListSubheader classes={{root: clsx(!open && classes.invisible)}}>ADMIN</StyledListSubheader>
-      <ListItem 
-        className={classes.item}
-        activeclassname={classes.active} 
-        component={CustomerLink}
-        to={'/app/user'}
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <Person />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Profile</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item}   
-        activeclassname={classes.active}   
-        component={CustomerLink}
-        to={'/app/team'} 
-        disableGutters
-      >
-        <div className={classes.icon}>
-          <SupervisorAccount />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Team Management</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item}
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app/settings'}
-        disableGutters>
-        <div className={classes.icon}>
-          <Settings />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Company Settings</span>
-      </ListItem>
-      <ListItem 
-        className={classes.item} 
-        activeclassname={classes.active}
-        component={CustomerLink}
-        to={'/app/bill'}
-        disableGutters>
-        <div className={classes.icon}>
-          <Cached />
-        </div>
-        <span className={clsx(!open && classes.invisible)}>Billing</span>
-      </ListItem>
+      { adminPages.map(item => (
+          <ListItem 
+            className={classes.item} 
+            activeclassname={classes.active}
+            component={CustomerLink}
+            to={item.href}
+            disableGutters
+          >
+            <div className={classes.icon}>
+              {item.icon}
+            </div>
+            <div className={clsx(classes.textFlow, !open && classes.invisible)}>{item.title}</div>
+          </ListItem>
+        ))
+      }
     </React.Fragment>
   )
 }

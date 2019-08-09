@@ -57,10 +57,10 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingRight: 18
     },
     marginOpen: {
-      margin: '15px 24px 0px 24px'
+      margin: '15px 24px 15px 24px'
     },
     marginClose: {
-      margin: '15px 18px 0px 18px'
+      margin: '15px 18px 15px 18px'
     },
   })
 );
@@ -98,7 +98,7 @@ export default function SideBar(props: SideBarProps) {
         <ListItem className={clsx(classes.paddingOpen, !open && classes.paddingClose)} disableGutters>
           {open ?
             <StyledButton variant="outlined" color="primary">Create</StyledButton> :
-            <StyledButton variant="outlined" color="primary" style={{height: "36px"}}>
+            <StyledButton variant="outlined" color="primary">
               <AddIcon />
             </StyledButton>
           }
