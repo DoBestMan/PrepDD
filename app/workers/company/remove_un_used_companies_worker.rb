@@ -7,12 +7,18 @@ class Company::RemoveUnUsedCompaniesWorker
       if company.created_at < 1.day.ago
 
         # Remove s3 bucket of company
-        s3_client = Aws::S3::Client.new
-        bucket_name = company.s3_location.gsub('/', '')
-        s3_client.delete_bucket(bucket: bucket_name)
+        if company.s3_location?
+          s3_client = Aws::S3::Client.new
+          bucket_name = company.s3_location.gsub('/', '')
+          s3_client.delete_bucket(bucket: bucket_name)
+        end
 
         # Remove KMS key of company
-        
+        if company.kms_key_id?
+          client = Aws::KMS::Client.new
+          key_id = company.kms_key_id
+          resp = client.schedule_key_deletion({ key_id: key_id, pending_window_in_days: 7 })
+        end
         company.destroy
       end
     end
