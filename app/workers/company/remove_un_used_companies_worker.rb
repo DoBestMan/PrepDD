@@ -2,8 +2,7 @@ class Company::RemoveUnUsedCompaniesWorker
   include Sidekiq::Worker
 
   def perform
-    companies = Company.where(owner_id: nil)
-    companies.each do |company|
+    Company.where(owner_id: nil).each do |company|
       if company.created_at < 1.day.ago
 
         # Remove s3 bucket of company
@@ -19,6 +18,7 @@ class Company::RemoveUnUsedCompaniesWorker
           key_id = company.kms_key_id
           resp = client.schedule_key_deletion({ key_id: key_id, pending_window_in_days: 7 })
         end
+
         company.destroy
       end
     end
