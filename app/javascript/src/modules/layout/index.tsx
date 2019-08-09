@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transform: 'rotate(-180deg)',
       color:'#3A84FF',
       "zIndex": 10000, 
+      opacity: 0, 
 
       transition: theme.transitions.create('left', {
         easing: theme.transitions.easing.sharp,
@@ -54,31 +55,54 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '15px',
       color:'#3A84FF',
       "zIndex": 10000, 
+      opacity: 0, 
 
       transition: theme.transitions.create('left', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
     },
+    narrowShow: {
+      opacity: 1
+    },
+    narrowOver: {
+      position: 'absolute',
+      left: drawerWidth, 
+      width: 24, 
+      height: '100vh', 
+      zIndex: 10000
+    },
   })
 );
 
 export default function Layout(props: {path?: string, children: React.ReactNode}) {
-  const { children } = props
-  const classes = useStyles()
-  const [open, setOpen] = React.useState<boolean>(true)
+  const { children } = props;
+  const classes = useStyles();
+  const [open, setOpen] = React.useState<boolean>(true);
+  const [showNarrow, setShowNarrow] = React.useState<boolean>(false);
 
-  const toggleDrawer = () => {
-    setOpen(!open)
-  }
+  const toggleDrawer = () => setOpen(!open)
 
   return (
     <div className={classes.root}>
       <TopBar open={open} />
-      <SideBar open={open} />
+      <SideBar 
+        open={open} 
+        setShowNarrow={setShowNarrow}
+      />
+      <div 
+        className={classes.narrowOver} 
+        onMouseOver={() => setShowNarrow(true)}
+        onMouseOut={() => setShowNarrow(false)}
+      />
       <PlayCircleOutline 
-        className={clsx(open && classes.togglerOpen, !open && classes.togglerClose)}
+        className={clsx(
+          open && classes.togglerOpen, !open && classes.togglerClose,
+          (!open || showNarrow) && classes.narrowShow
+        )}
         onClick={toggleDrawer}
+        onMouseOver={() => setShowNarrow(true)}
+        onMouseOut={() => setShowNarrow(false)}
       />
       <main className={clsx(classes.content, !open && classes.contentOpen)} >
         { children }
