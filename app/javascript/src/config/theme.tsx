@@ -13,7 +13,7 @@ export default createMuiTheme({
       'BlinkMacSystemFont',
       '"Segoe UI"',
       'Roboto',
-      '"Helvetica Neue"',
+      '"Montserrat Neue"',
       'Arial',
       'sans-serif',
       '"Apple Color Emoji"',

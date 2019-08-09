@@ -21,9 +21,9 @@ const useToolbarStyles = makeStyles(theme => ({
   },
   title: {
     flex: '0 0 auto',
-    fontFamily: 'Helvetica',
+    fontFamily: 'Montserrat',
     fontSize: '18px',
-    fontWeight: 800,
+    fontWeight: 'bold',
     color: '#2C2C2C'
   },
 }))

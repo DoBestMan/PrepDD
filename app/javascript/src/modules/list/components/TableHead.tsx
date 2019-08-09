@@ -63,13 +63,15 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
     <TableHead>
       <TableRow>
         <StyledTableCell padding="checkbox">
-          <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
-          <StyledCheckBox 
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{'aria-label': 'select all companies'}}
-          />
+          <div className={classes.flex}>
+            <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
+            <StyledCheckBox 
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{'aria-label': 'select all companies'}}
+            />
+          </div>
         </StyledTableCell>
         {headRows.map(row => (
           <StyledTableCell
@@ -94,16 +96,6 @@ const EnhancedTableHead = (props: EnhancedTableProps) => {
       </TableRow>
     </TableHead>
   )
-}
-
-EnhancedTableHead.props = {
-  classes: PropTypes.object.isRequired, 
-  numSelected: PropTypes.number.isRequired, 
-  onRequestSort: PropTypes.func.isRequired, 
-  onSelectAllClick: PropTypes.func.isRequired, 
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired, 
-  orderBy: PropTypes.string.isRequired, 
-  rowCount: PropTypes.number.isRequired
 }
 
 export default EnhancedTableHead

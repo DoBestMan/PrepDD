@@ -13,7 +13,7 @@ const useStyle = makeStyles({
   },
   title: {
     color: '#2C2C2C',
-    fontFamily: 'Helvetica',
+    fontFamily: 'Montserrat',
     fontSize: '24px'
   }
 })

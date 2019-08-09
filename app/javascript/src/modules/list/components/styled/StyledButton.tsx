@@ -5,12 +5,13 @@ const StyledButton = withStyles({
   root: {
     boxSizing: 'border-box',
     height: '36px',
+    minWidth: '92px',
     marginLeft: 20, 
     border: '2px solid #3A84FF',
     borderRadius: '3px',
-    fontFamily: 'Helvetica',
-    fontWeight: 800, 
-    fontSize: '15px',
+    fontFamily: 'Montserrat',
+    fontWeight: 'bold', 
+    fontSize: '12px',
     color: '#3A84FF',
     textAlign: 'center',
     '&:hover': {

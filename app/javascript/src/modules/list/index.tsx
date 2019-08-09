@@ -37,7 +37,7 @@ function createData(
 const rows = [
   createData('G2 Crowd', 'List Title', 'high', '34/36 complete', 'Edited 5 hours ago'),
   createData('G2 Crowd', 'List Title', 'medium', '34/36 complete', 'Date/Time'),
-  createData('G2 Crowd', 'Get this done now, pl...', 'low', '34/36 complete', 'Date/Time'),
+  createData('G2 Crowd', 'Get this done now, please complete this one', 'low', '34/36 complete', 'Date/Time'),
   createData('G2 Crowd', 'List Title', 'high', '34/36 complete', 'Edited 5 hours ago'),
   createData('G2 Crowd', 'List Title', 'high', '34/36 complete', 'Edited 5 hours ago'),
   createData('G2 Crowd', 'List Title', 'high', '34/36 complete', 'Edited 5 hours ago'),
@@ -205,19 +205,21 @@ export default function List(props: {path?: string}) {
                             <img src="../assets/img/logos/g2-logo.svg" alt="G2 Crowd" width="18" height="18" /> :
                             <img src="../assets/img/logos/prepdd-logo.svg" alt="PrepDD" width="18" height="18" />
                           }
-                          <span style={{marginLeft: "5px"}}>{row.company}</span>
+                          <div className={classes.textFlow} style={{marginLeft: "5px"}}>{row.company}</div>
                         </div>
                       </StyledTableCell>
-                      <StyledTableCell>{row.name}</StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.textFlow}>{row.name}</div>
+                      </StyledTableCell>
                       <StyledTableCell>
                         <div className={classes.flex}>
                           {renderStatus(row.status)}
-                          <span style={{marginLeft: "10px"}}>{row.statusText}</span>
+                          <div className={classes.textFlow} style={{marginLeft: "10px"}}>{row.statusText}</div>
                         </div>
                       </StyledTableCell>
                       <StyledTableCell>
                         <div className={clsx(classes.flex, classes.alignCenter)}>
-                          <span>{row.modified}</span>
+                          <div className={classes.textFlow}>{row.modified}</div>
                           <div className={classes.grow} />
                           <StyledButton
                             className={clsx(classes.invisibleButton, isItemSelected && classes.visibleButton)}

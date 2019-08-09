@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
@@ -10,45 +10,47 @@ import FilesPane from './FilesPane'
 
 const panelWidth = 539
 
-const useStyles = makeStyles(theme => ({
-  drawer: {
-    width: panelWidth, 
-    flexShrink: 0
-  },
-  drawerPaper: {
-    width: panelWidth
-  },
-  drawerSpacer: {
-    marginTop: 73
-  },
-  drawerHeader: {
-    padding: '24px 24px 0px 24px',
-  },
-  drawerTitle: {
-    display: 'flex',
-    fontFamily: 'Helvetica',
-    fontSize: '14px',
-    fontWeight: 800, 
-    color: '#606060',
-    lineHeight: '20px'
-  },
-  drawerSubTitle: {
-    fontWeight: 700,
-    fontFamily: 'Helvetica',
-    fontSize: '24px',
-    color: '#2C2C2C',
-    marginRight: '10px'
-  },
-  description: {
-    fontFamily: 'Helvetica',
-    fontSize: '14px',
-    color: '#606060',
-    lineHeight: '20px'
-  },
-  grow: {
-    flexGrow: 1
-  }
-}))
+const useStyles = makeStyles((theme: Theme) => 
+  createStyles({
+    drawer: {
+      width: panelWidth, 
+      flexShrink: 0
+    },
+    drawerPaper: {
+      width: panelWidth
+    },
+    drawerSpacer: {
+      marginTop: 73
+    },
+    drawerHeader: {
+      padding: '24px 24px 0px 24px',
+    },
+    drawerTitle: {
+      display: 'flex',
+      fontFamily: 'Montserrat',
+      fontWeight: 'bold',
+      fontSize: '14px',
+      color: '#606060',
+      lineHeight: '20px'
+    },
+    drawerSubTitle: {
+      fontFamily: 'Montserrat',
+      fontSize: '24px',
+      color: '#2C2C2C',
+      marginRight: '10px'
+    },
+    description: {
+      fontFamily: 'Montserrat',
+      fontSize: '14px',
+      fontWeight: 600,
+      color: '#606060',
+      lineHeight: '20px'
+    },
+    grow: {
+      flexGrow: 1
+    }
+  })
+);
 
 interface TabPanelProps {
   children?: React.ReactNode, 

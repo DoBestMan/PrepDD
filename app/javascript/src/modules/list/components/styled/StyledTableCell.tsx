@@ -3,10 +3,10 @@ import TableCell from '@material-ui/core/TableCell'
 
 const StyledTableCell = withStyles({
   root: {
-    padding: '4px 24px 4px 24px',
-    fontFamily: 'Helvetica',
-    fontSize: '14px',
-    fontWeight: 800, 
+    padding: '0px 24px 0px 24px',
+    fontFamily: 'Montserrat',
+    fontSize: '12px',
+    fontWeight: 600, 
     color: '#606060'
   }
 })(TableCell)
