@@ -65,17 +65,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SideBar(props: {open: boolean}) {
-  const { open } = props;
+interface SideBarProps {
+  open: boolean;
+  setShowNarrow(showNarrow: boolean): void;
+}
+
+export default function SideBar(props: SideBarProps) {
+  const { open, setShowNarrow } = props;
   const classes = useStyles();
 
   return (
     <Drawer
-      variant="permanent"
       classes={{
         paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
       }}
+      variant="permanent"
       open={open}
+      onMouseOver={() => setShowNarrow(true)}
+      onMouseOut={() => setShowNarrow(false)}
     >
       <List disablePadding>
         <ListItem className={clsx(classes.paddingOpen, !open && classes.paddingClose)} disableGutters>
