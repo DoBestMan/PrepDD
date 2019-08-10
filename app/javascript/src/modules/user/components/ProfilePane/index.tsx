@@ -5,17 +5,15 @@ import {
   Paper,
   Card,
   Grid,
-  TextField,
   Table, 
   TableHead, 
   TableBody, 
   TableRow, 
   TableCell,
   Button, 
-  FormControlLabel, 
-  Checkbox,
   Typography
 } from '@material-ui/core'
+import CameraIcon from '@material-ui/icons/CameraAlt'
 
 import InputForm from './components/InputForm'
 import CheckBox from './components/CheckBox'
@@ -40,10 +38,32 @@ const useStyles = makeStyles((theme: Theme) =>
     invisible: {
       display: 'none'
     },
+    profilePhoto: {
+      position: 'relative'
+    },
     photo: {
       width: '120px', 
       height: '120px',
       borderRadius: '50%'
+    },
+    uploadArea: {
+      position: 'absolute', 
+      width: '120px',
+      height: '60px',
+      backgroundColor: 'rgba(48, 48, 48, 0.5)',
+      borderBottomLeftRadius: '120px', 
+      borderBottomRightRadius: '120px',
+      clip: 'rect(12px, 120px, 60px, 0px)',
+      top: '60px',
+      left: '0px'
+    },
+    uploadLabel: {
+      marginTop: '15px',
+      textAlign: 'center',
+      color: 'white',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px'
     },
     profile: {
       padding: '0px 36px 0px 36px', 
@@ -127,6 +147,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
     hasSpecialChar: false, 
     hasEightChar: false
   })
+  const [show, setShow] = React.useState<boolean>(false)
 
   const handleChange = React.useCallback(event => {
     const { name, value } = event.target
@@ -153,13 +174,29 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
     }    
   }, [setState])
 
+  const handleClickAway = () => setShow(false)
+
   return (
     <Paper
       className={clsx(classes.root, (value !== index) && classes.invisible)}
       aria-labelledby="Personal Information"
       elevation={0}
-    >
-      <img className={classes.photo} src="../assets/img/photos/Alana.jpg" alt="Alana" />
+    >      
+      <div 
+        className={classes.profilePhoto}
+        onMouseOver={() => setShow(true)}
+        onMouseOut={() => setShow(false)}
+      >
+        <img className={classes.photo} src="../assets/img/photos/Alana.jpg" alt="Alana" />
+        <div className={clsx(classes.uploadArea, !show && classes.invisible)}>
+          <div className={classes.uploadLabel}>
+            <CameraIcon fontSize="small" />
+            <br />
+            Update
+          </div>
+        </div>
+      </div>
+      
       <Card className={classes.profile} elevation={0}>
         <form autoComplete="off">
           <Grid container spacing={2}>
@@ -234,7 +271,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           type="password"
           placeholder="Password"
           onChange={handleChange}
-          style={{marginTop: '24px'}}
+          style={{marginTop: '24px', marginBottom: '24px'}}
         />
         <InputForm
           value={state.confirmPassword}
@@ -243,6 +280,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           type="password"
           placeholder="Confirm Password"
           onChange={handleChange}
+          style={{marginBottom: '36px'}}
         />
         <Button className={classes.primaryButton} variant="contained" fullWidth>
           Update password

@@ -46,26 +46,6 @@ export default function NotificationPane(props: NotificationPaneProps) {
       <Typography className={classes.title} variant="h2">
         Alert Notifications
       </Typography>
-      <div className={classes.settings}>
-        <Select style={{marginRight: '24px'}}>
-          <MenuItem>Immediately</MenuItem>
-          <MenuItem>Daily</MenuItem>
-          <MenuItem>Weekly</MenuItem>
-          <MenuItem>Never</MenuItem>
-        </Select>
-        <Select style={{marginRight: '24px'}}>
-          <MenuItem>Immediately</MenuItem>
-          <MenuItem>Daily</MenuItem>
-          <MenuItem>Weekly</MenuItem>
-          <MenuItem>Never</MenuItem>
-        </Select>
-        <Select style={{marginRight: '24px'}}>
-          <MenuItem>Immediately</MenuItem>
-          <MenuItem>Daily</MenuItem>
-          <MenuItem>Weekly</MenuItem>
-          <MenuItem>Never</MenuItem>
-        </Select>
-      </div>
     </Paper>
   )
 }

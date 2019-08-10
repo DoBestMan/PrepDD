@@ -1,7 +1,9 @@
 {
   "name": "prepdd",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "test": "jest --watch"
+  },
   "dependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
@@ -28,13 +30,23 @@
     "react-google-login": "^5.0.4",
     "react-hot-loader": "^4.12.3",
     "react-linkedin-login-oauth2": "^1.0.6",
+    "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.2",
     "webpack": "^4.36.1"
   },
   "devDependencies": {
     "@prettier/plugin-ruby": "^0.14.0",
+    "@types/enzyme": "^3.10.3",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "@types/jest": "^24.0.17",
     "apollo": "^2.16.0",
+    "babel-jest": "^24.8.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-to-json": "^3.4.0",
+    "jest": "^24.8.0",
+    "jest-enzyme": "^7.1.0",
     "prettier": "^1.18.2",
     "webpack-dev-server": "^3.7.1"
   }
