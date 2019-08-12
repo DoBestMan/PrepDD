@@ -11,7 +11,7 @@ import EnhancedTableHead from './components/TableHead'
 import {
   StyledButton, 
   StyledTableRow, 
-  StyledTableCell, 
+  StyledTableCell,
   StyledCheckBox
 } from './components/styled'
 import useStyles from './style'

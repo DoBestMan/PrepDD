@@ -1,12 +1,11 @@
 import React from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import { 
-  TableHead, 
-  TableRow, 
-  TableSortLabel
+  TableHead
 } from '@material-ui/core'
 
-import StyledTableCell from '../../../components/StyledTableCell'
+import StyledTableRow from './StyledTableRow'
+import StyledTableCell from './StyledTableCell'
 import StyledCheckBox from '../../../components/StyledCheckBox'
 
 type roleType = 'Member' | 'Admin'
@@ -51,64 +50,40 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-type Order = 'asc' | 'desc'
-
 interface TableHeaderProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
-  order: Order;
-  orderBy: string;
   rowCount: number;
 }
 
 export default function TableHeader(props: TableHeaderProps) {
   const {
-    order, 
-    orderBy, 
     numSelected, 
     rowCount, 
-    onRequestSort,
     onSelectAllClick, 
   } = props
   const classes = useStyles()
-
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property)
-  }
   
   return (
     <TableHead>
-      <TableRow>
-        <StyledTableCell padding="checkbox">
+      <StyledTableRow>
+        <StyledTableCell>
           <StyledCheckBox 
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
             onChange={onSelectAllClick}
-            inputProps={{'aria-label': 'select all companies'}}
+            inputProps={{'aria-label': 'select all members'}}
           />
         </StyledTableCell>
         {headRows.map(row => (
           <StyledTableCell
             key={row.id}
             align="left"
-            sortDirection={orderBy === row.id ? order : false}
           >
-            <TableSortLabel
-              active={orderBy === row.id}
-              direction={order}
-              onClick={createSortHandler(row.id)}
-            >
-              {row.label}
-              {orderBy === row.id ? (
-                <span className={classes.visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </span>
-              ) : null}
-            </TableSortLabel>
+            {row.label}
           </StyledTableCell>
         ))}
-      </TableRow>
+      </StyledTableRow>
     </TableHead>
   )
 }

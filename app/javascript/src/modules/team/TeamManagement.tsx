@@ -7,11 +7,14 @@ import {
   TableBody,
   TableCell
 } from '@material-ui/core'
+
 import TableToolbar from './components/TableToolbar'
 import Searchbar from './components/Searchbar'
 import TableHeader from './components/TableHeader'
-
-type roleType = 'Member' | 'Admin'
+import StyledTableRow from './components/StyledTableRow'
+import StyledTableCell from './components/StyledTableCell'
+import StyledCheckBox from '../../components/StyledCheckBox'
+import StyledItem from './components/StyledItem'
 
 interface Company {
   url: string;
@@ -22,14 +25,14 @@ interface Data {
   name: string;
   companies: Company[];
   teams: string[];
-  role: roleType;
+  role: string;
 }
 
 function createData(
   name: string, 
   companies: Company[], 
   teams: string[], 
-  role: roleType
+  role: string
   ): Data {
   return { name, companies, teams, role }
 }
@@ -51,9 +54,12 @@ const rows = [
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
 ]
 
+const panelWidth=594
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      width: '100%'
     },
     flex: {
       display: 'flex'
@@ -62,62 +68,37 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1
     },
     paper: {
-
+      width: '100%',
+      marginBottom: theme.spacing(2),
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp, 
+        duration: theme.transitions.duration.leavingScreen
+      })
     },
     paperShift: {
-
+      width: `calc(100% - ${panelWidth}px)`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut, 
+        duration: theme.transitions.duration.enteringScreen
+      })
     },
     tableWrapper: {
-
+      overflowX: 'auto',
     },
     table: {
-
+      minWidth: 750
     },
+    round: {
+      borderRadius: '50%'
+    }
   })
 )
 
-function desc<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1
-  }
-  return 0
-}
-
-function stableSort<T>(array: T[], cmp: (a: T, b: T) => number) {
-  const stabilizedThis = array.map((el, index) => [el, index] as [T, number])
-  stabilizedThis.sort((a, b) => {
-    const order = cmp(a[0], b[0])
-    if (order !== 0) return order
-    return a[1] - b[1]
-  })
-  return stabilizedThis.map(el => el[0])
-}
-
-type Order = 'asc' | 'desc'
-
-function getSorting<K extends keyof any>(
-  order: Order, 
-  orderBy: K
-  ): (a: { [key in K]: number | string }, b: { [key in K]: number | string }) => number {
-  return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy)
-}
-
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
-  const [order, setOrder] = React.useState<Order>('asc')
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('name')
   const [selected, setSelected] = React.useState<number[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
-
-  function handleRequestSort(event: React.MouseEvent<unknown>, property: keyof Data) {
-    const isDesc = orderBy === property && order === 'desc'
-    setOrder(isDesc ? 'asc' : 'desc')
-    setOrderBy(property)
-  }
 
   function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.checked) {
@@ -172,15 +153,11 @@ export default function TeamManagement(props: {path?: string}) {
           <Table className={classes.table} aria-labelledby="Team Management Table">
             <TableHeader
               numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            {/* <TableBody>
-              { stableSort(rows, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            <TableBody>
+              { rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: Data, index: number) => {
                   const isItemSelected = isSelected(index)
                   
@@ -194,34 +171,43 @@ export default function TeamManagement(props: {path?: string}) {
                       key={`member-${index}`}
                       selected={isItemSelected}
                     >
-                      <TableCell>
+                      <StyledTableCell style={{width: '20px'}}>
                         <StyledCheckBox checked={isItemSelected}/>
-                      </TableCell>
-                      <TableCell>
+                      </StyledTableCell>
+                      <StyledTableCell>
                         <div className={classes.flex}>
-                          <img src="../assets/img/photos/Alana.jpg" width="30" height="30" alt="Alana" />
+                          <img 
+                            className={classes.round} 
+                            src="../assets/img/photos/Alana.jpg" 
+                            width="30" 
+                            height="30" 
+                            alt="Alana" 
+                          />
                           <div style={{marginLeft: "18px"}}>{row.name}</div>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        { 
-                          row.companies.map(company => {
-                            <StyledItem logo={company.url} label={company.label} />
-                          })
-                        }
-                      </TableCell>
-                      <TableCell>
-                        { row.teams.map(team => {
-                            <StyledItem label={team} />
-                          })                          
-                        }
-                      </TableCell>
-                      <TableCell>{row.role}</TableCell>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { row.companies.map(company => 
+                              <StyledItem logo={company.url} label={company.label} selected={isItemSelected} />
+                            )
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { row.teams.map(team => 
+                              <StyledItem label={team} selected={isItemSelected}  />
+                            )                          
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>{row.role}</StyledTableCell>
                     </StyledTableRow>
                   )
                 })
               }
-            </TableBody> */}
+            </TableBody>
           </Table>
         </div>
       </Paper>
