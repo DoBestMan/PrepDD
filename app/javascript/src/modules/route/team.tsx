@@ -5,7 +5,7 @@ import ManagementPage from '../team/TeamManagement';
 export default function Router(props: {path: string}) {
   return (
     <ReachRouter>
-      <ManagementPage path="/mgmt" />
+      <ManagementPage path="/" />
     </ReachRouter>
   );
 }

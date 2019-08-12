@@ -1,7 +1,7 @@
 import StyledButton from './StyledButton'
-import StyledCheckBox from './StyledCheckBox'
+import StyledCheckBox from '../../../../components/StyledCheckBox'
 import StyledTab from './StyledTab'
-import StyledTableCell from './StyledTableCell'
+import StyledTableCell from '../../../../components/StyledTableCell'
 import StyledTableRow from './StyledTableRow'
 import StyledTabs from './StyledTabs'
 

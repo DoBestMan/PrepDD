@@ -1,38 +1,59 @@
 import React from 'react'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableSortLabel from '@material-ui/core/TableSortLabel'
-import useStyles from '../style'
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import { 
+  TableHead, 
+  TableRow, 
+  TableSortLabel
+} from '@material-ui/core'
 
-import {
-  StyledTableCell, 
-  StyledCheckBox
-} from './styled'
+import StyledTableCell from '../../../components/StyledTableCell'
+import StyledCheckBox from '../../../components/StyledCheckBox'
 
-interface Data {
-  company: string;
-  name: string; 
-  status: string;
-  statusText: string;
-  modified: string;
+type roleType = 'Member' | 'Admin'
+
+interface Company {
+  url: string;
+  label: string;
 }
 
-interface HeadRow {
+interface Data {
+  name: string;
+  companies: Company[];
+  teams: string[];
+  role: roleType;
+}
+
+interface HeadRows {
   id: keyof Data;
   label: string;
 }
 
-const headRows: HeadRow[] = [
-  { id: 'company', label: 'Company' },
-  { id: 'name', label: 'Name' },
-  { id: 'statusText', label: 'Status' },
-  { id: 'modified', label: 'Modified' }
+const headRows: HeadRows[] = [
+  { id: 'name', label: 'Name'}, 
+  { id: 'companies', label: 'Company(s)'},
+  { id: 'teams', label: 'Team(s)'}, 
+  { id: 'role', label: 'Role'}
 ]
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    visuallyHidden: {
+      border: 0, 
+      clip: 'rect(0 0 0 0)',
+      height: 1, 
+      margin: -1, 
+      overflow: 'hidden',
+      padding: 0, 
+      position: 'absolute', 
+      top: 20, 
+      width: 1
+    },
+  })
+)
 
 type Order = 'asc' | 'desc'
 
-interface EnhancedTableHeadProps {
-  classes: ReturnType<typeof useStyles>;
+interface TableHeaderProps {
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
@@ -41,9 +62,8 @@ interface EnhancedTableHeadProps {
   rowCount: number;
 }
 
-const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
-  const { 
-    classes, 
+export default function TableHeader(props: TableHeaderProps) {
+  const {
     order, 
     orderBy, 
     numSelected, 
@@ -51,24 +71,22 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
     onRequestSort,
     onSelectAllClick, 
   } = props
+  const classes = useStyles()
 
   const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property)
   }
-
+  
   return (
     <TableHead>
       <TableRow>
         <StyledTableCell padding="checkbox">
-          <div className={classes.flex}>
-            <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
-            <StyledCheckBox 
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{'aria-label': 'select all companies'}}
-            />
-          </div>
+          <StyledCheckBox 
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={numSelected === rowCount}
+            onChange={onSelectAllClick}
+            inputProps={{'aria-label': 'select all companies'}}
+          />
         </StyledTableCell>
         {headRows.map(row => (
           <StyledTableCell
@@ -94,5 +112,3 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
     </TableHead>
   )
 }
-
-export default EnhancedTableHead
