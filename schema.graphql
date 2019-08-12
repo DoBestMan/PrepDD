@@ -111,7 +111,6 @@ input UpdateUserDetailsInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  companyName: String!
   email: String!
   fullName: String!
 }
@@ -157,8 +156,9 @@ input UpdateUserPasswordInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  confirmPassword: String!
-  password: String!
+  email: String!
+  newPassword: String!
+  oldPassword: String!
 }
 
 """
@@ -178,6 +178,7 @@ type UpdateUserPasswordPayload {
 User
 """
 type User {
+  displayName: String!
   email: String!
   fullName: String!
   id: ID!
