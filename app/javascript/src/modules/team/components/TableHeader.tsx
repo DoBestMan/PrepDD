@@ -4,8 +4,8 @@ import {
   TableHead
 } from '@material-ui/core'
 
-import StyledTableRow from './StyledTableRow'
-import StyledTableCell from './StyledTableCell'
+import StyledTableRow from './styled/StyledTableRow'
+import StyledTableCell from './styled/StyledTableCell'
 import StyledCheckBox from '../../../components/StyledCheckBox'
 
 type roleType = 'Member' | 'Admin'

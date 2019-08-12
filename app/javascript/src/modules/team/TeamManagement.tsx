@@ -5,16 +5,18 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell
+  TableCell,
+  TablePagination
 } from '@material-ui/core'
 
 import TableToolbar from './components/TableToolbar'
 import Searchbar from './components/Searchbar'
 import TableHeader from './components/TableHeader'
-import StyledTableRow from './components/StyledTableRow'
-import StyledTableCell from './components/StyledTableCell'
+import DetailPane from './components/DetailPane'
+import StyledTableRow from './components/styled/StyledTableRow'
+import StyledTableCell from './components/styled/StyledTableCell'
 import StyledCheckBox from '../../components/StyledCheckBox'
-import StyledItem from './components/StyledItem'
+import StyledItem from './components/styled/StyledItem'
 
 interface Company {
   url: string;
@@ -38,19 +40,19 @@ function createData(
 }
 
 const rows = [
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Equity'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Human Resource'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
 ]
 
@@ -188,17 +190,38 @@ export default function TeamManagement(props: {path?: string}) {
                       </StyledTableCell>
                       <StyledTableCell>
                         <div className={classes.flex}>
-                          { row.companies.map(company => 
-                              <StyledItem logo={company.url} label={company.label} selected={isItemSelected} />
+                          { row.companies.slice(0, 2).map(company => 
+                              <StyledItem 
+                                key={`${row.name}-${company.label}`}
+                                logo={company.url} 
+                                label={company.label} 
+                                selected={isItemSelected}
+                              />
                             )
+                          }
+                          { row.companies.length > 2 &&
+                            <StyledItem
+                              label={`+${row.companies.length - 2}`}
+                              selected={isItemSelected}
+                            />
                           }
                         </div>
                       </StyledTableCell>
                       <StyledTableCell>
                         <div className={classes.flex}>
-                          { row.teams.map(team => 
-                              <StyledItem label={team} selected={isItemSelected}  />
-                            )                          
+                          { row.teams.slice(0, 2).map(team => 
+                              <StyledItem 
+                                key={`${row.name}-${team}`}
+                                label={team} 
+                                selected={isItemSelected}
+                              />
+                            )                      
+                          }
+                          { row.teams.length > 2 &&
+                            <StyledItem
+                              label={`+${row.teams.length - 2}`}
+                              selected={isItemSelected}
+                            />
                           }
                         </div>
                       </StyledTableCell>
@@ -210,7 +233,25 @@ export default function TeamManagement(props: {path?: string}) {
             </TableBody>
           </Table>
         </div>
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            'aria-label': 'previous page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'next page',
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Paper>
+
+      <DetailPane open={isOpen()} />
     </div>
   )
 }

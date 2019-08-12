@@ -69,8 +69,6 @@ export default function Panel(props: PanelProps) {
     })
   );
 
-  console.log(newPanes);
-
   return (
     <div>
       <Tabs

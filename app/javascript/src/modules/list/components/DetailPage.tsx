@@ -96,10 +96,10 @@ export default function ListDetailPage(props: {open: boolean}) {
       <div className={classes.drawerSpacer} />
       <div className={classes.drawerHeader}>
         <div className={classes.drawerTitle}>
-          <Typography variant="h6" className={classes.drawerSubTitle}>
+          <Typography variant="h2" className={classes.drawerSubTitle}>
             Series B Funding
           </Typography>
-          <img src="assets/img/logos/g2-logo.svg" alt="G2 Crod" />
+          <img src="../assets/img/logos/g2-logo.svg" alt="G2 Crod" />
           <div className={classes.grow} />
           <MoreIcon />
         </div>

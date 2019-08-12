@@ -53,6 +53,7 @@ export default function CreateCompanyPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.createCompany.success)) {
+      console.log(data)
       navigate('/signup?companyName='+ state.name);
     }
   }, [data]);
@@ -130,8 +131,6 @@ export default function CreateCompanyPage(_props: {path?: string}) {
                 Continue
               </Button>
             </form>
-
-
           </Grid>
         </Grid>
       </div>
