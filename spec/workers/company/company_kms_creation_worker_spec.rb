@@ -1,4 +1,4 @@
 require 'rails_helper'
-RSpec.describe CompanyKmsCreationWorker, type: :worker do
+RSpec.describe  Company::CompanyKmsCreationWorker, type: :worker do
   pending "add some examples to (or delete) #{__FILE__}"
 end

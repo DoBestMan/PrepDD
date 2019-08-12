@@ -1,4 +1,4 @@
-class CompanyS3BucketCreationWorker
+class Company::CompanyS3BucketCreationWorker
   include Sidekiq::Worker
 
   def perform(company_id)
