@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '1px'
     },
     label: {
-      marginLeft: '6px',
       color: '#606060',
       fontFamily: 'Montserrat', 
       fontSize: '12px', 
@@ -37,7 +36,7 @@ export default function StyledItem(props: StyledItemProps) {
 
   return (
     <div className={classes.root}>
-      { logo && <img src={logo} width="18" height="18" alt={label} />}
+      { logo && <img src={logo} width="18" height="18" style={{marginRight: '6px'}} alt={label} />}
       <div className={clsx(classes.label, selected && classes.selected)}>{label}</div>
     </div>
   )
