@@ -1,5 +1,6 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import clsx from 'clsx'
+import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -17,6 +18,8 @@ import CameraIcon from '@material-ui/icons/CameraAlt'
 
 import InputForm from './components/InputForm'
 import CheckBox from './components/CheckBox'
+
+import { getCurrentUser } from '../../../../graphql/queries/auth'
 
 const rows = [
   {
@@ -148,6 +151,23 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
     hasEightChar: false
   })
   const [show, setShow] = React.useState<boolean>(false)
+
+  const { loading, data } = getCurrentUser({})
+
+  useEffect(() => {
+    const currentUser = idx(data, data => data.currentUser.user)
+
+    if (loading || !currentUser) return
+
+    console.log(loading, currentUser)
+
+    setState({
+      ...state, 
+      fullName: currentUser.fullName, 
+      displayName: currentUser.displayName, 
+      email: currentUser.email
+    })
+  }, [loading])
 
   const handleChange = React.useCallback(event => {
     const { name, value } = event.target

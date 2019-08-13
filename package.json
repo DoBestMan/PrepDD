@@ -2,7 +2,7 @@
   "name": "prepdd",
   "private": true,
   "scripts": {
-    "test": "jest --watch"
+    "test": "jest"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
