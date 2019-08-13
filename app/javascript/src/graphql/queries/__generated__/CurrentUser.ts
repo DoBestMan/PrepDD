@@ -10,6 +10,7 @@ export interface CurrentUser_currentUser_user {
   __typename: "User";
   id: string;
   fullName: string;
+  displayName: string;
   email: string;
 }
 

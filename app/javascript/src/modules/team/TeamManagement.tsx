@@ -177,7 +177,7 @@ export default function TeamManagement(props: {path?: string}) {
                         <StyledCheckBox checked={isItemSelected}/>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <div className={classes.flex}>
+                        <div className={classes.flex} style={{alignItems: 'center'}}>
                           <img 
                             className={classes.round} 
                             src="../assets/img/photos/Alana.jpg" 
@@ -185,7 +185,7 @@ export default function TeamManagement(props: {path?: string}) {
                             height="30" 
                             alt="Alana" 
                           />
-                          <div style={{marginLeft: "18px"}}>{row.name}</div>
+                          <span style={{marginLeft: '18px'}}>{row.name}</span>
                         </div>
                       </StyledTableCell>
                       <StyledTableCell>
