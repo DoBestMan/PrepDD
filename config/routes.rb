@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users, skip: :all
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   post '/graphql', to: 'graphql#execute'
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: '/graphiql', graphql_path: '/graphql'

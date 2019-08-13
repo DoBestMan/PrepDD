@@ -13,8 +13,8 @@ class Company < ApplicationRecord
   after_create :create_s3_kms
 
   def create_s3_kms
-    CompanyS3BucketCreationWorker.perform_async(self.id)
-    CompanyKmsCreationWorker.perform_async(self.id)
+    Company::CompanyS3BucketCreationWorker.perform_async(self.id)
+    Company::CompanyKmsCreationWorker.perform_async(self.id)
   end
 
   def generate_encryption_key
