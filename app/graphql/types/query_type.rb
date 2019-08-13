@@ -7,6 +7,10 @@ module Types
           CurrentUserType,
           null: true, description: 'The currently logged in user'
 
+    field :company_teams,
+          CompanyTeamsType,
+          null: true, description: 'The currently company teams'
+
     field :user_for_password_reset,
           UserForPasswordResetType,
           null: true,
@@ -33,7 +37,12 @@ module Types
     def user_details
       user = context[:controller].current_user
       { user: user, owned_companies: user&.owned_companies, member_companies:
-      user&.companies, teams: user&.teams }
+        user&.companies, teams: user&.teams }
     end
+
+    def company_teams(id)
+      {id: '1', name: 'kjhkjhkh', teams: Team.where(company_id: id)}
+    end
+
   end
 end
