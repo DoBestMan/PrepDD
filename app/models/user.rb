@@ -5,8 +5,7 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable
-
-  validates :uuid, uniqueness: true
+  
   validate :email_or_uuid
   has_many :roles_users
   has_many :teams_users
