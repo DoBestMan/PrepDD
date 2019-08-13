@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface StyledItemProps {
   logo?: string;
   label: string;
-  selected: boolean;
+  selected?: boolean;
 }
 
 export default function StyledItem(props: StyledItemProps) {

@@ -3,6 +3,7 @@ import TableRow from '@material-ui/core/TableRow'
 
 const StyledTableRow = withStyles({
   root: {
+    height: '48px',
     padding: '0px 31px 0px 31px',
     fontFamily: 'Montserrat',
     fontWeight: 600, 
