@@ -5,7 +5,7 @@ class Company < ApplicationRecord
 
   belongs_to :owner, class_name: 'User', optional: true
   has_many :users_companies
-  has_many :employees, through: :users_companies
+  has_many :users, through: :users_companies
   belongs_to :subscription, optional: true
 
   validates :name, presence: true
