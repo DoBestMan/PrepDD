@@ -9,7 +9,7 @@ RSpec.describe Company, type: :model do
   end
 
   describe '#associations' do
-    it { should have_many :employees }
+    it { should have_many :users }
     it { should belong_to :owner }
     it { should belong_to :subscription }
   end
