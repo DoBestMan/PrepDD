@@ -8,11 +8,12 @@ PrepDD is a normal Rails 5 application and follows the usual conventions and set
 
 1. Install [chruby](https://github.com/postmodern/chruby) (recommended)
 2. Install postgres using [postgres.app](https://postgresapp.com/downloads.html) (recommended) or homebrew
-3. Install gems: `bundle install`
-4. Install node packages: `yarn install`
-5. Set up database: `bundle exec rake db:create:all db:migrate db:seed`
+3. Install redis: `brew install redis`
+4. Install gems: `bundle install`
+5. Install node packages: `yarn install`
+6. Set up database: `bundle exec rake db:create:all db:migrate db:seed`
 
-Finally, you are ready to start the server by running `bundle exec rails server`. Although not required, it's recommeded to open up a second terminal window and run `bin/webpack-dev-server` to speed up asset compilation and display messages from typescript.
+Finally, you are ready to start the server by running `bundle exec foreman start -f Procfile.dev`.
 
 ## Deployment
 

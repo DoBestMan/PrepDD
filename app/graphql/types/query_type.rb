@@ -20,8 +20,7 @@ module Types
 
     def current_user
       user = context[:controller].current_user
-      { id: 'current_user', user: user, owned_companies: user.owned_companies, member_companies:
-        user.companies, teams: user.teams }
+      { id: 'current_user', user: user }
     end
 
     def user_for_password_reset(token:)
