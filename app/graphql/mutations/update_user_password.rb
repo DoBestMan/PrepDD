@@ -16,7 +16,7 @@ class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
 
     user = context[:controller].current_user
 
-    user = User.
+    user.
       update({
                password: password,
                password_confirmation: password
