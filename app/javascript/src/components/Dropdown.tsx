@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'none'
     }, 
     item: {
-      width: 'max-content',
       display: 'flex', 
       padding: '12px', 
       alignItems: 'center', 
@@ -65,17 +64,11 @@ export default function Dropdown(props: DropdownProps) {
 
   const handleClickAway = () => setOpen(false)
 
-  // const handleSelect = (e: React.MouseEvent<HTMLInputElement>, selectValue: String) => {
-  //   const option = findSelected(selectValue)
-  //   setSelectedItem(option)
-  //   setOpen(false)
-  // }
-
   return (
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <div className={classes.item} onClick={toggleMenu}>
+          <div className={classes.item} onClick={toggleMenu} style={{width: 'max-content'}}>
             { selectedItem ? selectedItem.label : placeholder }
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>
