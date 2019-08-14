@@ -40,7 +40,7 @@ function createData(
 }
 
 const rows = [
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
   createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
@@ -92,6 +92,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     round: {
       borderRadius: '50%'
+    },
+    label: {
+      color: 'white', 
+      fontSize: '12px', 
+      fontWeight: 600, 
+      textTransform: 'capitalize'
     }
   })
 )
@@ -145,6 +151,14 @@ export default function TeamManagement(props: {path?: string}) {
   const isOpen = () => selected.length > 0
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
+
+  const renderTooltipTitle = (options: String[]) => {
+    return (
+      <React.Fragment>
+        { options.map(option => <p className={classes.label}>{option}</p>)}
+      </React.Fragment>
+    )
+  }
 
   return (
     <div className={classes.root}>
@@ -200,7 +214,10 @@ export default function TeamManagement(props: {path?: string}) {
                             )
                           }
                           { row.companies.length > 2 &&
-                            <ArrowTooltip title={`+${row.companies.length - 2}`}>
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.companies.map(a => a.label).slice(2))} 
+                              placement="top"
+                            >
                               <StyledItem
                                 label={`+${row.companies.length - 2}`}
                                 selected={isItemSelected}
@@ -220,7 +237,10 @@ export default function TeamManagement(props: {path?: string}) {
                             )                      
                           }
                           { row.teams.length > 2 &&
-                            <ArrowTooltip title={`+${row.teams.length - 2}`} placement="top">
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.teams.slice(2))} 
+                              placement="top"
+                            >
                               <StyledItem
                                 label={`+${row.teams.length - 2}`}
                                 selected={isItemSelected}
