@@ -34,12 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px'
     },
     drawerSubTitle: {
-      fontFamily: 'Montserrat',
-      fontSize: '24px',
+      marginRight: '10px',
       color: '#2C2C2C',
-      marginRight: '10px'
+      fontFamily: 'Montserrat',
+      fontWeight: 'bold',
+      fontSize: '24px'
     },
     description: {
+      marginTop: '6px',
       fontFamily: 'Montserrat',
       fontSize: '14px',
       fontWeight: 600,

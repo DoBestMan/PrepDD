@@ -5,7 +5,6 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TablePagination
 } from '@material-ui/core'
 
@@ -17,6 +16,7 @@ import StyledTableRow from './components/styled/StyledTableRow'
 import StyledTableCell from './components/styled/StyledTableCell'
 import StyledCheckBox from '../../components/StyledCheckBox'
 import StyledItem from './components/styled/StyledItem'
+import ArrowTooltip from './components/ArrowTooltip'
 
 interface Company {
   url: string;
@@ -40,7 +40,7 @@ function createData(
 }
 
 const rows = [
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Equity'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
   createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
@@ -92,6 +92,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     round: {
       borderRadius: '50%'
+    },
+    label: {
+      color: 'white', 
+      fontSize: '12px', 
+      fontWeight: 600, 
+      textTransform: 'capitalize'
     }
   })
 )
@@ -146,6 +152,14 @@ export default function TeamManagement(props: {path?: string}) {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
 
+  const renderTooltipTitle = (options: String[]) => {
+    return (
+      <React.Fragment>
+        { options.map(option => <p className={classes.label}>{option}</p>)}
+      </React.Fragment>
+    )
+  }
+
   return (
     <div className={classes.root}>
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
@@ -177,7 +191,7 @@ export default function TeamManagement(props: {path?: string}) {
                         <StyledCheckBox checked={isItemSelected}/>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <div className={classes.flex}>
+                        <div className={classes.flex} style={{alignItems: 'center'}}>
                           <img 
                             className={classes.round} 
                             src="../assets/img/photos/Alana.jpg" 
@@ -185,7 +199,7 @@ export default function TeamManagement(props: {path?: string}) {
                             height="30" 
                             alt="Alana" 
                           />
-                          <div style={{marginLeft: "18px"}}>{row.name}</div>
+                          <span style={{marginLeft: '18px'}}>{row.name}</span>
                         </div>
                       </StyledTableCell>
                       <StyledTableCell>
@@ -200,10 +214,15 @@ export default function TeamManagement(props: {path?: string}) {
                             )
                           }
                           { row.companies.length > 2 &&
-                            <StyledItem
-                              label={`+${row.companies.length - 2}`}
-                              selected={isItemSelected}
-                            />
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.companies.map(a => a.label).slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${row.companies.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
                           }
                         </div>
                       </StyledTableCell>
@@ -218,10 +237,15 @@ export default function TeamManagement(props: {path?: string}) {
                             )                      
                           }
                           { row.teams.length > 2 &&
-                            <StyledItem
-                              label={`+${row.teams.length - 2}`}
-                              selected={isItemSelected}
-                            />
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.teams.slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${row.teams.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
                           }
                         </div>
                       </StyledTableCell>

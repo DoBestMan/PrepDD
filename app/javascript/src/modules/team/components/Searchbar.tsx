@@ -3,6 +3,8 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 
+import Dropdown from '../../../components/Dropdown'
+
 const useSearchbarStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -13,6 +15,7 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       width: '100%',
       height: '42px',
+      marginRight: '24px', 
       border: '1px solid #CACACA',
       borderRadius: '3px',
       color: '#D6D6D6',
@@ -50,6 +53,13 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const options = [
+  { label: 'Select team', value: 'Select team' },
+  { label: 'Finance', value: 'Finance'},
+  { label: 'Legal', value: 'Legal'}, 
+  { label: 'Equity', value: 'Equity'}
+] 
+
 export default function Searchbar() {
   const classes = useSearchbarStyles()
 
@@ -68,7 +78,7 @@ export default function Searchbar() {
           inputProps={{"aria-label": "search"}}
         />
       </div>
-      {/* <Dropdown /> */}
+      <Dropdown options={options} placeholder="Select team" />
     </div>
   )
 }

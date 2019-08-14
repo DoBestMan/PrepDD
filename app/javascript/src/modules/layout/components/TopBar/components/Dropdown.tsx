@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    width: 250, 
     top: 73, 
     left: 0
   },

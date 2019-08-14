@@ -27,17 +27,19 @@ const useStyles = makeStyles((theme: Theme) =>
 interface StyledItemProps {
   logo?: string;
   label: string;
-  selected: boolean;
+  selected?: boolean;
 }
 
-export default function StyledItem(props: StyledItemProps) {
-  const { logo, label, selected } = props
+const StyledItem = React.forwardRef((props: StyledItemProps, ref: React.Ref<HTMLDivElement>) => {
+  const { logo, label, selected, ...other } = props
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
+    <div  {...other} className={classes.root} ref={ref}>
       { logo && <img src={logo} width="18" height="18" style={{marginRight: '6px'}} alt={label} />}
       <div className={clsx(classes.label, selected && classes.selected)}>{label}</div>
     </div>
   )
-}
+})
+
+export default StyledItem
