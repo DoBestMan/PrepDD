@@ -19,7 +19,7 @@ import CameraIcon from '@material-ui/icons/CameraAlt'
 import InputForm from './components/InputForm'
 import CheckBox from './components/CheckBox'
 
-import { getCurrentUser } from '../../../../graphql/queries/auth'
+import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 
 const rows = [
   {
@@ -152,7 +152,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
   })
   const [show, setShow] = React.useState<boolean>(false)
 
-  const { loading, data } = getCurrentUser({})
+  const { loading, data } = useCurrentUser({})
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user)
@@ -193,8 +193,6 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
       }
     }    
   }, [setState])
-
-  const handleClickAway = () => setShow(false)
 
   return (
     <Paper

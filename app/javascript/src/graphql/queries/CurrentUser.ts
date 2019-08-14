@@ -13,6 +13,7 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
       user {
         id
         fullName
+        displayName
         email
       }
     }
