@@ -16,7 +16,7 @@ export default function Router(props: {path: string}) {
           <CompanyRoutes path="/company/*" />
           <TeamRoutes path="/team/*" />
           <UserRoutes path="/user/*" />
-          <ListRoutes path="/list/*" />
+          <ListRoutes path="/lists/*" />
         </ReachRouter>
       </Layout>
     </Suspense>

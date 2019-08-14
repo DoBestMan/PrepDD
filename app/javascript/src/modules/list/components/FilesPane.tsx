@@ -72,8 +72,8 @@ const rows = [
 
 interface FilesPaneProps {
   children?: React.ReactNode;
-  index: any;
-  value: any;
+  index: number;
+  value: number;
 }
 
 export default function FilesPane(props: FilesPaneProps) {

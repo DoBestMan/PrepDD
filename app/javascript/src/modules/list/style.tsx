@@ -32,8 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       })
     },
     table: {
-      minWidth: 750,
-      tableLayout: 'fixed'
+      minWidth: 750
     },
     tableWrapper: {
       overflowX: 'auto',
@@ -78,6 +77,8 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#81AFFF'
     },
     textFlow: {
+      display: 'inline-block', 
+      width: 'calc(80%)',
       whiteSpace: 'nowrap',
       overflow: 'hidden', 
       textOverflow: 'ellipsis'

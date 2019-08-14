@@ -10,8 +10,8 @@ export default function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ReachRouter>
-        <AppRoutes path="/app/*" />
         <AuthRoutes path="/*" />
+        <AppRoutes path="/app/*" />
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

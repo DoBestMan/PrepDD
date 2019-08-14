@@ -134,6 +134,7 @@ export const MainListItems = (props: {open: boolean}) => {
     <React.Fragment>
       { mainPages.map(item => (
           <ListItem 
+            key={item.title}
             className={classes.item} 
             activeclassname={classes.active}
             component={CustomerLink}
@@ -159,6 +160,7 @@ export const AdminListItems = (props: {open: boolean}) => {
     <React.Fragment>
       { adminPages.map(item => (
           <ListItem 
+            key={item.title}
             className={classes.item} 
             activeclassname={classes.active}
             component={CustomerLink}

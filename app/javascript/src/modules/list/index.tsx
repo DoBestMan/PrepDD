@@ -235,7 +235,7 @@ export default function List(props: {path?: string}) {
                   )
                 })}
               {emptyRows > 0 && (
-                <StyledTableRow style={{ height: 51 * emptyRows }}>
+                <StyledTableRow style={{ height: 42 * emptyRows }}>
                   <StyledTableCell colSpan={6} />
                 </StyledTableRow>
               )}
