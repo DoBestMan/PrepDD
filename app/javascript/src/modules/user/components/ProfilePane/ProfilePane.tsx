@@ -21,6 +21,7 @@ import CheckBox from './components/CheckBox'
 
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
+import { useUpdateUserDetails } from '../../../../graphql/mutations/UpdateUserDetails'
 
 const rows = [
   {
@@ -155,7 +156,13 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
 
   const { loading, data } = useCurrentUser({})
 
-  const [updateUserPassword, ...res] = useUpdateUserPassword({ password: state.password })
+  const [updateUserPassword, ...resUpdatePassword] = useUpdateUserPassword({ password: state.password })
+
+  const [updateUserDetails, ...resUpdateDetails] = useUpdateUserDetails({
+    fullName: state.fullName, 
+    displayName: state.displayName, 
+    email: state.email
+  })
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user)
@@ -206,14 +213,26 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
       }))
       return
     }
+    if (!state.hasEightChar || !state.hasSpecialChar || !state.hasUppercase) {
+      alert("Password is invalid")
+      setState(state => ({
+        ...state, 
+        confirmPassword: ''
+      }))
+      return      
+    }
 
     updateUserPassword()
-    console.log(res)
     setState(state => ({
       ...state, 
       password: '', 
       confirmPassword: ''
     }))
+  }
+
+  const handleChangeDetails = () => {
+    console.log("On Blur")
+    updateUserDetails()
   }
 
   return (
@@ -247,6 +266,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                 name="fullName"
                 placeholder="Full Name"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={6}>
@@ -256,6 +276,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                 name="displayName"
                 placeholder="Display Name"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={12}>
@@ -265,6 +286,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                 name="email"
                 placeholder="example.123@gmail.com"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={12}>

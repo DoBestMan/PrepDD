@@ -46,10 +46,11 @@ interface InputFormProps {
   required?: boolean;
   style?: any; 
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputForm(props: InputFormProps) {
-  const { name, label, value, type, placeholder, onChange, style, ...other } = props
+  const { name, label, value, type, placeholder, onChange, onBlur, style, ...other } = props
   const classes = useStyles()
 
   return (
@@ -62,6 +63,7 @@ export default function InputForm(props: InputFormProps) {
         name={name}
         placeholder={placeholder}
         onChange={onChange}
+        onBlur={onBlur}
         {...other}
       />
     </div>

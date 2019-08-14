@@ -1,4 +1,3 @@
-
 import {createMutationHook, gql} from '../graphqlHelpers';
 import {
   UpdateUserPassword,
