@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'grid',
-      marginBottom: '24px'
+      marginBottom: '6px'
     },
     label: {
       marginBottom: '3px', 
