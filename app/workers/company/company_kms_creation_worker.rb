@@ -1,4 +1,4 @@
-class CompanyKmsCreationWorker
+class Company::CompanyKmsCreationWorker
   include Sidekiq::Worker
 
   def perform(company_id)

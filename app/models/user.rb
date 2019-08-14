@@ -5,13 +5,14 @@ class User < ApplicationRecord
          :registerable,
          :recoverable,
          :rememberable
-
-  validates :uuid, uniqueness: true
+  
   validate :email_or_uuid
   has_many :roles_users
   has_many :teams_users
+  has_many :users_companies
   has_many :roles, through: :roles_users
   has_many :teams, through: :teams_users
+  has_many :companies, through: :users_companies
   has_many :owned_companies,
            class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
   belongs_to :company, optional: true
@@ -27,7 +28,7 @@ class User < ApplicationRecord
       require 'uri'
       require 'json'
 
-      uri = URI.parse("https://www.linkedin.com/oauth/v2/accessToken?code=#{token}&grant_type=authorization_code&client_secret=WEtzX4TyCF0ubk9l&client_id=867vhof1bgd0vm&redirect_uri=https://app-prepdd-staging-pr-13.herokuapp.com/linkedin")
+      uri = URI.parse("https://www.linkedin.com/oauth/v2/accessToken?code=#{token}&grant_type=authorization_code&client_secret=WEtzX4TyCF0ubk9l&client_id=867vhof1bgd0vm&redirect_uri=https://app-prepdd-staging.herokuapp.com/linkedin")
       request = Net::HTTP::Post.new(uri)
       req_options = {
         use_ssl: uri.scheme == "https",
