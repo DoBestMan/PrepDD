@@ -1,340 +1,281 @@
-import React, {useCallback} from 'react';
-import clsx from 'clsx';
-import {fade, makeStyles, useTheme} from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import {deepPurple} from '@material-ui/core/colors';
-import Button from '@material-ui/core/Button';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import React from 'react'
+import clsx from 'clsx'
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import {
+  Paper,
+  Table,
+  TableBody,
+  TablePagination
+} from '@material-ui/core'
 
-import Drawer from '@material-ui/core/Drawer';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import TableToolbar from './components/TableToolbar'
+import Searchbar from './components/Searchbar'
+import TableHeader from './components/TableHeader'
+import DetailPane from './components/DetailPane'
+import StyledTableRow from './components/styled/StyledTableRow'
+import StyledTableCell from './components/styled/StyledTableCell'
+import StyledCheckBox from '../../components/StyledCheckBox'
+import StyledItem from './components/styled/StyledItem'
+import ArrowTooltip from './components/ArrowTooltip'
 
-const options = ['Parent Company', 'Broker', 'Assign broker'];
+interface Company {
+  url: string;
+  label: string;
+}
 
-const drawerWidth = 210;
-const ITEM_HEIGHT = 48;
+interface Data {
+  name: string;
+  companies: Company[];
+  teams: string[];
+  role: string;
+}
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '80%',
-    marginLeft: '10%',
-    marginTop: theme.spacing(3),
-    alignItems: 'center',
-    overflowX: 'auto',
-  },
-  rootShifted: {
-    width: `calc(100% - ${drawerWidth}px)`,
-  },
-  list: {
-    width: 450,
-  },
-  fullList: {
-    width: 'auto',
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  table: {
-    minWidth: 650,
-  },
-  avatar: {
-    display: 'inline',
-    margin: 10,
-  },
-  purpleAvatar: {
-    margin: 10,
-    color: '#fff',
-    backgroundColor: deepPurple[500],
-  },
-  nameCustom: {
-    marginLeft: 20,
-    marginTop: 15,
-  },
-  avatarCustom: {
-    display: 'inline-flex',
-    width: '100%',
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-  },
-  inputInput: {
-    border: '1px solid lightgray',
-    padding: theme.spacing(1, 1, 1, 7),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 300,
-    },
-  },
-  selectDrop: {
-    display: 'inline',
-  },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: drawerWidth,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  hide: {
-    display: 'none',
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginRight: -drawerWidth,
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginRight: 0,
-  },
-}));
-
-function createData(name: string, team: string, role: string, company: string) {
-  return {name, team, role, company};
+function createData(
+  name: string, 
+  companies: Company[], 
+  teams: string[], 
+  role: string
+  ): Data {
+  return { name, companies, teams, role }
 }
 
 const rows = [
-  createData('User One', 'PrepDD', 'Admin', 'PrepDD'),
-  createData('User Two', 'design', 'Member', 'PrepDD'),
-  createData('User Three', 'SS', 'Member', 'PrepDD'),
-];
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+]
+
+const panelWidth=594
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      width: '100%'
+    },
+    flex: {
+      display: 'flex'
+    },
+    grow: {
+      flexGrow: 1
+    },
+    paper: {
+      width: '100%',
+      marginBottom: theme.spacing(2),
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp, 
+        duration: theme.transitions.duration.leavingScreen
+      })
+    },
+    paperShift: {
+      width: `calc(100% - ${panelWidth}px)`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut, 
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+    tableWrapper: {
+      overflowX: 'auto',
+    },
+    table: {
+      minWidth: 750
+    },
+    round: {
+      borderRadius: '50%'
+    },
+    label: {
+      color: 'white', 
+      fontSize: '12px', 
+      fontWeight: 600, 
+      textTransform: 'capitalize'
+    }
+  })
+)
 
 export default function TeamManagement(props: {path?: string}) {
-  const classes = useStyles();
-  const theme = useTheme();
+  const classes = useStyles()
+  const [selected, setSelected] = React.useState<number[]>([])
+  const [page, setPage] = React.useState(0)
+  const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
-  const [state, setState] = React.useState({right: false});
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
+  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>) {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((row: Data, index: number) => index)
+      setSelected(newSelecteds)
+      return
+    }
+    setSelected([])
+  }
 
-  const handleDrawerOpen = useCallback(() => {
-    setOpen(true);
-  }, []);
-  const handleDrawerClose = useCallback(() => {
-    setOpen(false);
-  }, []);
-  const handleClick = useCallback(event => {
-    setAnchorEl(event.currentTarget);
-  }, []);
-  const handleClose = useCallback(() => {
-    setAnchorEl(null);
-  }, []);
+  function handleClick(event: React.MouseEvent<unknown>, id: number) {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected: number[] = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id)
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1))
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1))
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1), 
+      )
+    }
+
+    setSelected(newSelected)
+  }
+
+  function handleChangePage(event: unknown, newPage: number) {
+    setPage(newPage)
+  }
+
+  function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+
+  const isSelected = (id: number) => selected.indexOf(id) !== -1
+
+  const isOpen = () => selected.length > 0
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
+
+  const renderTooltipTitle = (options: String[]) => {
+    return (
+      <React.Fragment>
+        { options.map(option => <p className={classes.label}>{option}</p>)}
+      </React.Fragment>
+    )
+  }
 
   return (
-    <Paper className={clsx(classes.root, classes.rootShifted)}>
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon />
+    <div className={classes.root}>
+      <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
+        <TableToolbar />
+        <Searchbar />
+        <div className={classes.tableWrapper}>
+          <Table className={classes.table} aria-labelledby="Team Management Table">
+            <TableHeader
+              numSelected={selected.length}
+              onSelectAllClick={handleSelectAllClick}
+              rowCount={rows.length}
+            />
+            <TableBody>
+              { rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row: Data, index: number) => {
+                  const isItemSelected = isSelected(index)
+                  
+                  return (
+                    <StyledTableRow
+                      hover
+                      onClick={(event: React.MouseEvent<unknown>) => handleClick(event, index)}
+                      role="team member"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={`member-${index}`}
+                      selected={isItemSelected}
+                    >
+                      <StyledTableCell style={{width: '20px'}}>
+                        <StyledCheckBox checked={isItemSelected}/>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex} style={{alignItems: 'center'}}>
+                          <img 
+                            className={classes.round} 
+                            src="../assets/img/photos/Alana.jpg" 
+                            width="30" 
+                            height="30" 
+                            alt="Alana" 
+                          />
+                          <span style={{marginLeft: '18px'}}>{row.name}</span>
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { row.companies.slice(0, 2).map(company => 
+                              <StyledItem 
+                                key={`${row.name}-${company.label}`}
+                                logo={company.url} 
+                                label={company.label} 
+                                selected={isItemSelected}
+                              />
+                            )
+                          }
+                          { row.companies.length > 2 &&
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.companies.map(a => a.label).slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${row.companies.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { row.teams.slice(0, 2).map(team => 
+                              <StyledItem 
+                                key={`${row.name}-${team}`}
+                                label={team} 
+                                selected={isItemSelected}
+                              />
+                            )                      
+                          }
+                          { row.teams.length > 2 &&
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(row.teams.slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${row.teams.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>{row.role}</StyledTableCell>
+                    </StyledTableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            'aria-label': 'previous page',
           }}
-          inputProps={{'aria-label': 'Search'}}
+          nextIconButtonProps={{
+            'aria-label': 'next page',
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
+      </Paper>
 
-        <Button variant="contained" color="primary" className={classes.button}>
-          Add member
-        </Button>
-
-        <div className={classes.selectDrop}>
-          <IconButton
-            aria-label="More"
-            aria-controls="long-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            id="long-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            PaperProps={{
-              style: {
-                maxHeight: ITEM_HEIGHT * 4.5,
-                width: 200,
-              },
-            }}
-          >
-            {options.map(option => (
-              <MenuItem
-                key={option}
-                selected={option === 'Pyxis'}
-                onClick={handleClose}
-              >
-                {option}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
-      </div>
-
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Company(s)</TableCell>
-            <TableCell align="right">Team&nbsp;(g)</TableCell>
-            <TableCell align="right">Role&nbsp;(g)</TableCell>
-            <TableCell align="right"></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.name}>
-              <TableCell
-                className={classes.avatarCustom}
-                component="th"
-                scope="row"
-              >
-                <Avatar className={classes.purpleAvatar}>A</Avatar>
-                <Typography
-                  className={classes.nameCustom}
-                  variant="body2"
-                  gutterBottom
-                >
-                  {row.name}
-                </Typography>
-              </TableCell>
-              <TableCell align="right">{row.company}</TableCell>
-              <TableCell align="right">{row.team}</TableCell>
-              <TableCell align="right">{row.role}</TableCell>
-              <TableCell align="right">Click</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      <div className={classes.root}>
-        <Toolbar>
-          <Typography variant="h6" noWrap className={classes.title}>
-            Persistent drawer
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="Open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            className={clsx(open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-
-        <Drawer
-          className={classes.drawer}
-          variant="persistent"
-          anchor="right"
-          open={open}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === 'rtl' ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
-
-          <div>
-            <Avatar className={classes.purpleAvatar}>A</Avatar>
-            <Typography
-              className={classes.nameCustom}
-              variant="body2"
-              gutterBottom
-            >
-              Test User 1 (In Progress)
-            </Typography>
-          </div>
-        </Drawer>
-      </div>
-    </Paper>
-  );
+      <DetailPane open={isOpen()} />
+    </div>
+  )
 }

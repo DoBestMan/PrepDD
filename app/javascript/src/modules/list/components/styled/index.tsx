@@ -1,15 +1,15 @@
 import StyledButton from './StyledButton'
-import StyledCheckBox from './StyledCheckBox'
 import StyledTab from './StyledTab'
 import StyledTableCell from './StyledTableCell'
 import StyledTableRow from './StyledTableRow'
 import StyledTabs from './StyledTabs'
+import StyledCheckBox from '../../../../components/StyledCheckBox'
 
 export {
   StyledButton, 
-  StyledCheckBox, 
   StyledTab, 
   StyledTableCell, 
   StyledTableRow, 
-  StyledTabs
+  StyledTabs,
+  StyledCheckBox
 }

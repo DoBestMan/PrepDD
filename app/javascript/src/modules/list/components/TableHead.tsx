@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import TableSortLabel from '@material-ui/core/TableSortLabel'
@@ -21,20 +20,18 @@ interface Data {
 interface HeadRow {
   id: keyof Data;
   label: string;
-  numeric: boolean;
-  disablePadding: boolean;
 }
 
 const headRows: HeadRow[] = [
-  { id: 'company', numeric: false, disablePadding: true, label: 'Company' },
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'statusText', numeric: false, disablePadding: true, label: 'Status' },
-  { id: 'modified', numeric: false, disablePadding: true, label: 'Modified' }
+  { id: 'company', label: 'Company' },
+  { id: 'name', label: 'Name' },
+  { id: 'statusText', label: 'Status' },
+  { id: 'modified', label: 'Modified' }
 ]
 
 type Order = 'asc' | 'desc'
 
-interface EnhancedTableProps {
+interface EnhancedTableHeadProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
@@ -44,7 +41,7 @@ interface EnhancedTableProps {
   rowCount: number;
 }
 
-const EnhancedTableHead = (props: EnhancedTableProps) => {
+const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
   const { 
     classes, 
     order, 

@@ -34,12 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px'
     },
     drawerSubTitle: {
-      fontFamily: 'Montserrat',
-      fontSize: '24px',
+      marginRight: '10px',
       color: '#2C2C2C',
-      marginRight: '10px'
+      fontFamily: 'Montserrat',
+      fontWeight: 'bold',
+      fontSize: '24px'
     },
     description: {
+      marginTop: '6px',
       fontFamily: 'Montserrat',
       fontSize: '14px',
       fontWeight: 600,
@@ -96,10 +98,10 @@ export default function ListDetailPage(props: {open: boolean}) {
       <div className={classes.drawerSpacer} />
       <div className={classes.drawerHeader}>
         <div className={classes.drawerTitle}>
-          <Typography variant="h6" className={classes.drawerSubTitle}>
+          <Typography variant="h2" className={classes.drawerSubTitle}>
             Series B Funding
           </Typography>
-          <img src="assets/img/logos/g2-logo.svg" alt="G2 Crod" />
+          <img src="../assets/img/logos/g2-logo.svg" alt="G2 Crod" />
           <div className={classes.grow} />
           <MoreIcon />
         </div>

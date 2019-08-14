@@ -1,5 +1,6 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
 import clsx from 'clsx'
+import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -17,6 +18,8 @@ import CameraIcon from '@material-ui/icons/CameraAlt'
 
 import InputForm from './components/InputForm'
 import CheckBox from './components/CheckBox'
+
+import { getCurrentUser } from '../../../../graphql/queries/auth'
 
 const rows = [
   {
@@ -115,7 +118,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#2C2C2C',
       fontFamily: 'Montserrat', 
       fontSize: '15px', 
-      fontWeight: 600,       
+      fontWeight: 600,
     }, 
     flex: {
       display: 'flex'
@@ -148,6 +151,23 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
     hasEightChar: false
   })
   const [show, setShow] = React.useState<boolean>(false)
+
+  const { loading, data } = getCurrentUser({})
+
+  useEffect(() => {
+    const currentUser = idx(data, data => data.currentUser.user)
+
+    if (loading || !currentUser) return
+
+    console.log(loading, currentUser)
+
+    setState({
+      ...state, 
+      fullName: currentUser.fullName, 
+      displayName: currentUser.displayName, 
+      email: currentUser.email
+    })
+  }, [loading])
 
   const handleChange = React.useCallback(event => {
     const { name, value } = event.target
@@ -238,12 +258,14 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                 <TableBody >
                 { rows.map(row => (
                   <TableRow key={row.company}>
-                    <TableCell className={clsx(classes.tableBody, classes.flex)}>
-                      { row.company === 'G2 Crowd' ?
-                        <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
-                        <img src="../assets/img/logos/prepdd-logo.svg" width="18" height="18" alt="PREPDD" />
-                      }                      
-                      <div style={{marginLeft: '7px'}}>{row.company}</div>
+                    <TableCell className={classes.tableBody}>
+                      <div className={classes.flex}>
+                        { row.company === 'G2 Crowd' ?
+                          <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
+                          <img src="../assets/img/logos/prepdd-logo.svg" width="18" height="18" alt="PREPDD" />
+                        }                      
+                        <div style={{marginLeft: '7px'}}>{row.company}</div>                        
+                      </div>
                     </TableCell>
                     <TableCell className={classes.tableBody}>
                       {row.team.join(', ')}

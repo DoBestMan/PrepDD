@@ -1,7 +1,6 @@
 import * as React from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
-import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 
 import Panel from '../../components/Panel'
@@ -31,7 +30,7 @@ export default function Profile(props: {path?: string}) {
   const classes = useStyle()
 
   return (
-    <Container className={classes.root}>
+    <div className={classes.root}>
       <Typography className={classes.title} variant="h2">
         Profile
       </Typography>
@@ -39,6 +38,6 @@ export default function Profile(props: {path?: string}) {
         <ProfilePane />
         <NotificationPane />
       </Panel>
-    </Container>
+    </div>
   )
 }
