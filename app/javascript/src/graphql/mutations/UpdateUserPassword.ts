@@ -10,14 +10,10 @@ export const useUpdateUserPassword = createMutationHook<
   UpdateUserPasswordVariables
   >(gql`
   mutation UpdateUserPassword(
-  $email: String!,
-  $oldPassword: String!,
-  $newPassword: String!,
+    $password: String!,
   ) {
     updateUserPassword(
-    email: $email,
-    oldPassword: $oldPassword,
-    newPassword: $newPassword,
+      password: $password, 
     ) {
       errors {
         path
