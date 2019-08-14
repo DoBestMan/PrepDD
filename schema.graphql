@@ -22,6 +22,9 @@ CurrentUser
 """
 type CurrentUser {
   id: String!
+  memberCompanies: [Company!]
+  ownedCompanies: [Company!]
+  teams: [Team!]
   user: User
 }
 
@@ -101,6 +104,11 @@ type SignUpUserPayload {
   errors: [FormError!]!
   success: Boolean!
   user: User
+}
+
+type Team {
+  id: ID!
+  name: String!
 }
 
 """
