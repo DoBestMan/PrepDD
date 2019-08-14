@@ -17,6 +17,15 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
         email
         displayName
       }
+      ownedCompanies {
+        name
+      }
+      memberCompanies {
+        name
+      }
+      teams {
+        name
+      }
     }
   }
 `);

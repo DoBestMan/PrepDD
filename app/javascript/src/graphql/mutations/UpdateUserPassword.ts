@@ -10,7 +10,7 @@ export const useUpdateUserPassword = createMutationHook<
   UpdateUserPasswordVariables
   >(gql`
   mutation UpdateUserPassword(
-    $password: String!,
+    $password: String!
   ) {
     updateUserPassword(
       password: $password, 
@@ -23,5 +23,3 @@ export const useUpdateUserPassword = createMutationHook<
     }
   }
 `);
-
-

@@ -20,6 +20,7 @@ import InputForm from './components/InputForm'
 import CheckBox from './components/CheckBox'
 
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
+import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 
 const rows = [
   {
@@ -154,6 +155,8 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
 
   const { loading, data } = useCurrentUser({})
 
+  const [updateUserPassword, ...res] = useUpdateUserPassword({ password: state.password })
+
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user)
 
@@ -164,7 +167,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
     setState({
       ...state, 
       fullName: currentUser.fullName, 
-      displayName: currentUser.displayName, 
+      displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
       email: currentUser.email
     })
   }, [loading])
@@ -193,6 +196,25 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
       }
     }    
   }, [setState])
+
+  const handleChangePassword = () => {
+    if (state.password !== state.confirmPassword) {
+      alert("Password is not matched")
+      setState(state => ({
+        ...state, 
+        confirmPassword: ''
+      }))
+      return
+    }
+
+    updateUserPassword()
+    console.log(res)
+    setState(state => ({
+      ...state, 
+      password: '', 
+      confirmPassword: ''
+    }))
+  }
 
   return (
     <Paper
@@ -302,7 +324,11 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           onChange={handleChange}
           style={{marginBottom: '36px'}}
         />
-        <Button className={classes.primaryButton} variant="contained" fullWidth>
+        <Button 
+          className={classes.primaryButton} variant="contained" 
+          onClick={handleChangePassword}
+          fullWidth
+        >
           Update password
         </Button>
       </Card>
