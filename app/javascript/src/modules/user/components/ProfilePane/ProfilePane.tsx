@@ -21,7 +21,7 @@ import CheckBox from './components/CheckBox'
 
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
-import { useUpdateUserDetails } from '../../../../graphql/mutations/UpdateUserDetails'
+import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
 
 const rows = [
   {
@@ -158,7 +158,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
 
   const [updateUserPassword, ...resUpdatePassword] = useUpdateUserPassword({ password: state.password })
 
-  const [updateUserDetails, ...resUpdateDetails] = useUpdateUserDetails({
+  const [updateUserData, ...resUpdateData] = useUpdateUserData({
     fullName: state.fullName, 
     displayName: state.displayName, 
     email: state.email
@@ -232,7 +232,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
 
   const handleChangeDetails = () => {
     console.log("On Blur")
-    updateUserDetails()
+    updateUserData()
   }
 
   return (
