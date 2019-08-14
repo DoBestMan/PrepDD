@@ -5,7 +5,6 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TablePagination
 } from '@material-ui/core'
 
@@ -17,6 +16,7 @@ import StyledTableRow from './components/styled/StyledTableRow'
 import StyledTableCell from './components/styled/StyledTableCell'
 import StyledCheckBox from '../../components/StyledCheckBox'
 import StyledItem from './components/styled/StyledItem'
+import ArrowTooltip from './components/ArrowTooltip'
 
 interface Company {
   url: string;
@@ -40,7 +40,7 @@ function createData(
 }
 
 const rows = [
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal', 'Equity'], 'Member'),
+  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
   createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
   createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
@@ -200,10 +200,12 @@ export default function TeamManagement(props: {path?: string}) {
                             )
                           }
                           { row.companies.length > 2 &&
-                            <StyledItem
-                              label={`+${row.companies.length - 2}`}
-                              selected={isItemSelected}
-                            />
+                            <ArrowTooltip title={`+${row.companies.length - 2}`}>
+                              <StyledItem
+                                label={`+${row.companies.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
                           }
                         </div>
                       </StyledTableCell>
@@ -218,10 +220,12 @@ export default function TeamManagement(props: {path?: string}) {
                             )                      
                           }
                           { row.teams.length > 2 &&
-                            <StyledItem
-                              label={`+${row.teams.length - 2}`}
-                              selected={isItemSelected}
-                            />
+                            <ArrowTooltip title={`+${row.teams.length - 2}`} placement="top">
+                              <StyledItem
+                                label={`+${row.teams.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
                           }
                         </div>
                       </StyledTableCell>
