@@ -2,8 +2,10 @@ class Company < ApplicationRecord
 
   belongs_to :parent, class_name: 'Company', optional: true
   has_many :children, class_name: 'Company', foreign_key: 'parent_id'
+
   belongs_to :owner, class_name: 'User', optional: true
-  has_many :employees, class_name: 'User', dependent: :destroy
+  has_many :users_companies
+  has_many :employees, through: :users_companies
   belongs_to :subscription, optional: true
 
   validates :name, presence: true
