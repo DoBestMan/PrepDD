@@ -73,8 +73,8 @@ export default function Dropdown(props: DropdownProps) {
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>
           <Paper className={clsx(classes.paper, !open && classes.invisible)}>
-            { options && options.map(option => (
-                <div className={classes.item} onClick={toggleMenu}>
+            { options && options.map((option: Option, index: number) => (
+                <div key={index} className={classes.item} onClick={toggleMenu}>
                   {option.label}
                 </div>
               ))

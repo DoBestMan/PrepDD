@@ -5,7 +5,6 @@ import {
   Typography,
   Button
  } from '@material-ui/core'
- import MoreIcon from '@material-ui/icons/MoreHoriz'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
 
 const useToolbarStyles = makeStyles(theme => ({
@@ -23,8 +22,8 @@ const useToolbarStyles = makeStyles(theme => ({
     fontSize: '24px'
   },
   primaryButton: {
-    width: '154px',
     height: '42px', 
+    padding: '6px 24px 6px 24px',
     margin: '0px 12px 0px 12px', 
     background: '#3A84FF',
     borderRadius: '3px',
@@ -35,22 +34,36 @@ const useToolbarStyles = makeStyles(theme => ({
     textAlign: 'center',
     textTransform: 'capitalize'
   },
-  more: {
-    color: '#606060'
+  deleteIcon: {
+    display: 'flex', 
+    width: '42px', 
+    height: '42px',
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    '&:hover': {
+      cursor: 'pointer', 
+      border: '1px solid #3A84FF',
+      borderRadius: '3px'
+    }
   }
 }))
 
 
-const TableToolbar = () => {
+const TableToolbar = (props: {selected: number;}) => {
+  const { selected } = props
   const classes = useToolbarStyles()
 
+  console.log(selected)
   return (
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
       <Button className={classes.primaryButton}>Add member</Button>
-      <MoreIcon className={classes.more} fontSize="large" />
       <div className={classes.grow} />
-      <DeleteIcon />
+      { (selected > 0) && 
+        <div className={classes.deleteIcon}>
+          <DeleteIcon />
+        </div>
+      }
     </Toolbar>
   )
 }
