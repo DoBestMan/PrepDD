@@ -7,6 +7,7 @@ type Company {
   ownerId: ID!
   parentId: ID!
   subscriptionId: ID!
+  teams: [Team!]!
   users: [User!]!
 }
 
@@ -75,6 +76,11 @@ type Query {
   currentUser: CurrentUser
 
   """
+  Find a team by id
+  """
+  team(id: ID!): Team!
+
+  """
   The currently logged in user details
   """
   userDetails: UserDetails
@@ -126,11 +132,12 @@ type SignUpUserPayload {
 }
 
 """
-CurrentCompany
+Team
 """
 type Team {
   id: ID!
   name: String!
+  users: [User!]!
 }
 
 """

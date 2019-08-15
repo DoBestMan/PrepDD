@@ -25,6 +25,12 @@ module Types
           CompanyType, null: false do
       description "Find a company by id"
       argument :id, ID, required: true
+      end
+
+    field :team,
+          TeamType, null: false do
+      description "Find a team by id"
+      argument :id, ID, required: true
     end
 
     def current_user
@@ -44,6 +50,10 @@ module Types
 
     def company(id:)
       Company.find(id)
+      end
+
+    def team(id:)
+      Team.find(id)
     end
 
   end

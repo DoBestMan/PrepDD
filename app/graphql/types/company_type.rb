@@ -9,5 +9,6 @@ module Types
     field :name, String, null: false
     field :owner, UserType, null: false
     field :users, [UserType], null: false
+    field :teams, [TeamType], null: false
   end
 end
