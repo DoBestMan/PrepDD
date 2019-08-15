@@ -93,7 +93,11 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       color: '#FFFFFF',
       textAlign: 'center',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
+      '&:hover': {
+        opacity: 0.7,
+        background: '#3A84FF'
+      }
     },
     appBarItemSize: {
       width: '30px',

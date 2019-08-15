@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     primaryButton: {
       height: '42px', 
+      padding: '12px 36px 12px 36px',
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
@@ -102,7 +103,11 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       color: '#FFFFFF',
       textAlign: 'center',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
+      '&:hover': {
+        opacity: 0.7,
+        background: '#3A84FF'
+      }
     },
     tableHead: {
       paddingLeft: 0, 
@@ -304,7 +309,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           onChange={handleChange}
           style={{marginBottom: '36px'}}
         />
-        <Button className={classes.primaryButton} variant="contained" fullWidth>
+        <Button className={classes.primaryButton} variant="contained">
           Update password
         </Button>
       </Card>
