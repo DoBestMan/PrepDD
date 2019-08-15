@@ -17,7 +17,7 @@
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
       "scripts": {
-        "test" "bundle exec rake test && yarn test"
+        "test": "bundle exec rake test && yarn test"
       },
       "env": {}
     }
