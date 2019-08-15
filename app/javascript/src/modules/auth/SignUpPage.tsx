@@ -132,7 +132,7 @@ export default function SignUpPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     }
   }, [data]);
 
@@ -142,7 +142,8 @@ export default function SignUpPage(_props: {path?: string}) {
     if (companyName !== null) {
       setState(state => ({...state, companyName: companyName}));
     }
-  });
+  }, []);
+
   function errorFor(path: string) {
     const errors = idx(data, x => x.signUpUser.errors);
     if (!errors) {

@@ -1,12 +1,16 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Typography from '@material-ui/core/Typography'
-import Paper from '@material-ui/core/Paper'
+import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+
+const G2Logo = require('images/dummy/logos/g2-logo.svg');
+const MicrosoftLogo = require('images/dummy/logos/microsoft-logo.svg');
+const PrepddLogo = require('images/logos/prepdd-logo.svg');
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'relative'
+    position: 'relative',
   },
   title: {
     display: 'none',
@@ -16,18 +20,18 @@ const useStyles = makeStyles(theme => ({
     borderRight: '1px solid #D8D8D8',
     fontFamily: 'Montserrat',
     fontSize: '18px',
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
     color: '#2C2C2C',
     [theme.breakpoints.up('sm')]: {
       display: 'flex',
     },
     '&:hover': {
       cursor: 'pointer',
-      background: '#EBF2FF'
-    }
+      background: '#EBF2FF',
+    },
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   paper: {
     position: 'absolute',
@@ -35,60 +39,60 @@ const useStyles = makeStyles(theme => ({
     left: 0
   },
   pl12: {
-    paddingLeft: 12
-  }
-}))
+    paddingLeft: 12,
+  },
+}));
 
 export default function Dropdown() {
-  const classes = useStyles()
-  const [open, setOpen] = React.useState(false)
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const toggleMenu = () => {
-    setOpen(prev => !prev)
-  }
+    setOpen(prev => !prev);
+  };
 
   const handleClickAway = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <Typography 
+          <Typography
             className={classes.title}
             variant="inherit"
             onClick={toggleMenu}
           >
-            <img src="../assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
+            <img src={MicrosoftLogo} alt="Microsoft" />
             <span className={classes.pl12}>Microsoft</span>
             <div className={classes.grow} />
             <i className="fa fa-caret-down"></i>
           </Typography>
           {open ? (
             <Paper className={classes.paper}>
-              <Typography 
+              <Typography
                 className={classes.title}
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="../assets/img/logos/microsoft-logo.svg" alt="Microsoft"/>
+                <img src={MicrosoftLogo} alt="Microsoft" />
                 <span className={classes.pl12}>Microsoft</span>
               </Typography>
-              <Typography 
+              <Typography
                 className={classes.title}
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="../assets/img/logos/prepdd-logo.svg" alt="Microsoft" width="24" height="24" />
+                <img src={PrepddLogo} alt="PrepDD" width="24" height="24" />
                 <span className={classes.pl12}>PrepDD</span>
               </Typography>
-              <Typography 
+              <Typography
                 className={classes.title}
                 variant="inherit"
                 onClick={toggleMenu}
               >
-                <img src="../assets/img/logos/g2-logo.svg" alt="Microsoft" width="24" height="24" />
+                <img src={G2Logo} alt="Microsoft" width="24" height="24" />
                 <span className={classes.pl12}>G2 Crowd</span>
               </Typography>
             </Paper>
@@ -96,5 +100,5 @@ export default function Dropdown() {
         </div>
       </ClickAwayListener>
     </div>
-  )
+  );
 }
