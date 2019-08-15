@@ -2,7 +2,7 @@
   "name": "prepdd",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/.bin/jest"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",
@@ -34,7 +34,6 @@
     "ts-loader": "^6.0.2",
     "typescript": "^3.5.2",
     "webpack": "^4.36.1",
-
     "@types/enzyme": "^3.10.3",
     "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/jest": "^24.0.17",

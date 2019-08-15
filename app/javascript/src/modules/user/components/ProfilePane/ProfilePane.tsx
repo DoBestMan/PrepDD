@@ -1,64 +1,67 @@
-import React, { useEffect } from 'react'
-import clsx from 'clsx'
-import idx from 'idx'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import React, {useEffect} from 'react';
+import clsx from 'clsx';
+import idx from 'idx';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
   Card,
   Grid,
-  Table, 
-  TableHead, 
-  TableBody, 
-  TableRow, 
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
   TableCell,
-  Button, 
-  Typography
-} from '@material-ui/core'
-import CameraIcon from '@material-ui/icons/CameraAlt'
+  Button,
+  Typography,
+} from '@material-ui/core';
+import CameraIcon from '@material-ui/icons/CameraAlt';
 
-import InputForm from './components/InputForm'
-import CheckBox from './components/CheckBox'
+import InputForm from './components/InputForm';
+import CheckBox from './components/CheckBox';
 
-import { getCurrentUser } from '../../../../graphql/queries/auth'
+import {getCurrentUser} from '../../../../graphql/queries/auth';
+
+const G2Logo = require('images/dummy/logos/g2-logo.svg');
+const PrepddLogo = require('images/logos/prepdd-logo.svg');
 
 const rows = [
   {
-    company: 'G2 Crowd', 
-    team: ['Finance', 'Legal', 'Equity']
-  }, 
+    company: 'G2 Crowd',
+    team: ['Finance', 'Legal', 'Equity'],
+  },
   {
-    company: 'PrepDD', 
-    team: ['M&A', 'Debt']
-  }
-]
+    company: 'PrepDD',
+    team: ['M&A', 'Debt'],
+  },
+];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      paddingTop: '36px'
+      paddingTop: '36px',
     },
     invisible: {
-      display: 'none'
+      display: 'none',
     },
     profilePhoto: {
-      position: 'relative'
+      position: 'relative',
     },
     photo: {
-      width: '120px', 
+      width: '120px',
       height: '120px',
-      borderRadius: '50%'
+      borderRadius: '50%',
     },
     uploadArea: {
-      position: 'absolute', 
+      position: 'absolute',
       width: '120px',
       height: '60px',
       backgroundColor: 'rgba(48, 48, 48, 0.5)',
-      borderBottomLeftRadius: '120px', 
+      borderBottomLeftRadius: '120px',
       borderBottomRightRadius: '120px',
       clip: 'rect(12px, 120px, 60px, 0px)',
       top: '60px',
-      left: '0px'
+      left: '0px',
     },
     uploadLabel: {
       marginTop: '15px',
@@ -66,65 +69,65 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'white',
       fontFamily: 'Montserrat',
       fontWeight: 600,
-      fontSize: '12px'
+      fontSize: '12px',
     },
     profile: {
-      padding: '0px 36px 0px 36px', 
+      padding: '0px 36px 0px 36px',
       fontFamily: 'Montserrat',
       fontSize: '12px',
       color: '#606060',
-      lineHeight: '20px'
+      lineHeight: '20px',
     },
     passwordForm: {
-      width: '493px', 
-      paddingLeft: '36px'
+      width: '493px',
+      paddingLeft: '36px',
     },
     passwordFormTitle: {
       color: '#606060',
       fontFamily: 'Montserrat',
       fontSize: '12px',
-      fontWeight: 600, 
-      lineHeight: '20px'      
+      fontWeight: 600,
+      lineHeight: '20px',
     },
     controlLabel: {
       fontFamily: 'Montserrat',
-      fontWeight: 'bold', 
+      fontWeight: 'bold',
       fontSize: '12px',
       color: '#2C2C2C',
-      lineHeight: '20px'    
+      lineHeight: '20px',
     },
     primaryButton: {
-      height: '42px', 
+      height: '42px',
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
-      fontWeight: 'bold', 
+      fontWeight: 'bold',
       fontSize: '12px',
       color: '#FFFFFF',
       textAlign: 'center',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
     },
     tableHead: {
-      paddingLeft: 0, 
+      paddingLeft: 0,
       paddingRight: 0,
-      color: '#606060', 
-      fontFamily: 'Montserrat', 
-      fontWeight: 600, 
-      fontSize: '12px'
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
     },
     tableBody: {
-      paddingLeft: 0, 
+      paddingLeft: 0,
       paddingRight: 0,
       color: '#2C2C2C',
-      fontFamily: 'Montserrat', 
-      fontSize: '15px', 
+      fontFamily: 'Montserrat',
+      fontSize: '15px',
       fontWeight: 600,
-    }, 
+    },
     flex: {
-      display: 'flex'
-    }
+      display: 'flex',
+    },
   })
-)
+);
 
 interface StateType {
   fullName: string;
@@ -137,77 +140,84 @@ interface StateType {
   hasEightChar: boolean;
 }
 
-export default function ProfilePane(props: {value?: number, index?: number}) {
-  const { value, index } = props
-  const classes = useStyles()
+export default function ProfilePane(props: {value?: number; index?: number}) {
+  const {value, index} = props;
+  const classes = useStyles();
   const [state, setState] = React.useState<StateType>({
-    fullName: '', 
-    displayName: '', 
-    email: '', 
-    password: '', 
-    confirmPassword: '', 
-    hasUppercase: false, 
-    hasSpecialChar: false, 
-    hasEightChar: false
-  })
-  const [show, setShow] = React.useState<boolean>(false)
+    fullName: '',
+    displayName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    hasUppercase: false,
+    hasSpecialChar: false,
+    hasEightChar: false,
+  });
+  const [show, setShow] = React.useState<boolean>(false);
 
-  const { loading, data } = getCurrentUser({})
+  const {loading, data} = getCurrentUser({});
 
   useEffect(() => {
-    const currentUser = idx(data, data => data.currentUser.user)
+    const currentUser = idx(data, data => data.currentUser.user);
 
-    if (loading || !currentUser) return
+    if (loading || !currentUser) return;
 
-    console.log(loading, currentUser)
+    console.log(loading, currentUser);
 
     setState({
-      ...state, 
-      fullName: currentUser.fullName, 
-      displayName: currentUser.displayName, 
-      email: currentUser.email
-    })
-  }, [loading])
+      ...state,
+      fullName: currentUser.fullName,
+      displayName: currentUser.displayName,
+      email: currentUser.email,
+    });
+  }, [loading]);
 
-  const handleChange = React.useCallback(event => {
-    const { name, value } = event.target
+  const handleChange = React.useCallback(
+    event => {
+      const {name, value} = event.target;
 
-    setState(state => ({...state, [name]: value}))
-    if (name == 'password') {
-      if (value.match(/[A-Z]/)) {
-        setState(state => ({...state, hasUppercase: true}))
-      } else {
-        setState(state => ({...state, hasUppercase: false}))
+      setState(state => ({...state, [name]: value}));
+      if (name == 'password') {
+        if (value.match(/[A-Z]/)) {
+          setState(state => ({...state, hasUppercase: true}));
+        } else {
+          setState(state => ({...state, hasUppercase: false}));
+        }
+
+        if (value.length >= 8) {
+          setState(state => ({...state, hasEightChar: true}));
+        } else {
+          setState(state => ({...state, hasEightChar: false}));
+        }
+
+        if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) {
+          setState(state => ({...state, hasSpecialChar: true}));
+        } else {
+          setState(state => ({...state, hasSpecialChar: false}));
+        }
       }
+    },
+    [setState]
+  );
 
-      if (value.length >= 8) {
-        setState(state => ({...state, hasEightChar: true}))
-      } else {
-        setState(state => ({...state, hasEightChar: false}))
-      }
-
-      if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) {
-        setState(state => ({...state, hasSpecialChar: true}))
-      } else {
-        setState(state => ({...state, hasSpecialChar: false}))
-      }
-    }    
-  }, [setState])
-
-  const handleClickAway = () => setShow(false)
+  const handleClickAway = () => setShow(false);
 
   return (
     <Paper
-      className={clsx(classes.root, (value !== index) && classes.invisible)}
+      className={clsx(classes.root, value !== index && classes.invisible)}
       aria-labelledby="Personal Information"
       elevation={0}
-    >      
-      <div 
+    >
+      <div
         className={classes.profilePhoto}
         onMouseOver={() => setShow(true)}
         onMouseOut={() => setShow(false)}
       >
-        <img className={classes.photo} src="../assets/img/photos/Alana.jpg" alt="Alana" />
+        <img
+          className={classes.photo}
+          src="../assets/img/photos/Alana.jpg"
+          alt="Alana"
+        />
         <div className={clsx(classes.uploadArea, !show && classes.invisible)}>
           <div className={classes.uploadLabel}>
             <CameraIcon fontSize="small" />
@@ -216,7 +226,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           </div>
         </div>
       </div>
-      
+
       <Card className={classes.profile} elevation={0}>
         <form autoComplete="off">
           <Grid container spacing={2}>
@@ -251,27 +261,35 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell className={classes.tableHead}>Company(s)</TableCell>
+                    <TableCell className={classes.tableHead}>
+                      Company(s)
+                    </TableCell>
                     <TableCell className={classes.tableHead}>Team(s)</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody >
-                { rows.map(row => (
-                  <TableRow key={row.company}>
-                    <TableCell className={classes.tableBody}>
-                      <div className={classes.flex}>
-                        { row.company === 'G2 Crowd' ?
-                          <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
-                          <img src="../assets/img/logos/prepdd-logo.svg" width="18" height="18" alt="PREPDD" />
-                        }                      
-                        <div style={{marginLeft: '7px'}}>{row.company}</div>                        
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tableBody}>
-                      {row.team.join(', ')}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                <TableBody>
+                  {rows.map(row => (
+                    <TableRow key={row.company}>
+                      <TableCell className={classes.tableBody}>
+                        <div className={classes.flex}>
+                          {row.company === 'G2 Crowd' ? (
+                            <img src={G2Logo} width="18" height="18" alt="G2" />
+                          ) : (
+                            <img
+                              src={PrepddLogo}
+                              width="18"
+                              height="18"
+                              alt="PREPDD"
+                            />
+                          )}
+                          <div style={{marginLeft: '7px'}}>{row.company}</div>
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tableBody}>
+                        {row.team.join(', ')}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Grid>
@@ -279,13 +297,26 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
         </form>
       </Card>
       <Card className={classes.passwordForm} elevation={0}>
-        <Typography className={classes.passwordFormTitle} variant="h6" gutterBottom>
+        <Typography
+          className={classes.passwordFormTitle}
+          variant="h6"
+          gutterBottom
+        >
           Password must contain
         </Typography>
-        <CheckBox checked={state.hasUppercase} label="At least 1 uppercase letter" />
-        <CheckBox checked={state.hasSpecialChar} label="At least 1 special character" />
-        <CheckBox checked={state.hasEightChar} label="At least 8 total characters" />
-        
+        <CheckBox
+          checked={state.hasUppercase}
+          label="At least 1 uppercase letter"
+        />
+        <CheckBox
+          checked={state.hasSpecialChar}
+          label="At least 1 special character"
+        />
+        <CheckBox
+          checked={state.hasEightChar}
+          label="At least 8 total characters"
+        />
+
         <InputForm
           value={state.password}
           label="Password"
@@ -309,5 +340,5 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
         </Button>
       </Card>
     </Paper>
-  )
+  );
 }
