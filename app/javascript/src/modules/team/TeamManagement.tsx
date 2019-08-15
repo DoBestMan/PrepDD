@@ -163,7 +163,9 @@ export default function TeamManagement(props: {path?: string}) {
   return (
     <div className={classes.root}>
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-        <TableToolbar />
+        <TableToolbar 
+          selected={selected.length}
+        />
         <Searchbar />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="Team Management Table">
