@@ -1,5 +1,13 @@
 {
-  "addons": ["heroku-postgresql"],
+  "addons": ["heroku-postgresql", "heroku-redis"],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
   "env": {
     "HEROKU_DEBUG_RAILS_RUNNER": "1"
   },
@@ -16,7 +24,6 @@
   "environments": {
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
-      "scripts": {},
       "env": {}
     }
   }

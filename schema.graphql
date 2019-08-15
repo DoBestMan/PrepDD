@@ -61,6 +61,11 @@ type Query {
   currentUser: CurrentUser
 
   """
+  The currently logged in user details
+  """
+  userDetails: UserDetails
+
+  """
   Information for resetting a users password
   """
   userForPasswordReset(
@@ -157,6 +162,16 @@ type User {
   email: String!
   fullName: String!
   id: ID!
+}
+
+"""
+LoggedInUserDetails
+"""
+type UserDetails {
+  memberCompanies: [Company!]
+  ownedCompanies: [Company!]
+  teams: [Team!]
+  user: User
 }
 
 """
