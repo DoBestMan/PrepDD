@@ -9,5 +9,6 @@ module Types
     field :ownedCompanies, [CompanyType], null: true
     field :companies, [CompanyType], null: true
     field :teams, [TeamType], null: true
+    field :roles, [RoleType], null: true
   end
 end
