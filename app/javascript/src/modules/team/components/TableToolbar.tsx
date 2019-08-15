@@ -23,8 +23,8 @@ const useToolbarStyles = makeStyles(theme => ({
     fontSize: '24px'
   },
   primaryButton: {
-    width: '154px',
     height: '42px', 
+    padding: '6px 24px 6px 24px',
     margin: '0px 12px 0px 12px', 
     background: '#3A84FF',
     borderRadius: '3px',
