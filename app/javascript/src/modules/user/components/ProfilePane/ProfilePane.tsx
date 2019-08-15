@@ -172,7 +172,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     if (loading || !currentUser) return;
 
-    console.log(loading, currentUser);
+    console.log(data, currentUser);
 
     setState({
       ...state, 
@@ -241,6 +241,26 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     updateUserData()
   }
 
+  const handleOpenFile = () => {
+    const fileInstance = document.getElementById("file-input")
+
+    if (fileInstance) {
+      fileInstance.click()
+    }
+  }
+
+  const handleChangePhoto = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    event.persist()
+    const {
+      currentTarget: { validity, files}
+    } = event
+
+    console.log(validity, files)
+    if (validity.valid && files) {
+      const file = files[0]
+    }
+  }
+
   return (
     <Paper
       className={clsx(classes.root, value !== index && classes.invisible)}
@@ -257,12 +277,21 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           src="../assets/img/photos/Alana.jpg"
           alt="Alana"
         />
-        <div className={clsx(classes.uploadArea, !show && classes.invisible)}>
+        <div 
+          className={clsx(classes.uploadArea, !show && classes.invisible)}
+          onClick={handleOpenFile}
+        >
           <div className={classes.uploadLabel}>
             <CameraIcon fontSize="small" />
             <br />
             Update
           </div>
+          <input 
+            id="file-input" 
+            className={classes.invisible} 
+            type="file" 
+            onChange={e => handleChangePhoto(e)}
+          />
         </div>
       </div>
 
