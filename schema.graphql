@@ -22,9 +22,6 @@ CurrentUser
 """
 type CurrentUser {
   id: String!
-  memberCompanies: [Company!]
-  ownedCompanies: [Company!]
-  teams: [Team!]
   user: User
 }
 
@@ -190,10 +187,13 @@ type UpdateUserPasswordPayload {
 User
 """
 type User {
+  companies: [Company!]
   displayName: String!
   email: String!
   fullName: String!
   id: ID!
+  ownedCompanies: [Company!]
+  teams: [Team!]
 }
 
 """
