@@ -7,10 +7,6 @@ module Types
           CurrentUserType,
           null: true, description: 'The currently logged in user'
 
-    field :company_teams,
-          CompanyTeamsType,
-          null: true, description: 'The currently company teams'
-
     field :user_for_password_reset,
           UserForPasswordResetType,
           null: true,
@@ -24,6 +20,12 @@ module Types
 
     field :user_details, UserDetailsType, null: true,
           description: 'The currently logged in user details'
+
+    field :company,
+          CompanyType, null: false do
+      description "Find a company by id"
+      argument :id, ID, required: true
+    end
 
     def current_user
       user = context[:controller].current_user
@@ -40,8 +42,8 @@ module Types
         user&.companies, teams: user&.teams }
     end
 
-    def company_teams(id)
-      {id: '1', name: 'kjhkjhkh', teams: Team.where(company_id: id)}
+    def company(id:)
+      Company.find(id)
     end
 
   end

@@ -35,6 +35,37 @@
           "description": null,
           "fields": [
             {
+              "name": "company",
+              "description": "Find a company by id",
+              "args": [
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Company",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "currentUser",
               "description": "The currently logged in user",
               "args": [
@@ -381,6 +412,24 @@
               "deprecationReason": null
             },
             {
+              "name": "owner",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "User",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "ownerId",
               "description": null,
               "args": [
@@ -433,6 +482,32 @@
               },
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "users",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "User",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "inputFields": null,
@@ -445,7 +520,7 @@
         {
           "kind": "OBJECT",
           "name": "Team",
-          "description": null,
+          "description": "CurrentCompany",
           "fields": [
             {
               "name": "id",
@@ -1127,20 +1202,6 @@
         },
         {
           "kind": "OBJECT",
-          "name": "Team",
-          "description": null,
-          "fields": [
-
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
           "name": "FormError",
           "description": "A user-readable error from a form field",
           "fields": [
@@ -1243,165 +1304,6 @@
                   "name": "Boolean",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            }
-          ],
-          "inputFields": null,
-          "interfaces": [
-
-          ],
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "OBJECT",
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
-          "name": "FormError",
-          "description": "A user-readable error from a form field",
-          "fields": [
-            {
-              "name": "message",
-              "description": "A description of the error",
-=======
-          "name": "Company",
-          "description": null,
-          "fields": [
-            {
-              "name": "brokerCoId",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "id",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "isActive",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "name",
-              "description": null,
->>>>>>> Create company team types
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
-              "name": "path",
-              "description": "Which field this error came from",
-=======
-              "name": "ownerId",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "parentId",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "subscriptionId",
-              "description": null,
->>>>>>> Create company team types
-              "args": [
-
-              ],
-              "type": {
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-=======
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "ID",
-                  "ofType": null
-                }
->>>>>>> Create company team types
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -1554,7 +1456,7 @@
           "fields": null,
           "inputFields": [
             {
-              "name": "email",
+              "name": "password",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
@@ -1568,37 +1470,6 @@
               "defaultValue": null
             },
             {
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
-=======
-              "name": "oldPassword",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "newPassword",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
->>>>>>> Create company team types
               "name": "clientMutationId",
               "description": "A unique identifier for the client performing the mutation.",
               "type": {
@@ -1733,7 +1604,6 @@
               "defaultValue": null
             },
             {
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
               "name": "displayName",
               "description": null,
               "type": {
@@ -1748,8 +1618,6 @@
               "defaultValue": null
             },
             {
-=======
->>>>>>> Create company team types
               "name": "clientMutationId",
               "description": "A unique identifier for the client performing the mutation.",
               "type": {

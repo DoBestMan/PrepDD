@@ -3,9 +3,11 @@ type Company {
   id: ID!
   isActive: Boolean!
   name: String!
+  owner: User!
   ownerId: ID!
   parentId: ID!
   subscriptionId: ID!
+  users: [User!]!
 }
 
 """
@@ -63,6 +65,11 @@ type Mutation {
 
 type Query {
   """
+  Find a company by id
+  """
+  company(id: ID!): Company!
+
+  """
   The currently logged in user
   """
   currentUser: CurrentUser
@@ -118,12 +125,12 @@ type SignUpUserPayload {
   user: User
 }
 
+"""
+CurrentCompany
+"""
 type Team {
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
   id: ID!
   name: String!
-=======
->>>>>>> Create company team types
 }
 
 """
@@ -134,10 +141,7 @@ input UpdateUserDetailsInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
   displayName: String!
-=======
->>>>>>> Create company team types
   email: String!
   fullName: String!
 }
@@ -183,13 +187,7 @@ input UpdateUserPasswordInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-<<<<<<< 0f27697ba9adb34a5e2cd780368439dcbf39edad
   password: String!
-=======
-  email: String!
-  newPassword: String!
-  oldPassword: String!
->>>>>>> Create company team types
 }
 
 """

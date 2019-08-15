@@ -7,5 +7,7 @@ module Types
     field :owner_id, ID, null: false
     field :is_active, Boolean, null: false
     field :name, String, null: false
+    field :owner, UserType, null: false
+    field :users, [UserType], null: false
   end
 end
