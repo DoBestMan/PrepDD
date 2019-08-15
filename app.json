@@ -1,5 +1,5 @@
 {
-  "addons": ["heroku-postgresql"],
+  "addons": ["heroku-postgresql", "heroku-redis"],
   "env": {
     "HEROKU_DEBUG_RAILS_RUNNER": "1"
   },
@@ -16,7 +16,9 @@
   "environments": {
     "test": {
       "addons": ["heroku-postgresql:in-dyno"],
-      "scripts": {},
+      "scripts": {
+        "test" "bundle exec rake test && yarn test"
+      },
       "env": {}
     }
   }
