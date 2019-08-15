@@ -5,7 +5,6 @@ import {
   Typography,
   Button
  } from '@material-ui/core'
- import MoreIcon from '@material-ui/icons/MoreHoriz'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
 
 const useToolbarStyles = makeStyles(theme => ({
@@ -48,7 +47,6 @@ const TableToolbar = () => {
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
       <Button className={classes.primaryButton}>Add member</Button>
-      <MoreIcon className={classes.more} fontSize="large" />
       <div className={classes.grow} />
       <DeleteIcon />
     </Toolbar>
