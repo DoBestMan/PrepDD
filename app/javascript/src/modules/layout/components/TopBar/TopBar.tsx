@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     inviteButton: {
-      width: '91px',
+      width: '72px',
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',

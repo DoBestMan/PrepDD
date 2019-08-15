@@ -76,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px'
     },
     passwordForm: {
-      width: '493px', 
+      width: '350px', 
       paddingLeft: '36px'
     },
     passwordFormTitle: {
@@ -308,7 +308,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
           onChange={handleChange}
           style={{marginBottom: '36px'}}
         />
-        <Button className={classes.primaryButton} variant="contained">
+        <Button className={classes.primaryButton} variant="contained" fullWidth>
           Update password
         </Button>
       </Card>
