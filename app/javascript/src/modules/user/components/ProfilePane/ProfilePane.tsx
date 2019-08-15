@@ -117,12 +117,11 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600, 
       fontSize: '12px'
     },
-    tableBody: {
-      paddingLeft: 0, 
-      paddingRight: 0,
+    tableCell: {
+      padding: '12px 0px 12px 0px',
       color: '#2C2C2C',
       fontFamily: 'Montserrat', 
-      fontSize: '15px', 
+      fontSize: '12px', 
       fontWeight: 600,
     }, 
     flex: {
@@ -263,7 +262,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                 <TableBody >
                 { rows.map(row => (
                   <TableRow key={row.company}>
-                    <TableCell className={classes.tableBody}>
+                    <TableCell className={classes.tableCell}>
                       <div className={classes.flex}>
                         { row.company === 'G2 Crowd' ?
                           <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
@@ -272,7 +271,7 @@ export default function ProfilePane(props: {value?: number, index?: number}) {
                         <div style={{marginLeft: '7px'}}>{row.company}</div>                        
                       </div>
                     </TableCell>
-                    <TableCell className={classes.tableBody}>
+                    <TableCell className={classes.tableCell}>
                       {row.team.join(', ')}
                     </TableCell>
                   </TableRow>
