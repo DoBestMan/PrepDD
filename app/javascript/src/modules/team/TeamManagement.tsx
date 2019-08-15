@@ -109,6 +109,7 @@ export default function TeamManagement(props: {path?: string}) {
 
   function handleClick(event: React.MouseEvent<HTMLTableRowElement>, id: number) {
     event.persist()
+
     if (event.metaKey || event.ctrlKey) {
       const selectedIndex = selected.indexOf(id);
       let newSelected: number[] = [];
@@ -128,7 +129,14 @@ export default function TeamManagement(props: {path?: string}) {
   
       setSelected(newSelected)
     } else {
-      let newSelected: number[] = [id];
+      const selectedIndex = selected.indexOf(id)
+      let newSelected: number[] = [];
+
+      if (selectedIndex === -1) {
+        newSelected.push(id)
+      } else if (selectedIndex >= 0 && selected.length > 1) {
+        newSelected.push(id)
+      }
 
       setSelected(newSelected)
     }
