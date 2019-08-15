@@ -18,6 +18,9 @@ module Types
                  'The reset token received from a forgot password email'
     end
 
+    field :user_details, UserDetailsType, null: true,
+          description: 'The currently logged in user details'
+
     def current_user
       user = context[:controller].current_user
       { id: 'current_user', user: user }
@@ -25,6 +28,12 @@ module Types
 
     def user_for_password_reset(token:)
       User.where(reset_password_token: token).first
+    end
+
+    def user_details
+      user = context[:controller].current_user
+      { user: user, owned_companies: user&.owned_companies, member_companies:
+      user&.companies, teams: user&.teams }
     end
   end
 end
