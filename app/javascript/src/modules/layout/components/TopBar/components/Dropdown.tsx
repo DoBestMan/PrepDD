@@ -10,9 +10,9 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     display: 'none',
-    width: 250, 
+    width: 220, 
     boxSizing: 'border-box',
-    padding: '24px 24px 19px 24px',
+    padding: '18px 24px 19px 24px',
     borderRight: '1px solid #D8D8D8',
     fontFamily: 'Montserrat',
     fontSize: '18px',
@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    top: 73, 
+    top: 64, 
     left: 0
   },
   pl12: {

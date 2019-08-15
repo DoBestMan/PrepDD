@@ -7,7 +7,7 @@ import PlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
 const drawerWidth = 210
 const miniDrawerWidth = 72
-const topBarHeight = 73
+const topBarHeight = 64
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({

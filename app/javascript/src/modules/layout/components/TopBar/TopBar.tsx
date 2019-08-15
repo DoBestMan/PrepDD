@@ -17,7 +17,7 @@ import StyledBadge from './components/StyledBadge';
 
 const drawerWidth = 210
 const miniDrawerWidth = 72
-const topBarHeight = 73
+const topBarHeight = 64
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -70,17 +70,16 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
-      height: 42, 
+      height: 33, 
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 'bold', 
       color: 'black'
     },
     inputInput: {
-      padding: theme.spacing(1, 1, 1, 6),
+      padding: "8px 8px 8px 48px",
       transition: theme.transitions.create('width'),
       width: '100%',
-      height: 42, 
       [theme.breakpoints.up('md')]: {
         width: 300,
       },
@@ -97,8 +96,8 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'capitalize'
     },
     appBarItemSize: {
-      width: '40px',
-      height: '40px'
+      width: '30px',
+      height: '30px'
     },
     grow: {
       flexGrow: 1
@@ -130,7 +129,7 @@ export default function TopBar(props: {open: boolean}) {
         { isDesktop ? (
           <div className={clsx(classes.search, classes.grow)}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <SearchIcon fontSize="small" />
             </div>
             <InputBase
               placeholder="Search for lists, request, or files"
