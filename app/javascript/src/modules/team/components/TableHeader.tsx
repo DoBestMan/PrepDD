@@ -6,7 +6,6 @@ import {
 
 import StyledTableRow from './styled/StyledTableRow'
 import StyledTableCell from './styled/StyledTableCell'
-import StyledCheckBox from '../../../components/StyledCheckBox'
 
 type roleType = 'Member' | 'Admin'
 
@@ -50,31 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-interface TableHeaderProps {
-  numSelected: number;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
-  rowCount: number;
-}
-
-export default function TableHeader(props: TableHeaderProps) {
-  const {
-    numSelected, 
-    rowCount, 
-    onSelectAllClick, 
-  } = props
-  const classes = useStyles()
-  
+export default function TableHeader() {  
   return (
     <TableHead>
       <StyledTableRow>
-        <StyledTableCell>
-          <StyledCheckBox 
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{'aria-label': 'select all members'}}
-          />
-        </StyledTableCell>
         {headRows.map(row => (
           <StyledTableCell
             key={row.id}
