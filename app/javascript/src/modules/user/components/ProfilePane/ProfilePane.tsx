@@ -79,8 +79,8 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     passwordForm: {
-      width: '493px',
-      paddingLeft: '36px',
+      width: '350px', 
+      paddingLeft: '36px'
     },
     passwordFormTitle: {
       color: '#606060',
@@ -97,7 +97,8 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     primaryButton: {
-      height: '42px',
+      height: '42px', 
+      padding: '12px 36px 12px 36px',
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
@@ -106,6 +107,10 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#FFFFFF',
       textAlign: 'center',
       textTransform: 'capitalize',
+      '&:hover': {
+        opacity: 0.7,
+        background: '#3A84FF'
+      }
     },
     tableHead: {
       paddingLeft: 0,
@@ -115,12 +120,11 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: '12px',
     },
-    tableBody: {
-      paddingLeft: 0,
-      paddingRight: 0,
+    tableCell: {
+      padding: '12px 0px 12px 0px',
       color: '#2C2C2C',
-      fontFamily: 'Montserrat',
-      fontSize: '15px',
+      fontFamily: 'Montserrat', 
+      fontSize: '12px', 
       fontWeight: 600,
     },
     flex: {
@@ -267,29 +271,23 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                     <TableCell className={classes.tableHead}>Team(s)</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {rows.map(row => (
-                    <TableRow key={row.company}>
-                      <TableCell className={classes.tableBody}>
-                        <div className={classes.flex}>
-                          {row.company === 'G2 Crowd' ? (
-                            <img src={G2Logo} width="18" height="18" alt="G2" />
-                          ) : (
-                            <img
-                              src={PrepddLogo}
-                              width="18"
-                              height="18"
-                              alt="PREPDD"
-                            />
-                          )}
-                          <div style={{marginLeft: '7px'}}>{row.company}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className={classes.tableBody}>
-                        {row.team.join(', ')}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                <TableBody >
+                { rows.map(row => (
+                  <TableRow key={row.company}>
+                    <TableCell className={classes.tableCell}>
+                      <div className={classes.flex}>
+                        { row.company === 'G2 Crowd' ?
+                          <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
+                          <img src="../assets/img/logos/prepdd-logo.svg" width="18" height="18" alt="PREPDD" />
+                        }                      
+                        <div style={{marginLeft: '7px'}}>{row.company}</div>                        
+                      </div>
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      {row.team.join(', ')}
+                    </TableCell>
+                  </TableRow>
+                ))}
                 </TableBody>
               </Table>
             </Grid>

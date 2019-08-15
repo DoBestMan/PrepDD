@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: panelWidth
     },
     drawerSpacer: {
-      marginTop: 73
+      marginTop: 64
     },
     drawerHeader: {
       padding: '24px 24px 0px 24px',
