@@ -23,6 +23,7 @@ import {getCurrentUser} from '../../../../graphql/queries/auth';
 
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
+const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 
 const rows = [
   {
@@ -219,7 +220,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       >
         <img
           className={classes.photo}
-          src="../assets/img/photos/Alana.jpg"
+          src={DefaultPhoto}
           alt="Alana"
         />
         <div className={clsx(classes.uploadArea, !show && classes.invisible)}>
@@ -277,9 +278,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                     <TableCell className={classes.tableCell}>
                       <div className={classes.flex}>
                         { row.company === 'G2 Crowd' ?
-                          <img src="../assets/img/logos/g2-logo.svg" width="18" height="18" alt="G2" /> :
-                          <img src="../assets/img/logos/prepdd-logo.svg" width="18" height="18" alt="PREPDD" />
-                        }                      
+                          <img src={G2Logo} width="18" height="18" alt="G2" /> :
+                          <img src={PrepddLogo} width="18" height="18" alt="PREPDD" />
+                        }
                         <div style={{marginLeft: '7px'}}>{row.company}</div>                        
                       </div>
                     </TableCell>
