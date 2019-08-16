@@ -18,6 +18,8 @@ import useStyles from './style';
 
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
+const Drag = require('images/dummy/logos/drag.svg');
+const DragSelect = require('images/dummy/logos/drag-black.svg');
 
 interface Data {
   company: string;
@@ -247,12 +249,12 @@ export default function List(props: {path?: string}) {
                         <div className={classes.flex}>
                           {isItemSelected ? (
                             <img
-                              src="../assets/img/logos/drag-black.svg"
+                              src={DragSelect}
                               alt="Drag"
                             />
                           ) : (
                             <img
-                              src="../assets/img/logos/drag.svg"
+                              src={Drag}
                               alt="Drag"
                             />
                           )}
