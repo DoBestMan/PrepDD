@@ -18,18 +18,17 @@ module Types
                  'The reset token received from a forgot password email'
     end
 
-    field :user_details, UserDetailsType, null: true,
-          description: 'The currently logged in user details'
+    field :user_details,
+          UserDetailsType,
+          null: true, description: 'The currently logged in user details'
 
-    field :company,
-          CompanyType, null: false do
-      description "Find a company by id"
+    field :company, CompanyType, null: false do
+      description 'Find a company by id'
       argument :id, ID, required: true
-      end
+    end
 
-    field :team,
-          TeamType, null: false do
-      description "Find a team by id"
+    field :team, TeamType, null: false do
+      description 'Find a team by id'
       argument :id, ID, required: true
     end
 
@@ -44,17 +43,20 @@ module Types
 
     def user_details
       user = context[:controller].current_user
-      { user: user, owned_companies: user&.owned_companies, member_companies:
-        user&.companies, teams: user&.teams }
+      {
+        user: user,
+        owned_companies: user&.owned_companies,
+        member_companies: user&.companies,
+        teams: user&.teams
+      }
     end
 
     def company(id:)
       Company.find(id)
-      end
+    end
 
     def team(id:)
       Team.find(id)
     end
-
   end
 end
