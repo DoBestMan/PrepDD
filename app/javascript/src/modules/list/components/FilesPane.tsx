@@ -7,6 +7,8 @@ import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import GetApp from '@material-ui/icons/GetApp'
 
+const Excel = require('images/dummy/logos/excel.svg')
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -97,7 +99,7 @@ export default function FilesPane(props: FilesPaneProps) {
             <TableRow key={`files-${index}`}>
               <TableCell align="left">
                 <div className={classes.flexAttr}>
-                  <img src="../assets/img/logos/excel.svg" alt="Excel" />
+                  <img src={Excel} alt="Excel" />
                   <span className={classes.title}>{row.title}</span>
                   <div className={classes.grow} />
                   <span className={classes.modify}>{row.modified}</span>

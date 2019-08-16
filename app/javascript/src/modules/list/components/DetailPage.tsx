@@ -9,6 +9,7 @@ import { StyledTabs, StyledTab } from './styled'
 import FilesPane from './FilesPane'
 
 const panelWidth = 539
+const G2Logo = require('images/dummy/logos/g2-logo.svg')
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -101,7 +102,7 @@ export default function ListDetailPage(props: {open: boolean}) {
           <Typography variant="h2" className={classes.drawerSubTitle}>
             Series B Funding
           </Typography>
-          <img src="../assets/img/logos/g2-logo.svg" alt="G2 Crod" />
+          <img src={G2Logo} alt="G2 Crod" />
           <div className={classes.grow} />
           <MoreIcon />
         </div>

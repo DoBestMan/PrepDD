@@ -38,21 +38,26 @@ function createData(
   return { name, companies, teams, role }
 }
 
+const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
+const G2Logo = require('images/dummy/logos/g2-logo.svg')
+const DomoLogo = require('images/dummy/logos/domo-logo.svg')
+const DripLogo = require('images/dummy/logos/drip-logo.svg')
+
 const rows = [
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}, {url: '../assets/img/logos/g2-logo.svg', label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: '../assets/img/logos/g2-logo.svg', label: 'G2 Crowd'}, {url: '../assets/img/logos/drip-logo.svg', label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: '../assets/img/logos/domo-logo.svg', label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}, {url: G2Logo, label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
+  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
+  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
 ]
 
 const panelWidth=594
@@ -197,7 +202,7 @@ export default function TeamManagement(props: {path?: string}) {
                         <div className={classes.flex} style={{alignItems: 'center'}}>
                           <img 
                             className={classes.round} 
-                            src="../assets/img/photos/Alana.jpg" 
+                            src={DefaultPhoto}
                             width="30" 
                             height="30" 
                             alt="Alana" 

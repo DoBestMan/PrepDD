@@ -17,8 +17,10 @@ import StyledItem from './styled/StyledItem';
 import StyledTableRow from './styled/StyledTableRow';
 import StyledTableCell from './styled/StyledTableCell';
 
+const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
+const DripLogo = require('images/dummy/logos/drip-logo.svg');
 
 const panelWidth = 594;
 
@@ -123,7 +125,7 @@ export default function DetailPane(props: {open: boolean}) {
       <div className={classes.drawerHeader}>
         <img
           className={classes.round}
-          src="../assets/img/photos/Alana.jpg"
+          src={DefaultPhoto}
           width="30"
           height="30"
           alt="Alana"
@@ -168,7 +170,7 @@ export default function DetailPane(props: {open: boolean}) {
             <StyledTableCell>
               <div className={classes.flex} style={{alignItems: 'center'}}>
                 <img
-                  src="../assets/img/logos/drip-logo.svg"
+                  src={DripLogo}
                   width="18"
                   height="18"
                   alt="Drip"
