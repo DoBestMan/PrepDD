@@ -8,31 +8,28 @@
 
 export interface CurrentUser_currentUser_user_ownedCompanies {
   __typename: "Company";
-  id: string;
   name: string;
 }
 
 export interface CurrentUser_currentUser_user_companies {
   __typename: "Company";
-  id: string;
   name: string;
 }
 
-export interface CurrentUser_currentUser_user_teams {
-  __typename: "Team";
+export interface CurrentUser_currentUser_user_roles {
+  __typename: "Role";
   id: string;
-  name: string;
 }
 
 export interface CurrentUser_currentUser_user {
   __typename: "User";
   id: string;
   fullName: string;
-  displayName: string;
   email: string;
+  displayName: string;
   ownedCompanies: CurrentUser_currentUser_user_ownedCompanies[] | null;
   companies: CurrentUser_currentUser_user_companies[] | null;
-  teams: CurrentUser_currentUser_user_teams[] | null;
+  roles: CurrentUser_currentUser_user_roles[] | null;
 }
 
 export interface CurrentUser_currentUser {

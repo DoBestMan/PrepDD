@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       flexGrow: 1,
       overflow: 'auto',
-      height: `calc(100% - ${topBarHeight}px)`,
+      height: `calc(100vh - ${topBarHeight}px)`,
       marginLeft: drawerWidth,
       marginTop: topBarHeight,
       transition: theme.transitions.create('margin-left', {

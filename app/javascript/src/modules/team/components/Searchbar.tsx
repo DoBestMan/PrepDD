@@ -4,6 +4,7 @@ import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 
 import Dropdown from '../../../components/Dropdown'
+import {CompanyDetails_company_teams} from '../../../graphql/queries/__generated__/CompanyDetails'
 
 const useSearchbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -35,6 +36,7 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      width: '100%', 
       height: 42, 
       fontFamily: 'Montserrat',
       fontSize: '12px',
@@ -46,22 +48,22 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
       transition: theme.transitions.create('width'),
       width: '100%',
       height: 42, 
-      [theme.breakpoints.up('md')]: {
-        width: 300,
-      },
     },
   })
 )
 
-const options = [
-  { label: 'Select team', value: 'Select team' },
-  { label: 'Finance', value: 'Finance'},
-  { label: 'Legal', value: 'Legal'}, 
-  { label: 'Equity', value: 'Equity'}
-] 
-
-export default function Searchbar() {
+export default function Searchbar(props: { data: CompanyDetails_company_teams[] }) {
+  const { data } = props
   const classes = useSearchbarStyles()
+
+  const options = data.map(item => {
+    const res = {
+      label: item.name, 
+      value: item.id
+    }
+
+    return res
+  })
 
   return (
     <div className={classes.root}>
@@ -78,7 +80,7 @@ export default function Searchbar() {
           inputProps={{"aria-label": "search"}}
         />
       </div>
-      <Dropdown options={options} placeholder="Select team" />
+      <Dropdown options={options} placeholder="Select all teams" />
     </div>
   )
 }
