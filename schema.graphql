@@ -91,6 +91,11 @@ type Query {
   team(id: ID!): Team!
 
   """
+  Find a user by id
+  """
+  user(id: ID!): User!
+
+  """
   Information for resetting a users password
   """
   userForPasswordReset(

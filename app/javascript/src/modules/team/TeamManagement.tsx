@@ -48,7 +48,7 @@ const G2Logo = require('images/dummy/logos/g2-logo.svg')
 const DomoLogo = require('images/dummy/logos/domo-logo.svg')
 const DripLogo = require('images/dummy/logos/drip-logo.svg')
 
-const panelWidth=594
+const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

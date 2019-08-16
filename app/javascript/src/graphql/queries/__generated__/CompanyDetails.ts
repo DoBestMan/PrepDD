@@ -18,11 +18,18 @@ export interface CompanyDetails_company_users_companies {
   name: string;
 }
 
+export interface CompanyDetails_company_users_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+}
+
 export interface CompanyDetails_company_users {
   __typename: "User";
   id: string;
   fullName: string;
   companies: CompanyDetails_company_users_companies[] | null;
+  teams: CompanyDetails_company_users_teams[] | null;
 }
 
 export interface CompanyDetails_company {

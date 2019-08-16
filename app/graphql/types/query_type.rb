@@ -7,6 +7,11 @@ module Types
           CurrentUserType,
           null: true, description: 'The currently logged in user'
 
+    field :user, UserType, null: true do
+      description 'Find a user by id' 
+      argument :id, ID, required: true
+    end
+
     field :user_for_password_reset,
           UserForPasswordResetType,
           null: true,
@@ -31,6 +36,10 @@ module Types
     def current_user
       user = context[:controller].current_user
       { id: 'current_user', user: user }
+    end
+
+    def user(id:)
+      User.find(id)
     end
 
     def user_for_password_reset(token:)
