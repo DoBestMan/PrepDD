@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     togglerOpen: {
       position: 'fixed', 
-      top: '41px', 
+      top: '30px', 
       left: drawerWidth - 12,
       background: 'white',
       borderRadius: '15px',
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     togglerClose: {
       position: 'fixed', 
-      top: '41px', 
+      top: '30px', 
       left: miniDrawerWidth - 12,
       background: 'white',
       borderRadius: '15px',
