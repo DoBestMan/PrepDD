@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'none',
     },
     profilePhoto: {
+      width: '120px',
+      height: '120px',
       position: 'relative',
     },
     photo: {
@@ -205,7 +207,18 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     [setState]
   );
 
-  const handleClickAway = () => setShow(false);
+  const handleOpenFile = () => {
+    const fileDialog = document.getElementById("fileUpload");
+    
+    if (fileDialog) {
+      fileDialog.click();
+    }
+  }
+
+  const handleChangePhoto = (event: React.ChangeEvent) => {
+    event.persist();
+    console.log(event);
+  }
 
   return (
     <Paper
@@ -223,12 +236,21 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           src={DefaultPhoto}
           alt="Alana"
         />
-        <div className={clsx(classes.uploadArea, !show && classes.invisible)}>
+        <div 
+          className={clsx(classes.uploadArea, !show && classes.invisible)}
+          onClick={handleOpenFile}
+        >
           <div className={classes.uploadLabel}>
             <CameraIcon fontSize="small" />
             <br />
             Update
           </div>
+          <input 
+            type="file" 
+            id="fileUpload" 
+            className={classes.invisible} 
+            onChange={handleChangePhoto}
+          />
         </div>
       </div>
 

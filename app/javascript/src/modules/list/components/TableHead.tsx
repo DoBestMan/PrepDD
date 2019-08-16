@@ -9,6 +9,8 @@ import {
   StyledCheckBox
 } from './styled'
 
+const Drag = require('images/dummy/logos/drag.svg');
+
 interface Data {
   company: string;
   name: string; 
@@ -61,7 +63,7 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
       <TableRow>
         <StyledTableCell padding="checkbox">
           <div className={classes.flex}>
-            <img src="../assets/img/logos/drag.svg" alt="Drag" className={classes.invisibleButton} />
+            <img src={Drag} alt="Drag" className={classes.invisibleButton} />
             <StyledCheckBox 
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
