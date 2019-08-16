@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(version: 2019_08_14_110824) do
     t.boolean "is_active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_teams_on_company_id"
   end
 
   create_table "teams_users", force: :cascade do |t|

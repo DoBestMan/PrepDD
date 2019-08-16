@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: panelWidth,
     },
     drawerSpacer: {
-      marginTop: 73,
+      marginTop: 64
     },
     round: {
       borderRadius: '50%',

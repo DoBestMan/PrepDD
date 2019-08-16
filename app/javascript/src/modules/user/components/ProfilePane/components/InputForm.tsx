@@ -15,11 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px'
     },
     input: {
-      height: '42px', 
+      height: '36px', 
       paddingLeft: '12px',
       color: '#2C2C2C',
       fontFamily: 'Montserrat', 
-      fontSize: '15px', 
+      fontSize: '12px', 
       fontWeight: 600, 
       border: '1px solid #D8D8D8', 
       borderRadius: '3px',

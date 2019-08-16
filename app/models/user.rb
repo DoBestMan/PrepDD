@@ -15,7 +15,6 @@ class User < ApplicationRecord
   has_many :companies, through: :users_companies
   has_many :owned_companies,
            class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
-  belongs_to :company, optional: true
 
   def email_or_uuid
     if !self.email.present? && !self.uuid.present?

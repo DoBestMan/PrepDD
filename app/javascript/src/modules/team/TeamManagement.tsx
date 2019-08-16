@@ -14,7 +14,6 @@ import TableHeader from './components/TableHeader'
 import DetailPane from './components/DetailPane'
 import StyledTableRow from './components/styled/StyledTableRow'
 import StyledTableCell from './components/styled/StyledTableCell'
-import StyledCheckBox from '../../components/StyledCheckBox'
 import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
 
@@ -108,33 +107,39 @@ export default function TeamManagement(props: {path?: string}) {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
-  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>) {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((row: Data, index: number) => index)
-      setSelected(newSelecteds)
-      return
+  function handleClick(event: React.MouseEvent<HTMLTableRowElement>, id: number) {
+    event.persist()
+
+    if (event.metaKey || event.ctrlKey) {
+      const selectedIndex = selected.indexOf(id);
+      let newSelected: number[] = [];
+  
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, id)
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1))
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1))
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1), 
+        )
+      }
+  
+      setSelected(newSelected)
+    } else {
+      const selectedIndex = selected.indexOf(id)
+      let newSelected: number[] = [];
+
+      if (selectedIndex === -1) {
+        newSelected.push(id)
+      } else if (selectedIndex >= 0 && selected.length > 1) {
+        newSelected.push(id)
+      }
+
+      setSelected(newSelected)
     }
-    setSelected([])
-  }
-
-  function handleClick(event: React.MouseEvent<unknown>, id: number) {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: number[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id)
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1))
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1))
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1), 
-      )
-    }
-
-    setSelected(newSelected)
   }
 
   function handleChangePage(event: unknown, newPage: number) {
@@ -142,6 +147,7 @@ export default function TeamManagement(props: {path?: string}) {
   }
 
   function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
+    console.log(event)
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
@@ -155,7 +161,9 @@ export default function TeamManagement(props: {path?: string}) {
   const renderTooltipTitle = (options: String[]) => {
     return (
       <React.Fragment>
-        { options.map(option => <p className={classes.label}>{option}</p>)}
+        { options.map((option: String, index: number) => 
+          <p key={index} className={classes.label}>{option}</p>
+        )}
       </React.Fragment>
     )
   }
@@ -163,15 +171,13 @@ export default function TeamManagement(props: {path?: string}) {
   return (
     <div className={classes.root}>
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-        <TableToolbar />
+        <TableToolbar 
+          selected={selected.length}
+        />
         <Searchbar />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="Team Management Table">
-            <TableHeader
-              numSelected={selected.length}
-              onSelectAllClick={handleSelectAllClick}
-              rowCount={rows.length}
-            />
+            <TableHeader />
             <TableBody>
               { rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row: Data, index: number) => {
@@ -180,16 +186,13 @@ export default function TeamManagement(props: {path?: string}) {
                   return (
                     <StyledTableRow
                       hover
-                      onClick={(event: React.MouseEvent<unknown>) => handleClick(event, index)}
+                      onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, index)}
                       role="team member"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={`member-${index}`}
                       selected={isItemSelected}
                     >
-                      <StyledTableCell style={{width: '20px'}}>
-                        <StyledCheckBox checked={isItemSelected}/>
-                      </StyledTableCell>
                       <StyledTableCell>
                         <div className={classes.flex} style={{alignItems: 'center'}}>
                           <img 

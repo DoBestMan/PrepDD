@@ -10,8 +10,8 @@ import NotificationPane from './components/NotificationPane'
 const useStyle = makeStyles({
   root: {
     display: 'block',
-    padding: `84px calc((100% - 1050px) / 2) 0px calc((100% - 1050px) / 2)`,
-    height: 'calc(100vh - 73px)'
+    padding: `84px calc((100% - 900px) / 2) 0px calc((100% - 900px) / 2)`,
+    height: 'calc(100vh - 64px)'
   },
   title: {
     color: '#2C2C2C',

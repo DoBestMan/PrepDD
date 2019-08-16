@@ -6,5 +6,9 @@ module Types
     field :fullName, String, null: false
     field :email, String, null: false
     field :displayName, String, null: false
+    field :ownedCompanies, [CompanyType], null: true
+    field :companies, [CompanyType], null: true
+    field :teams, [TeamType], null: true
+    field :roles, [RoleType], null: true
   end
 end

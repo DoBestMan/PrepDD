@@ -6,36 +6,39 @@
 // GraphQL query operation: CurrentUser
 // ====================================================
 
+export interface CurrentUser_currentUser_user_ownedCompanies {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
+export interface CurrentUser_currentUser_user_companies {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
+export interface CurrentUser_currentUser_user_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+}
+
 export interface CurrentUser_currentUser_user {
   __typename: "User";
   id: string;
   fullName: string;
   displayName: string;
   email: string;
-}
-
-export interface CurrentUser_currentUser_ownedCompanies {
-  __typename: "Company";
-  name: string;
-}
-
-export interface CurrentUser_currentUser_memberCompanies {
-  __typename: "Company";
-  name: string;
-}
-
-export interface CurrentUser_currentUser_teams {
-  __typename: "Team";
-  name: string;
+  ownedCompanies: CurrentUser_currentUser_user_ownedCompanies[] | null;
+  companies: CurrentUser_currentUser_user_companies[] | null;
+  teams: CurrentUser_currentUser_user_teams[] | null;
 }
 
 export interface CurrentUser_currentUser {
   __typename: "CurrentUser";
   id: string;
   user: CurrentUser_currentUser_user | null;
-  ownedCompanies: CurrentUser_currentUser_ownedCompanies[] | null;
-  memberCompanies: CurrentUser_currentUser_memberCompanies[] | null;
-  teams: CurrentUser_currentUser_teams[] | null;
 }
 
 export interface CurrentUser {
