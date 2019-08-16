@@ -1,25 +1,24 @@
-class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
-  argument :password, String, required: true
+class Mutations::UpdateUserData < GraphQL::Schema::Mutation
+  argument :fullName, String, required: true
+  argument :email, String, required: true
+  argument :displayName, String, required: true
 
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(password: nil)
+  def resolve(full_name: nil, email: nil, display_name: nil)
     response = { errors: [] }
-
-    if !context[:controller].user_signed_in?
-      response[:errors].push({ path: 'root', message: 'Not authorized to do it' })
-      response[:success] = false
-      return response
-    end
 
     user = context[:controller].current_user
 
-    user.update({
-      password: password,
-      password_confirmation: password
-    })
+    user.update(
+        {
+          full_name: full_name,
+          email: email,
+          display_name: display_name,
+        }
+      )
 
     user.errors.messages.each do |path, messages|
       messages.each do |message|
@@ -30,9 +29,10 @@ class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
       end
     end
 
+
     if user.persisted?
-      response[:user] = user
       response[:success] = true
+      response
     end
 
     response

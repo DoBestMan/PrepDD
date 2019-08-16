@@ -19,7 +19,9 @@ import CameraIcon from '@material-ui/icons/CameraAlt';
 import InputForm from './components/InputForm';
 import CheckBox from './components/CheckBox';
 
-import {getCurrentUser} from '../../../../graphql/queries/auth';
+import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
+import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
+import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
 
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
@@ -162,22 +164,30 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   });
   const [show, setShow] = React.useState<boolean>(false);
 
-  const {loading, data} = getCurrentUser({});
+  const { loading, data } = useCurrentUser({})
+
+  const [updateUserPassword, ...resUpdatePassword] = useUpdateUserPassword({ password: state.password })
+
+  const [updateUserData, ...resUpdateData] = useUpdateUserData({
+    fullName: state.fullName, 
+    displayName: state.displayName, 
+    email: state.email
+  })
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user);
 
     if (loading || !currentUser) return;
 
-    console.log(loading, currentUser);
+    console.log(data, currentUser);
 
     setState({
-      ...state,
-      fullName: currentUser.fullName,
-      displayName: currentUser.displayName,
-      email: currentUser.email,
-    });
-  }, [loading]);
+      ...state, 
+      fullName: currentUser.fullName, 
+      displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
+      email: currentUser.email
+    })
+  }, [loading])
 
   const handleChange = React.useCallback(
     event => {
@@ -207,17 +217,55 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     [setState]
   );
 
+  const handleChangePassword = () => {
+    if (state.password !== state.confirmPassword) {
+      alert("Password is not matched")
+      setState(state => ({
+        ...state, 
+        confirmPassword: ''
+      }))
+      return
+    }
+    if (!state.hasEightChar || !state.hasSpecialChar || !state.hasUppercase) {
+      alert("Password is invalid")
+      setState(state => ({
+        ...state, 
+        confirmPassword: ''
+      }))
+      return      
+    }
+
+    updateUserPassword()
+    setState(state => ({
+      ...state, 
+      password: '', 
+      confirmPassword: ''
+    }))
+  }
+
+  const handleChangeDetails = () => {
+    console.log("On Blur")
+    updateUserData()
+  }
+
   const handleOpenFile = () => {
-    const fileDialog = document.getElementById("fileUpload");
-    
-    if (fileDialog) {
-      fileDialog.click();
+    const fileInstance = document.getElementById("file-input")
+
+    if (fileInstance) {
+      fileInstance.click()
     }
   }
 
-  const handleChangePhoto = (event: React.ChangeEvent) => {
-    event.persist();
-    console.log(event);
+  const handleChangePhoto = (event: React.SyntheticEvent<HTMLInputElement>) => {
+    event.persist()
+    const {
+      currentTarget: { validity, files}
+    } = event
+
+    console.log(validity, files)
+    if (validity.valid && files) {
+      const file = files[0]
+    }
   }
 
   return (
@@ -246,10 +294,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             Update
           </div>
           <input 
-            type="file" 
-            id="fileUpload" 
+            id="file-input" 
             className={classes.invisible} 
-            onChange={handleChangePhoto}
+            type="file" 
+            onChange={e => handleChangePhoto(e)}
           />
         </div>
       </div>
@@ -264,6 +312,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                 name="fullName"
                 placeholder="Full Name"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={6}>
@@ -273,6 +322,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                 name="displayName"
                 placeholder="Display Name"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={12}>
@@ -282,6 +332,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                 name="email"
                 placeholder="example.123@gmail.com"
                 onChange={handleChange}
+                onBlur={handleChangeDetails}
               />
             </Grid>
             <Grid item md={12}>
@@ -356,7 +407,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           onChange={handleChange}
           style={{marginBottom: '36px'}}
         />
-        <Button className={classes.primaryButton} variant="contained" fullWidth>
+        <Button 
+          className={classes.primaryButton} variant="contained" 
+          onClick={handleChangePassword}
+          fullWidth
+        >
           Update password
         </Button>
       </Card>
