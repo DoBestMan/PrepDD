@@ -8,14 +8,11 @@ type AddTeamMemberPayload {
 }
 
 type Company {
-  brokerCoId: ID!
   id: ID!
   isActive: Boolean!
   name: String!
   owner: User!
-  ownerId: ID!
-  parentId: ID!
-  subscriptionId: ID!
+  parent: Company
   teams: [Team!]!
   users: [User!]!
 }
