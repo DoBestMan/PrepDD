@@ -96,26 +96,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
-  const [selected, setSelected] = React.useState<number[]>([])
+  const [selected, setSelected] = React.useState<string[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
-  const { loading, data, error } = useCompanyDetails({id: 4})
+  const { loading, data, error } = useCompanyDetails({id: 1})
 
-  useEffect(() => {
-    const company = idx(data, data => data.company);
-
-    if (loading || !company) return;
-
-    console.log(data, company)
-  }, [loading])
-
-  const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: number) => {
+  const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
 
     if (event.metaKey || event.ctrlKey) {
       const selectedIndex = selected.indexOf(id);
-      let newSelected: number[] = [];
+      let newSelected: string[] = [];
   
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, id)
@@ -133,7 +125,7 @@ export default function TeamManagement(props: {path?: string}) {
       setSelected(newSelected)
     } else {
       const selectedIndex = selected.indexOf(id)
-      let newSelected: number[] = [];
+      let newSelected: string[] = [];
 
       if (selectedIndex === -1) {
         newSelected.push(id)
@@ -155,7 +147,7 @@ export default function TeamManagement(props: {path?: string}) {
     setPage(0)
   }
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1
+  const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
 
@@ -189,16 +181,16 @@ export default function TeamManagement(props: {path?: string}) {
                 { data && data.company && data.company.users &&
                   data.company.users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: CompanyDetails_company_users, index: number) => {
-                    const isItemSelected = isSelected(index)
+                    const isItemSelected = isSelected(row.id)
                     
                     return (
                       <StyledTableRow
                         hover
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, index)}
+                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
                         role="team member"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={`member-${index}`}
+                        key={`member-${row.id}`}
                         selected={isItemSelected}
                       >
                         <StyledTableCell>
@@ -287,7 +279,9 @@ export default function TeamManagement(props: {path?: string}) {
           )}
         </Paper>
 
-        <DetailPane open={isOpen()} />
+        { selected.length > 0 && 
+          <DetailPane id={selected[0]}open={isOpen()} />
+        }
       </div>
     )
 }
