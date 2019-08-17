@@ -93,7 +93,7 @@ type Query {
   """
   Find a user by id
   """
-  user(id: ID!): User!
+  user(id: ID!): User
 
   """
   Information for resetting a users password
