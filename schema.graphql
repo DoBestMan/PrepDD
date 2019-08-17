@@ -18,6 +18,7 @@ type Company {
   previewOnly: Boolean
   subscription: Subscription
   teams: [Team!]!
+  totalUsers: Int!
   users: [User!]!
 }
 
