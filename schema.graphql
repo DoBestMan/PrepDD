@@ -154,6 +154,7 @@ type Subscription {
   id: ID!
   maxStorage: String
   maxUsers: String
+  name: String!
 }
 
 """
