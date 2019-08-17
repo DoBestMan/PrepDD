@@ -58,12 +58,13 @@ export default function Dropdown(props: DropdownProps) {
 
   const findSelected = (findValue: String) => options.find(option => option.value === findValue)
 
-  const [selectedItem, setSelectedItem] = React.useState<Option>(options[0])
+  const [selectedItem, setSelectedItem] = React.useState<Option | null>(null)
 
   const toggleMenu = () => setOpen(prev => !prev)
 
   const handleClickAway = () => setOpen(false)
 
+  console.log(options)
   return (
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>

@@ -20,7 +20,6 @@ import StyledTableRow from './styled/StyledTableRow';
 import StyledTableCell from './styled/StyledTableCell';
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
-import { useCurrentUser } from '../../../graphql/queries/CurrentUser';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
@@ -166,79 +165,79 @@ export default function DetailPane(props: DetailPaneProps) {
           (
             <>
               <div className={classes.drawerSpacer} />
-                <div className={classes.drawerHeader}>
-                  <img
-                    className={classes.round}
-                    src={DefaultPhoto}
-                    width="30"
-                    height="30"
-                    alt="Alana"
-                  />
-                  <Typography className={classes.title} variant="h2">
-                    {state.fullName || "Guy Number1"}
-                  </Typography>
-                  <CreateIcon className={classes.primaryColor} />
-                  <div className={classes.grow} />
-                  <DeleteIcon />
-                  <CloseIcon style={{marginLeft: '6px'}} />
-                </div>
-
-                <div className={classes.roleForm}>
-                  <div style={{width: 'fit-content'}}>
-                    <p className={classes.roleLabel}>Role</p>
-                    <Dropdown options={options} placeholder={state.roles[0].name} />
-                  </div>
-                </div>
-
-                <Table className={classes.table}>
-                  <TableHead>
-                    <StyledTableRow>
-                      <StyledTableCell>Company(s)</StyledTableCell>
-                      <StyledTableCell>Team(s)</StyledTableCell>
-                    </StyledTableRow>
-                  </TableHead>
-                  <TableBody>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <StyledItem logo={G2Logo} label="G2 Crowd" />
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className={classes.flex}>
-                          <StyledItem label="Finance" />
-                          <StyledItem label="Legal" />
-                          <StyledItem label="+1" />
-                        </div>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <div className={classes.flex} style={{alignItems: 'center'}}>
-                          <img
-                            src={DripLogo}
-                            width="18"
-                            height="18"
-                            alt="Drip"
-                          />
-                          <div style={{marginLeft: '6px'}}>Drip</div>
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>Finance, Legal</StyledTableCell>
-                    </StyledTableRow>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <div className={classes.flex} style={{alignItems: 'center'}}>
-                          <img src={PrepddLogo} width="18" height="18" alt="g2" />
-                          <div style={{marginLeft: '6px'}}>Advocately</div>
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>Finance</StyledTableCell>
-                    </StyledTableRow>
-                  </TableBody>
-                </Table>
-                <Typography className={classes.addLink} variant="h6">
-                  Add new company & team
+              <div className={classes.drawerHeader}>
+                <img
+                  className={classes.round}
+                  src={DefaultPhoto}
+                  width="30"
+                  height="30"
+                  alt="Alana"
+                />
+                <Typography className={classes.title} variant="h2">
+                  {state.fullName || "Guy Number1"}
                 </Typography>
-                <Button className={classes.resetButton}>Reset password</Button>
+                <CreateIcon className={classes.primaryColor} />
+                <div className={classes.grow} />
+                <DeleteIcon />
+                <CloseIcon style={{marginLeft: '6px'}} />
+              </div>
+
+              <div className={classes.roleForm}>
+                <div style={{width: 'fit-content'}}>
+                  <p className={classes.roleLabel}>Role</p>
+                  <Dropdown options={options} placeholder={state.roles[0].name} />
+                </div>
+              </div>
+
+              <Table className={classes.table}>
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell>Company(s)</StyledTableCell>
+                    <StyledTableCell>Team(s)</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  <StyledTableRow>
+                    <StyledTableCell>
+                      <StyledItem logo={G2Logo} label="G2 Crowd" />
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <div className={classes.flex}>
+                        <StyledItem label="Finance" />
+                        <StyledItem label="Legal" />
+                        <StyledItem label="+1" />
+                      </div>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell>
+                      <div className={classes.flex} style={{alignItems: 'center'}}>
+                        <img
+                          src={DripLogo}
+                          width="18"
+                          height="18"
+                          alt="Drip"
+                        />
+                        <div style={{marginLeft: '6px'}}>Drip</div>
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell>Finance, Legal</StyledTableCell>
+                  </StyledTableRow>
+                  <StyledTableRow>
+                    <StyledTableCell>
+                      <div className={classes.flex} style={{alignItems: 'center'}}>
+                        <img src={PrepddLogo} width="18" height="18" alt="g2" />
+                        <div style={{marginLeft: '6px'}}>Advocately</div>
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell>Finance</StyledTableCell>
+                  </StyledTableRow>
+                </TableBody>
+              </Table>
+              <Typography className={classes.addLink} variant="h6">
+                Add new company & team
+              </Typography>
+              <Button className={classes.resetButton}>Reset password</Button>
             </>
           )
         )        

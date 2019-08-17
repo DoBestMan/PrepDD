@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 
-import InputForm from './components/InputForm';
+import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
 
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'

@@ -52,18 +52,24 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
   })
 )
 
+const options = [
+  { label: 'Finance', value: 'Finance'},
+  { label: 'Legal', value: 'Legal'}, 
+  { label: 'Equity', value: 'Equity'}
+] 
+
 export default function Searchbar(props: { data: CompanyDetails_company_teams[] }) {
   const { data } = props
   const classes = useSearchbarStyles()
 
-  const options = data.map(item => {
-    const res = {
-      label: item.name, 
-      value: item.id
-    }
+  // const options = data.map(item => {
+  //   const res = {
+  //     label: item.name, 
+  //     value: item.id
+  //   }
 
-    return res
-  })
+  //   return res
+  // })
 
   return (
     <div className={classes.root}>
