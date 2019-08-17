@@ -7,7 +7,8 @@ module Types
     field :auto_watermark, Boolean, null: true
     field :preview_only, Boolean, null: true
     field :subscription, SubscriptionType, null: true
-    field :total_users, Integer, null: false
+    field :total_users, Integer, null: true
+    field :total_storage, Integer, null: true
 
     field :owner, UserType, null: false
     field :parent, CompanyType, null: true
@@ -17,6 +18,11 @@ module Types
 
     def total_users
       object.users.count + 1
+    end
+
+    def total_storage
+      #TODO not implemented yet so returning dummy 0
+      0
     end
   end
 end
