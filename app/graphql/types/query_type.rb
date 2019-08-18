@@ -50,7 +50,7 @@ module Types
     end
 
     def roles
-      Role.all
+      Role.all.where("id != ?", 1)
     end
   end
 end
