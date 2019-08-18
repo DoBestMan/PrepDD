@@ -2,8 +2,8 @@ class Mutations::UpdateCompany < GraphQL::Schema::Mutation
   argument :id, ID, required: true
   argument :name, String, required: true
   argument :autoPdf, Boolean, required: true
-  argument :autoWatermark, String, required: true
-  argument :previewOnly, String, required: true
+  argument :autoWatermark, Boolean, required: true
+  argument :previewOnly, Boolean, required: true
 
   field :company, Types::CompanyType, null: true
   field :errors, [Types::FormErrorType], null: false

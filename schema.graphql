@@ -10,6 +10,7 @@ type AddTeamMemberPayload {
 type Company {
   autoPdf: Boolean
   autoWatermark: Boolean
+  broker: Company
   id: ID!
   isActive: Boolean
   name: String!
@@ -72,7 +73,7 @@ type Mutation {
   signInUser(email: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
   signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
-  updateCompany(autoPdf: Boolean!, autoWatermark: String!, id: ID!, name: String!, previewOnly: String!): UpdateCompanyPayload
+  updateCompany(autoPdf: Boolean!, autoWatermark: Boolean!, id: ID!, name: String!, previewOnly: Boolean!): UpdateCompanyPayload
   updateUserData(displayName: String!, email: String!, fullName: String!): UpdateUserDataPayload
   updateUserNotificatiosn(input: UpdateUserNotificatiosnInput!): UpdateUserNotificatiosnPayload
   updateUserPassword(password: String!): UpdateUserPasswordPayload

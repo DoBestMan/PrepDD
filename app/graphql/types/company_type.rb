@@ -12,6 +12,7 @@ module Types
 
     field :owner, UserType, null: false
     field :parent, CompanyType, null: true
+    field :broker, CompanyType, null: true
 
     field :users, [UserType], null: false
     field :teams, [TeamType], null: false

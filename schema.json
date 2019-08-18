@@ -407,6 +407,20 @@
               "deprecationReason": null
             },
             {
+              "name": "broker",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Company",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "id",
               "description": null,
               "args": [
@@ -1347,7 +1361,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "String",
+                      "name": "Boolean",
                       "ofType": null
                     }
                   },
@@ -1361,7 +1375,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "String",
+                      "name": "Boolean",
                       "ofType": null
                     }
                   },
