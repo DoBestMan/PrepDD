@@ -2,7 +2,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
   argument :teamId, ID, required: true
   argument :email, String, required: true
   argument :fullName, String, required: true
-  argument :role, String, required: true
+  argument :role, ID, required: true
 
   field :team, Types::TeamType, null: true
   field :errors, [Types::FormErrorType], null: false
@@ -28,6 +28,8 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
 
     team_user = TeamsUser.create( user_id: user.id, team_id: team_id )
 
+    user_role = RolesUser.create(user_id: user.id, role_id: role)
+
 
     team_user.errors.messages.each do |path, messages|
       messages.each do |message|
@@ -45,9 +47,18 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
         )
         response[:success] = false
       end
+      end
+
+    role.errors.messages.each do |path, messages|
+      messages.each do |message|
+        response[:errors].push(
+          { path: path.to_s.camelcase(:lower), message: message }
+        )
+        response[:success] = false
+      end
     end
 
-    if team_user&.persisted?
+    if user&.persisted?
       response[:success] = true
       response
     end

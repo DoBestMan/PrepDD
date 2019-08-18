@@ -62,7 +62,7 @@ type FormError {
 }
 
 type Mutation {
-  addTeamMember(email: String!, fullName: String!, role: String!, teamId: ID!): AddTeamMemberPayload
+  addTeamMember(email: String!, fullName: String!, role: ID!, teamId: ID!): AddTeamMemberPayload
   createCompany(name: String!): CreateCompanyPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
