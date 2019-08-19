@@ -3,7 +3,7 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
   argument :fullName, String, required: true
   argument :companyId, ID, required: true
   argument :newRole, ID, required: true
-  argument :OldRole, ID, required: true
+  argument :oldRole, ID, required: true
 
   field :team, Types::TeamType, null: true
   field :errors, [Types::FormErrorType], null: false

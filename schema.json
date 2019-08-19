@@ -1560,7 +1560,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "OldRole",
+                  "name": "oldRole",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
