@@ -169,6 +169,7 @@ type Subscription {
 Team
 """
 type Team {
+  company: Company!
   id: ID!
   name: String!
   users: [User!]!
