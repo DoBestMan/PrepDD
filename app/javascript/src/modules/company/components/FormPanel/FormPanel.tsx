@@ -19,6 +19,7 @@ import StyledTableRow from './components/StyledTableRow'
 import StyledTableCell from './components/StyledTableCell'
 
 import {useCompanySettings} from '../../../../graphql/queries/CompanySettings'
+import {useUpdateCompany} from '../../../../graphql/mutations/UpdateCompany'
 import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings'
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -81,6 +82,16 @@ export default function FormPanel() {
   
   const {data, error, loading} = useCompanySettings({id: 1})
 
+  console.log("Company Settings: ", data)
+
+  const [updateCompany] = useUpdateCompany({
+    id: state.id, 
+    name: state.name, 
+    autoPdf: state.autoPdf as boolean, 
+    autoWatermark: state.autoWatermark as boolean, 
+    previewOnly: state.previewOnly as boolean
+  })
+
   useEffect(() => {
     const company = idx(data, data => data.company);
 
@@ -91,6 +102,32 @@ export default function FormPanel() {
     })
   }, [loading])
 
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      name: event.target.value
+    })
+  }
+
+  const handleUpdateName = () => {
+    updateCompany()
+  }
+
+  const handleAutoPDF = () => {
+    setState({...state, autoPdf: !state.autoPdf})
+    updateCompany()
+  }
+
+  const handleAutoWatermark = () => {
+    setState({...state, autoWatermark: !state.autoWatermark})
+    updateCompany()
+  }
+
+  const handlePreviewOnly = () => {
+    setState({...state, previewOnly: !state.previewOnly})
+    updateCompany()
+  }
+
   return (
     <Card elevation={0}>
       <Typography className={classes.title} variant="h2">
@@ -98,7 +135,12 @@ export default function FormPanel() {
       </Typography>
       <Grid container spacing={2}>
         <Grid item md={12}>
-          <InputForm label="Company name" value={state.name} />
+          <InputForm 
+            label="Company name" 
+            value={state.name} 
+            onChange={handleChangeName}
+            onUpdate={handleUpdateName}
+          />
         </Grid>
         <Grid item md={6}>
           <CompanyForm 
@@ -161,7 +203,10 @@ export default function FormPanel() {
                     <div className={classes.flex}>
                       <p>Automatic PDF</p>
                       <div className={classes.grow} />
-                      <SwitchForm value={state.autoPdf} />
+                      <SwitchForm 
+                        value={state.autoPdf} 
+                        onChange={handleAutoPDF}
+                      />
                     </div>
                   </StyledTableCell>
                 </TableRow>
@@ -170,7 +215,10 @@ export default function FormPanel() {
                     <div className={classes.flex}>
                       <p>Dynamic watermarking</p> 
                       <div className={classes.grow} />
-                      <SwitchForm value={state.autoWatermark} />
+                      <SwitchForm 
+                        value={state.autoWatermark} 
+                        onChange={handleAutoWatermark}
+                      />
                     </div>
                   </StyledTableCell>
                 </TableRow>
@@ -179,7 +227,10 @@ export default function FormPanel() {
                     <div className={classes.flex}>
                       <p>Preview only</p>
                       <div className={classes.grow} />
-                      <SwitchForm value={state.previewOnly} />
+                      <SwitchForm 
+                        value={state.previewOnly}
+                        onChange={handlePreviewOnly}
+                      />
                     </div>
                   </StyledTableCell>
                 </TableRow>

@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface SwitchFormProps {
   value: boolean | null;
-  onChange?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onChange?: () => void;
 }
 
 export default function SwitchForm(props: SwitchFormProps) {
