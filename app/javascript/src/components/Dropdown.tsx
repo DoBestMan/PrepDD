@@ -65,7 +65,6 @@ export default function Dropdown(props: DropdownProps) {
 
   const handleClickAway = () => setOpen(false)
 
-  console.log(options)
   return (
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>

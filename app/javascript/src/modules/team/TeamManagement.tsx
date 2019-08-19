@@ -102,6 +102,8 @@ export default function TeamManagement(props: {path?: string}) {
 
   const { loading, data, error } = useCompanyDetails({id: 1})
 
+  console.log("Company Data: ", data)
+
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
 
