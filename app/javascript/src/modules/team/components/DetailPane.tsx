@@ -137,7 +137,7 @@ export default function DetailPane(props: DetailPaneProps) {
   const [roles, setRoles] = useState<AllRoles_roles[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
-  console.log(data)
+  console.log("Current User", data)
   const rolesData = useAllRoles({})
   // const [updateTeamMember] = useUpdateTeamMember({
   //   id: state.id, 

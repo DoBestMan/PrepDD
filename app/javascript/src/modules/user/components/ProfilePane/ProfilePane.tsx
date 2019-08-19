@@ -23,20 +23,7 @@ import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
 
-const G2Logo = require('images/dummy/logos/g2-logo.svg');
-const PrepddLogo = require('images/logos/prepdd-logo.svg');
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
-
-const rows = [
-  {
-    company: 'G2 Crowd',
-    team: ['Finance', 'Legal', 'Equity'],
-  },
-  {
-    company: 'PrepDD',
-    team: ['M&A', 'Debt'],
-  },
-];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -346,19 +333,16 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                   </TableRow>
                 </TableHead>
                 <TableBody >
-                { rows.map(row => (
-                  <TableRow key={row.company}>
+                { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
+                  data.currentUser.user.companies.map(company => (
+                  <TableRow key={company.name}>
                     <TableCell className={classes.tableCell}>
                       <div className={classes.flex}>
-                        { row.company === 'G2 Crowd' ?
-                          <img src={G2Logo} width="18" height="18" alt="G2" /> :
-                          <img src={PrepddLogo} width="18" height="18" alt="PREPDD" />
-                        }
-                        <div style={{marginLeft: '7px'}}>{row.company}</div>                        
+                        <div>{company.name}</div>                        
                       </div>
                     </TableCell>
                     <TableCell className={classes.tableCell}>
-                      {row.team.join(', ')}
+                      {company.teams.join(', ')}
                     </TableCell>
                   </TableRow>
                 ))}
