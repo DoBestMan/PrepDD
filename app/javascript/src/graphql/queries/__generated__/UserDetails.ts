@@ -12,10 +12,17 @@ export interface UserDetails_user_roles {
   name: string;
 }
 
+export interface UserDetails_user_companies_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+}
+
 export interface UserDetails_user_companies {
   __typename: "Company";
   id: string;
   name: string;
+  teams: UserDetails_user_companies_teams[];
 }
 
 export interface UserDetails_user {

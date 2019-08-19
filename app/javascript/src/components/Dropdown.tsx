@@ -14,9 +14,14 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       position: 'relative',
       border: '1px solid #CACACA',
-      borderRadius: '3px'
+      borderRadius: '3px',
+      width: '120px'
+    },
+    grow: {
+      flexGrow: 1, 
     },
     paper: {
+      width: '100%', 
       position: 'absolute',
       top: 42, 
       left: 0,
@@ -78,8 +83,9 @@ export default function Dropdown(props: DropdownProps) {
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <div className={classes.item} onClick={toggleMenu} style={{width: 'max-content'}}>
+          <div className={classes.item} onClick={toggleMenu}>
             { selectedItem ? selectedItem.name : placeholder }
+            <div className={classes.grow} />
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>
           <Paper className={clsx(classes.paper, !open && classes.invisible)}>

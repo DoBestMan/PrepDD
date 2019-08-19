@@ -22,6 +22,7 @@ import InputForm from './InputForm'
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import {AllRoles_roles} from '../../../graphql/queries/__generated__/AllRoles'
+import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
@@ -112,19 +113,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const options = [
-  {label: 'Member', value: 'Member'},
-  {label: 'Admin', value: 'Admin'},
-];
-
 interface DetailPaneProps {
   id: string;
   open: boolean;
 }
 
-interface StateProps {
-  id: string;
-  fullName: string;
+interface StateProps extends UserDetails_user {
   role: string;
 }
 
@@ -132,9 +126,12 @@ export default function DetailPane(props: DetailPaneProps) {
   const {id, open} = props;
   const classes = useStyles();
   const [state, setState] = useState<StateProps>({
+    __typename: "User",
     id: '',
     fullName: '',
-    role: ''
+    role: 'Member', 
+    roles: null,
+    companies: null,
   });
   const [roles, setRoles] = useState<AllRoles_roles[]>([]);
   
@@ -155,10 +152,10 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (loading || !currentUser) return;
 
+    console.log("Current Selected User", currentUser)
     setState({
-      id: currentUser.id, 
-      fullName: currentUser.fullName, 
-      role: 'Member'
+      ...state, 
+      ...currentUser
     })
   }, [loading])
 
