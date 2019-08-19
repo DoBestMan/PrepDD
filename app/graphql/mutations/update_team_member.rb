@@ -14,24 +14,27 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
 
     user = User.find_by_email(email)
 
-    if !user.present?
+    if user && full_name
       user.update(
         full_name: full_name
       )
     end
 
-    RolesUser.find(old_role).destroy!
+    if new_role && old_role
+      RolesUser.find(old_role).destroy!
 
-    user_new_role = RolesUser.create(user_id: user.id, role_id: role)
+      user_new_role = RolesUser.create(user_id: user.id, role_id: role)
 
 
-    user_new_role.errors.messages.each do |path, messages|
-      messages.each do |message|
-        response[:errors].push(
-          { path: path.to_s.camelcase(:lower), message: message }
-        )
-        response[:success] = false
+      user_new_role.errors.messages.each do |path, messages|
+        messages.each do |message|
+          response[:errors].push(
+            { path: path.to_s.camelcase(:lower), message: message }
+          )
+          response[:success] = false
+        end
       end
+
     end
 
     user.errors.messages.each do |path, messages|
