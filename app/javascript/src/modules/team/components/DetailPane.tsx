@@ -23,6 +23,7 @@ import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import {AllRoles_roles} from '../../../graphql/queries/__generated__/AllRoles'
 import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
+import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
@@ -136,8 +137,14 @@ export default function DetailPane(props: DetailPaneProps) {
   const [roles, setRoles] = useState<AllRoles_roles[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
-
+  console.log(data)
   const rolesData = useAllRoles({})
+  // const [updateTeamMember] = useUpdateTeamMember({
+  //   id: state.id, 
+  //   fullName: state.fullName, 
+  //   companyId: 1, 
+  //   oldRole: 
+  // })
 
   useEffect(() => {
     const rolesList = idx(rolesData, rolesData => rolesData.data.roles);

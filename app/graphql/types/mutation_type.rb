@@ -1,5 +1,7 @@
 module Types
   class MutationType < GraphQL::Schema::Object
+    field :updateTeamMember, mutation: Mutations::UpdateTeamMember
+    field :removeTeamMember, mutation: Mutations::RemoveTeamMember
     field :updateCompany, mutation: Mutations::UpdateCompany
     field :addTeamMember, mutation: Mutations::AddTeamMember
     field :createTeam, mutation: Mutations::CreateTeam
