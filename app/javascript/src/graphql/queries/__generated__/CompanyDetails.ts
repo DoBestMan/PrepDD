@@ -36,8 +36,8 @@ export interface CompanyDetails_company {
   __typename: "Company";
   id: string;
   name: string;
-  teams: CompanyDetails_company_teams[] | null;
-  users: CompanyDetails_company_users[] | null;
+  teams: CompanyDetails_company_teams[];
+  users: CompanyDetails_company_users[];
 }
 
 export interface CompanyDetails {

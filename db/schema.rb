@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_14_110824) do
+ActiveRecord::Schema.define(version: 2019_08_17_122452) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 2019_08_14_110824) do
     t.string "s3_location"
     t.string "kms_key_id"
     t.string "kms_key"
+    t.boolean "auto_pdf", default: false
+    t.boolean "auto_watermark", default: false
+    t.boolean "preview_only", default: false
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
@@ -65,6 +68,7 @@ ActiveRecord::Schema.define(version: 2019_08_14_110824) do
     t.boolean "modify_subscription"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "teams", force: :cascade do |t|

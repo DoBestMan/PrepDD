@@ -18,7 +18,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '-webkit-fill-available', 
       position: 'absolute',
       top: 42, 
-      left: 0
+      left: 0,
+      zIndex: 1
     },
     invisible: {
       display: 'none'

@@ -21,7 +21,6 @@ import ArrowTooltip from './components/ArrowTooltip'
 
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
-import AddMemberPane from './components/AddMemberPane';
 
 interface Company {
   url: string;
@@ -150,8 +149,7 @@ export default function TeamManagement(props: {path?: string}) {
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
-  // const isOpen = () => selected.length > 0
-  const isOpen = () => true
+  const isOpen = () => selected.length > 0
 
   // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
 
@@ -284,7 +282,6 @@ export default function TeamManagement(props: {path?: string}) {
         { selected.length > 0 && 
           <DetailPane id={selected[0]} open={isOpen()} />
         }
-        <AddMemberPane open={isOpen()} />
       </div>
     )
 }

@@ -102,6 +102,10 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: '12px',
       textTransform: 'capitalize',
+      '&:hover': {
+        opacity: 0.7,
+        background: '#3A84FF'
+      }
     },
   })
 );

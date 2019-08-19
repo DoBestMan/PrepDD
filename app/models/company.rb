@@ -1,6 +1,8 @@
 class Company < ApplicationRecord
 
   belongs_to :parent, class_name: 'Company', optional: true
+
+  belongs_to :broker, class_name: 'Company', optional: true, foreign_key:  'broker_co_id'
   has_many :children, class_name: 'Company', foreign_key: 'parent_id'
 
   belongs_to :owner, class_name: 'User', optional: true
