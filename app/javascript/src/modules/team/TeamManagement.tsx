@@ -102,8 +102,6 @@ export default function TeamManagement(props: {path?: string}) {
 
   const { loading, data, error } = useCompanyDetails({id: 1})
 
-  console.log("Company Data: ", data)
-
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
 
@@ -230,19 +228,19 @@ export default function TeamManagement(props: {path?: string}) {
                             }
                           </div>
                         </StyledTableCell>
-                        {/* <StyledTableCell>
+                        <StyledTableCell>
                           <div className={classes.flex}>
-                            { row.teams.slice(0, 2).map(team => 
+                            { row.teams && row.teams.slice(0, 2).map(team => 
                                 <StyledItem 
-                                  key={`${row.name}-${team}`}
-                                  label={team} 
+                                  key={`${row.fullName}-${team}`}
+                                  label={team.name} 
                                   selected={isItemSelected}
                                 />
                               )                      
                             }
-                            { row.teams.length > 2 &&
+                            { row.teams && row.teams.length > 2 &&
                               <ArrowTooltip 
-                                title={renderTooltipTitle(row.teams.slice(2))} 
+                                title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
                                 placement="top"
                               >
                                 <StyledItem
@@ -252,8 +250,10 @@ export default function TeamManagement(props: {path?: string}) {
                               </ArrowTooltip>
                             }
                           </div>
-                        </StyledTableCell> */}
-                        {/* <StyledTableCell>{row.role}</StyledTableCell> */}
+                        </StyledTableCell>
+                        { row.roles && row.roles[0].title && 
+                          <StyledTableCell>{row.roles[0].title}</StyledTableCell>
+                        }
                       </StyledTableRow>
                     )
                   })

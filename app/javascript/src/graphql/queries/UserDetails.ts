@@ -10,7 +10,7 @@ export const useUserDetails = createQueryHook<UserDetails, {}>(gql`
       fullName
       roles {
         id
-        name
+        title
       }
       companies {
         id
