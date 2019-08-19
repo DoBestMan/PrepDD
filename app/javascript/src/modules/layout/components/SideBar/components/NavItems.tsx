@@ -103,7 +103,7 @@ const adminPages = [
   },
   {
     title: 'Company Settings', 
-    href: '/app/settings', 
+    href: '/app/company', 
     icon: <Settings />
   },
   {
