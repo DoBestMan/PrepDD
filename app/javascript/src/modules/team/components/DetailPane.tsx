@@ -9,7 +9,6 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -21,6 +20,8 @@ import StyledTableCell from './styled/StyledTableCell';
 import InputForm from './InputForm'
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
+import {useAllRoles} from '../../../graphql/queries/AllRoles'
+import {AllRoles_roles} from '../../../graphql/queries/__generated__/AllRoles'
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
@@ -134,16 +135,25 @@ export default function DetailPane(props: DetailPaneProps) {
     id: '',
     fullName: '',
     role: ''
-  })
+  });
+  const [roles, setRoles] = useState<AllRoles_roles[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
+
+  const rolesData = useAllRoles({})
+
+  useEffect(() => {
+    const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
+
+    if (loading || !rolesList) return;
+    setRoles([...rolesList]);
+    console.log("Roles", roles)
+  }, [rolesData.loading])
 
   useEffect(() => {
     const currentUser = idx(data, data => data.user);
 
     if (loading || !currentUser) return;
-
-    console.log("User Details", data, currentUser);
 
     setState({
       id: currentUser.id, 
@@ -160,7 +170,15 @@ export default function DetailPane(props: DetailPaneProps) {
   }
 
   const handleUpdateName = () => {
-    // updateCompany()
+    // update
+  }
+
+  const handleSelectRole = (role: AllRoles_roles) => {
+    setState({
+      ...state,
+      role: role.name
+    })
+    // update
   }
 
   return loading ?
@@ -197,7 +215,12 @@ export default function DetailPane(props: DetailPaneProps) {
         <div className={classes.roleForm}>
           <div style={{width: 'fit-content'}}>
             <p className={classes.roleLabel}>Role</p>
-            <Dropdown options={options} placeholder={state.role} />
+            <Dropdown 
+              options={roles} 
+              selected={state.role} 
+              placeholder={state.role} 
+              onChange={(role: AllRoles_roles) => handleSelectRole(role)}
+            />
           </div>
         </div>
 

@@ -62,15 +62,6 @@ export default function Searchbar(props: { data: CompanyDetails_company_teams[] 
   const { data } = props
   const classes = useSearchbarStyles()
 
-  // const options = data.map(item => {
-  //   const res = {
-  //     label: item.name, 
-  //     value: item.id
-  //   }
-
-  //   return res
-  // })
-
   return (
     <div className={classes.root}>
       <div className={classes.search}>
@@ -86,7 +77,7 @@ export default function Searchbar(props: { data: CompanyDetails_company_teams[] 
           inputProps={{"aria-label": "search"}}
         />
       </div>
-      <Dropdown options={options} placeholder="Select all teams" />
+      {/* <Dropdown options={options} placeholder="Select all teams" /> */}
     </div>
   )
 }
