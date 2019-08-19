@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       border: '1px solid #CACACA',
       borderRadius: '3px',
-      width: '120px'
+      width: '150px'
     },
     grow: {
       flexGrow: 1, 
@@ -47,15 +47,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface Option {
+  id: string;
+  name: string;
+}
+
 interface DropdownProps {
-  options: AllRoles_roles[];
+  options: Option[];
   selected: string;
   placeholder?: string;
-  onChange?: (role: AllRoles_roles) => void;
+  handleUpdate?: (role: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const { options, selected, placeholder, onChange } = props
+  const { options, selected, placeholder, handleUpdate } = props
   const classes = useStyles()
   const [open, setOpen] = React.useState<boolean>(false)
 
@@ -67,9 +72,9 @@ export default function Dropdown(props: DropdownProps) {
 
   const toggleMenu = () => setOpen(prev => !prev)
 
-  const handleClick = (role: AllRoles_roles) => {
+  const handleClick = (role: string) => {
     setOpen(prev => !prev)
-    if (onChange) onChange(role)
+    if (handleUpdate) handleUpdate(role)
   }
 
   const handleClickAway = () => setOpen(false)
@@ -88,7 +93,7 @@ export default function Dropdown(props: DropdownProps) {
                 <div 
                   key={option.id} 
                   className={classes.item} 
-                  onClick={() => handleClick(option)}
+                  onClick={() => handleClick(option.id)}
                 >
                   {option.name}
                 </div>

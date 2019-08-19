@@ -96,6 +96,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [selected, setSelected] = React.useState<string[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [team, setTeam] = React.useState("")
 
   const { loading, data, error } = useCompanyDetails({id: 1})
   // const removeTeamMember = useRemoveTeamMember({
@@ -152,6 +153,10 @@ export default function TeamManagement(props: {path?: string}) {
     // removeTeamMember()
   }
 
+  const handleChangeTeam = (newTeam: string) => {
+    setTeam(newTeam)
+  }
+
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
@@ -178,7 +183,7 @@ export default function TeamManagement(props: {path?: string}) {
             handleDelete={handleDelete}
           />
           { data && data.company && data.company.teams && 
-            <Searchbar data={data.company.teams}/>
+            <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
           }
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="Team Management Table">

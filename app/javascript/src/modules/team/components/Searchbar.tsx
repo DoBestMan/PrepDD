@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
@@ -52,15 +52,34 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const options = [
-  { label: 'Finance', value: 'Finance'},
-  { label: 'Legal', value: 'Legal'}, 
-  { label: 'Equity', value: 'Equity'}
-] 
+interface Option {
+  id: string;
+  name: string;
+}
 
-export default function Searchbar(props: { data: CompanyDetails_company_teams[] }) {
-  const { data } = props
+interface SearchbarProps {
+  data: CompanyDetails_company_teams[];
+  value: string;
+  handleUpdate: (newTeam: string) => void;
+}
+
+export default function Searchbar(props: SearchbarProps) {
+  const { data, value, handleUpdate } = props
   const classes = useSearchbarStyles()
+
+  const convertType = () => {
+    const res = data.map(team => {
+      const obj = { id: team.id, name: team.name };
+      return obj;
+    });
+    res.unshift({
+      id: "", 
+      name: "Select team"
+    })
+    return res;
+  }
+
+  const [teams, setTeams] = useState<Option[]>(convertType())
 
   return (
     <div className={classes.root}>
@@ -77,7 +96,12 @@ export default function Searchbar(props: { data: CompanyDetails_company_teams[] 
           inputProps={{"aria-label": "search"}}
         />
       </div>
-      {/* <Dropdown options={options} placeholder="Select all teams" /> */}
+      <Dropdown 
+        options={teams} 
+        selected={value}
+        placeholder="Select role" 
+        handleUpdate={handleUpdate}
+      />
     </div>
   )
 }

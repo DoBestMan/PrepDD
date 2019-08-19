@@ -21,15 +21,11 @@ import InputForm from './InputForm'
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
-import {AllRoles_roles} from '../../../graphql/queries/__generated__/AllRoles'
 import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
 import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
-const G2Logo = require('images/dummy/logos/g2-logo.svg');
-const PrepddLogo = require('images/logos/prepdd-logo.svg');
-const DripLogo = require('images/dummy/logos/drip-logo.svg');
 
 const panelWidth = 500;
 
@@ -124,6 +120,11 @@ interface StateProps extends UserDetails_user {
   role: string;
 }
 
+interface Role {
+  id: string;
+  name: string;
+}
+
 export default function DetailPane(props: DetailPaneProps) {
   const {id, open} = props;
   const classes = useStyles();
@@ -135,7 +136,7 @@ export default function DetailPane(props: DetailPaneProps) {
     roles: null,
     companies: null,
   });
-  const [roles, setRoles] = useState<AllRoles_roles[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
   console.log("Data: ", data)
@@ -155,7 +156,14 @@ export default function DetailPane(props: DetailPaneProps) {
     const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
 
     if (loading || !rolesList) return;
-    setRoles([...rolesList]);
+    const temp = rolesList.map(role => {
+      const res = {
+        id: role.id, 
+        name: role.name
+      }
+      return res
+    })
+    setRoles(temp)
   }, [rolesData.data])
 
   useEffect(() => {
@@ -188,20 +196,20 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const handleUpdateName = () => {
-    // updateTeamMember()
-  }
-
-  const handleSelectRole = (role: AllRoles_roles) => {
+  const handleChangeRole = (newRole: string) => {
     setState({
       ...state,
-      role: role.id
+      role: newRole
     })
     // updateTeamMember()
   }
 
   const handleDelete = () => {
     // removeTeamMember()
+  }
+
+  const handleUpdateName = () => {
+    // updateTeamMember()
   }
 
   return loading ?
@@ -240,9 +248,9 @@ export default function DetailPane(props: DetailPaneProps) {
             <p className={classes.roleLabel}>Role</p>
             <Dropdown 
               options={roles} 
-              selected={state.role} 
+              selected={state.role}
               placeholder="Select role" 
-              onChange={(role: AllRoles_roles) => handleSelectRole(role)}
+              handleUpdate={handleChangeRole}
             />
           </div>
         </div>
