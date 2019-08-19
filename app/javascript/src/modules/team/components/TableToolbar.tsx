@@ -6,7 +6,11 @@ import {
   Toolbar,
   Typography,
   Button,
-  TextField
+  TextField,
+  FormControl, 
+  InputLabel, 
+  Select, 
+  MenuItem
  } from '@material-ui/core'
  import ClickAwayListener from '@material-ui/core/ClickAwayListener'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
@@ -157,11 +161,25 @@ const TableToolbar = (props: TableToolbarProps) => {
     }
   }, [data]);
 
-  const handleToggle = () => setOpen(!open)
+  const handleToggle = () => {
+    console.log("Toggle")
+    setOpen(!open)
+  }
 
-  const handleClickAway = () => setOpen(false)
+  const handleClickAway = () => {
+    console.log("Click Away")
+    setOpen(false)
+  }
+
+  const handleChangeRole = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
+    setState(prev => ({
+      ...prev,
+      role: event.target.value as string,
+    }));
+  }
 
   const handleSubmit = useCallback(event => {
+    setOpen(false)
     event.preventDefault()
     addTeamMember()
   }, [addTeamMember])
@@ -171,7 +189,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
       <div className={classes.dropDown}>
-        <ClickAwayListener onClickAway={handleClickAway}>
+        {/* <ClickAwayListener onClickAway={handleClickAway}> */}
           <div>
             <Button 
               className={classes.primaryButton}
@@ -201,14 +219,21 @@ const TableToolbar = (props: TableToolbarProps) => {
                 autoFocus
                 required
               />
-              <TextField 
-                id="role"
-                name="role"
-                label="Role"
-                className={classes.input}
-                value={state.role}
-                onChange={handleChange}
-              />
+              <FormControl className={classes.input}>
+                <InputLabel htmlFor="role">Role</InputLabel>
+                <Select
+                  value={state.role}
+                  onChange={handleChangeRole}
+                  inputProps={{
+                    name: 'role', 
+                    id: 'role'
+                  }}
+                >
+                  <MenuItem value="1">User</MenuItem>
+                  <MenuItem value="2">Admin</MenuItem>
+                  <MenuItem value="3">Owner</MenuItem>
+                </Select>
+              </FormControl>
               <TextField 
                 id="team"
                 name="team"
@@ -220,7 +245,7 @@ const TableToolbar = (props: TableToolbarProps) => {
               <Button type="submit" className={classes.submitButton}>Create new team member</Button>
             </form>
           </div>
-        </ClickAwayListener>
+        {/* </ClickAwayListener> */}
       </div>
       <div className={classes.grow} />
       { (selected > 0) && 
