@@ -144,15 +144,13 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (loading || !rolesList) return;
     setRoles([...rolesList]);
-    console.log("Roles", roles)
-  }, [rolesData.loading])
+  }, [rolesData.data])
 
   useEffect(() => {
     const currentUser = idx(data, data => data.user);
 
     if (loading || !currentUser) return;
 
-    console.log("Current Selected User", currentUser)
     setState({
       ...state, 
       ...currentUser
