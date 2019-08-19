@@ -14,6 +14,7 @@ import {
  } from '@material-ui/core'
  import ClickAwayListener from '@material-ui/core/ClickAwayListener'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
+//  import AutoSuggest from './AutoSuggest'
 import { useAddTeamMember } from '../../../graphql/mutations/AddTeamMember';
 import { navigate } from '@reach/router';
 
@@ -145,7 +146,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     fullName: state.fullName, 
     email: state.email, 
     role: '1', 
-    team: '1',
+    team: '',
     companyId: '1'
   })
 
@@ -166,8 +167,9 @@ const TableToolbar = (props: TableToolbarProps) => {
     setOpen(!open)
   }
 
-  const handleClickAway = () => {
-    console.log("Click Away")
+  const handleClickAway = (event: React.MouseEvent<unknown>) => {
+    console.log(event)
+    // if (event.target.tagName !== "LI")
     setOpen(false)
   }
 
@@ -178,13 +180,19 @@ const TableToolbar = (props: TableToolbarProps) => {
     }));
   }
 
+  const handleChangeTeam = (newValue: string) => {
+    setState(prev => ({
+      ...prev, 
+      team: newValue
+    }))
+  }
+
   const handleSubmit = useCallback(event => {
     setOpen(false)
     event.preventDefault()
     addTeamMember()
   }, [addTeamMember])
 
-  console.log(selected)
   return (
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
@@ -241,7 +249,13 @@ const TableToolbar = (props: TableToolbarProps) => {
                 className={classes.input}
                 value={state.team}
                 onChange={handleChange}
+                autoFocus
+                required
               />
+              {/* <AutoSuggest
+                value={state.team}
+                handleChange={handleChangeTeam}
+              /> */}
               <Button type="submit" className={classes.submitButton}>Create new team member</Button>
             </form>
           </div>
