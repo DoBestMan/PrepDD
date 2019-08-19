@@ -274,9 +274,9 @@ export default function DetailPane(props: DetailPaneProps) {
                     <div className={classes.flex}>
                       { company.teams && company.teams.map(team => {
                         return (
-                          <StyledItem label={team.name} />
+                          <StyledItem key={team.id} label={team.name} />
                         )
-                      })}                      
+                      })}
                     </div>
                   </StyledTableCell>
                 </StyledTableRow>

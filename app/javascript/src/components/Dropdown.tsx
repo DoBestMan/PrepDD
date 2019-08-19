@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'relative',
       border: '1px solid #CACACA',
       borderRadius: '3px',
-      width: '150px'
+      minWidth: '150px'
     },
     grow: {
       flexGrow: 1, 

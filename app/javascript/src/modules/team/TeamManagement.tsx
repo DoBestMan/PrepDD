@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import clsx from 'clsx'
+import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -19,8 +20,10 @@ import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
 
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
+import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveTeamMember} from '../../graphql/mutations/RemoveTeamMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
+import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
 
 interface Company {
   url: string;
@@ -97,12 +100,20 @@ export default function TeamManagement(props: {path?: string}) {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [team, setTeam] = React.useState("")
+  const [state, setState] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
   const { loading, data, error } = useCompanyDetails({id: 1})
   // const removeTeamMember = useRemoveTeamMember({
   //   companyId: "1", 
   //   userIds: selected
   // })
+
+  useEffect(() => {
+    const usersList = idx(data, data => data.company.users);
+
+    if (loading || !usersList) return;
+    setState(usersList)
+  }, [loading])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -155,6 +166,7 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam)
+    // useTeamDetails({id: newTeam})
   }
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1
@@ -189,8 +201,7 @@ export default function TeamManagement(props: {path?: string}) {
             <Table className={classes.table} aria-labelledby="Team Management Table">
               <TableHeader />
               <TableBody>
-                { data && data.company && data.company.users &&
-                  data.company.users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                { state && state.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: CompanyDetails_company_users, index: number) => {
                     const isItemSelected = isSelected(row.id)
                     
@@ -273,11 +284,11 @@ export default function TeamManagement(props: {path?: string}) {
             </Table>
           </div>
 
-          { data && data.company && data.company.users && (
+          { state && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={data.company.users.length}
+              count={state.length}
               rowsPerPage={rowsPerPage}
               page={page}
               backIconButtonProps={{
