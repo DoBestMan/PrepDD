@@ -66,7 +66,7 @@ type FormError {
 }
 
 type Mutation {
-  addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, teamId: ID!): AddTeamMemberPayload
+  addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createCompany(name: String!): CreateCompanyPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   removeCompanyMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveCompanyMemberPayload
@@ -137,7 +137,7 @@ All Available Roles
 """
 type Role {
   id: ID!
-  title: String!
+  name: String!
 }
 
 """

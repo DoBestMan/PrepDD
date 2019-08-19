@@ -904,7 +904,7 @@
               "deprecationReason": null
             },
             {
-              "name": "title",
+              "name": "name",
               "description": null,
               "args": [
 
@@ -984,14 +984,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "teamId",
+                  "name": "team",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "ID",
+                      "name": "String",
                       "ofType": null
                     }
                   },
