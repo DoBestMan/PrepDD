@@ -141,7 +141,8 @@ const TableToolbar = (props: TableToolbarProps) => {
     fullName: state.fullName, 
     email: state.email, 
     role: '1', 
-    team: '1'
+    team: '1',
+    companyId: '1'
   })
 
   const handleChange = useCallback(event => {

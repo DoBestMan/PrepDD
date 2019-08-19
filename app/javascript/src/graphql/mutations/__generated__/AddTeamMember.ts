@@ -33,4 +33,5 @@ export interface AddTeamMemberVariables {
   fullName: string;
   role: string;
   team: string;
+  companyId: string;
 }
