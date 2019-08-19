@@ -1,5 +1,6 @@
 class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
   argument :teamId, ID, required: true
+  argument :companyId, ID, required: true
   argument :email, String, required: true
   argument :fullName, String, required: true
   argument :role, ID, required: true
@@ -8,7 +9,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(team_id: nil, email: nil, full_name: nil, role: nil)
+  def resolve(team_id: nil, email: nil, full_name: nil, role: nil, company_id: nil)
     response = { errors: [] }
 
     user = User.find_by_email(email)
@@ -28,7 +29,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
 
     team_user = TeamsUser.create( user_id: user.id, team_id: team_id )
 
-    user_role = RolesUser.create(user_id: user.id, role_id: role)
+    user_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
 
     team_user.errors.messages.each do |path, messages|
