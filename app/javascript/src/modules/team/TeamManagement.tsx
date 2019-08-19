@@ -251,7 +251,7 @@ export default function TeamManagement(props: {path?: string}) {
                             }
                           </div>
                         </StyledTableCell>
-                        { row.roles && row.roles[0].title && 
+                        { row.roles && row.roles[0].name && 
                           <StyledTableCell>{row.roles[0].name}</StyledTableCell>
                         }
                       </StyledTableRow>

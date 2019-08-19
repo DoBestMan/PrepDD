@@ -18,6 +18,7 @@ import Dropdown from '../../../components/Dropdown';
 import StyledItem from './styled/StyledItem';
 import StyledTableRow from './styled/StyledTableRow';
 import StyledTableCell from './styled/StyledTableCell';
+import InputForm from './InputForm'
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
 
@@ -134,7 +135,7 @@ export default function DetailPane(props: DetailPaneProps) {
     fullName: '',
     role: ''
   })
-
+  
   const {loading, data, error} = useUserDetails({id, })
 
   useEffect(() => {
@@ -150,6 +151,17 @@ export default function DetailPane(props: DetailPaneProps) {
       role: 'Member'
     })
   }, [loading])
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      fullName: event.target.value
+    })
+  }
+
+  const handleUpdateName = () => {
+    // updateCompany()
+  }
 
   return loading ?
     <LoadingFallback /> :
@@ -172,10 +184,11 @@ export default function DetailPane(props: DetailPaneProps) {
             height="30"
             alt="Alana"
           />
-          <Typography className={classes.title} variant="h2">
-            {state.fullName || "Guy Number1"}
-          </Typography>
-          <CreateIcon className={classes.primaryColor} />
+          <InputForm 
+            value={state.fullName} 
+            onChange={handleChangeName}
+            onUpdate={handleUpdateName}
+          />          
           <div className={classes.grow} />
           <DeleteIcon />
           <CloseIcon style={{marginLeft: '6px'}} />
