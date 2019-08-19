@@ -121,11 +121,7 @@ All Available Roles
 """
 type Role {
   id: ID!
-<<<<<<< HEAD
-  title: String!
-=======
   name: String!
->>>>>>> c5f390cef56bc3185ca845bb2d22b445e15ec574
 }
 
 """

@@ -9,7 +9,7 @@
 export interface UserDetails_user_roles {
   __typename: "Role";
   id: string;
-  title: string;
+  name: string;
 }
 
 export interface UserDetails_user_companies {
