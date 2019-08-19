@@ -3,6 +3,6 @@ module Types
     description 'User Roles'
 
     field :id, ID, null: false
-    field :Name, String, null: false
+    field :name, String, null: false
   end
 end
