@@ -24,6 +24,7 @@ import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import {AllRoles_roles} from '../../../graphql/queries/__generated__/AllRoles'
 import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
+import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
@@ -137,7 +138,7 @@ export default function DetailPane(props: DetailPaneProps) {
   const [roles, setRoles] = useState<AllRoles_roles[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
-  console.log("Current User", data)
+  console.log("Data: ", data)
   const rolesData = useAllRoles({})
   // const [updateTeamMember] = useUpdateTeamMember({
   //   id: state.id, 
@@ -158,18 +159,23 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (loading || !currentUser) return;
 
+    console.log("CurrentUser", currentUser)
     if (currentUser.roles) {
       setState({
-        ...currentUser, 
-        role: currentUser.roles[0].id
+        ...state, 
+        id: currentUser.id, 
+        fullName: currentUser.fullName, 
+        role: currentUser.roles[0].id,
       })
     } else {
       setState({
         ...state, 
-        ...currentUser
+        id: currentUser.id, 
+        fullName: currentUser.fullName,
       })
     }
-  }, [loading])
+    console.log("State: ", state)
+  }, [data])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({
@@ -241,41 +247,25 @@ export default function DetailPane(props: DetailPaneProps) {
             </StyledTableRow>
           </TableHead>
           <TableBody>
-            <StyledTableRow>
-              <StyledTableCell>
-                <StyledItem logo={G2Logo} label="G2 Crowd" />
-              </StyledTableCell>
-              <StyledTableCell>
-                <div className={classes.flex}>
-                  <StyledItem label="Finance" />
-                  <StyledItem label="Legal" />
-                  <StyledItem label="+1" />
-                </div>
-              </StyledTableCell>
-            </StyledTableRow>
-            <StyledTableRow>
-              <StyledTableCell>
-                <div className={classes.flex} style={{alignItems: 'center'}}>
-                  <img
-                    src={DripLogo}
-                    width="18"
-                    height="18"
-                    alt="Drip"
-                  />
-                  <div style={{marginLeft: '6px'}}>Drip</div>
-                </div>
-              </StyledTableCell>
-              <StyledTableCell>Finance, Legal</StyledTableCell>
-            </StyledTableRow>
-            <StyledTableRow>
-              <StyledTableCell>
-                <div className={classes.flex} style={{alignItems: 'center'}}>
-                  <img src={PrepddLogo} width="18" height="18" alt="g2" />
-                  <div style={{marginLeft: '6px'}}>Advocately</div>
-                </div>
-              </StyledTableCell>
-              <StyledTableCell>Finance</StyledTableCell>
-            </StyledTableRow>
+            { data && data.user && data.user.companies && 
+              data.user.companies.map(company => {
+              return (
+                <StyledTableRow key={company.id}>
+                  <StyledTableCell>
+                    <StyledItem label={company.name} />
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <div className={classes.flex}>
+                      { company.teams && company.teams.map(team => {
+                        return (
+                          <StyledItem label={team.name} />
+                        )
+                      })}                      
+                    </div>
+                  </StyledTableCell>
+                </StyledTableRow>
+              )
+            })}
           </TableBody>
         </Table>
         <Typography className={classes.addLink} variant="h6">
