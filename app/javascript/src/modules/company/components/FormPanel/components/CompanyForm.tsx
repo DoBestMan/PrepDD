@@ -1,6 +1,7 @@
 import React, {useState} from'react'
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles'
 
+import {CompanySettings_company_parent, CompanySettings_company_broker} from '../../../../../graphql/queries/__generated__/CompanySettings'
 import StyledItem from './StyledItem'
 
 const G2Logo = require('images/dummy/logos/g2-logo.svg')
@@ -12,38 +13,41 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '24px',
       color: '#606060',
       fontFamily: 'Montserrat',
+      fontWeight: 600, 
       fontSize: '12px', 
       textTransform: 'capitalize'      
     },
     companyList: {
       display: 'flex',
       height: '36px', 
+      alignItems: 'center', 
       borderBottom: '1px solid #D8D8D8', 
+      fontFamily: 'Montserrat',
+      fontWeight: 600, 
+      fontSize: '15px', 
+      textTransform: 'capitalize',
     }
   })
 )
 
-const parents = [
-  { label: "G2 Crowd", url: G2Logo },
-  { label: "PrepDD", url: PrepDDLogo }
-]
-
 interface CompanyFormProps {
   label: string;
   placeholder: string;
+  company: CompanySettings_company_parent | CompanySettings_company_broker | null;
 }
 
 export default function CompanyForm(props: CompanyFormProps) {
-  const {label, placeholder} = props
+  const {label, placeholder, company} = props
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
       <p>{label}</p>
       <div className={classes.companyList}>
-        { parents.map(item => 
-          <StyledItem key={item.label} label={item.label} logo={item.url} />
-        )}
+        { company ?
+          <StyledItem key={label} label={label} /> :
+          placeholder
+        }
       </div>
     </div>
   )
