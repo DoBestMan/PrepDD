@@ -70,7 +70,7 @@ type Mutation {
   createCompany(name: String!): CreateCompanyPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   removeCompanyMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveCompanyMemberPayload
-  removeTeamMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveTeamMemberPayload
+  removeTeamMember(teamId: ID!, userId: ID, userIds: [ID!]): RemoveTeamMemberPayload
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
   signInUser(email: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
