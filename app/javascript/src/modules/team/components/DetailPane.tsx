@@ -146,6 +146,10 @@ export default function DetailPane(props: DetailPaneProps) {
   //   companyId: "1", 
   //   role: state.role, 
   // })
+  // const removeTeamMember = useRemoveTeamMember({
+  //   companyId: "1", 
+  //   userId: state.id, 
+  // })
 
   useEffect(() => {
     const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
@@ -196,6 +200,10 @@ export default function DetailPane(props: DetailPaneProps) {
     // updateTeamMember()
   }
 
+  const handleDelete = () => {
+    // removeTeamMember()
+  }
+
   return loading ?
     <LoadingFallback /> :
     <Drawer
@@ -223,7 +231,7 @@ export default function DetailPane(props: DetailPaneProps) {
             onUpdate={handleUpdateName}
           />          
           <div className={classes.grow} />
-          <DeleteIcon />
+          <DeleteIcon onClick={handleDelete}/>
           <CloseIcon style={{marginLeft: '6px'}} />
         </div>
 
