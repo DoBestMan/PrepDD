@@ -1,5 +1,5 @@
 class Mutations::RemoveTeamMember < GraphQL::Schema::Mutation
-  argument :teamId, ID, required: true
+  argument :companyId, ID, required: true
   argument :userId, ID, required: false
   argument :userIds, [ID], required: false
 
@@ -7,7 +7,7 @@ class Mutations::RemoveTeamMember < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(team_id: nil, user_id: nil, user_ids: nil)
+  def resolve(company_id: nil, user_id: nil, user_ids: nil)
     response = { errors: [] }
 
     if user_id
