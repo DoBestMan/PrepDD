@@ -105,8 +105,8 @@ type Query {
 User Roles
 """
 type Role {
-  Name: String!
   id: ID!
+  name: String!
 }
 
 """
