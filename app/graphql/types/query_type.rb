@@ -30,6 +30,11 @@ module Types
 
     field :roles, [RoleType], null: false do
       description 'Return All available roles'
+      end
+
+    field :user, UserType, null: false do
+      description 'Return details of a user'
+      argument :id, ID, required: true
     end
 
     def current_user
@@ -51,6 +56,10 @@ module Types
 
     def roles
       Role.all.where("id != ?", 1)
+    end
+
+    def user(id:)
+      User.find(id)
     end
   end
 end
