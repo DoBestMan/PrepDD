@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react'
 import clsx from 'clsx'
-import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -20,6 +19,7 @@ import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
 
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
+import {useRemoveTeamMember} from '../../graphql/mutations/RemoveTeamMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 
 interface Company {
@@ -44,9 +44,6 @@ function createData(
 }
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
-const G2Logo = require('images/dummy/logos/g2-logo.svg')
-const DomoLogo = require('images/dummy/logos/domo-logo.svg')
-const DripLogo = require('images/dummy/logos/drip-logo.svg')
 
 const panelWidth=500
 
@@ -101,6 +98,10 @@ export default function TeamManagement(props: {path?: string}) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
 
   const { loading, data, error } = useCompanyDetails({id: 1})
+  // const removeTeamMember = useRemoveTeamMember({
+  //   companyId: "1", 
+  //   userIds: selected
+  // })
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -147,6 +148,10 @@ export default function TeamManagement(props: {path?: string}) {
     setPage(0)
   }
 
+  const handleDelete = () => {
+    // removeTeamMember()
+  }
+
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
@@ -170,6 +175,7 @@ export default function TeamManagement(props: {path?: string}) {
         <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
           <TableToolbar 
             selected={selected.length}
+            handleDelete={handleDelete}
           />
           { data && data.company && data.company.teams && 
             <Searchbar data={data.company.teams}/>

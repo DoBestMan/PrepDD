@@ -121,8 +121,13 @@ interface StateProps {
   team: string;
 }
 
-const TableToolbar = (props: {selected: number;}) => {
-  const { selected } = props
+interface TableToolbarProps {
+  selected: number;
+  handleDelete: () => void;
+}
+
+const TableToolbar = (props: TableToolbarProps) => {
+  const { selected, handleDelete } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
@@ -219,7 +224,7 @@ const TableToolbar = (props: {selected: number;}) => {
       <div className={classes.grow} />
       { (selected > 0) && 
         <div className={classes.deleteIcon}>
-          <DeleteIcon />
+          <DeleteIcon onClick={handleDelete}/>
         </div>
       }
     </Toolbar>
