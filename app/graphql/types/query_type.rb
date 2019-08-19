@@ -26,6 +26,10 @@ module Types
     field :team, TeamType, null: false do
       description 'Find a team by id'
       argument :id, ID, required: true
+      end
+
+    field :roles, [RoleType], null: false do
+      description 'Return All available roles'
     end
 
     def current_user
@@ -43,6 +47,10 @@ module Types
 
     def team(id:)
       Team.find(id)
+    end
+
+    def roles
+      Role.all.where("id != ?", 1)
     end
   end
 end
