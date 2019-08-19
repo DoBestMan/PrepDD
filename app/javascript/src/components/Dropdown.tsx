@@ -59,16 +59,11 @@ export default function Dropdown(props: DropdownProps) {
   const classes = useStyles()
   const [open, setOpen] = React.useState<boolean>(false)
 
-  const findSelected = (findValue: String): (AllRoles_roles | null) => {
-    const res = options.find(option => option.name === findValue);
-
-    if (res) return res;
-    return null;    
+  const renderLabel = () => {
+    const res = options.find(option => option.id === selected);
+    if (res) return res.name;
+    return placeholder;
   }
-
-  const [selectedItem, setSelectedItem] = React.useState<AllRoles_roles | null>(findSelected(selected))
-
-  console.log("options:", options)
 
   const toggleMenu = () => setOpen(prev => !prev)
 
@@ -84,7 +79,7 @@ export default function Dropdown(props: DropdownProps) {
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
           <div className={classes.item} onClick={toggleMenu}>
-            { selectedItem ? selectedItem.name : placeholder }
+            {renderLabel()}
             <div className={classes.grow} />
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>

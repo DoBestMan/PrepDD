@@ -130,7 +130,7 @@ export default function DetailPane(props: DetailPaneProps) {
     __typename: "User",
     id: '',
     fullName: '',
-    role: 'Member', 
+    role: '0', 
     roles: null,
     companies: null,
   });
@@ -142,8 +142,8 @@ export default function DetailPane(props: DetailPaneProps) {
   // const [updateTeamMember] = useUpdateTeamMember({
   //   id: state.id, 
   //   fullName: state.fullName, 
-  //   companyId: 1, 
-  //   oldRole: 
+  //   companyId: "1", 
+  //   role: state.role, 
   // })
 
   useEffect(() => {
@@ -158,10 +158,17 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (loading || !currentUser) return;
 
-    setState({
-      ...state, 
-      ...currentUser
-    })
+    if (currentUser.roles) {
+      setState({
+        ...currentUser, 
+        role: currentUser.roles[0].id
+      })
+    } else {
+      setState({
+        ...state, 
+        ...currentUser
+      })
+    }
   }, [loading])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -172,15 +179,15 @@ export default function DetailPane(props: DetailPaneProps) {
   }
 
   const handleUpdateName = () => {
-    // update
+    // updateTeamMember()
   }
 
   const handleSelectRole = (role: AllRoles_roles) => {
     setState({
       ...state,
-      role: role.name
+      role: role.id
     })
-    // update
+    // updateTeamMember()
   }
 
   return loading ?
@@ -220,7 +227,7 @@ export default function DetailPane(props: DetailPaneProps) {
             <Dropdown 
               options={roles} 
               selected={state.role} 
-              placeholder={state.role} 
+              placeholder="Select role" 
               onChange={(role: AllRoles_roles) => handleSelectRole(role)}
             />
           </div>
