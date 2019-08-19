@@ -11,4 +11,14 @@ module Types
     field :teams, [TeamType], null: true
     field :roles, [RoleType], null: true
   end
+
+  def companies
+    team_ids  = object.teams.pluck(:id)
+    object.companies.includes(:teams).where(teams: {id: team_ids}).references(:teams)
+  end
+
+  def ownedCompanies
+    team_ids  = object.teams.pluck(:id)
+    object.companies.includes(:teams).where(teams: {id: team_ids}).references(:teams)
+  end
 end
