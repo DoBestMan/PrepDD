@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: topBarHeight,
       background: '#FFFFFF',
       color: '#606060',
-      border: '1px solid #D8D8D8',
+      borderBottom: '1px solid #D8D8D8',
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
