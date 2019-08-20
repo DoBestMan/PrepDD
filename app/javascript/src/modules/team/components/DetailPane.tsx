@@ -157,7 +157,7 @@ export default function DetailPane(props: DetailPaneProps) {
   useEffect(() => {
     const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
 
-    if (loading || !rolesList) return;
+    if (!rolesList) return;
     const temp = rolesList.map(role => {
       const res = {
         id: role.id, 
@@ -166,7 +166,7 @@ export default function DetailPane(props: DetailPaneProps) {
       return res
     })
     setRoles(temp)
-  }, [rolesData.data])
+  }, [idx(rolesData, rolesData => rolesData.data.roles)])
 
   useEffect(() => {
     const currentUser = idx(data, data => data.user);

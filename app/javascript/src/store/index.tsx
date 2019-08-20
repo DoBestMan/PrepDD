@@ -13,9 +13,12 @@ const rootReducer: React.Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case 'SET_SELECTED_COMPANY':
       return {
+        ...state,
         selectedCompany: action.companyId
       }
       break
+    default:
+      return state
   }
 }
 
@@ -23,13 +26,20 @@ const initialState: State = {
   selectedCompany: ''
 }
 
-const Context = createContext<State>(initialState)
+type ContextType = {
+  state: State,
+  dispatch: (action: Action) => void
+}
+
+const Context = createContext<ContextType>({
+  dispatch: () => undefined, 
+  state: initialState,
+});
 
 export const Provider = (props: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(rootReducer, initialState);
-  console.log("State", state, dispatch)
   return (
-    <Context.Provider value={state}>
+    <Context.Provider value={{state, dispatch}}>
       {props.children}
     </Context.Provider>
   )

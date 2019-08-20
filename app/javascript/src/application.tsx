@@ -30,12 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   render(
+    <Provider>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />
         </ThemeProvider>
-      </ApolloProvider>,
+      </ApolloProvider>
+    </Provider>,
     document.body.appendChild(document.createElement('div'))
   )
 })

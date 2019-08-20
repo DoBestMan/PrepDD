@@ -346,7 +346,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                             <div>{company.name}</div>                        
                           </div>
                         </TableCell>
-                        <TableCell></TableCell>
+                        <TableCell className={classes.tableCell}>
+                          No Teams
+                        </TableCell>
                       </TableRow>
                     ))
                   }
@@ -392,19 +394,19 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
         <InputForm
           value={state.oldPassword}
-          label="Old password"
+          label="Current password"
           name="oldPassword"
           type="password"
-          placeholder="Old password"
+          placeholder="Current password"
           onChange={handleChange}
           style={{marginTop: '24px', marginBottom: '24px'}}
         />
         <InputForm
           value={state.password}
-          label="Password"
+          label="New Password"
           name="password"
           type="password"
-          placeholder="Password"
+          placeholder="New password"
           onChange={handleChange}
           style={{marginTop: '24px', marginBottom: '24px'}}
         />

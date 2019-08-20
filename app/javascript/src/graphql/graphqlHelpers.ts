@@ -1,4 +1,4 @@
-import {gql} from 'apollo-boost';
+import {gql, ApolloError} from 'apollo-boost';
 import {useQuery, useMutation} from 'react-apollo';
 import {DocumentNode} from 'graphql';
 import {QueryResult, MutationTuple} from 'react-apollo';
@@ -15,8 +15,14 @@ export function createQueryHook<TData, TVariables>(
 
 export function createMutationHook<TData, TVariables>(
   mutation: DocumentNode
-): (variables: TVariables) => MutationTuple<TData, TVariables> {
+): (
+  variables: TVariables,
+  onCompleted?: (data: TData) => void,
+  onError?: (error: ApolloError) => void, 
+) => MutationTuple<TData, TVariables> {
   return function(variables) {
-    return useMutation(mutation, {variables});
+    return useMutation(mutation, {
+      variables
+    });
   };
 }
