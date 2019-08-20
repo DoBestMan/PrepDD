@@ -14,7 +14,7 @@ import {
  } from '@material-ui/core'
  import ClickAwayListener from '@material-ui/core/ClickAwayListener'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
-//  import AutoSuggest from './AutoSuggest'
+ import AutoSuggest from './AutoSuggest'
 import { useAddTeamMember } from '../../../graphql/mutations/AddTeamMember';
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import { navigate } from '@reach/router';
@@ -255,20 +255,10 @@ const TableToolbar = (props: TableToolbarProps) => {
                   }
                 </Select>
               </FormControl>
-              <TextField 
-                id="team"
-                name="team"
-                label="Team"
-                className={classes.input}
-                value={state.team}
-                onChange={handleChange}
-                autoFocus
-                required
-              />
-              {/* <AutoSuggest
+              <AutoSuggest
                 value={state.team}
                 handleChange={handleChangeTeam}
-              /> */}
+              />
               <Button type="submit" className={classes.submitButton}>Create new team member</Button>
             </form>
           </div>
