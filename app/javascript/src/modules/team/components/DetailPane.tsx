@@ -142,7 +142,6 @@ export default function DetailPane(props: DetailPaneProps) {
   const [roles, setRoles] = useState<Role[]>([]);
   
   const {loading, data, error} = useUserDetails({id, })
-  console.log("Data: ", data)
   const rolesData = useAllRoles({})
   const [updateTeamMember] = useUpdateTeamMember({
     id: state.id,
@@ -174,7 +173,6 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (loading || !currentUser) return;
 
-    console.log("CurrentUser", currentUser)
     if (currentUser.roles) {
       setState({
         ...state, 
@@ -189,7 +187,6 @@ export default function DetailPane(props: DetailPaneProps) {
         fullName: currentUser.fullName,
       })
     }
-    console.log("State: ", state)
   }, [data])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {

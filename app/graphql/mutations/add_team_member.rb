@@ -34,7 +34,10 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
 
     user_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
-    user_company = UsersCompany.create(user_id: user.id, company_id: company_id)
+    user_company = UsersCompany.where(user_id: user.id, company_id: company_id).all
+    if !user_company.present?
+      user_company = UsersCompany.create(user_id: user.id, company_id: company_id)
+    end
 
     team_user.errors.messages.each do |path, messages|
       messages.each do |message|

@@ -122,9 +122,10 @@ export default function TeamManagement(props: {path?: string}) {
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
 
+    console.log("Team Member is changed")
     if (loading || !usersList) return;
     setState(usersList)
-  }, [data])
+  }, [JSON.stringify(data),])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -166,7 +167,6 @@ export default function TeamManagement(props: {path?: string}) {
   }
 
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event)
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
@@ -245,7 +245,7 @@ export default function TeamManagement(props: {path?: string}) {
                           <div className={classes.flex}>
                             { row.companies && row.companies.slice(0, 2).map(company => 
                                 <StyledItem 
-                                  key={`${row.fullName}-${company.name}`}
+                                  key={`${row.fullName}-${company.id}`}
                                   label={company.name} 
                                   selected={isItemSelected}
                                 />
@@ -268,7 +268,7 @@ export default function TeamManagement(props: {path?: string}) {
                           <div className={classes.flex}>
                             { row.teams && row.teams.slice(0, 2).map(team => 
                                 <StyledItem 
-                                  key={`${row.fullName}-${team}`}
+                                  key={`${row.fullName}-${team.id}`}
                                   label={team.name} 
                                   selected={isItemSelected}
                                 />

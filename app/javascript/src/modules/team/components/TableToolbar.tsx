@@ -160,6 +160,7 @@ const TableToolbar = (props: TableToolbarProps) => {
   }, [setState])
 
   useEffect(() => {
+    console.log("Add Member successfully")
     if (idx(response, response => response.data.addTeamMember.success)) {
       navigate('/app/team')
     }
@@ -180,7 +181,6 @@ const TableToolbar = (props: TableToolbarProps) => {
       ...prev,
       role: event.target.value as string,
     }));
-    console.log("Role ID", state.role)
   }
 
   const handleChangeTeam = (newValue: string) => {
@@ -194,6 +194,12 @@ const TableToolbar = (props: TableToolbarProps) => {
     setOpen(false)
     event.preventDefault()
     addTeamMember()
+    setState({
+      fullName: '', 
+      email: '', 
+      role: '', 
+      team: ''
+    })
   }, [addTeamMember])
 
   return (
