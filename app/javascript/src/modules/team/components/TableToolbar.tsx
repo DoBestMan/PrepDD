@@ -16,6 +16,7 @@ import {
  import DeleteIcon from '@material-ui/icons/DeleteForever'
 //  import AutoSuggest from './AutoSuggest'
 import { useAddTeamMember } from '../../../graphql/mutations/AddTeamMember';
+import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import { navigate } from '@reach/router';
 
 const useToolbarStyles = makeStyles((theme: Theme) => 
@@ -142,7 +143,9 @@ const TableToolbar = (props: TableToolbarProps) => {
     team: ''
   })
 
-  const [addTeamMember, {data}] = useAddTeamMember({
+  const {data, loading, error} = useAllRoles({})
+
+  const [addTeamMember, response] = useAddTeamMember({
     fullName: state.fullName, 
     email: state.email, 
     role: state.role, 
@@ -156,11 +159,10 @@ const TableToolbar = (props: TableToolbarProps) => {
   }, [setState])
 
   useEffect(() => {
-    if (idx(data, data => data.addTeamMember.success)) {
-      console.log(data)
+    if (idx(response, response => response.data.addTeamMember.success)) {
       navigate('/app/team')
     }
-  }, [data]);
+  }, [response]);
 
   const handleToggle = () => {
     setOpen(!open)
@@ -237,9 +239,13 @@ const TableToolbar = (props: TableToolbarProps) => {
                     id: 'role'
                   }}
                 >
-                  <MenuItem value="1">User</MenuItem>
-                  <MenuItem value="2">Admin</MenuItem>
-                  <MenuItem value="3">Owner</MenuItem>
+                  { data && data.roles &&
+                    data.roles.map(role => {
+                      return (
+                        <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
+                      )
+                    })
+                  }
                 </Select>
               </FormControl>
               <TextField 
