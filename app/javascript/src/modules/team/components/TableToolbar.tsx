@@ -145,8 +145,8 @@ const TableToolbar = (props: TableToolbarProps) => {
   const [addTeamMember, {data}] = useAddTeamMember({
     fullName: state.fullName, 
     email: state.email, 
-    role: '', 
-    team: '',
+    role: state.role, 
+    team: state.team,
     companyId: '2'
   })
 

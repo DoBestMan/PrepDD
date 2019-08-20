@@ -1,35 +1,40 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, createContext, useContext } from 'react'
 
-const Context = React.createContext<unknown>({})
-
-const initialState = {
-  selectedCompany: ''
-}
-
-type State = {
+interface State {
   selectedCompany: string;
 }
 
-type Action = { type: 'SET_SELECTED_COMPANY', companyId: string }
+interface Action {
+  type: 'SET_SELECTED_COMPANY';
+  companyId: string 
+}
 
-const rootReducer = (state: State, action: Action) => {
+const rootReducer: React.Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case 'SET_SELECTED_COMPANY':
       return {
-        ...state,
         selectedCompany: action.companyId
       }
       break
-    default:
-      return state
   }
 }
 
-const [state, dispatch] = useReducer(rootReducer, initialState)
-const store = {
-  dispatch, 
-  state, 
-  getState: () => state, 
+const initialState: State = {
+  selectedCompany: ''
 }
 
-export { store, Context }
+const Context = createContext<State>(initialState)
+
+export const Provider = (props: { children: React.ReactNode }) => {
+  const [state, dispatch] = useReducer(rootReducer, initialState);
+  console.log("State", state, dispatch)
+  return (
+    <Context.Provider value={state}>
+      {props.children}
+    </Context.Provider>
+  )
+}
+
+export const useGlobalState = () => {
+  return useContext(Context)
+}
