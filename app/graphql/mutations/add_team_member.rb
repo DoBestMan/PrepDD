@@ -42,7 +42,16 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
         )
         response[:success] = false
       end
+    end
+
+    user_role.errors.messages.each do |path, messages|
+      messages.each do |message|
+        response[:errors].push(
+          { path: path.to_s.camelcase(:lower), message: message }
+        )
+        response[:success] = false
       end
+    end
 
     user.errors.messages.each do |path, messages|
       messages.each do |message|
@@ -51,7 +60,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
         )
         response[:success] = false
       end
-      end
+    end
 
     role.errors.messages.each do |path, messages|
       messages.each do |message|
