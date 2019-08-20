@@ -102,7 +102,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [team, setTeam] = React.useState("")
   const [state, setState] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  const { loading, data, error } = useCompanyDetails({id: "2"})
+  const { loading, data, error } = useCompanyDetails({id: "1"})
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: "1", 
     userIds: selected

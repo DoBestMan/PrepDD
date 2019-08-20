@@ -23,6 +23,7 @@ import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
+import {useRemoveCompanyMember} from '../../../graphql/mutations/RemoveCompanyMember';
 import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
@@ -147,10 +148,10 @@ export default function DetailPane(props: DetailPaneProps) {
   //   companyId: "1", 
   //   role: state.role, 
   // })
-  // const removeTeamMember = useRemoveTeamMember({
-  //   companyId: "1", 
-  //   userId: state.id, 
-  // })
+  const [removeCompanyMember] = useRemoveCompanyMember({
+    companyId: "1", 
+    userId: state.id, 
+  })
 
   useEffect(() => {
     const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
@@ -205,7 +206,7 @@ export default function DetailPane(props: DetailPaneProps) {
   }
 
   const handleDelete = () => {
-    // removeTeamMember()
+    removeCompanyMember()
   }
 
   const handleUpdateName = () => {
