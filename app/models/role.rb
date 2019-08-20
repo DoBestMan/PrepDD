@@ -5,12 +5,12 @@ class Role < ApplicationRecord
   before_validation :customize_title
   validates :name, uniqueness: true
 
-  def customize_title(role_name = title)
+  def customize_title(role_name = name)
     self.name = role_name.camelize.titlecase.gsub(/\s+/, '')
   end
 
   def self.add(name)
-    where(title: name).first_or_create
+    where(name: name).first_or_create
   rescue StandardError
     raise ArgumentError, 'Argument title not valid.'
   end

@@ -61,7 +61,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
       end
     end
 
-    role.errors.messages.each do |path, messages|
+    team_user.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(
           { path: path.to_s.camelcase(:lower), message: message }
