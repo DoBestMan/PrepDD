@@ -17,6 +17,7 @@ type Company {
   owner: User!
   parent: Company
   previewOnly: Boolean
+  roles: [Role!]!
   subscription: Subscription
   teams: [Team!]!
   totalStorage: Int
