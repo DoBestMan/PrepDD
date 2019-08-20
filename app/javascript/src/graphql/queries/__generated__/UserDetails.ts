@@ -35,9 +35,9 @@ export interface UserDetails_user {
 
 export interface UserDetails {
   /**
-   * Find a user by id
+   * Return details of a user
    */
-  user: UserDetails_user | null;
+  user: UserDetails_user;
 }
 
 export interface UserDetailsVariables {

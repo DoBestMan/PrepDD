@@ -21,7 +21,7 @@ import ArrowTooltip from './components/ArrowTooltip'
 
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
 import {useTeamDetails} from '../../graphql/queries/TeamDetails'
-import {useRemoveTeamMember} from '../../graphql/mutations/RemoveTeamMember'
+import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
 
@@ -102,11 +102,11 @@ export default function TeamManagement(props: {path?: string}) {
   const [team, setTeam] = React.useState("")
   const [state, setState] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  const { loading, data, error } = useCompanyDetails({id: 1})
-  // const removeTeamMember = useRemoveTeamMember({
-  //   companyId: "1", 
-  //   userIds: selected
-  // })
+  const { loading, data, error } = useCompanyDetails({id: "2"})
+  const [removeCompanyMember] = useRemoveCompanyMember({
+    companyId: "1", 
+    userIds: selected
+  })
 
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
@@ -161,7 +161,7 @@ export default function TeamManagement(props: {path?: string}) {
   }
 
   const handleDelete = () => {
-    // removeTeamMember()
+    removeCompanyMember()
   }
 
   const handleChangeTeam = (newTeam: string) => {

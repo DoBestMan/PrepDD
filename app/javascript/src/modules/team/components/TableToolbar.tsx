@@ -145,9 +145,9 @@ const TableToolbar = (props: TableToolbarProps) => {
   const [addTeamMember, {data}] = useAddTeamMember({
     fullName: state.fullName, 
     email: state.email, 
-    role: '1', 
+    role: '', 
     team: '',
-    companyId: '1'
+    companyId: '2'
   })
 
   const handleChange = useCallback(event => {
@@ -163,7 +163,6 @@ const TableToolbar = (props: TableToolbarProps) => {
   }, [data]);
 
   const handleToggle = () => {
-    console.log("Toggle")
     setOpen(!open)
   }
 
