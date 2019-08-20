@@ -10,16 +10,22 @@ class Mutations::RemoveCompanyMember < GraphQL::Schema::Mutation
   def resolve(company_id: nil, user_id: nil, user_ids: nil)
     response = { errors: [] }
 
+    company = Company.find(company_id)
+    company_teams = company.teams.pluck(:id)
+
     if user_id
-      TeamsUser.where(user_id: user_id, company_id: company_id).destroy_all
-      UsersCompany.where(user_id: user_id, company_id: company_id).first&.destroy!
-      RolesUser.where(user_id: user_id, company_id: company_id).first&.destroy!
+      user_teams = TeamsUser.where(user_id: user_id)
+      user_teams.where(team_id: company_teams).destroy_all
+      UsersCompany.where(user_id: user_id, company_id: company_id).first&.destroy
+      RolesUser.where(user_id: user_id, company_id: company_id).first&.destroy
 
     elsif user_ids.present?
       user_ids.each do |id|
-        TeamsUser.where(user_id: id, company_id: company_id).destroy_all
-        UsersCompany.where(user_id: id, company_id: company_id).first&.destroy!
-        RolesUser.where(user_id: id, company_id: company_id).first&.destroy!
+        user_teams = TeamsUser.where(user_id: id)
+        user_teams.where(team_id: company_teams).destroy_all
+
+        UsersCompany.where(user_id: id, company_id: company_id).first&.destroy
+        RolesUser.where(user_id: id, company_id: company_id).first&.destroy
       end
     end
 
