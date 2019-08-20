@@ -30,4 +30,5 @@ export interface UpdateUserPassword {
 
 export interface UpdateUserPasswordVariables {
   password: string;
+  oldPassword: string;
 }

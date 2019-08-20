@@ -230,13 +230,13 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     updateUserPassword()
     setState(state => ({
       ...state, 
+      oldPassword: '',
       password: '', 
       confirmPassword: ''
     }))
   }
 
   const handleChangeDetails = () => {
-    console.log("On Blur")
     updateUserData()
   }
 
@@ -391,7 +391,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         />
 
         <InputForm
-          value={state.password}
+          value={state.oldPassword}
           label="Old password"
           name="oldPassword"
           type="password"

@@ -79,7 +79,7 @@ type Mutation {
   updateTeamMember(companyId: ID!, fullName: String!, id: ID!, role: ID!): UpdateTeamMemberPayload
   updateUserData(displayName: String!, email: String!, fullName: String!): UpdateUserDataPayload
   updateUserNotificatiosn(input: UpdateUserNotificatiosnInput!): UpdateUserNotificatiosnPayload
-  updateUserPassword(password: String!): UpdateUserPasswordPayload
+  updateUserPassword(oldPassword: String!, password: String!): UpdateUserPasswordPayload
 }
 
 type Query {
