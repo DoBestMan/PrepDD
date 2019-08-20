@@ -129,6 +129,7 @@ interface StateType {
   fullName: string;
   displayName: string;
   email: string;
+  oldPassword: string;
   password: string;
   confirmPassword: string;
   hasUppercase: boolean;
@@ -143,6 +144,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     fullName: '',
     displayName: '',
     email: '',
+    oldPassword: '',
     password: '',
     confirmPassword: '',
     hasUppercase: false,
@@ -153,9 +155,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   const { loading, data } = useCurrentUser({})
 
-  const [updateUserPassword, ...resUpdatePassword] = useUpdateUserPassword({ password: state.password })
+  const [updateUserPassword] = useUpdateUserPassword({ 
+    oldPassword: state.oldPassword, 
+    password: state.password
+  })
 
-  const [updateUserData, ...resUpdateData] = useUpdateUserData({
+  const [updateUserData] = useUpdateUserData({
     fullName: state.fullName, 
     displayName: state.displayName, 
     email: state.email
@@ -385,6 +390,15 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           label="At least 8 total characters"
         />
 
+        <InputForm
+          value={state.password}
+          label="Old password"
+          name="oldPassword"
+          type="password"
+          placeholder="Old password"
+          onChange={handleChange}
+          style={{marginTop: '24px', marginBottom: '24px'}}
+        />
         <InputForm
           value={state.password}
           label="Password"
