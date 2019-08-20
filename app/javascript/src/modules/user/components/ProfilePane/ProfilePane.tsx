@@ -333,19 +333,31 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                   </TableRow>
                 </TableHead>
                 <TableBody >
-                { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
-                  data.currentUser.user.companies.map(company => (
-                  <TableRow key={company.name}>
-                    <TableCell className={classes.tableCell}>
-                      <div className={classes.flex}>
-                        <div>{company.name}</div>                        
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {company.teams.join(', ')}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies &&
+                    data.currentUser.user.ownedCompanies.map(company => (
+                      <TableRow key={company.name}>
+                        <TableCell className={classes.tableCell}>
+                          <div className={classes.flex}>
+                            <div>{company.name}</div>                        
+                          </div>
+                        </TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    ))
+                  }
+                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
+                    data.currentUser.user.companies.map(company => (
+                    <TableRow key={company.name}>
+                      <TableCell className={classes.tableCell}>
+                        <div className={classes.flex}>
+                          <div>{company.name}</div>                        
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {company.teams.join(', ')}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Grid>
