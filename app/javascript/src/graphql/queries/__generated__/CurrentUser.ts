@@ -8,6 +8,7 @@
 
 export interface CurrentUser_currentUser_user_ownedCompanies {
   __typename: "Company";
+  id: string;
   name: string;
 }
 

@@ -19,6 +19,7 @@ import StyledTableCell from './components/styled/StyledTableCell'
 import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
 
+import {useCurrentUser} from '../../graphql/queries/CurrentUser'
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
 import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
@@ -101,12 +102,22 @@ export default function TeamManagement(props: {path?: string}) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [team, setTeam] = React.useState("")
   const [state, setState] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
+  const [company, setCompany] = React.useState<string>("1")
 
-  const { loading, data, error } = useCompanyDetails({id: "1"})
+  const currentUser = useCurrentUser({})
+  const { loading, data, error } = useCompanyDetails({id: company})
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId: "1", 
+    companyId: company, 
     userIds: selected
   })
+
+  useEffect(() => {
+    const owned = idx(currentUser, currentUser => currentUser.data.currentUser.user.ownedCompanies)
+
+    if (owned) {
+      setCompany(owned[0].id)
+    }
+  }, [currentUser])
 
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
@@ -195,6 +206,7 @@ export default function TeamManagement(props: {path?: string}) {
           <TableToolbar 
             selected={selected.length}
             handleDelete={handleDelete}
+            company={company}
           />
           { data && data.company && data.company.teams && 
             <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
@@ -306,7 +318,7 @@ export default function TeamManagement(props: {path?: string}) {
         </Paper>
 
         { selected.length > 0 && 
-          <DetailPane id={selected[0]} open={isOpen()} />
+          <DetailPane id={selected[0]} open={isOpen()} company={company} />
         }
       </div>
     )

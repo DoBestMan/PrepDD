@@ -115,6 +115,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface DetailPaneProps {
   id: string;
   open: boolean;
+  company: string;
 }
 
 interface StateProps extends UserDetails_user {
@@ -127,7 +128,7 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open} = props;
+  const {id, open, company} = props;
   const classes = useStyles();
   const [state, setState] = useState<StateProps>({
     __typename: "User",
@@ -145,11 +146,11 @@ export default function DetailPane(props: DetailPaneProps) {
   // const [updateTeamMember] = useUpdateTeamMember({
   //   id: state.id, 
   //   fullName: state.fullName, 
-  //   companyId: "1", 
+  //   companyId: company, 
   //   role: state.role, 
   // })
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId: "1", 
+    companyId: company, 
     userId: state.id, 
   })
 

@@ -129,11 +129,12 @@ interface StateProps {
 
 interface TableToolbarProps {
   selected: number;
+  company: string;
   handleDelete: () => void;
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const { selected, handleDelete } = props
+  const { selected, handleDelete, company } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
@@ -150,7 +151,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     email: state.email, 
     role: state.role, 
     team: state.team,
-    companyId: "1"
+    companyId: company
   })
 
   const handleChange = useCallback(event => {
