@@ -11,6 +11,7 @@ class Company < ApplicationRecord
   belongs_to :subscription, optional: true
   has_many :teams
   has_many :roles_users
+  has_many :roles, through: :roles_users
 
   validates :name, presence: true
   validates :name, uniqueness: true

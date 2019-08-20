@@ -16,6 +16,7 @@ module Types
 
     field :users, [UserType], null: false
     field :teams, [TeamType], null: false
+    field :roles, [RoleType], null: false
 
     def total_users
       object.users.count + 1
