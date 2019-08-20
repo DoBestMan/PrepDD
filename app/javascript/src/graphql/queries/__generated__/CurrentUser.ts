@@ -20,6 +20,7 @@ export interface CurrentUser_currentUser_user_companies_teams {
 
 export interface CurrentUser_currentUser_user_companies {
   __typename: "Company";
+  id: string;
   name: string;
   teams: CurrentUser_currentUser_user_companies_teams[];
 }

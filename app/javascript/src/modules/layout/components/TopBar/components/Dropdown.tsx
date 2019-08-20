@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import idx from 'idx';
 import {makeStyles} from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -54,6 +54,26 @@ export default function Dropdown() {
   const {state, dispatch} = useGlobalState()
   const {data, loading, error} = useCurrentUser({})
 
+  useEffect(() => {
+    if (loading) return
+    const owned = idx(data, data => data.currentUser.user.ownedCompanies)
+    
+    if (owned) {
+      dispatch({
+        type: 'SET_SELECTED_COMPANY', 
+        companyId: owned[0].id
+      })
+      return
+    }
+    const companies = idx(data, data => data.currentUser.user.companies)
+    if (companies) {
+      dispatch({
+        type: 'SET_SELECTED_COMPANY', 
+        companyId: companies[0].id
+      })
+    }
+  }, [loading])
+
   const toggleMenu = () => {
     setOpen(prev => !prev);
   };
@@ -72,15 +92,12 @@ export default function Dropdown() {
 
   const renderCompanyName = () => {
     if (!state.selectedCompany) return "";
-    console.log("State", state.selectedCompany)
 
     const companies = idx(data, data => data.currentUser.user.ownedCompanies);
-    console.log("Companies", companies)
     
     if (!companies) return "";
     const selected = companies.find(company => company.id === state.selectedCompany);
     if (!selected) return ""
-    console.log("Selected", selected)
     return selected.name;
   }
 
@@ -103,6 +120,20 @@ export default function Dropdown() {
             <Paper className={classes.paper}>
               { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies && 
                 data.currentUser.user.ownedCompanies.map(company => {
+                  return (
+                    <Typography
+                      key={company.id}
+                      className={classes.title}
+                      variant="inherit"
+                      onClick={() => handleClick(company.id)}
+                    >
+                      <span>{company.name} </span>
+                    </Typography>
+                  )
+                })
+              }
+              { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
+                data.currentUser.user.companies.map(company => {
                   return (
                     <Typography
                       key={company.id}
