@@ -75,10 +75,12 @@ export default function Dropdown() {
     console.log("State", state.selectedCompany)
 
     const companies = idx(data, data => data.currentUser.user.ownedCompanies);
+    console.log("Companies", companies)
     
     if (!companies) return "";
     const selected = companies.find(company => company.id === state.selectedCompany);
     if (!selected) return ""
+    console.log("Selected", selected)
     return selected.name;
   }
 

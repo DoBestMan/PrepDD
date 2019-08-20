@@ -19,13 +19,13 @@ import StyledTableCell from './components/styled/StyledTableCell'
 import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
 
-import {useCurrentUser} from '../../graphql/queries/CurrentUser'
+import {useGlobalState} from '../../store'
+
 import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
 import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
-import { useLazyQuery } from '@apollo/react-hooks';
 
 interface Company {
   url: string;
@@ -102,29 +102,20 @@ export default function TeamManagement(props: {path?: string}) {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [team, setTeam] = React.useState("")
-  const [state, setState] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
-  const [company, setCompany] = React.useState<string>("1")
+  const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  const currentUser = useCurrentUser({})
-  const { loading, data, error } = useCompanyDetails({id: company})
+  const {state, dispatch} = useGlobalState()
+  const { loading, data, error } = useCompanyDetails({id: state.selectedCompany})
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId: company, 
+    companyId: state.selectedCompany, 
     userIds: selected
   })
-
-  useEffect(() => {
-    const owned = idx(currentUser, currentUser => currentUser.data.currentUser.user.ownedCompanies)
-
-    if (owned) {
-      setCompany(owned[0].id)
-    }
-  }, [currentUser])
 
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
 
     if (loading || !usersList) return;
-    setState(usersList)
+    setMemberList(usersList)
   }, [idx(data, data => data.company.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
@@ -186,8 +177,6 @@ export default function TeamManagement(props: {path?: string}) {
 
   const isOpen = () => selected.length > 0
 
-  // const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
-
   const renderTooltipTitle = (options: String[]) => {
     return (
       <React.Fragment>
@@ -206,7 +195,7 @@ export default function TeamManagement(props: {path?: string}) {
           <TableToolbar 
             selected={selected.length}
             handleDelete={handleDelete}
-            company={company}
+            company={state.selectedCompany}
           />
           { data && data.company && data.company.teams && 
             <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
@@ -215,7 +204,7 @@ export default function TeamManagement(props: {path?: string}) {
             <Table className={classes.table} aria-labelledby="Team Management Table">
               <TableHeader />
               <TableBody>
-                { state && state.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                { memberList && memberList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row: CompanyDetails_company_users, index: number) => {
                     const isItemSelected = isSelected(row.id)
                     
@@ -298,11 +287,11 @@ export default function TeamManagement(props: {path?: string}) {
             </Table>
           </div>
 
-          { state && (
+          { memberList && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={state.length}
+              count={memberList.length}
               rowsPerPage={rowsPerPage}
               page={page}
               backIconButtonProps={{
@@ -321,7 +310,7 @@ export default function TeamManagement(props: {path?: string}) {
           <DetailPane 
             id={selected[0]} 
             open={isOpen()} 
-            company={company}
+            company={state.selectedCompany}
             handleClose={() => setSelected([])}
           />
         }
