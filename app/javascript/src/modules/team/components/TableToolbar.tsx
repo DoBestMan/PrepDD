@@ -147,7 +147,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     email: state.email, 
     role: state.role, 
     team: state.team,
-    companyId: '2'
+    companyId: "1"
   })
 
   const handleChange = useCallback(event => {
@@ -177,6 +177,7 @@ const TableToolbar = (props: TableToolbarProps) => {
       ...prev,
       role: event.target.value as string,
     }));
+    console.log("Role ID", state.role)
   }
 
   const handleChangeTeam = (newValue: string) => {
@@ -189,6 +190,7 @@ const TableToolbar = (props: TableToolbarProps) => {
   const handleSubmit = useCallback(event => {
     setOpen(false)
     event.preventDefault()
+    console.log("State:", state)
     addTeamMember()
   }, [addTeamMember])
 
