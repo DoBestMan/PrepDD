@@ -1648,14 +1648,14 @@
               "description": null,
               "args": [
                 {
-                  "name": "email",
+                  "name": "id",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "String",
+                      "name": "ID",
                       "ofType": null
                     }
                   },
@@ -1690,21 +1690,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "newRole",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ID",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                },
-                {
-                  "name": "oldRole",
+                  "name": "role",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1814,6 +1800,20 @@
               "args": [
                 {
                   "name": "password",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "String",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "oldPassword",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",

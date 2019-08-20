@@ -1,5 +1,6 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import clsx from 'clsx'
+import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -8,6 +9,7 @@ import {
   TablePagination
 } from '@material-ui/core'
 
+import LoadingFallback from '../../components/LoadingFallback'
 import TableToolbar from './components/TableToolbar'
 import Searchbar from './components/Searchbar'
 import TableHeader from './components/TableHeader'
@@ -16,6 +18,14 @@ import StyledTableRow from './components/styled/StyledTableRow'
 import StyledTableCell from './components/styled/StyledTableCell'
 import StyledItem from './components/styled/StyledItem'
 import ArrowTooltip from './components/ArrowTooltip'
+
+import {useGlobalState} from '../../store'
+
+import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
+import {useTeamDetails} from '../../graphql/queries/TeamDetails'
+import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
+import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
+import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
 
 interface Company {
   url: string;
@@ -39,28 +49,8 @@ function createData(
 }
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
-const G2Logo = require('images/dummy/logos/g2-logo.svg')
-const DomoLogo = require('images/dummy/logos/domo-logo.svg')
-const DripLogo = require('images/dummy/logos/drip-logo.svg')
 
-const rows = [
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}, {url: G2Logo, label: 'Advocately'}], ['Finance', 'Legal', 'Equity', 'Trust & Safety'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-  createData('Guy Number 1', [{url: G2Logo, label: 'G2 Crowd'}, {url: DripLogo, label: 'Drip'}], ['Finance', 'Legal'], 'Member'),
-  createData('Guy Number 2', [{url: DomoLogo, label: 'Domo'}], ['Finance'], 'Admin'),
-]
-
-const panelWidth=594
+const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -108,16 +98,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
-  const [selected, setSelected] = React.useState<number[]>([])
+  const [selected, setSelected] = React.useState<string[]>([])
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(10)
+  const [team, setTeam] = React.useState("")
+  const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  function handleClick(event: React.MouseEvent<HTMLTableRowElement>, id: number) {
+  const {state, dispatch} = useGlobalState()
+  const { loading, data, error } = useCompanyDetails({id: state.selectedCompany})
+  const [removeCompanyMember] = useRemoveCompanyMember({
+    companyId: state.selectedCompany, 
+    userIds: selected
+  })
+
+  useEffect(() => {
+    const usersList = idx(data, data => data.company.users);
+
+    if (loading || !usersList) return;
+    setMemberList(usersList)
+  }, [idx(data, data => data.company.users)])
+
+  const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
 
     if (event.metaKey || event.ctrlKey) {
       const selectedIndex = selected.indexOf(id);
-      let newSelected: number[] = [];
+      let newSelected: string[] = [];
   
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, id)
@@ -135,7 +141,7 @@ export default function TeamManagement(props: {path?: string}) {
       setSelected(newSelected)
     } else {
       const selectedIndex = selected.indexOf(id)
-      let newSelected: number[] = [];
+      let newSelected: string[] = [];
 
       if (selectedIndex === -1) {
         newSelected.push(id)
@@ -147,21 +153,29 @@ export default function TeamManagement(props: {path?: string}) {
     }
   }
 
-  function handleChangePage(event: unknown, newPage: number) {
+  const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
   }
 
-  function handleChangeRowsPerPage(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event)
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(+event.target.value)
     setPage(0)
   }
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1
+  const handleDelete = () => {
+    if (confirm("Are you going to delete team members?")) {
+      removeCompanyMember()
+    }
+  }
+
+  const handleChangeTeam = (newTeam: string) => {
+    setTeam(newTeam)
+    // useTeamDetails({id: newTeam})
+  }
+
+  const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
-
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage)
 
   const renderTooltipTitle = (options: String[]) => {
     return (
@@ -173,117 +187,133 @@ export default function TeamManagement(props: {path?: string}) {
     )
   }
 
-  return (
-    <div className={classes.root}>
-      <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-        <TableToolbar 
-          selected={selected.length}
-        />
-        <Searchbar />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="Team Management Table">
-            <TableHeader />
-            <TableBody>
-              { rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row: Data, index: number) => {
-                  const isItemSelected = isSelected(index)
-                  
-                  return (
-                    <StyledTableRow
-                      hover
-                      onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, index)}
-                      role="team member"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={`member-${index}`}
-                      selected={isItemSelected}
-                    >
-                      <StyledTableCell>
-                        <div className={classes.flex} style={{alignItems: 'center'}}>
-                          <img 
-                            className={classes.round} 
-                            src={DefaultPhoto}
-                            width="30" 
-                            height="30" 
-                            alt="Alana" 
-                          />
-                          <span style={{marginLeft: '18px'}}>{row.name}</span>
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className={classes.flex}>
-                          { row.companies.slice(0, 2).map(company => 
-                              <StyledItem 
-                                key={`${row.name}-${company.label}`}
-                                logo={company.url} 
-                                label={company.label} 
-                                selected={isItemSelected}
-                              />
-                            )
-                          }
-                          { row.companies.length > 2 &&
-                            <ArrowTooltip 
-                              title={renderTooltipTitle(row.companies.map(a => a.label).slice(2))} 
-                              placement="top"
-                            >
-                              <StyledItem
-                                label={`+${row.companies.length - 2}`}
-                                selected={isItemSelected}
-                              />
-                            </ArrowTooltip>
-                          }
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className={classes.flex}>
-                          { row.teams.slice(0, 2).map(team => 
-                              <StyledItem 
-                                key={`${row.name}-${team}`}
-                                label={team} 
-                                selected={isItemSelected}
-                              />
-                            )                      
-                          }
-                          { row.teams.length > 2 &&
-                            <ArrowTooltip 
-                              title={renderTooltipTitle(row.teams.slice(2))} 
-                              placement="top"
-                            >
-                              <StyledItem
-                                label={`+${row.teams.length - 2}`}
-                                selected={isItemSelected}
-                              />
-                            </ArrowTooltip>
-                          }
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>{row.role}</StyledTableCell>
-                    </StyledTableRow>
-                  )
-                })
-              }
-            </TableBody>
-          </Table>
-        </div>
+  return loading ? 
+    <LoadingFallback /> :
+    (
+      <div className={classes.root}>
+        <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
+          <TableToolbar 
+            selected={selected.length}
+            handleDelete={handleDelete}
+            company={state.selectedCompany}
+          />
+          { data && data.company && data.company.teams && 
+            <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
+          }
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="Team Management Table">
+              <TableHeader />
+              <TableBody>
+                { memberList && memberList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row: CompanyDetails_company_users, index: number) => {
+                    const isItemSelected = isSelected(row.id)
+                    
+                    return (
+                      <StyledTableRow
+                        hover
+                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        role="team member"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={`member-${row.id}`}
+                        selected={isItemSelected}
+                      >
+                        <StyledTableCell>
+                          <div className={classes.flex} style={{alignItems: 'center'}}>
+                            <img 
+                              className={classes.round} 
+                              src={DefaultPhoto}
+                              width="30" 
+                              height="30" 
+                              alt="Alana" 
+                            />
+                            <span style={{marginLeft: '18px'}}>{row.fullName}</span>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div className={classes.flex}>
+                            { row.companies && row.companies.slice(0, 2).map(company => 
+                                <StyledItem 
+                                  key={`${row.fullName}-${company.id}`}
+                                  label={company.name} 
+                                  selected={isItemSelected}
+                                />
+                              )
+                            }
+                            { row.companies && row.companies.length > 2 &&
+                              <ArrowTooltip 
+                                title={renderTooltipTitle(row.companies.map(a => a.name).slice(2))} 
+                                placement="top"
+                              >
+                                <StyledItem
+                                  label={`+${row.companies.length - 2}`}
+                                  selected={isItemSelected}
+                                />
+                              </ArrowTooltip>
+                            }
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div className={classes.flex}>
+                            { row.teams && row.teams.slice(0, 2).map(team => 
+                                <StyledItem 
+                                  key={`${row.fullName}-${team.id}`}
+                                  label={team.name} 
+                                  selected={isItemSelected}
+                                />
+                              )                      
+                            }
+                            { row.teams && row.teams.length > 2 &&
+                              <ArrowTooltip 
+                                title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
+                                placement="top"
+                              >
+                                <StyledItem
+                                  label={`+${row.teams.length - 2}`}
+                                  selected={isItemSelected}
+                                />
+                              </ArrowTooltip>
+                            }
+                          </div>
+                        </StyledTableCell>
+                        { row.roles && row.roles[0].name && 
+                          <StyledTableCell>{row.roles[0].name}</StyledTableCell>
+                        }
+                      </StyledTableRow>
+                    )
+                  })
+                }
+              </TableBody>
+            </Table>
+          </div>
 
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            'aria-label': 'previous page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'next page',
-          }}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
+          { memberList && (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={memberList.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              backIconButtonProps={{
+                'aria-label': 'previous page',
+              }}
+              nextIconButtonProps={{
+                'aria-label': 'next page',
+              }}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          )}
+        </Paper>
 
-      <DetailPane open={isOpen()} />
-    </div>
-  )
+        { selected.length > 0 && 
+          <DetailPane 
+            id={selected[0]} 
+            open={isOpen()} 
+            company={state.selectedCompany}
+            handleClose={() => setSelected([])}
+          />
+        }
+      </div>
+    )
 }

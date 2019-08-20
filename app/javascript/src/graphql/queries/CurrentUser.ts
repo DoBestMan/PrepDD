@@ -13,7 +13,6 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
       user {
         id
         fullName
-        displayName
         email
         displayName
         ownedCompanies {
@@ -21,12 +20,14 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
           name
         }
         companies {
-          id
           name
+          teams {
+            id
+            name
+          }
         }
-        teams {
+        roles {
           id
-          name
         }
       }
     }

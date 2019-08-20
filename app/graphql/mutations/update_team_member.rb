@@ -1,18 +1,17 @@
 class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
-  argument :email, String, required: true
+  argument :id, ID, required: true
   argument :fullName, String, required: true
   argument :companyId, ID, required: true
-  argument :newRole, ID, required: true
-  argument :oldRole, ID, required: true
+  argument :role, ID, required: true
 
   field :team, Types::TeamType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(email: nil, full_name: nil, new_role: nil, old_role: nil)
+  def resolve(id: nil, full_name: nil, role: nil, company_id: nil)
     response = { errors: [] }
 
-    user = User.find_by_email(email)
+    user = User.find(id)
 
     if user && full_name
       user.update(
@@ -20,10 +19,10 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
       )
     end
 
-    if new_role && old_role
-      RolesUser.find(old_role).destroy!
+    if role && company_id
+      RolesUser.where(user_id: user.id, company_id: company_id).first&.destroy!
 
-      user_new_role = RolesUser.create(user_id: user.id, role_id: role)
+      user_new_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
 
       user_new_role.errors.messages.each do |path, messages|

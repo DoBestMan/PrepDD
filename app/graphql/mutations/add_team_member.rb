@@ -30,10 +30,14 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
     company = Company.find(company_id)
     company_team = company.teams.where(name: team).first_or_create
 
-    team_user = TeamsUser.create( user_id: user.id, team_id: company_team.id )
+    team_user = TeamsUser.create( user_id: user.id, team_id: company_team.id)
 
     user_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
+    user_company = UsersCompany.where(user_id: user.id, company_id: company_id).all
+    if !user_company.present?
+      user_company = UsersCompany.create(user_id: user.id, company_id: company_id)
+    end
 
     team_user.errors.messages.each do |path, messages|
       messages.each do |message|
@@ -42,7 +46,16 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
         )
         response[:success] = false
       end
+    end
+
+    user_role.errors.messages.each do |path, messages|
+      messages.each do |message|
+        response[:errors].push(
+          { path: path.to_s.camelcase(:lower), message: message }
+        )
+        response[:success] = false
       end
+    end
 
     user.errors.messages.each do |path, messages|
       messages.each do |message|
@@ -51,9 +64,9 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
         )
         response[:success] = false
       end
-      end
+    end
 
-    role.errors.messages.each do |path, messages|
+    team_user.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(
           { path: path.to_s.camelcase(:lower), message: message }

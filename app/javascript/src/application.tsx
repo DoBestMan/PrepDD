@@ -8,6 +8,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import App from './containers/app'
 import theme from './config/theme'
+import {Provider} from './store'
 
 function getCSRFToken(): string {
   const el = document.querySelector('meta[name="csrf-token"]')
@@ -29,12 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   render(
-    <ApolloProvider client={client}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </ApolloProvider>,
+    <Provider>
+      <ApolloProvider client={client}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </ApolloProvider>
+    </Provider>,
     document.body.appendChild(document.createElement('div'))
   )
 })

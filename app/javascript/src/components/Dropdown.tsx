@@ -7,18 +7,25 @@ import {
   Typography
 } from '@material-ui/core'
 
+import {AllRoles_roles} from '../graphql/queries/__generated__/AllRoles'
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
       position: 'relative',
       border: '1px solid #CACACA',
-      borderRadius: '3px'
+      borderRadius: '3px',
+      minWidth: '150px'
+    },
+    grow: {
+      flexGrow: 1, 
     },
     paper: {
-      width: '-webkit-fill-available', 
+      width: '100%', 
       position: 'absolute',
       top: 42, 
-      left: 0
+      left: 0,
+      zIndex: 1
     },
     invisible: {
       display: 'none'
@@ -41,26 +48,34 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Option {
-  value: String; 
-  label: String;
+  id: string;
+  name: string;
 }
 
 interface DropdownProps {
   options: Option[];
-  selected?: String;
-  placeholder?: String;
+  selected: string;
+  placeholder?: string;
+  handleUpdate?: (role: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const { options, selected, placeholder } = props
+  const { options, selected, placeholder, handleUpdate } = props
   const classes = useStyles()
   const [open, setOpen] = React.useState<boolean>(false)
 
-  const findSelected = (findValue: String) => options.find(option => option.value === findValue)
-
-  const [selectedItem, setSelectedItem] = React.useState<Option>(options[0])
+  const renderLabel = () => {
+    const res = options.find(option => option.id === selected);
+    if (res) return res.name;
+    return placeholder;
+  }
 
   const toggleMenu = () => setOpen(prev => !prev)
+
+  const handleClick = (role: string) => {
+    setOpen(prev => !prev)
+    if (handleUpdate) handleUpdate(role)
+  }
 
   const handleClickAway = () => setOpen(false)
 
@@ -68,14 +83,19 @@ export default function Dropdown(props: DropdownProps) {
     <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <div className={classes.item} onClick={toggleMenu} style={{width: 'max-content'}}>
-            { selectedItem ? selectedItem.label : placeholder }
+          <div className={classes.item} onClick={toggleMenu}>
+            {renderLabel()}
+            <div className={classes.grow} />
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>
           <Paper className={clsx(classes.paper, !open && classes.invisible)}>
-            { options && options.map((option: Option, index: number) => (
-                <div key={index} className={classes.item} onClick={toggleMenu}>
-                  {option.label}
+            { options && options.map(option => (
+                <div 
+                  key={option.id} 
+                  className={classes.item} 
+                  onClick={() => handleClick(option.id)}
+                >
+                  {option.name}
                 </div>
               ))
             }

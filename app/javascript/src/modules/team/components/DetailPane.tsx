@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import idx from 'idx';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {
   Drawer,
@@ -8,21 +9,26 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import CloseIcon from '@material-ui/icons/Close';
 
+import LoadingFallback from '../../../components/LoadingFallback'
 import Dropdown from '../../../components/Dropdown';
 import StyledItem from './styled/StyledItem';
 import StyledTableRow from './styled/StyledTableRow';
 import StyledTableCell from './styled/StyledTableCell';
+import InputForm from './InputForm'
+
+import {useUserDetails} from '../../../graphql/queries/UserDetails'
+import {useAllRoles} from '../../../graphql/queries/AllRoles'
+import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
+import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
+import {useRemoveCompanyMember} from '../../../graphql/mutations/RemoveCompanyMember';
+import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember';
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
-const G2Logo = require('images/dummy/logos/g2-logo.svg');
-const PrepddLogo = require('images/logos/prepdd-logo.svg');
-const DripLogo = require('images/dummy/logos/drip-logo.svg');
 
-const panelWidth = 594;
+const panelWidth = 500;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -98,20 +104,119 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600,
       fontSize: '12px',
       textTransform: 'capitalize',
+      '&:hover': {
+        opacity: 0.7,
+        background: '#3A84FF'
+      }
     },
   })
 );
 
-const options = [
-  {label: 'Member', value: 'Member'},
-  {label: 'Admin', value: 'Admin'},
-];
+interface DetailPaneProps {
+  id: string;
+  open: boolean;
+  company: string;
+  handleClose: () => void;
+}
 
-export default function DetailPane(props: {open: boolean}) {
-  const {open} = props;
+interface StateProps extends UserDetails_user {
+  role: string;
+}
+
+interface Role {
+  id: string;
+  name: string;
+}
+
+export default function DetailPane(props: DetailPaneProps) {
+  const {id, open, company, handleClose} = props;
   const classes = useStyles();
+  const [state, setState] = useState<StateProps>({
+    __typename: "User",
+    id: '',
+    fullName: '',
+    role: '0', 
+    roles: null,
+    companies: null,
+  });
+  const [roles, setRoles] = useState<Role[]>([]);
+  
+  const {loading, data, error} = useUserDetails({id, })
+  const rolesData = useAllRoles({})
+  const [updateTeamMember] = useUpdateTeamMember({
+    id: state.id,
+    fullName: state.fullName, 
+    companyId: company, 
+    role: state.role, 
+  })
+  const [removeCompanyMember] = useRemoveCompanyMember({
+    companyId: company, 
+    userId: state.id, 
+  })
 
-  return (
+  useEffect(() => {
+    const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
+
+    if (!rolesList) return;
+    const temp = rolesList.map(role => {
+      const res = {
+        id: role.id, 
+        name: role.name
+      }
+      return res
+    })
+    setRoles(temp)
+  }, [idx(rolesData, rolesData => rolesData.data.roles)])
+
+  useEffect(() => {
+    const currentUser = idx(data, data => data.user);
+
+    if (loading || !currentUser) return;
+
+    if (currentUser.roles) {
+      setState({
+        ...state, 
+        id: currentUser.id, 
+        fullName: currentUser.fullName, 
+        role: currentUser.roles[0].id,
+      })
+    } else {
+      setState({
+        ...state, 
+        id: currentUser.id, 
+        fullName: currentUser.fullName,
+      })
+    }
+  }, [data])
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setState({
+      ...state,
+      fullName: event.target.value
+    })
+  }
+
+  const handleChangeRole = (newRole: string) => {
+    setState({
+      ...state,
+      role: newRole
+    })
+    updateTeamMember()
+  }
+
+  const handleDelete = () => {
+    if (confirm("Are you going to delete this member?")) {
+      removeCompanyMember()
+      handleClose()
+    }
+  }
+
+  const handleUpdateName = () => {
+    updateTeamMember()
+  }
+
+  return loading ?
+    <LoadingFallback /> :
     <Drawer
       className={classes.root}
       variant="persistent"
@@ -121,80 +226,72 @@ export default function DetailPane(props: {open: boolean}) {
         paper: classes.drawerPaper,
       }}
     >
-      <div className={classes.drawerSpacer} />
-      <div className={classes.drawerHeader}>
-        <img
-          className={classes.round}
-          src={DefaultPhoto}
-          width="30"
-          height="30"
-          alt="Alana"
-        />
-        <Typography className={classes.title} variant="h2">
-          Guy Number 1
-        </Typography>
-        <CreateIcon className={classes.primaryColor} />
-        <div className={classes.grow} />
-        <DeleteIcon />
-        <CloseIcon style={{marginLeft: '6px'}} />
-      </div>
-
-      <div className={classes.roleForm}>
-        <div style={{width: 'fit-content'}}>
-          <p className={classes.roleLabel}>Role</p>
-          <Dropdown options={options} placeholder="Member" />
+      <>
+        <div className={classes.drawerSpacer} />
+        <div className={classes.drawerHeader}>
+          <img
+            className={classes.round}
+            src={DefaultPhoto}
+            width="30"
+            height="30"
+            alt="Alana"
+          />
+          <InputForm 
+            value={state.fullName} 
+            onChange={handleChangeName}
+            onUpdate={handleUpdateName}
+          />          
+          <div className={classes.grow} />
+          <DeleteIcon onClick={handleDelete} />
+          <CloseIcon style={{marginLeft: '6px'}} onClick={handleClose}/>
         </div>
-      </div>
 
-      <Table className={classes.table}>
-        <TableHead>
-          <StyledTableRow>
-            <StyledTableCell>Company(s)</StyledTableCell>
-            <StyledTableCell>Team(s)</StyledTableCell>
-          </StyledTableRow>
-        </TableHead>
-        <TableBody>
-          <StyledTableRow>
-            <StyledTableCell>
-              <StyledItem logo={G2Logo} label="G2 Crowd" />
-            </StyledTableCell>
-            <StyledTableCell>
-              <div className={classes.flex}>
-                <StyledItem label="Finance" />
-                <StyledItem label="Legal" />
-                <StyledItem label="+1" />
-              </div>
-            </StyledTableCell>
-          </StyledTableRow>
-          <StyledTableRow>
-            <StyledTableCell>
-              <div className={classes.flex} style={{alignItems: 'center'}}>
-                <img
-                  src={DripLogo}
-                  width="18"
-                  height="18"
-                  alt="Drip"
-                />
-                <div style={{marginLeft: '6px'}}>Drip</div>
-              </div>
-            </StyledTableCell>
-            <StyledTableCell>Finance, Legal</StyledTableCell>
-          </StyledTableRow>
-          <StyledTableRow>
-            <StyledTableCell>
-              <div className={classes.flex} style={{alignItems: 'center'}}>
-                <img src={PrepddLogo} width="18" height="18" alt="g2" />
-                <div style={{marginLeft: '6px'}}>Advocately</div>
-              </div>
-            </StyledTableCell>
-            <StyledTableCell>Finance</StyledTableCell>
-          </StyledTableRow>
-        </TableBody>
-      </Table>
-      <Typography className={classes.addLink} variant="h6">
-        Add new company & team
-      </Typography>
-      <Button className={classes.resetButton}>Reset password</Button>
+        <div className={classes.roleForm}>
+          <div style={{width: 'fit-content'}}>
+            <p className={classes.roleLabel}>Role</p>
+            <Dropdown 
+              options={roles} 
+              selected={state.role}
+              placeholder="Select role" 
+              handleUpdate={handleChangeRole}
+            />
+          </div>
+        </div>
+
+        <Table className={classes.table}>
+          <TableHead>
+            <StyledTableRow>
+              <StyledTableCell>Company(s)</StyledTableCell>
+              <StyledTableCell>Team(s)</StyledTableCell>
+            </StyledTableRow>
+          </TableHead>
+          <TableBody>
+            { data && data.user && data.user.companies && 
+              data.user.companies.map(company => {
+              return (
+                <StyledTableRow key={company.id}>
+                  <StyledTableCell>
+                    <StyledItem label={company.name} />
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <div className={classes.flex}>
+                      { company.teams && company.teams.map(team => {
+                        return (
+                          <StyledItem key={team.id} label={team.name} />
+                        )
+                      })}
+                    </div>
+                  </StyledTableCell>
+                </StyledTableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+        <Typography className={classes.addLink} variant="h6">
+          Add new company & team
+        </Typography>
+        <Button className={classes.resetButton}>Reset password</Button>
+      </>
+        
     </Drawer>
-  );
 }

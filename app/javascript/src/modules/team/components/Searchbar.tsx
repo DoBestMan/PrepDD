@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 
 import Dropdown from '../../../components/Dropdown'
+import {CompanyDetails_company_teams} from '../../../graphql/queries/__generated__/CompanyDetails'
 
 const useSearchbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -35,6 +36,7 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      width: '100%', 
       height: 42, 
       fontFamily: 'Montserrat',
       fontSize: '12px',
@@ -46,22 +48,38 @@ const useSearchbarStyles = makeStyles((theme: Theme) =>
       transition: theme.transitions.create('width'),
       width: '100%',
       height: 42, 
-      [theme.breakpoints.up('md')]: {
-        width: 300,
-      },
     },
   })
 )
 
-const options = [
-  { label: 'Select team', value: 'Select team' },
-  { label: 'Finance', value: 'Finance'},
-  { label: 'Legal', value: 'Legal'}, 
-  { label: 'Equity', value: 'Equity'}
-] 
+interface Option {
+  id: string;
+  name: string;
+}
 
-export default function Searchbar() {
+interface SearchbarProps {
+  data: CompanyDetails_company_teams[];
+  value: string;
+  handleUpdate: (newTeam: string) => void;
+}
+
+export default function Searchbar(props: SearchbarProps) {
+  const { data, value, handleUpdate } = props
   const classes = useSearchbarStyles()
+
+  const convertType = () => {
+    const res = data.map(team => {
+      const obj = { id: team.id, name: team.name };
+      return obj;
+    });
+    res.unshift({
+      id: "", 
+      name: "Select team"
+    })
+    return res;
+  }
+
+  const [teams, setTeams] = useState<Option[]>(convertType())
 
   return (
     <div className={classes.root}>
@@ -78,7 +96,12 @@ export default function Searchbar() {
           inputProps={{"aria-label": "search"}}
         />
       </div>
-      <Dropdown options={options} placeholder="Select team" />
+      <Dropdown 
+        options={teams} 
+        selected={value}
+        placeholder="Select role" 
+        handleUpdate={handleUpdate}
+      />
     </div>
   )
 }

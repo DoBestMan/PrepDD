@@ -16,27 +16,14 @@ import {
 } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 
-import InputForm from './components/InputForm';
+import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
 
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
 
-const G2Logo = require('images/dummy/logos/g2-logo.svg');
-const PrepddLogo = require('images/logos/prepdd-logo.svg');
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
-
-const rows = [
-  {
-    company: 'G2 Crowd',
-    team: ['Finance', 'Legal', 'Equity'],
-  },
-  {
-    company: 'PrepDD',
-    team: ['M&A', 'Debt'],
-  },
-];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -142,6 +129,7 @@ interface StateType {
   fullName: string;
   displayName: string;
   email: string;
+  oldPassword: string;
   password: string;
   confirmPassword: string;
   hasUppercase: boolean;
@@ -156,6 +144,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     fullName: '',
     displayName: '',
     email: '',
+    oldPassword: '',
     password: '',
     confirmPassword: '',
     hasUppercase: false,
@@ -166,9 +155,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   const { loading, data } = useCurrentUser({})
 
-  const [updateUserPassword, ...resUpdatePassword] = useUpdateUserPassword({ password: state.password })
+  const [updateUserPassword] = useUpdateUserPassword({ 
+    oldPassword: state.oldPassword, 
+    password: state.password
+  })
 
-  const [updateUserData, ...resUpdateData] = useUpdateUserData({
+  const [updateUserData] = useUpdateUserData({
     fullName: state.fullName, 
     displayName: state.displayName, 
     email: state.email
@@ -238,13 +230,13 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     updateUserPassword()
     setState(state => ({
       ...state, 
+      oldPassword: '',
       password: '', 
       confirmPassword: ''
     }))
   }
 
   const handleChangeDetails = () => {
-    console.log("On Blur")
     updateUserData()
   }
 
@@ -346,22 +338,33 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                   </TableRow>
                 </TableHead>
                 <TableBody >
-                { rows.map(row => (
-                  <TableRow key={row.company}>
-                    <TableCell className={classes.tableCell}>
-                      <div className={classes.flex}>
-                        { row.company === 'G2 Crowd' ?
-                          <img src={G2Logo} width="18" height="18" alt="G2" /> :
-                          <img src={PrepddLogo} width="18" height="18" alt="PREPDD" />
-                        }
-                        <div style={{marginLeft: '7px'}}>{row.company}</div>                        
-                      </div>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      {row.team.join(', ')}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies &&
+                    data.currentUser.user.ownedCompanies.map(company => (
+                      <TableRow key={company.name}>
+                        <TableCell className={classes.tableCell}>
+                          <div className={classes.flex}>
+                            <div>{company.name}</div>                        
+                          </div>
+                        </TableCell>
+                        <TableCell className={classes.tableCell}>
+                          No Teams
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  }
+                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
+                    data.currentUser.user.companies.map(company => (
+                    <TableRow key={company.name}>
+                      <TableCell className={classes.tableCell}>
+                        <div className={classes.flex}>
+                          <div>{company.name}</div>                        
+                        </div>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {company.teams.join(', ')}
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Grid>
@@ -390,11 +393,20 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         />
 
         <InputForm
+          value={state.oldPassword}
+          label="Current password"
+          name="oldPassword"
+          type="password"
+          placeholder="Current password"
+          onChange={handleChange}
+          style={{marginTop: '24px', marginBottom: '24px'}}
+        />
+        <InputForm
           value={state.password}
-          label="Password"
+          label="New Password"
           name="password"
           type="password"
-          placeholder="Password"
+          placeholder="New password"
           onChange={handleChange}
           style={{marginTop: '24px', marginBottom: '24px'}}
         />

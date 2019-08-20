@@ -5,6 +5,8 @@ import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import PlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
 
+import {useGlobalState} from '../../store'
+
 const drawerWidth = 210
 const miniDrawerWidth = 72
 const topBarHeight = 64
@@ -17,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       flexGrow: 1,
       overflow: 'auto',
-      height: `calc(100% - ${topBarHeight}px)`,
+      height: `calc(100vh - ${topBarHeight}px)`,
       marginLeft: drawerWidth,
       marginTop: topBarHeight,
       transition: theme.transitions.create('margin-left', {
@@ -81,6 +83,8 @@ export default function Layout(props: {path?: string, children: React.ReactNode}
   const classes = useStyles();
   const [open, setOpen] = React.useState<boolean>(true);
   const [showNarrow, setShowNarrow] = React.useState<boolean>(false);
+
+  const {state, dispatch} = useGlobalState();
 
   const toggleDrawer = () => setOpen(!open)
 

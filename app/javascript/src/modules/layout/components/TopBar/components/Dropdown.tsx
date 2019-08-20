@@ -1,8 +1,12 @@
 import React from 'react';
+import idx from 'idx';
 import {makeStyles} from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+
+import {useCurrentUser} from '../../../../../graphql/queries/CurrentUser'
+import {useGlobalState} from '../../../../../store'
 
 const G2Logo = require('images/dummy/logos/g2-logo.svg');
 const MicrosoftLogo = require('images/dummy/logos/microsoft-logo.svg');
@@ -47,6 +51,9 @@ export default function Dropdown() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
+  const {state, dispatch} = useGlobalState()
+  const {data, loading, error} = useCurrentUser({})
+
   const toggleMenu = () => {
     setOpen(prev => !prev);
   };
@@ -54,6 +61,28 @@ export default function Dropdown() {
   const handleClickAway = () => {
     setOpen(false);
   };
+
+  const handleClick = (id: string) => {
+    dispatch({
+      type: 'SET_SELECTED_COMPANY', 
+      companyId: id
+    })
+    setOpen(prev => !prev);
+  }
+
+  const renderCompanyName = () => {
+    if (!state.selectedCompany) return "";
+    console.log("State", state.selectedCompany)
+
+    const companies = idx(data, data => data.currentUser.user.ownedCompanies);
+    console.log("Companies", companies)
+    
+    if (!companies) return "";
+    const selected = companies.find(company => company.id === state.selectedCompany);
+    if (!selected) return ""
+    console.log("Selected", selected)
+    return selected.name;
+  }
 
   return (
     <div className={classes.root}>
@@ -64,37 +93,28 @@ export default function Dropdown() {
             variant="inherit"
             onClick={toggleMenu}
           >
-            <img src={MicrosoftLogo} alt="Microsoft" />
-            <span className={classes.pl12}>Microsoft</span>
+            <span>
+              { renderCompanyName() }
+            </span>
             <div className={classes.grow} />
             <i className="fa fa-caret-down"></i>
           </Typography>
           {open ? (
             <Paper className={classes.paper}>
-              <Typography
-                className={classes.title}
-                variant="inherit"
-                onClick={toggleMenu}
-              >
-                <img src={MicrosoftLogo} alt="Microsoft" />
-                <span className={classes.pl12}>Microsoft</span>
-              </Typography>
-              <Typography
-                className={classes.title}
-                variant="inherit"
-                onClick={toggleMenu}
-              >
-                <img src={PrepddLogo} alt="PrepDD" width="24" height="24" />
-                <span className={classes.pl12}>PrepDD</span>
-              </Typography>
-              <Typography
-                className={classes.title}
-                variant="inherit"
-                onClick={toggleMenu}
-              >
-                <img src={G2Logo} alt="Microsoft" width="24" height="24" />
-                <span className={classes.pl12}>G2 Crowd</span>
-              </Typography>
+              { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies && 
+                data.currentUser.user.ownedCompanies.map(company => {
+                  return (
+                    <Typography
+                      key={company.id}
+                      className={classes.title}
+                      variant="inherit"
+                      onClick={() => handleClick(company.id)}
+                    >
+                      <span>{company.name} </span>
+                    </Typography>
+                  )
+                })
+              }
             </Paper>
           ) : null}
         </div>

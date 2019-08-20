@@ -32,3 +32,10 @@ export const useRequireGuest = createCurrentUserLoadedHook(currentUser => {
     navigate('/app')
   }
 })
+
+export const isAuthenticated = createCurrentUserLoadedHook(currentUser => {
+  if (currentUser) {
+    return true
+  }
+  return false
+})
