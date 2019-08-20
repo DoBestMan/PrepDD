@@ -30,7 +30,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
     company = Company.find(company_id)
     company_team = company.teams.where(name: team).first_or_create
 
-    team_user = TeamsUser.create( user_id: user.id, team_id: company_team.id )
+    team_user = TeamsUser.create( user_id: user.id, team_id: company_team.id, company_id: company_id )
 
     user_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
