@@ -113,7 +113,7 @@ export default function TeamManagement(props: {path?: string}) {
 
     if (loading || !usersList) return;
     setState(usersList)
-  }, [loading])
+  }, [data])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -161,7 +161,9 @@ export default function TeamManagement(props: {path?: string}) {
   }
 
   const handleDelete = () => {
-    removeCompanyMember()
+    if (confirm("Are you going to delete team members?")) {
+      removeCompanyMember()
+    }
   }
 
   const handleChangeTeam = (newTeam: string) => {
