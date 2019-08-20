@@ -208,7 +208,10 @@ export default function DetailPane(props: DetailPaneProps) {
   }
 
   const handleDelete = () => {
-    removeCompanyMember()
+    if (confirm("Are you going to delete this member?")) {
+      removeCompanyMember()
+      handleClose()
+    }
   }
 
   const handleUpdateName = () => {
@@ -242,7 +245,7 @@ export default function DetailPane(props: DetailPaneProps) {
             onUpdate={handleUpdateName}
           />          
           <div className={classes.grow} />
-          <DeleteIcon onClick={handleDelete}/>
+          <DeleteIcon onClick={handleDelete} />
           <CloseIcon style={{marginLeft: '6px'}} onClick={handleClose}/>
         </div>
 
