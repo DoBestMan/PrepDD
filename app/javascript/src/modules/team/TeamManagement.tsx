@@ -25,6 +25,7 @@ import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
+import { useLazyQuery } from '@apollo/react-hooks';
 
 interface Company {
   url: string;
@@ -122,10 +123,9 @@ export default function TeamManagement(props: {path?: string}) {
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
 
-    console.log("Team Member is changed")
     if (loading || !usersList) return;
     setState(usersList)
-  }, [JSON.stringify(data),])
+  }, [idx(data, data => data.company.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
