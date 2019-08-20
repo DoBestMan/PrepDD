@@ -116,6 +116,7 @@ interface DetailPaneProps {
   id: string;
   open: boolean;
   company: string;
+  handleClose: () => void;
 }
 
 interface StateProps extends UserDetails_user {
@@ -128,7 +129,7 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company} = props;
+  const {id, open, company, handleClose} = props;
   const classes = useStyles();
   const [state, setState] = useState<StateProps>({
     __typename: "User",
@@ -242,7 +243,7 @@ export default function DetailPane(props: DetailPaneProps) {
           />          
           <div className={classes.grow} />
           <DeleteIcon onClick={handleDelete}/>
-          <CloseIcon style={{marginLeft: '6px'}} />
+          <CloseIcon style={{marginLeft: '6px'}} onClick={handleClose}/>
         </div>
 
         <div className={classes.roleForm}>

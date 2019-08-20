@@ -318,7 +318,12 @@ export default function TeamManagement(props: {path?: string}) {
         </Paper>
 
         { selected.length > 0 && 
-          <DetailPane id={selected[0]} open={isOpen()} company={company} />
+          <DetailPane 
+            id={selected[0]} 
+            open={isOpen()} 
+            company={company}
+            handleClose={() => setSelected([])}
+          />
         }
       </div>
     )
