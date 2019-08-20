@@ -22,8 +22,7 @@ module Types
 
   def ownedCompanies
     team_ids  = object.teams.pluck(:id)
-    role_ids = object.roles.pluck(:id)
-    object.companies.includes(:teams).where(teams: {id: team_ids})
+    object.owned_companies.includes(:teams).where(teams: {id: team_ids})
       .references(:teams).includes(:roles)
       .where(roles: {id: role_ids}).references(:roles)
   end
