@@ -143,12 +143,12 @@ export default function DetailPane(props: DetailPaneProps) {
   const {loading, data, error} = useUserDetails({id, })
   console.log("Data: ", data)
   const rolesData = useAllRoles({})
-  // const [updateTeamMember] = useUpdateTeamMember({
-  //   id: state.id, 
-  //   fullName: state.fullName, 
-  //   companyId: company, 
-  //   role: state.role, 
-  // })
+  const [updateTeamMember] = useUpdateTeamMember({
+    id: state.id,
+    fullName: state.fullName, 
+    companyId: company, 
+    role: state.role, 
+  })
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: company, 
     userId: state.id, 
@@ -203,7 +203,7 @@ export default function DetailPane(props: DetailPaneProps) {
       ...state,
       role: newRole
     })
-    // updateTeamMember()
+    updateTeamMember()
   }
 
   const handleDelete = () => {
@@ -211,7 +211,7 @@ export default function DetailPane(props: DetailPaneProps) {
   }
 
   const handleUpdateName = () => {
-    // updateTeamMember()
+    updateTeamMember()
   }
 
   return loading ?

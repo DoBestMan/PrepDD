@@ -29,9 +29,8 @@ export interface UpdateTeamMember {
 }
 
 export interface UpdateTeamMemberVariables {
-  email: string;
+  id: string;
   fullName: string;
   companyId: string;
-  newRole: string;
-  oldRole: string;
+  role: string;
 }

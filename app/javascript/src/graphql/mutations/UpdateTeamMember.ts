@@ -9,18 +9,16 @@ export const useUpdateTeamMember = createMutationHook<
   UpdateTeamMemberVariables 
   >(gql`
   mutation UpdateTeamMember(
-    $email: String!,
+    $id: ID!,
     $fullName: String!,
     $companyId: ID!, 
-    $newRole: ID!, 
-    $oldRole: ID!
+    $role: ID!,
   ) {
     updateTeamMember(
-      email: $email, 
+      id: $id, 
       fullName: $fullName, 
       companyId: $companyId, 
-      newRole: $newRole, 
-      oldRole: $oldRole
+      role: $role,
     ) {
       errors {
         path
