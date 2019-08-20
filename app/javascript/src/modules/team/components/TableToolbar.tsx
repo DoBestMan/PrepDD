@@ -190,7 +190,6 @@ const TableToolbar = (props: TableToolbarProps) => {
   const handleSubmit = useCallback(event => {
     setOpen(false)
     event.preventDefault()
-    console.log("State:", state)
     addTeamMember()
   }, [addTeamMember])
 
