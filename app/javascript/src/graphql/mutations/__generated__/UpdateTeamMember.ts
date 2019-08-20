@@ -32,6 +32,5 @@ export interface UpdateTeamMemberVariables {
   email: string;
   fullName: string;
   companyId: string;
-  newRole: string;
-  oldRole: string;
+  role: string;
 }

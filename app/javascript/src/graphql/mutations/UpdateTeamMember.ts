@@ -12,15 +12,13 @@ export const useUpdateTeamMember = createMutationHook<
     $email: String!,
     $fullName: String!,
     $companyId: ID!, 
-    $newRole: ID!, 
-    $oldRole: ID!
+    $role: ID!,
   ) {
     updateTeamMember(
       email: $email, 
       fullName: $fullName, 
       companyId: $companyId, 
-      newRole: $newRole, 
-      oldRole: $oldRole
+      role: $role,
     ) {
       errors {
         path

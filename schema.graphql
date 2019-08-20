@@ -76,7 +76,7 @@ type Mutation {
   signOutUser: SignOutUserPayload
   signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
   updateCompany(autoPdf: Boolean!, autoWatermark: Boolean!, id: ID!, name: String!, previewOnly: Boolean!): UpdateCompanyPayload
-  updateTeamMember(companyId: ID!, email: String!, fullName: String!, newRole: ID!, oldRole: ID!): UpdateTeamMemberPayload
+  updateTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!): UpdateTeamMemberPayload
   updateUserData(displayName: String!, email: String!, fullName: String!): UpdateUserDataPayload
   updateUserNotificatiosn(input: UpdateUserNotificatiosnInput!): UpdateUserNotificatiosnPayload
   updateUserPassword(password: String!): UpdateUserPasswordPayload
