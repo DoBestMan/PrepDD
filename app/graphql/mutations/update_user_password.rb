@@ -39,8 +39,12 @@ class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
     end
 
     if user.persisted?
+      context[:controller].sign_out
+      context[:controller].sign_in(user)
       response[:user] = user
+      response[:current_user] = { id: 'current_user', user: user }
       response[:success] = true
+      response
     end
 
     response
