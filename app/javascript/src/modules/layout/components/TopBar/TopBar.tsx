@@ -50,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
       marginLeft: 0,
       width: '100%',
+      height: '36px', 
       background: '#F2F2F2',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
@@ -86,6 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inviteButton: {
       width: '72px',
+      height: '36px', 
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
@@ -100,8 +102,8 @@ const useStyles = makeStyles((theme: Theme) =>
       }
     },
     appBarItemSize: {
-      width: '30px',
-      height: '30px'
+      width: '32px',
+      height: '32px'
     },
     grow: {
       flexGrow: 1
@@ -152,7 +154,7 @@ export default function TopBar(props: {open: boolean}) {
           <Button className={classes.inviteButton}>
             Invite
           </Button>
-          <IconButton aria-label="show 4 new notifications" color="inherit">
+          <IconButton aria-label="show 4 new notifications" color="inherit" style={{marginLeft: "6px"}}>
             <StyledBadge badgeContent={4} color="secondary">
               <NotificationsIcon className={classes.appBarItemSize} />
             </StyledBadge>
