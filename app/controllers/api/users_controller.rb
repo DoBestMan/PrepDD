@@ -3,16 +3,17 @@ class Api::UsersController < ApplicationController
   before_action :set_user, only: %i[ update ]
 
   def update
+    @user.profile_picture.attach(params[:profile_picture])
     render json: {user: @user}
   end
 
   private
 
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find(user_params[:id])
   end
 
   def user_params
-    params.permit(profile_picture: [])
+    params.permit(:id, profile_picture: [])
   end
 end
