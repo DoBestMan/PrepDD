@@ -18,6 +18,7 @@ import StyledItem from './styled/StyledItem';
 import StyledTableRow from './styled/StyledTableRow';
 import StyledTableCell from './styled/StyledTableCell';
 import InputForm from './InputForm'
+import ArrowTooltip from './ArrowTooltip'
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
@@ -109,6 +110,12 @@ const useStyles = makeStyles((theme: Theme) =>
         background: '#3A84FF'
       }
     },
+    label: {
+      color: 'white', 
+      fontSize: '12px', 
+      fontWeight: 600, 
+      textTransform: 'capitalize'
+    }
   })
 );
 
@@ -140,6 +147,7 @@ export default function DetailPane(props: DetailPaneProps) {
     companies: null,
   });
   const [roles, setRoles] = useState<Role[]>([]);
+  const [hover, setHover] = useState<string>("");
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
@@ -215,6 +223,16 @@ export default function DetailPane(props: DetailPaneProps) {
     updateTeamMember()
   }
 
+  const renderTooltipTitle = (options: String[]) => {
+    return (
+      <React.Fragment>
+        { options.map((option: String, index: number) => 
+          <p key={index} className={classes.label}>{option}</p>
+        )}
+      </React.Fragment>
+    )
+  }
+
   return loading ?
     <LoadingFallback /> :
     <Drawer
@@ -268,23 +286,48 @@ export default function DetailPane(props: DetailPaneProps) {
           <TableBody>
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
-              return (
-                <StyledTableRow key={company.id}>
-                  <StyledTableCell>
-                    <StyledItem label={company.name} />
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <div className={classes.flex}>
-                      { company.teams && company.teams.map(team => {
-                        return (
-                          <StyledItem key={team.id} label={team.name} />
-                        )
-                      })}
-                    </div>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )
-            })}
+                const isHover = (hover === company.id)
+
+                return (
+                  <StyledTableRow 
+                    key={company.id} 
+                    onMouseOver={() => setHover(company.id)}
+                    onMouseLeave={() => setHover("")}
+                  >
+                    <StyledTableCell style={{width: '200px'}}>
+                      { isHover ?
+                        <StyledItem label={company.name} /> :
+                        company.name
+                      }
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      { isHover ? 
+                        <div className={classes.flex}>
+                          { company.teams && company.teams.slice(0, 2).map(team => 
+                              <StyledItem 
+                                key={`${state.fullName}-${team.id}`}
+                                label={team.name} 
+                              />
+                            )                      
+                          }
+                          { company.teams && company.teams.length > 2 &&
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(company.teams.map(a => a.name).slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${company.teams.length - 2}`}
+                              />
+                            </ArrowTooltip>
+                          }
+                        </div> :
+                        (company.teams && company.teams.map(team => team.name).join(', '))
+                      }
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )
+              }
+            )}
           </TableBody>
         </Table>
         <Typography className={classes.addLink} variant="h6">

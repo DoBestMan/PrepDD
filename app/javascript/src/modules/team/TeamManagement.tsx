@@ -233,15 +233,15 @@ export default function TeamManagement(props: {path?: string}) {
                     
                     return (
                       <StyledTableRow
-                        hover
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        key={`member-${row.id}`} 
                         role="team member"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={`member-${row.id}`}
                         selected={isItemSelected}
+                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        hover
                       >
-                        <StyledTableCell>
+                        <StyledTableCell style={{paddingLeft: '31px'}}>
                           <div className={classes.flex} style={{alignItems: 'center'}}>
                             <img 
                               className={classes.round} 
