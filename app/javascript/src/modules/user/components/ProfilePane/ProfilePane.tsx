@@ -177,7 +177,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
       email: currentUser.email
     })
-  }, [loading])
+  }, [idx(data, data => data.currentUser.user)])
 
   const handleChange = React.useCallback(
     event => {
