@@ -19,7 +19,7 @@ module Types
     field :roles, [RoleType], null: false
 
     def total_users
-      object.users.count + 1
+      object.users.count
     end
 
     def total_storage
