@@ -4,7 +4,7 @@ class Api::UsersController < ApplicationController
 
   def update
     @user.profile_picture.attach(params[:profile_picture])
-    render json: {user: @user}
+    render json: {user: @user, profile_url: url_for(@user.profile_picture)}
   end
 
   private

@@ -263,11 +263,12 @@ User
 """
 type User {
   companies: [Company!]
-  displayName: String!
+  displayName: String
   email: String!
   fullName: String!
   id: ID!
   ownedCompanies: [Company!]
+  profileUrl: String
   roles: [Role!]
   teams: [Team!]
 }
