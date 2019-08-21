@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
+import _ from 'lodash'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -26,6 +27,7 @@ import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
+import { canNotDefineSchemaWithinExtensionMessage } from 'graphql/validation/rules/LoneSchemaDefinition';
 
 interface Company {
   url: string;
@@ -137,6 +139,24 @@ export default function TeamManagement(props: {path?: string}) {
         )
       }
   
+      setSelected(newSelected)
+    } else if (event.shiftKey) {
+      let newSelected: string[] = selected
+
+      if (selected.length > 0) {
+        let startIndex = memberList.findIndex(member => member.id === id)
+        let endIndex = memberList.findIndex(member => member.id === selected[selected.length - 1])
+        startIndex > endIndex ? endIndex -= 1 : endIndex += 1
+        newSelected = newSelected.concat(_.range(startIndex, endIndex).map(index => memberList[index].id))
+      } else {
+        let endIndex = memberList.findIndex(member => member.id === id)
+        newSelected = newSelected.concat(_.range(0, endIndex + 1).map(index => memberList[index].id))
+      }
+
+      newSelected = newSelected.filter(
+        (member: string, index: number, self: string[]) => self.indexOf(member) === index
+      )
+
       setSelected(newSelected)
     } else {
       const selectedIndex = selected.indexOf(id)

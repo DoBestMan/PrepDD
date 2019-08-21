@@ -176,7 +176,7 @@ const TableToolbar = (props: TableToolbarProps) => {
   }
 
   const handleClickAway = (event: React.MouseEvent<unknown>) => {
-    console.log(event)
+    // console.log("Click Away Event", event)
     // if (event.target.tagName !== "LI")
     setOpen(false)
   }
