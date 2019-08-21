@@ -6,8 +6,7 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
   Table,
-  TableBody,
-  TablePagination
+  TableBody
 } from '@material-ui/core'
 
 import LoadingFallback from '../../components/LoadingFallback'
@@ -99,8 +98,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
   const [selected, setSelected] = React.useState<string[]>([])
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [team, setTeam] = React.useState("")
   const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
@@ -110,6 +107,12 @@ export default function TeamManagement(props: {path?: string}) {
     companyId: state.selectedCompany, 
     userIds: selected
   })
+  const responseTeam = useTeamDetails({id: team})
+
+  useEffect(() => {
+    setTeam("")
+    setSelected([])
+  }, [state.selectedCompany])
 
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
@@ -122,6 +125,14 @@ export default function TeamManagement(props: {path?: string}) {
     })
     setMemberList(usersList)
   }, [idx(data, data => data.company.users)])
+
+  useEffect(() => {
+    const usersList = idx(responseTeam, responseTeam => responseTeam.data.team.users);
+
+    if (!usersList) return;
+    console.log("Team Fetch", usersList)
+    setMemberList(usersList)
+  }, [idx(responseTeam, responseTeam => responseTeam.data.team.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -176,15 +187,6 @@ export default function TeamManagement(props: {path?: string}) {
     }
   }
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
-  }
-
   const handleDelete = () => {
     if (confirm("Are you going to delete team members?")) {
       removeCompanyMember()
@@ -193,7 +195,6 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam)
-    // useTeamDetails({id: newTeam})
   }
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1
@@ -227,8 +228,8 @@ export default function TeamManagement(props: {path?: string}) {
             <Table className={classes.table} aria-labelledby="Team Management Table">
               <TableHeader />
               <TableBody>
-                { memberList && memberList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: CompanyDetails_company_users, index: number) => {
+                { memberList && 
+                  memberList.map((row: CompanyDetails_company_users, index: number) => {
                     const isItemSelected = isSelected(row.id)
                     
                     return (
@@ -312,24 +313,6 @@ export default function TeamManagement(props: {path?: string}) {
               </TableBody>
             </Table>
           </div>
-
-          { memberList && (
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={memberList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                'aria-label': 'previous page',
-              }}
-              nextIconButtonProps={{
-                'aria-label': 'next page',
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          )}
         </Paper>
 
         { selected.length > 0 && 
