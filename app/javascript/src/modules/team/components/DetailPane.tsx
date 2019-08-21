@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import idx from 'idx';
-import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import React, {useState, useEffect} from 'react'
+import idx from 'idx'
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles'
 import {
   Drawer,
   Table,
@@ -8,28 +8,28 @@ import {
   TableBody,
   Typography,
   Button,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/DeleteForever';
-import CloseIcon from '@material-ui/icons/Close';
+} from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/DeleteForever'
+import CloseIcon from '@material-ui/icons/Close'
 
 import LoadingFallback from '../../../components/LoadingFallback'
-import Dropdown from '../../../components/Dropdown';
-import StyledItem from './styled/StyledItem';
-import StyledTableRow from './styled/StyledTableRow';
-import StyledTableCell from './styled/StyledTableCell';
+import Dropdown from '../../../components/Dropdown'
+import StyledItem from './styled/StyledItem'
+import StyledTableRow from './styled/StyledTableRow'
+import StyledTableCell from './styled/StyledTableCell'
 import InputForm from './InputForm'
 import ArrowTooltip from './ArrowTooltip'
 
 import {useUserDetails} from '../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../graphql/queries/AllRoles'
 import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
-import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember';
-import {useRemoveCompanyMember} from '../../../graphql/mutations/RemoveCompanyMember';
-import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember';
+import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember'
+import {useRemoveCompanyMember} from '../../../graphql/mutations/RemoveCompanyMember'
+import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember'
 
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
+const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 
-const panelWidth = 500;
+const panelWidth = 500
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -117,55 +117,60 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'capitalize'
     }
   })
-);
+)
 
 interface DetailPaneProps {
-  id: string;
-  open: boolean;
-  company: string;
-  handleClose: () => void;
+  id: string
+  open: boolean
+  company: string
+  handleClose: () => void
 }
 
-interface StateProps extends UserDetails_user {
-  role: string;
+interface UserProps extends UserDetails_user {
+  role: string
 }
 
 interface Role {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, handleClose} = props;
-  const classes = useStyles();
-  const [state, setState] = useState<StateProps>({
+  const {id, open, company, handleClose} = props
+  const classes = useStyles()
+  const [user, setUser] = useState<UserProps>({
     __typename: "User",
     id: '',
     fullName: '',
     role: '0', 
     roles: null,
     companies: null,
-  });
-  const [roles, setRoles] = useState<Role[]>([]);
-  const [hover, setHover] = useState<string>("");
+  })
+  const [roles, setRoles] = useState<Role[]>([])
+  const [companyId, setCompanyId] = useState<string>("")
+  const [teamId, setTeamId] = useState<string>("")
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
   const [updateTeamMember] = useUpdateTeamMember({
-    id: state.id,
-    fullName: state.fullName, 
+    id: user.id,
+    fullName: user.fullName, 
     companyId: company, 
-    role: state.role, 
+    role: user.role, 
   })
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId: company, 
-    userId: state.id, 
+    companyId, 
+    userId: user.id, 
+  })
+  const [removeTeamMember] = useRemoveTeamMember({
+    teamId, 
+    userId: user.id
   })
 
   useEffect(() => {
-    const rolesList = idx(rolesData, rolesData => rolesData.data.roles);
+    const rolesList = idx(rolesData, rolesData => rolesData.data.roles)
 
-    if (!rolesList) return;
+    if (!rolesList) return
     const temp = rolesList.map(role => {
       const res = {
         id: role.id, 
@@ -177,20 +182,20 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [idx(rolesData, rolesData => rolesData.data.roles)])
 
   useEffect(() => {
-    const currentUser = idx(data, data => data.user);
+    const currentUser = idx(data, data => data.user)
 
-    if (loading || !currentUser) return;
+    if (loading || !currentUser) return
 
     if (currentUser.roles) {
-      setState({
-        ...state, 
+      setUser({
+        ...user, 
         id: currentUser.id, 
         fullName: currentUser.fullName, 
         role: currentUser.roles[0].id,
       })
     } else {
-      setState({
-        ...state, 
+      setUser({
+        ...user, 
         id: currentUser.id, 
         fullName: currentUser.fullName,
       })
@@ -198,15 +203,15 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [data])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
+    setUser({
+      ...user,
       fullName: event.target.value
     })
   }
 
   const handleChangeRole = (newRole: string) => {
-    setState({
-      ...state,
+    setUser({
+      ...user,
       role: newRole
     })
     updateTeamMember()
@@ -214,6 +219,7 @@ export default function DetailPane(props: DetailPaneProps) {
 
   const handleDelete = () => {
     if (confirm("Are you going to delete this member?")) {
+      setCompanyId(company)
       removeCompanyMember()
       handleClose()
     }
@@ -221,6 +227,18 @@ export default function DetailPane(props: DetailPaneProps) {
 
   const handleUpdateName = () => {
     updateTeamMember()
+  }
+
+  const handleRemoveCompany = (id: string) => {
+    if (confirm("Are you going to delete this member?")) {
+      removeCompanyMember()      
+    }
+  }
+
+  const handleRemoveTeam = (id: string) => {
+    setTeamId(id)
+
+    removeTeamMember()
   }
 
   const renderTooltipTitle = (options: String[]) => {
@@ -255,7 +273,7 @@ export default function DetailPane(props: DetailPaneProps) {
             alt="Alana"
           />
           <InputForm 
-            value={state.fullName} 
+            value={user.fullName} 
             onChange={handleChangeName}
             onUpdate={handleUpdateName}
           />          
@@ -269,7 +287,7 @@ export default function DetailPane(props: DetailPaneProps) {
             <p className={classes.roleLabel}>Role</p>
             <Dropdown 
               options={roles} 
-              selected={state.role}
+              selected={user.role}
               placeholder="Select role" 
               handleUpdate={handleChangeRole}
             />
@@ -286,17 +304,20 @@ export default function DetailPane(props: DetailPaneProps) {
           <TableBody>
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
-                const isHover = (hover === company.id)
+                const isHover = (companyId === company.id)
 
                 return (
                   <StyledTableRow 
                     key={company.id} 
-                    onMouseOver={() => setHover(company.id)}
-                    onMouseLeave={() => setHover("")}
+                    onMouseOver={() => setCompanyId(company.id)}
+                    onMouseLeave={() => setCompanyId("")}
                   >
                     <StyledTableCell style={{width: '200px'}}>
                       { isHover ?
-                        <StyledItem label={company.name} /> :
+                        <StyledItem 
+                          label={company.name} 
+                          handleClose={() => handleRemoveCompany(company.id)}
+                          close /> :
                         company.name
                       }
                     </StyledTableCell>
@@ -305,8 +326,10 @@ export default function DetailPane(props: DetailPaneProps) {
                         <div className={classes.flex}>
                           { company.teams && company.teams.slice(0, 2).map(team => 
                               <StyledItem 
-                                key={`${state.fullName}-${team.id}`}
+                                key={`${user.fullName}-${team.id}`}
                                 label={team.name} 
+                                handleClose={() => handleRemoveTeam(team.id)}
+                                close
                               />
                             )                      
                           }
