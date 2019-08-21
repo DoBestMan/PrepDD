@@ -171,8 +171,6 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     if (loading || !currentUser) return;
 
-    console.log(data, currentUser);
-
     setState({
       ...state, 
       fullName: currentUser.fullName, 

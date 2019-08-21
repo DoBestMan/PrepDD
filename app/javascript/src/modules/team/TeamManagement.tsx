@@ -49,7 +49,6 @@ function createData(
 }
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
-
 const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -104,7 +103,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [team, setTeam] = React.useState("")
   const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  const {state, dispatch} = useGlobalState()
+  const {state} = useGlobalState()
   const { loading, data, error } = useCompanyDetails({id: state.selectedCompany})
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 

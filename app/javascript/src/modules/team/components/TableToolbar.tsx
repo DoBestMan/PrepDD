@@ -116,6 +116,12 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       fontWeight: 600, 
       fontSize: '12px',
       textTransform: 'capitalize'
+    },
+    primaryLabel: {
+      color: '#3A84FF',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '15px',
     }
   })
 )
@@ -160,7 +166,6 @@ const TableToolbar = (props: TableToolbarProps) => {
   }, [setState])
 
   useEffect(() => {
-    console.log("Add Member successfully")
     if (idx(response, response => response.data.addTeamMember.success)) {
       navigate('/app/team')
     }
@@ -265,6 +270,11 @@ const TableToolbar = (props: TableToolbarProps) => {
         {/* </ClickAwayListener> */}
       </div>
       <div className={classes.grow} />
+      { (selected > 0) && 
+        <Typography className={classes.primaryLabel} variant="h6">
+          {selected} member(s)
+        </Typography>
+      }
       { (selected > 0) && 
         <div className={classes.deleteIcon}>
           <DeleteIcon onClick={handleDelete}/>
