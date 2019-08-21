@@ -18,6 +18,7 @@ import SwitchForm from './components/SwitchForm'
 import StyledTableRow from './components/StyledTableRow'
 import StyledTableCell from './components/StyledTableCell'
 
+import {useGlobalState} from '../../../../store'
 import {useCompanySettings} from '../../../../graphql/queries/CompanySettings'
 import {useUpdateCompany} from '../../../../graphql/mutations/UpdateCompany'
 import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings'
@@ -66,7 +67,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function FormPanel() {
   const classes = useStyles()
-  const [state, setState] = useState<CompanySettings_company>({
+  const {state} = useGlobalState()
+  const [company, setCompany] = useState<CompanySettings_company>({
     __typename: "Company",
     id: '',
     name: '', 
@@ -80,31 +82,29 @@ export default function FormPanel() {
     previewOnly: false
   })
   
-  const {data, error, loading} = useCompanySettings({id: 1})
-
-  console.log("Company Settings: ", data)
+  const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
 
   const [updateCompany] = useUpdateCompany({
-    id: state.id, 
-    name: state.name, 
-    autoPdf: state.autoPdf as boolean, 
-    autoWatermark: state.autoWatermark as boolean, 
-    previewOnly: state.previewOnly as boolean
+    id: company.id, 
+    name: company.name, 
+    autoPdf: company.autoPdf as boolean, 
+    autoWatermark: company.autoWatermark as boolean, 
+    previewOnly: company.previewOnly as boolean
   })
 
   useEffect(() => {
-    const company = idx(data, data => data.company);
+    const companyData = idx(data, data => data.company);
 
-    if (loading || !company) return;
+    if (loading || !companyData) return;
 
-    setState({
-      ...company
+    setCompany({
+      ...companyData
     })
-  }, [loading])
+  }, [idx(data, data => data.company)])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
+    setCompany({
+      ...company,
       name: event.target.value
     })
   }
@@ -114,17 +114,17 @@ export default function FormPanel() {
   }
 
   const handleAutoPDF = () => {
-    setState({...state, autoPdf: !state.autoPdf})
+    setCompany({...company, autoPdf: !company.autoPdf})
     updateCompany()
   }
 
   const handleAutoWatermark = () => {
-    setState({...state, autoWatermark: !state.autoWatermark})
+    setCompany({...company, autoWatermark: !company.autoWatermark})
     updateCompany()
   }
 
   const handlePreviewOnly = () => {
-    setState({...state, previewOnly: !state.previewOnly})
+    setCompany({...company, previewOnly: !company.previewOnly})
     updateCompany()
   }
 
@@ -137,7 +137,7 @@ export default function FormPanel() {
         <Grid item md={12}>
           <InputForm 
             label="Company name" 
-            value={state.name} 
+            value={company.name} 
             onChange={handleChangeName}
             onUpdate={handleUpdateName}
           />
@@ -146,14 +146,14 @@ export default function FormPanel() {
           <CompanyForm 
             label="Parent company" 
             placeholder="Assign parent company..."
-            company={state.parent}
+            company={company.parent}
           />
         </Grid>
         <Grid item md={6}>
           <CompanyForm
             label="Broker"
             placeholder="Assign broker...."
-            company={state.broker}
+            company={company.broker}
           />
         </Grid>
         <Grid item md={12}>
@@ -172,13 +172,13 @@ export default function FormPanel() {
               <TableBody className={classes.tableBody}>
                 <TableRow>
                   <StyledTableCell>Total users this month(2 days remain)</StyledTableCell>
-                  <StyledTableCell>{state.totalUsers} users</StyledTableCell>
-                  <StyledTableCell>{state.subscription ? state.subscription.maxUsers : 0} users</StyledTableCell>
+                  <StyledTableCell>{company.totalUsers} users</StyledTableCell>
+                  <StyledTableCell>{company.subscription ? company.subscription.maxUsers : 0} users</StyledTableCell>
                 </TableRow>
                 <TableRow>
                   <StyledTableCell>Total storage used(GB)</StyledTableCell>
-                  <StyledTableCell>{state.totalStorage} GB</StyledTableCell>
-                  <StyledTableCell>{state.subscription ? state.subscription.maxStorage : 0} GB</StyledTableCell>
+                  <StyledTableCell>{company.totalStorage} GB</StyledTableCell>
+                  <StyledTableCell>{company.subscription ? company.subscription.maxStorage : 0} GB</StyledTableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -204,7 +204,7 @@ export default function FormPanel() {
                       <p>Automatic PDF</p>
                       <div className={classes.grow} />
                       <SwitchForm 
-                        value={state.autoPdf} 
+                        value={company.autoPdf} 
                         onChange={handleAutoPDF}
                       />
                     </div>
@@ -216,7 +216,7 @@ export default function FormPanel() {
                       <p>Dynamic watermarking</p> 
                       <div className={classes.grow} />
                       <SwitchForm 
-                        value={state.autoWatermark} 
+                        value={company.autoWatermark} 
                         onChange={handleAutoWatermark}
                       />
                     </div>
@@ -228,7 +228,7 @@ export default function FormPanel() {
                       <p>Preview only</p>
                       <div className={classes.grow} />
                       <SwitchForm 
-                        value={state.previewOnly}
+                        value={company.previewOnly}
                         onChange={handlePreviewOnly}
                       />
                     </div>
