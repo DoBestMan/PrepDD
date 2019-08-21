@@ -6,16 +6,13 @@ import {
   Paper
 } from '@material-ui/core'
 
+import {AllRoles_roles} from '../../../../../graphql/queries/__generated__/AllRoles'
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
       position: 'relative',
-      border: '1px solid #CACACA',
-      borderRadius: '3px',
-      minWidth: '150px'
-    },
-    smallHeight: {
-      height: '31px'
+      borderBottom: '1px solid darkgray'
     },
     grow: {
       flexGrow: 1, 
@@ -23,21 +20,27 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       width: '100%', 
       position: 'absolute',
-      top: 42, 
-      left: 0,
+      top: '54px', 
+      left: '0px',
       zIndex: 1
-    },
-    smallPaper: {
-      top: 30, 
     },
     invisible: {
       display: 'none'
     }, 
-    item: {
+    selectedItem: {
       display: 'flex', 
-      padding: '12px', 
-      alignItems: 'center', 
+      height: '48px', 
+      padding: '6px 0px 7px 0px',
+      alignItems: 'flex-end', 
       boxSizing: 'border-box', 
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600, 
+      fontSize: '12px',
+      textTransform: 'capitalize', 
+    },
+    item: {
+      padding: '12px', 
       color: '#606060',
       fontFamily: 'Montserrat',
       fontWeight: 600, 
@@ -47,9 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
         cursor: 'pointer',
         background: '#EBF2FF'
       }
-    },
-    smallItem: {
-      padding: '6px'
     }
   })
 )
@@ -60,17 +60,21 @@ interface Option {
 }
 
 interface DropdownProps {
-  options: Option[];
+  data: AllRoles_roles[];
   selected: string;
-  small?: boolean;
   placeholder?: string;
-  handleUpdate?: (value: string) => void;
+  handleChange?: (role: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const { options, selected, small, placeholder, handleUpdate } = props
+  const { data, selected, placeholder, handleChange } = props
   const classes = useStyles()
   const [open, setOpen] = React.useState<boolean>(false)
+
+  const options = data.map(role => ({
+    id: role.id, 
+    name: role.name
+  }))
 
   const renderLabel = () => {
     const res = options.find(option => option.id === selected);
@@ -80,23 +84,26 @@ export default function Dropdown(props: DropdownProps) {
 
   const toggleMenu = () => setOpen(prev => !prev)
 
-  const handleClick = (value: string) => {
+  const handleClick = (role: string) => {
     setOpen(prev => !prev)
-    if (handleUpdate) handleUpdate(value)
+    if (handleChange) handleChange(role)
   }
 
   const handleClickAway = () => setOpen(false)
 
   return (
-    <div className={clsx(classes.root, small && classes.smallHeight)}>
+    <div className={classes.root}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <div className={clsx(classes.item, small && classes.smallItem)} onClick={toggleMenu}>
+          <div 
+            className={classes.selectedItem} 
+            onClick={toggleMenu}
+          >
             {renderLabel()}
             <div className={classes.grow} />
-            <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
+            <i className="fa fa-caret-down"></i>
           </div>
-          <Paper className={clsx(classes.paper, !open && classes.invisible, small && classes.smallPaper)}>
+          <Paper className={clsx(classes.paper, !open && classes.invisible)}>
             { options && options.map(option => (
                 <div 
                   key={option.id} 

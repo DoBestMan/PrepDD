@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     passwordForm: {
-      width: '380px', 
+      minWidth: '250px', 
       paddingLeft: '36px'
     },
     passwordFormTitle: {

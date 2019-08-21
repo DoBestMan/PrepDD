@@ -289,7 +289,11 @@ export default function DetailPane(props: DetailPaneProps) {
           />          
           <div className={classes.grow} />
           <DeleteIcon onClick={handleDelete} />
-          <i className="fa fa-times" style={{marginLeft: '6px', fontSize: '20px'}} />
+          <i 
+            className="fa fa-times" 
+            onClick={handleClose}
+            style={{marginLeft: '6px', fontSize: '20px'}} 
+          />
         </div>
 
         <div className={classes.roleForm}>
@@ -313,8 +317,7 @@ export default function DetailPane(props: DetailPaneProps) {
           <TableBody>
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
-                // const isHover = (companyId === company.id)
-                const isHover = true
+                const isHover = (companyId === company.id)
 
                 return (
                   <StyledTableRow 

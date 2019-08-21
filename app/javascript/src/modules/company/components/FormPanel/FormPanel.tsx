@@ -97,6 +97,7 @@ export default function FormPanel() {
 
     if (loading || !companyData) return;
 
+    console.log("Company Data", companyData)
     setCompany({
       ...companyData
     })

@@ -1,19 +1,17 @@
 import React, {useState, useCallback} from 'react'
 import clsx from 'clsx'
+import idx from 'idx'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import {
   Toolbar,
   Typography,
   Button,
   TextField,
-  FormControl, 
-  InputLabel, 
-  Select, 
-  MenuItem
  } from '@material-ui/core'
- import ClickAwayListener from '@material-ui/core/ClickAwayListener'
- import DeleteIcon from '@material-ui/icons/DeleteForever'
- import AutoSuggest from './components/AutoSuggest'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import DeleteIcon from '@material-ui/icons/DeleteForever'
+import AutoSuggest from './components/AutoSuggest'
+import Dropdown from './components/Dropdown'
 import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
 
@@ -156,7 +154,6 @@ const TableToolbar = (props: TableToolbarProps) => {
   const { selected, handleDelete, company } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
-  const [roleChange, setRoleChange] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
     fullName: '', 
     email: '', 
@@ -184,17 +181,7 @@ const TableToolbar = (props: TableToolbarProps) => {
   }
 
   const handleClickAway = (event: React.MouseEvent<unknown>) => {
-    if (!roleChange)
-      setOpen(false)
-    setRoleChange(false)
-  }
-
-  const handleChangeRole = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    setState(prev => ({
-      ...prev,
-      role: event.target.value as string,
-    }));
-    setRoleChange(true)
+    setOpen(false)
   }
 
   const handleChangeTeam = (newValue: string) => {
@@ -250,25 +237,19 @@ const TableToolbar = (props: TableToolbarProps) => {
                 autoFocus
                 required
               />
-              <FormControl className={classes.input}>
-                <InputLabel htmlFor="role">Role</InputLabel>
-                <Select
-                  value={state.role}
-                  onChange={handleChangeRole}
-                  inputProps={{
-                    name: 'role', 
-                    id: 'role'
-                  }}
-                >
-                  { data && data.roles &&
-                    data.roles.map(role => {
-                      return (
-                        <MenuItem className={classes.menuItem} key={role.id} value={role.id}>{role.name}</MenuItem>
-                      )
-                    })
-                  }
-                </Select>
-              </FormControl>
+              { data && data.roles &&
+                <Dropdown
+                  data={data.roles}
+                  selected={state.role}
+                  placeholder="Role"
+                  handleChange={(role) => (
+                    setState(prev => ({
+                      ...prev,
+                      role,
+                    }))
+                  )}
+                />
+              }              
               <AutoSuggest
                 value={state.team}
                 handleChange={handleChangeTeam}
