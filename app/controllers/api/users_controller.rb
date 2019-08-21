@@ -3,8 +3,13 @@ class Api::UsersController < ApiController
   before_action :set_user, only: %i[ update ]
 
   def update
-    @user.profile_picture.attach(params[:profile_picture])
-    render json: {user: @user, profile_url: url_for(@user.profile_picture)}
+    picture = params[:profile_picture]
+    if picture.content_type.in?(%['image/jpeg image/jpg image/png'])
+      @user.profile_picture.attach(params[:profile_picture])
+      render json: { status: true, user: @user, profile_url: url_for(@user.profile_picture) }
+    else
+      render json: { status: false, message: 'Not a valid file type' }
+    end
   end
 
   private
