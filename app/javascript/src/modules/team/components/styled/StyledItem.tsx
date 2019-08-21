@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       width: 'fit-content',
       alignItems: 'center', 
-      marginRight: '6px',
+      margin: '3px', 
       padding: '3px 6px 3px 6px',
       background: '#FFFFFF',
-      border: '1px solid #F2F2F2',
-      borderRadius: '1px'
+      border: '1px solid #D8D8D8',
+      borderRadius: '3px'
     },
     label: {
       color: '#606060',
@@ -47,7 +47,7 @@ const StyledItem = React.forwardRef((props: StyledItemProps, ref: React.Ref<HTML
     <div  {...other} className={classes.root} ref={ref}>
       { logo && <img src={logo} width="18" height="18" style={{marginRight: '6px'}} alt={label} />}
       <div className={clsx(classes.label, selected && classes.selected)}>{label}</div>
-      { close && <i className={clsx(classes.close, "fa fa-times")} /> }
+      { close && <i className={clsx(classes.close, "fa fa-times")} onClick={handleClose} /> }
     </div>
   )
 })

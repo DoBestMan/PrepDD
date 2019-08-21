@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import idx from 'idx'
+import clsx from 'clsx'
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles'
 import {
   Drawer,
+  Paper, 
   Table,
   TableHead,
   TableBody,
@@ -10,22 +12,20 @@ import {
   Button,
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
-import CloseIcon from '@material-ui/icons/Close'
 
-import LoadingFallback from '../../../components/LoadingFallback'
-import Dropdown from '../../../components/Dropdown'
-import StyledItem from './styled/StyledItem'
-import StyledTableRow from './styled/StyledTableRow'
-import StyledTableCell from './styled/StyledTableCell'
-import InputForm from './InputForm'
-import ArrowTooltip from './ArrowTooltip'
+import LoadingFallback from '../../../../components/LoadingFallback'
+import Dropdown from '../../../../components/Dropdown'
+import StyledItem from '../styled/StyledItem'
+import StyledTableRow from '../styled/StyledTableRow'
+import StyledTableCell from '../styled/StyledTableCell'
+import InputForm from './components/InputForm'
 
-import {useUserDetails} from '../../../graphql/queries/UserDetails'
-import {useAllRoles} from '../../../graphql/queries/AllRoles'
-import {UserDetails_user} from '../../../graphql/queries/__generated__/UserDetails'
-import {useUpdateTeamMember} from '../../../graphql/mutations/UpdateTeamMember'
-import {useRemoveCompanyMember} from '../../../graphql/mutations/RemoveCompanyMember'
-import {useRemoveTeamMember} from '../../../graphql/mutations/RemoveTeamMember'
+import {useUserDetails} from '../../../../graphql/queries/UserDetails'
+import {useAllRoles} from '../../../../graphql/queries/AllRoles'
+import {UserDetails_user} from '../../../../graphql/queries/__generated__/UserDetails'
+import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
+import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
+import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 
@@ -119,6 +119,22 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px', 
       fontWeight: 600, 
       textTransform: 'capitalize'
+    },
+    morePaper: {
+      display: 'flex', 
+      flexWrap: 'wrap', 
+      width: '200px', 
+      position: 'absolute', 
+      top: '35px',
+      right: '3px', 
+      padding: '9px', 
+      boxSizing: 'border-box', 
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+      opacity: 0, 
+    },
+    visible: {
+      opacity: 1
     }
   })
 )
@@ -153,6 +169,7 @@ export default function DetailPane(props: DetailPaneProps) {
   const [roles, setRoles] = useState<Role[]>([])
   const [companyId, setCompanyId] = useState<string>("")
   const [teamId, setTeamId] = useState<string>("")
+  const [moreHover, setMoreHover] = useState<boolean>(false)
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
@@ -206,6 +223,11 @@ export default function DetailPane(props: DetailPaneProps) {
     }
   }, [data])
 
+  useEffect(() => {
+    if (teamId)
+      removeTeamMember()
+  }, [teamId])
+
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
       ...user,
@@ -233,26 +255,10 @@ export default function DetailPane(props: DetailPaneProps) {
     updateTeamMember()
   }
 
-  const handleRemoveCompany = (id: string) => {
+  const handleRemoveCompany = () => {
     if (confirm("Are you going to delete this member?")) {
       removeCompanyMember()      
     }
-  }
-
-  const handleRemoveTeam = (id: string) => {
-    setTeamId(id)
-
-    removeTeamMember()
-  }
-
-  const renderTooltipTitle = (options: String[]) => {
-    return (
-      <React.Fragment>
-        { options.map((option: String, index: number) => 
-          <p key={index} className={classes.label}>{option}</p>
-        )}
-      </React.Fragment>
-    )
   }
 
   return loading ?
@@ -307,7 +313,8 @@ export default function DetailPane(props: DetailPaneProps) {
           <TableBody>
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
-                const isHover = (companyId === company.id)
+                // const isHover = (companyId === company.id)
+                const isHover = true
 
                 return (
                   <StyledTableRow 
@@ -319,8 +326,10 @@ export default function DetailPane(props: DetailPaneProps) {
                       { isHover ?
                         <StyledItem 
                           label={company.name} 
-                          handleClose={() => handleRemoveCompany(company.id)}
-                          close /> :
+                          handleClose={() => handleRemoveCompany()}
+                          selected
+                          close 
+                        /> :
                         company.name
                       }
                     </StyledTableCell>
@@ -331,20 +340,35 @@ export default function DetailPane(props: DetailPaneProps) {
                               <StyledItem 
                                 key={`${user.fullName}-${team.id}`}
                                 label={team.name} 
-                                handleClose={() => handleRemoveTeam(team.id)}
+                                handleClose={() => setTeamId(team.id)}
+                                selected
                                 close
                               />
-                            )                      
+                            )
                           }
                           { company.teams && company.teams.length > 2 &&
-                            <ArrowTooltip 
-                              title={renderTooltipTitle(company.teams.map(a => a.name).slice(2))} 
-                              placement="top"
+                            <div 
+                              onMouseOver={() => setMoreHover(true)}
+                              onMouseLeave={() => setMoreHover(false)}
+                              style={{position: 'relative'}}
                             >
-                              <StyledItem
-                                label={`+${company.teams.length - 2}`}
-                              />
-                            </ArrowTooltip>
+                              <StyledItem label={`+${company.teams.length - 2}`} />
+                              <Paper 
+                                className={clsx(classes.morePaper, moreHover && classes.visible)} 
+                                elevation={0}
+                              >
+                                { company.teams.slice(2).map(team => 
+                                    <StyledItem 
+                                      key={`${user.fullName}-${team.id}`}
+                                      label={team.name} 
+                                      handleClose={() => setTeamId(team.id)}
+                                      selected
+                                      close
+                                    />
+                                  )
+                                }
+                              </Paper>
+                            </div>                            
                           }
                         </div> :
                         (company.teams && company.teams.map(team => team.name).join(', '))

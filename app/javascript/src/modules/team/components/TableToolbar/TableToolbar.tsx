@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useCallback} from 'react'
 import clsx from 'clsx'
-import idx from 'idx'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
 import {
   Toolbar,
@@ -14,10 +13,9 @@ import {
  } from '@material-ui/core'
  import ClickAwayListener from '@material-ui/core/ClickAwayListener'
  import DeleteIcon from '@material-ui/icons/DeleteForever'
- import AutoSuggest from './AutoSuggest'
-import { useAddTeamMember } from '../../../graphql/mutations/AddTeamMember';
-import {useAllRoles} from '../../../graphql/queries/AllRoles'
-import { navigate } from '@reach/router';
+ import AutoSuggest from './components/AutoSuggest'
+import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
+import { useAllRoles } from '../../../../graphql/queries/AllRoles'
 
 const useToolbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -180,12 +178,6 @@ const TableToolbar = (props: TableToolbarProps) => {
     const {name, value} = event.target
     setState(state => ({...state, [name]: value}))
   }, [setState])
-
-  useEffect(() => {
-    if (idx(response, response => response.data.addTeamMember.success)) {
-      navigate('/app/team')
-    }
-  }, [response]);
 
   const handleToggle = () => {
     setOpen(!open)

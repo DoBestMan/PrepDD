@@ -2,8 +2,8 @@ import React from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import TableHead from '@material-ui/core/TableHead'
 
-import StyledTableRow from './styled/StyledTableRow'
-import StyledTableCell from './styled/StyledTableCell'
+import StyledTableRow from '../styled/StyledTableRow'
+import StyledTableCell from '../styled/StyledTableCell'
 
 type roleType = 'Member' | 'Admin'
 
