@@ -346,7 +346,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                       </TableCell>
                       <TableCell className={classes.tableCell}>
                         { (company.teams.length > 0) ?
-                          company.teams.join(', ') :
+                          company.teams.map(team => team.name).join(', ') :
                           "No Teams"
                         }
                       </TableCell>
