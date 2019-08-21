@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
@@ -67,19 +67,14 @@ export default function Searchbar(props: SearchbarProps) {
   const { data, value, handleUpdate } = props
   const classes = useSearchbarStyles()
 
-  const convertType = () => {
-    const res = data.map(team => {
-      const obj = { id: team.id, name: team.name };
-      return obj;
-    });
-    res.unshift({
-      id: "", 
-      name: "Select team"
-    })
-    return res;
-  }
-
-  const [teams, setTeams] = useState<Option[]>(convertType())
+  const teamOptions = data.map(team => ({
+    id : team.id,
+    name: team.name
+  }));
+  teamOptions.unshift({
+    id: "",
+    name: "Select team"
+  });
 
   return (
     <div className={classes.root}>
@@ -97,7 +92,7 @@ export default function Searchbar(props: SearchbarProps) {
         />
       </div>
       <Dropdown 
-        options={teams} 
+        options={teamOptions} 
         selected={value}
         placeholder="Select role" 
         handleUpdate={handleUpdate}
