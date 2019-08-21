@@ -118,20 +118,6 @@ export default function Dropdown() {
           </Typography>
           {open ? (
             <Paper className={classes.paper}>
-              { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies && 
-                data.currentUser.user.ownedCompanies.map(company => {
-                  return (
-                    <Typography
-                      key={company.id}
-                      className={classes.title}
-                      variant="inherit"
-                      onClick={() => handleClick(company.id)}
-                    >
-                      <span>{company.name} </span>
-                    </Typography>
-                  )
-                })
-              }
               { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
                 data.currentUser.user.companies.map(company => {
                   return (

@@ -277,27 +277,30 @@ export default function TeamManagement(props: {path?: string}) {
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <div className={classes.flex}>
-                            { row.teams && row.teams.slice(0, 2).map(team => 
-                                <StyledItem 
-                                  key={`${row.fullName}-${team.id}`}
-                                  label={team.name} 
-                                  selected={isItemSelected}
-                                />
-                              )                      
-                            }
-                            { row.teams && row.teams.length > 2 &&
-                              <ArrowTooltip 
-                                title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
-                                placement="top"
-                              >
-                                <StyledItem
-                                  label={`+${row.teams.length - 2}`}
-                                  selected={isItemSelected}
-                                />
-                              </ArrowTooltip>
-                            }
-                          </div>
+                          { (row.teams && row.teams.length > 0) ? 
+                            <div className={classes.flex}>
+                              { row.teams.slice(0, 2).map(team => 
+                                  <StyledItem 
+                                    key={`${row.fullName}-${team.id}`}
+                                    label={team.name} 
+                                    selected={isItemSelected}
+                                  />
+                                )                      
+                              }
+                              { row.teams && row.teams.length > 2 &&
+                                <ArrowTooltip 
+                                  title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
+                                  placement="top"
+                                >
+                                  <StyledItem
+                                    label={`+${row.teams.length - 2}`}
+                                    selected={isItemSelected}
+                                  />
+                                </ArrowTooltip>
+                              }
+                            </div> : "No Teams"
+                          }
+                          
                         </StyledTableCell>
                         { row.roles && row.roles[0].name && 
                           <StyledTableCell>{row.roles[0].name}</StyledTableCell>
