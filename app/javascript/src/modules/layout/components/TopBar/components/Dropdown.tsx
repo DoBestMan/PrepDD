@@ -8,24 +8,21 @@ import Paper from '@material-ui/core/Paper';
 import {useCurrentUser} from '../../../../../graphql/queries/CurrentUser'
 import {useGlobalState} from '../../../../../store'
 
-const G2Logo = require('images/dummy/logos/g2-logo.svg');
-const MicrosoftLogo = require('images/dummy/logos/microsoft-logo.svg');
-const PrepddLogo = require('images/logos/prepdd-logo.svg');
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
   },
   title: {
     display: 'none',
-    width: 220, 
+    width: '180px', 
     boxSizing: 'border-box',
     padding: '18px 24px 19px 24px',
     borderRight: '1px solid #D8D8D8',
-    fontFamily: 'Montserrat',
-    fontSize: '18px',
-    fontWeight: 'bold',
+    alignItems: 'center',
     color: '#2C2C2C',
+    fontFamily: 'Montserrat',
+    fontSize: '15px',
+    fontWeight: 'bold',
     [theme.breakpoints.up('sm')]: {
       display: 'flex',
     },

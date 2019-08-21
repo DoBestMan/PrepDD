@@ -6,6 +6,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex', 
+      width: 'fit-content',
       marginRight: '6px',
       padding: '3px 6px 3px 6px',
       background: '#FFFFFF',

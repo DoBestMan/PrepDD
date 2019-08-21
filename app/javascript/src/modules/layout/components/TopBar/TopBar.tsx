@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      width: '100%',
       height: 33, 
       fontFamily: 'Montserrat',
       fontSize: '12px',
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'black'
     },
     inputInput: {
-      padding: "8px 8px 8px 48px",
+      padding: '10px 8px 8px 48px', 
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
