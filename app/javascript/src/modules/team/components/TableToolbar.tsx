@@ -158,6 +158,7 @@ const TableToolbar = (props: TableToolbarProps) => {
   const { selected, handleDelete, company } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
+  const [roleChange, setRoleChange] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
     fullName: '', 
     email: '', 
@@ -191,11 +192,9 @@ const TableToolbar = (props: TableToolbarProps) => {
   }
 
   const handleClickAway = (event: React.MouseEvent<unknown>) => {
-    const selectedElement = event.target
-    
-    console.log("Event: ", typeof selectedElement, event, selectedElement)
-    // if (selectedElement.tagName !== "LI")
+    if (!roleChange)
       setOpen(false)
+    setRoleChange(false)
   }
 
   const handleChangeRole = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -203,6 +202,7 @@ const TableToolbar = (props: TableToolbarProps) => {
       ...prev,
       role: event.target.value as string,
     }));
+    setRoleChange(true)
   }
 
   const handleChangeTeam = (newValue: string) => {

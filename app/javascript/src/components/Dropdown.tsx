@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
     item: {
       display: 'flex', 
       padding: '12px', 
+      alignItems: 'center', 
       boxSizing: 'border-box', 
       color: '#606060',
       fontFamily: 'Montserrat',
