@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#2C2C2C'
     }, 
     close: {
-      fontSize: '13px', 
+      fontSize: '12px', 
       marginLeft: '6px'
     }
   })
@@ -47,9 +47,7 @@ const StyledItem = React.forwardRef((props: StyledItemProps, ref: React.Ref<HTML
     <div  {...other} className={classes.root} ref={ref}>
       { logo && <img src={logo} width="18" height="18" style={{marginRight: '6px'}} alt={label} />}
       <div className={clsx(classes.label, selected && classes.selected)}>{label}</div>
-      { close && 
-        <CloseIcon className={classes.close} onClick={handleClose} />
-      }
+      { close && <i className={clsx(classes.close, "fa fa-times")} /> }
     </div>
   )
 })

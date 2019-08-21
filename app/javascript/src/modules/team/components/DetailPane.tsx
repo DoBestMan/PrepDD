@@ -283,7 +283,7 @@ export default function DetailPane(props: DetailPaneProps) {
           />          
           <div className={classes.grow} />
           <DeleteIcon onClick={handleDelete} />
-          <CloseIcon style={{marginLeft: '6px'}} onClick={handleClose}/>
+          <i className="fa fa-times" style={{marginLeft: '6px', fontSize: '20px'}} />
         </div>
 
         <div className={classes.roleForm}>
