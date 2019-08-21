@@ -69,6 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '24px',
     },
     roleForm: {
+      display: 'flex', 
+      width: 'fit-content',
+      alignItems: 'center', 
       margin: '36px 32px 0px 32px',
     },
     roleLabel: {
@@ -76,6 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 600,
+      marginRight: '12px', 
     },
     table: {
       width: 'auto',
@@ -283,15 +287,14 @@ export default function DetailPane(props: DetailPaneProps) {
         </div>
 
         <div className={classes.roleForm}>
-          <div style={{width: 'fit-content'}}>
-            <p className={classes.roleLabel}>Role</p>
-            <Dropdown 
-              options={roles} 
-              selected={user.role}
-              placeholder="Select role" 
-              handleUpdate={handleChangeRole}
-            />
-          </div>
+          <p className={classes.roleLabel}>Role</p>
+          <Dropdown 
+            options={roles} 
+            selected={user.role}
+            placeholder="Select role" 
+            handleUpdate={handleChangeRole}
+            small
+          />
         </div>
 
         <Table className={classes.table}>

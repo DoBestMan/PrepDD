@@ -130,10 +130,13 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       textTransform: 'capitalize'
     },
     primaryLabel: {
+      padding: '6px 12px',
       color: '#3A84FF',
       fontFamily: 'Montserrat',
       fontWeight: 600,
-      fontSize: '15px',
+      fontSize: '12px',
+      border: '2px solid #3A84FF',
+      borderRadius: '3px'
     }
   })
 )
@@ -188,9 +191,11 @@ const TableToolbar = (props: TableToolbarProps) => {
   }
 
   const handleClickAway = (event: React.MouseEvent<unknown>) => {
-    // console.log("Click Away Event", event)
-    // if (event.target.tagName !== "LI")
-    setOpen(false)
+    const selectedElement = event.target
+    
+    console.log("Event: ", typeof selectedElement, event, selectedElement)
+    // if (selectedElement.tagName !== "LI")
+      setOpen(false)
   }
 
   const handleChangeRole = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
@@ -223,7 +228,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
       <div className={classes.dropDown}>
-        {/* <ClickAwayListener onClickAway={handleClickAway}> */}
+        <ClickAwayListener onClickAway={handleClickAway}>
           <div>
             <Button 
               className={classes.primaryButton}
@@ -279,12 +284,12 @@ const TableToolbar = (props: TableToolbarProps) => {
               <Button type="submit" className={classes.submitButton}>Create new team member</Button>
             </form>
           </div>
-        {/* </ClickAwayListener> */}
+        </ClickAwayListener>
       </div>
       <div className={classes.grow} />
       { (selected > 0) && 
         <Typography className={classes.primaryLabel} variant="h6">
-          {selected} member(s)
+          View {selected} member(s)
         </Typography>
       }
       { (selected > 0) && 

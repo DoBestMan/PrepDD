@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       minWidth: '150px'
     },
+    smallHeight: {
+      height: '31px'
+    },
     grow: {
       flexGrow: 1, 
     },
@@ -27,13 +30,16 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
       zIndex: 1
     },
+    smallPaper: {
+      top: 30, 
+    },
     invisible: {
       display: 'none'
     }, 
     item: {
       display: 'flex', 
       padding: '12px', 
-      alignItems: 'center', 
+      boxSizing: 'border-box', 
       color: '#606060',
       fontFamily: 'Montserrat',
       fontWeight: 600, 
@@ -43,6 +49,9 @@ const useStyles = makeStyles((theme: Theme) =>
         cursor: 'pointer',
         background: '#EBF2FF'
       }
+    },
+    smallItem: {
+      padding: '6px'
     }
   })
 )
@@ -55,12 +64,13 @@ interface Option {
 interface DropdownProps {
   options: Option[];
   selected: string;
+  small?: boolean;
   placeholder?: string;
   handleUpdate?: (role: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const { options, selected, placeholder, handleUpdate } = props
+  const { options, selected, small, placeholder, handleUpdate } = props
   const classes = useStyles()
   const [open, setOpen] = React.useState<boolean>(false)
 
@@ -80,15 +90,15 @@ export default function Dropdown(props: DropdownProps) {
   const handleClickAway = () => setOpen(false)
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, small && classes.smallHeight)}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
-          <div className={classes.item} onClick={toggleMenu}>
+          <div className={clsx(classes.item, small && classes.smallItem)} onClick={toggleMenu}>
             {renderLabel()}
             <div className={classes.grow} />
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
           </div>
-          <Paper className={clsx(classes.paper, !open && classes.invisible)}>
+          <Paper className={clsx(classes.paper, !open && classes.invisible, small && classes.smallPaper)}>
             { options && options.map(option => (
                 <div 
                   key={option.id} 
