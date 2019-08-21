@@ -27,7 +27,6 @@ import {useTeamDetails} from '../../graphql/queries/TeamDetails'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
 import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
 import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
-import { canNotDefineSchemaWithinExtensionMessage } from 'graphql/validation/rules/LoneSchemaDefinition';
 
 interface Company {
   url: string;

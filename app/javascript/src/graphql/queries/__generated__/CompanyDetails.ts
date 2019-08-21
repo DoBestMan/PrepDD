@@ -39,12 +39,19 @@ export interface CompanyDetails_company_users {
   roles: CompanyDetails_company_users_roles[] | null;
 }
 
+export interface CompanyDetails_company_owner {
+  __typename: "User";
+  id: string;
+  fullName: string;
+}
+
 export interface CompanyDetails_company {
   __typename: "Company";
   id: string;
   name: string;
   teams: CompanyDetails_company_teams[];
   users: CompanyDetails_company_users[];
+  owner: CompanyDetails_company_owner;
 }
 
 export interface CompanyDetails {
