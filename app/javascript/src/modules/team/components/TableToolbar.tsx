@@ -108,6 +108,18 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       textTransform: 'capitalize'
     },
+    menuItem: {
+      padding: '12px', 
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600, 
+      fontSize: '12px',
+      textTransform: 'capitalize', 
+      '&:hover': {
+        cursor: 'pointer',
+        background: '#EBF2FF'
+      }
+    },
     submitButton: {
       color: '#3A84FF',
       marginTop: '6px',
@@ -254,7 +266,7 @@ const TableToolbar = (props: TableToolbarProps) => {
                   { data && data.roles &&
                     data.roles.map(role => {
                       return (
-                        <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
+                        <MenuItem className={classes.menuItem} key={role.id} value={role.id}>{role.name}</MenuItem>
                       )
                     })
                   }
