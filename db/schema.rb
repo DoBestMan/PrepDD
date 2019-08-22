@@ -55,6 +55,9 @@ ActiveRecord::Schema.define(version: 2019_08_22_034212) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -134,7 +137,6 @@ ActiveRecord::Schema.define(version: 2019_08_22_034212) do
     t.integer "active_state_id"
     t.string "user_token"
     t.string "bio"
-    t.bigint "last_viewed_company_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["notification_id"], name: "index_users_on_notification_id"
