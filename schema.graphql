@@ -110,6 +110,11 @@ type Query {
   user(id: ID!): User!
 
   """
+  Find a user by id
+  """
+  userDetails(id: ID!): UserDetails
+
+  """
   Information for resetting a users password
   """
   userForPasswordReset(
@@ -270,6 +275,14 @@ type User {
   ownedCompanies: [Company!]
   roles: [Role!]
   teams: [Team!]
+}
+
+"""
+UserDetails
+"""
+type UserDetails {
+  id: String!
+  user: User
 }
 
 """
