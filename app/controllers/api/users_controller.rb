@@ -4,7 +4,7 @@ class Api::UsersController < ApiController
 
   def update
     picture = params[:profile_picture]
-    if picture.type.in?(%['image/jpeg image/jpg image/png'])
+    if picture.content_type.in?(%['image/jpeg image/jpg image/png'])
       @user.profile_picture.attach(params[:profile_picture])
       render json: { status: true, user: @user, profile_url: url_for(@user.profile_picture) }
     else
