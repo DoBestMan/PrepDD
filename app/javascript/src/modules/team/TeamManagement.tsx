@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useMemo} from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
@@ -102,7 +102,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
   const {state} = useGlobalState()
-  const { loading, data, error } = useCompanyDetails({id: state.selectedCompany})
+  const {loading, data, error} = useCompanyDetails({id: state.selectedCompany});
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected

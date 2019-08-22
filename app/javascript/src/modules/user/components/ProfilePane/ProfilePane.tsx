@@ -123,13 +123,28 @@ const useStyles = makeStyles((theme: Theme) =>
     flex: {
       display: 'flex',
     },
+    defaultPhoto: {
+      display: 'flex', 
+      width: '120px', 
+      height: '120px',
+      borderRadius: '50%', 
+      background: '#AFAFAF', 
+      justifyContent: 'center'
+    }, 
+    defaultPhotoName: {
+      color: '#FFFFFF', 
+      fontFamily: 'Montserrat', 
+      fontSize: '36px', 
+      fontWeight: 'bold'
+    }
   })
 );
 
 interface StateType {
+  email: string;
   fullName: string;
   displayName: string;
-  email: string;
+  photo: string;
   oldPassword: string;
   password: string;
   confirmPassword: string;
@@ -142,9 +157,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   const {value, index} = props;
   const classes = useStyles();
   const [state, setState] = React.useState<StateType>({
+    email: '',
     fullName: '',
     displayName: '',
-    email: '',
+    photo: '', 
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -266,7 +282,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         },
         data: {
           id: currentUser.id, 
-          profile_picture: file
+          profile_picture: files
         }
       })
     }
@@ -283,11 +299,14 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         onMouseOver={() => setShow(true)}
         onMouseOut={() => setShow(false)}
       >
-        <img
-          className={classes.photo}
-          src={DefaultPhoto}
-          alt="Alana"
-        />
+        { state.photo ?
+          <img src={state.photo} className={classes.photo} /> :
+          ( <div className={classes.defaultPhoto}>
+              <p className={classes.defaultPhotoName}>
+                RS
+              </p>
+            </div> )
+        }
         <div 
           className={clsx(classes.uploadArea, !show && classes.invisible)}
           onClick={handleOpenFile}
