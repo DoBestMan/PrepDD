@@ -29,6 +29,7 @@ export interface UserDetails_user {
   __typename: "User";
   id: string;
   fullName: string;
+  email: string;
   roles: UserDetails_user_roles[] | null;
   companies: UserDetails_user_companies[] | null;
 }

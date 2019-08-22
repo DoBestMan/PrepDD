@@ -10,7 +10,7 @@ import {
  } from '@material-ui/core'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
-import AutoSuggest from './components/AutoSuggest'
+import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
 import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'

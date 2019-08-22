@@ -19,6 +19,7 @@ import StyledItem from '../styled/StyledItem'
 import StyledTableRow from '../styled/StyledTableRow'
 import StyledTableCell from '../styled/StyledTableCell'
 import InputForm from './components/InputForm'
+import AutoSuggest from '../AutoSuggest'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
@@ -26,6 +27,7 @@ import {UserDetails_user, UserDetails_user_companies_teams} from '../../../../gr
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
+import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 
@@ -119,13 +121,12 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap', 
       width: '200px', 
       position: 'absolute', 
-      top: '35px',
+      top: '28px',
       right: '3px', 
       padding: '9px', 
       boxSizing: 'border-box', 
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
-      opacity: 0, 
     },
     addMember: {
       color: '#3A84FF',
@@ -138,12 +139,28 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px'
     },
     addMemberHover: {
+      position: 'relative', 
       padding: '2px 6px 2px 6px', 
       border: '1px solid #D8D8D8',
     },
-    visible: {
-      opacity: 1
-    }
+    addPaper: {
+      width: '200px', 
+      position: 'absolute', 
+      top: '24px',
+      right: '-2px', 
+      padding: '12px', 
+      boxSizing: 'border-box', 
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
+    addLink: {
+      marginTop: '24px',
+      color: '#3A84FF',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      textTransform: 'capitalize'
+    },
   })
 )
 
@@ -156,6 +173,7 @@ interface DetailPaneProps {
 
 interface UserProps extends UserDetails_user {
   role: string
+  team: string
 }
 
 interface Role {
@@ -170,14 +188,17 @@ export default function DetailPane(props: DetailPaneProps) {
     __typename: "User",
     id: '',
     fullName: '',
-    role: '0', 
+    email: '',
     roles: null,
-    companies: null,
+    companies: null, 
+    role: '0', 
+    team: ''
   })
   const [roles, setRoles] = useState<Role[]>([])
   const [companyId, setCompanyId] = useState<string>("")
   const [teamId, setTeamId] = useState<string>("")
   const [moreHover, setMoreHover] = useState<boolean>(false)
+  const [addHover, setAddHover] = useState<boolean>(false)
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
@@ -194,6 +215,13 @@ export default function DetailPane(props: DetailPaneProps) {
   const [removeTeamMember] = useRemoveTeamMember({
     teamId, 
     userId: user.id
+  })
+  const [addTeamMember] = useAddTeamMember({
+    companyId,
+    fullName: user.fullName, 
+    email: user.email, 
+    role: user.role, 
+    team: user.team,
   })
 
   useEffect(() => {
@@ -219,6 +247,7 @@ export default function DetailPane(props: DetailPaneProps) {
       setUser({
         ...user, 
         id: currentUser.id, 
+        email: currentUser.email, 
         fullName: currentUser.fullName, 
         role: currentUser.roles[0].id,
       })
@@ -226,6 +255,7 @@ export default function DetailPane(props: DetailPaneProps) {
       setUser({
         ...user, 
         id: currentUser.id, 
+        email: currentUser.email, 
         fullName: currentUser.fullName,
       })
     }
@@ -268,6 +298,23 @@ export default function DetailPane(props: DetailPaneProps) {
       removeCompanyMember()      
     }
   }
+
+  const handleChangeTeam = (newValue: string) => {
+    setUser({
+      ...user, 
+      team: newValue
+    })
+  }
+
+  const handleAddTeamMember = useCallback(event => {
+    event.preventDefault()
+    addTeamMember()
+    setUser({
+      ...user, 
+      team: ''
+    })
+    setAddHover(false)
+  }, [addTeamMember])
 
   const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
     const label = 
@@ -383,28 +430,53 @@ export default function DetailPane(props: DetailPaneProps) {
                               style={{position: 'relative'}}
                             >
                               <StyledItem label={`+${company.teams.length - 2}`} selected />
-                              <Paper 
-                                className={clsx(classes.morePaper, moreHover && classes.visible)} 
-                                elevation={0}
-                              >
-                                { company.teams.slice(2).map(team => 
-                                    <StyledItem 
-                                      key={`${user.fullName}-${team.id}`}
-                                      label={team.name} 
-                                      handleClose={() => setTeamId(team.id)}
-                                      selected
-                                      close
-                                    />
-                                  )
-                                }
-                              </Paper>
+                              { moreHover && 
+                                <Paper 
+                                  className={classes.morePaper} 
+                                  elevation={0}
+                                  onMouseOver={() => setMoreHover(true)}
+                                  onMouseLeave={() => setMoreHover(false)}
+                                >
+                                  { company.teams.slice(2).map(team => 
+                                      <StyledItem 
+                                        key={`${user.fullName}-${team.id}`}
+                                        label={team.name} 
+                                        handleClose={() => setTeamId(team.id)}
+                                        selected
+                                        close
+                                      />
+                                    )
+                                  }
+                                </Paper>
+                              }
                             </div>
                           }
                           <div className={classes.grow} />
                           <div 
                             className={clsx(classes.addMember, classes.addMemberHover)}
+                            onMouseOver={() => setAddHover(true)}
+                            onMouseLeave={() => setAddHover(false)}
                           >
                             <i className="fa fa-plus" />
+                            { addHover && 
+                              <form 
+                                className={classes.addPaper} 
+                                onMouseOver={() => setAddHover(true)}
+                                onMouseLeave={() => setAddHover(false)}
+                                onSubmit={handleAddTeamMember}
+                              >
+                                <AutoSuggest
+                                  value={user.team}
+                                  handleChange={handleChangeTeam}                                  
+                                />
+                                <Button 
+                                  type="submit"
+                                  className={classes.addLink} 
+                                >
+                                  Add team
+                                </Button>
+                              </form>
+                            }
                           </div>
                         </div> :
                         (company.teams && renderTeams(company.teams))
