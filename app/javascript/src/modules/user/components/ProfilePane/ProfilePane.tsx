@@ -255,20 +255,18 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     const currentUser = idx(data, data => data.currentUser.user)
 
     if (validity.valid && files && currentUser) {
-      const file = files[0]
+      const user_data = new FormData()
+      user_data.append('profile_picture', files[0])
+      user_data.append('id', currentUser.id)
 
-      console.log("File", file)
-      axios({
-        method: 'post', 
-        url: '/api/update_user_profile', 
-        headers: {
-          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
-        },
-        data: {
-          id: currentUser.id, 
-          profile_picture: file
-        }
+      axios.post("/api/update_user_profile", user_data, {
+          headers: {
+            'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+          },
       })
+        .then(res => {
+          console.log(res.statusText)
+        })
     }
   }
 
