@@ -281,14 +281,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           headers: {
             'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
           },
-      })
-        .then(res => {
-          console.log("Res", res, res.data.profile_url)
-          setState({
-            ...state, 
-            profile_url: res.data.profile_url
-          })
+      }).then(res => {
+        setState({
+          ...state, 
+          profile_url: res.data.profile_url
         })
+      })
     }
   }
 
