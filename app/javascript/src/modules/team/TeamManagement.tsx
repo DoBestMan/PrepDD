@@ -120,7 +120,7 @@ export default function TeamManagement(props: {path?: string}) {
     if (loading || !usersList) return;
     usersList.sort(
       (a: CompanyDetails_company_users | TeamDetails_team_users, b: CompanyDetails_company_users | TeamDetails_team_users) => {
-        if (a.id > b.id) return 1
+        if (+a.id > +b.id) return 1
         return -1
     })
     setMemberList(usersList)
