@@ -180,7 +180,7 @@ export default function DetailPane(props: DetailPaneProps) {
     role: user.role, 
   })
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId, 
+    companyId: companyId || company, 
     userId: user.id, 
   })
   const [removeTeamMember] = useRemoveTeamMember({
