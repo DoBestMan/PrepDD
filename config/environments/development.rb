@@ -60,4 +60,7 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.action_mailer.default_url_options = { host: 'localhost', port: 3_000 }
+
+  # Active storage
+  config.active_storage.service = :amazon
 end

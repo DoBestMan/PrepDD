@@ -35,7 +35,7 @@ export interface CurrentUser_currentUser_user {
   id: string;
   fullName: string;
   email: string;
-  displayName: string;
+  displayName: string | null;
   ownedCompanies: CurrentUser_currentUser_user_ownedCompanies[] | null;
   companies: CurrentUser_currentUser_user_companies[] | null;
   roles: CurrentUser_currentUser_user_roles[] | null;
