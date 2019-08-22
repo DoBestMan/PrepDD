@@ -10,6 +10,7 @@ module Types
     field :companies, [CompanyType], null: true
     field :teams, [TeamType], null: true
     field :roles, [RoleType], null: true
+    field :lastViewedCompanyId, ID, null: true
   end
 
   def companies
