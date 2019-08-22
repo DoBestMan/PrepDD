@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
+import axios from 'axios';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
@@ -251,10 +252,23 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     const {
       currentTarget: { validity, files}
     } = event
+    const currentUser = idx(data, data => data.currentUser.user)
 
-    console.log(validity, files)
-    if (validity.valid && files) {
+    if (validity.valid && files && currentUser) {
       const file = files[0]
+
+      console.log("File", file)
+      axios({
+        method: 'post', 
+        url: '/api/update_user_profile', 
+        headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+        },
+        data: {
+          id: currentUser.id, 
+          profile_picture: file
+        }
+      })
     }
   }
 
