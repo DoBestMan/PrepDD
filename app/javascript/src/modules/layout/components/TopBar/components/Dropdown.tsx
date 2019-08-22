@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import idx from 'idx';
-import {makeStyles} from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
@@ -8,42 +8,44 @@ import Paper from '@material-ui/core/Paper';
 import {useCurrentUser} from '../../../../../graphql/queries/CurrentUser'
 import {useGlobalState} from '../../../../../store'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'relative',
-  },
-  title: {
-    display: 'none',
-    width: '180px', 
-    height: '64px', 
-    boxSizing: 'border-box',
-    padding: '0px 24px 0px 24px',
-    borderRight: '1px solid #D8D8D8',
-    alignItems: 'center',
-    color: '#2C2C2C',
-    fontFamily: 'Montserrat',
-    fontSize: '15px',
-    fontWeight: 'bold',
-    [theme.breakpoints.up('sm')]: {
-      display: 'flex',
+const useStyles = makeStyles((theme: Theme) => 
+  createStyles({
+    root: {
+      position: 'relative',
     },
-    '&:hover': {
-      cursor: 'pointer',
-      background: '#EBF2FF',
+    title: {
+      display: 'none',
+      width: '180px', 
+      height: '64px', 
+      boxSizing: 'border-box',
+      padding: '0px 24px 0px 24px',
+      borderRight: '1px solid #D8D8D8',
+      alignItems: 'center',
+      color: '#2C2C2C',
+      fontFamily: 'Montserrat',
+      fontSize: '15px',
+      fontWeight: 'bold',
+      [theme.breakpoints.up('sm')]: {
+        display: 'flex',
+      },
+      '&:hover': {
+        cursor: 'pointer',
+        background: '#EBF2FF',
+      },
     },
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  paper: {
-    position: 'absolute',
-    top: 64, 
-    left: 0
-  },
-  pl12: {
-    paddingLeft: 12,
-  },
-}));
+    grow: {
+      flexGrow: 1,
+    },
+    paper: {
+      position: 'absolute',
+      top: 64, 
+      left: 0
+    },
+    pl12: {
+      paddingLeft: 12,
+    },
+  })
+);
 
 export default function Dropdown() {
   const classes = useStyles();

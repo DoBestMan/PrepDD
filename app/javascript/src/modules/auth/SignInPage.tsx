@@ -16,69 +16,71 @@ import {
 } from 'react-google-login';
 import {Link as RouterLink} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
-import {makeStyles} from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {useRequireGuest} from '../../hooks/auth';
 import {useSignInUser} from '../../graphql/mutations/SignInUser';
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  flash: {
-    marginBottom: theme.spacing(1),
-  },
-  form: {
-    width: '86%',
-    marginLeft: '7%',
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  socialGmail: {
-    fontSize: '12px',
-    width: '90%',
-    textAlign: 'center',
-    marginBottom: 10,
-    height: 43,
-    borderRadius: 5,
-  },
-  socialLinkedIn: {
-    fontSize: '12px',
-    width: '90%',
-    marginLeft: '10%',
-    marginBottom: 10,
-    background: '#007bb6',
-    color: 'white',
-    height: 43,
-    border: 2,
-    borderRadius: 5,
-    boxShadow:
-      'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
-  },
-  linkedInText: {
-    marginRight: 10,
-    display: 'inline',
-    fontWeight: 'bold',
-  },
-  prepLink: {
-    textDecoration: 'none',
-    color: '#3f51b5',
-    '&:hover': {
-      textDecoration: 'underline',
+const useStyles = makeStyles((theme: Theme) => 
+  createStyles({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
-  },
-  signInTitle: {
-    textAlign: 'center',
-  },
-  socialButtons: {
-    width: '86%',
-    marginLeft: '7%',
-  },
-}));
+    flash: {
+      marginBottom: theme.spacing(1),
+    },
+    form: {
+      width: '86%',
+      marginLeft: '7%',
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+    socialGmail: {
+      fontSize: '12px',
+      width: '90%',
+      textAlign: 'center',
+      marginBottom: 10,
+      height: 43,
+      borderRadius: 5,
+    },
+    socialLinkedIn: {
+      fontSize: '12px',
+      width: '90%',
+      marginLeft: '10%',
+      marginBottom: 10,
+      background: '#007bb6',
+      color: 'white',
+      height: 43,
+      border: 2,
+      borderRadius: 5,
+      boxShadow:
+        'rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px',
+    },
+    linkedInText: {
+      marginRight: 10,
+      display: 'inline',
+      fontWeight: 'bold',
+    },
+    prepLink: {
+      textDecoration: 'none',
+      color: '#3f51b5',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+    signInTitle: {
+      textAlign: 'center',
+    },
+    socialButtons: {
+      width: '86%',
+      marginLeft: '7%',
+    },
+  })
+);
 
 export default function SignInPage(_props: {path?: string}) {
   useRequireGuest();
