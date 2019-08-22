@@ -145,6 +145,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     addPaper: {
       width: '200px', 
+      background: '#FFFFFF', 
       position: 'absolute', 
       top: '24px',
       right: '-2px', 
