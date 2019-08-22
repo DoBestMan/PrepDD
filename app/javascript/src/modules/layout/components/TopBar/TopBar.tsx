@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       marginLeft: miniDrawerWidth,
-      width: `calc(100% - ${miniDrawerWidth}px)`,
+      width: `calc(100% - ${miniDrawerWidth + 1}px)`,
       height: topBarHeight,
       background: '#FFFFFF',
       color: '#606060',
@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'center',
     },
     inputRoot: {
+      width: '100%',
       height: 33, 
       fontFamily: 'Montserrat',
       fontSize: '12px',
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'black'
     },
     inputInput: {
-      padding: "8px 8px 8px 48px",
+      padding: '10px 8px 8px 48px', 
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {

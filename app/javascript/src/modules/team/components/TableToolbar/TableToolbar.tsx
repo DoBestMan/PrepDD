@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useCallback} from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
@@ -7,17 +7,13 @@ import {
   Typography,
   Button,
   TextField,
-  FormControl, 
-  InputLabel, 
-  Select, 
-  MenuItem
  } from '@material-ui/core'
- import ClickAwayListener from '@material-ui/core/ClickAwayListener'
- import DeleteIcon from '@material-ui/icons/DeleteForever'
- import AutoSuggest from './AutoSuggest'
-import { useAddTeamMember } from '../../../graphql/mutations/AddTeamMember';
-import {useAllRoles} from '../../../graphql/queries/AllRoles'
-import { navigate } from '@reach/router';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import DeleteIcon from '@material-ui/icons/DeleteForever'
+import AutoSuggest from './components/AutoSuggest'
+import Dropdown from './components/Dropdown'
+import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
+import { useAllRoles } from '../../../../graphql/queries/AllRoles'
 
 const useToolbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -108,6 +104,18 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       textTransform: 'capitalize'
     },
+    menuItem: {
+      padding: '12px', 
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600, 
+      fontSize: '12px',
+      textTransform: 'capitalize', 
+      '&:hover': {
+        cursor: 'pointer',
+        background: '#EBF2FF'
+      }
+    },
     submitButton: {
       color: '#3A84FF',
       marginTop: '6px',
@@ -116,6 +124,15 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       fontWeight: 600, 
       fontSize: '12px',
       textTransform: 'capitalize'
+    },
+    primaryLabel: {
+      padding: '6px 12px',
+      color: '#3A84FF',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      border: '2px solid #3A84FF',
+      borderRadius: '3px'
     }
   })
 )
@@ -159,28 +176,12 @@ const TableToolbar = (props: TableToolbarProps) => {
     setState(state => ({...state, [name]: value}))
   }, [setState])
 
-  useEffect(() => {
-    console.log("Add Member successfully")
-    if (idx(response, response => response.data.addTeamMember.success)) {
-      navigate('/app/team')
-    }
-  }, [response]);
-
   const handleToggle = () => {
     setOpen(!open)
   }
 
   const handleClickAway = (event: React.MouseEvent<unknown>) => {
-    console.log(event)
-    // if (event.target.tagName !== "LI")
     setOpen(false)
-  }
-
-  const handleChangeRole = (event: React.ChangeEvent<{ name?: string; value: unknown }>) => {
-    setState(prev => ({
-      ...prev,
-      role: event.target.value as string,
-    }));
   }
 
   const handleChangeTeam = (newValue: string) => {
@@ -206,7 +207,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     <Toolbar className={classes.root} disableGutters>
       <Typography className={classes.title} variant="h2">Team Management</Typography>
       <div className={classes.dropDown}>
-        {/* <ClickAwayListener onClickAway={handleClickAway}> */}
+        <ClickAwayListener onClickAway={handleClickAway}>
           <div>
             <Button 
               className={classes.primaryButton}
@@ -236,25 +237,19 @@ const TableToolbar = (props: TableToolbarProps) => {
                 autoFocus
                 required
               />
-              <FormControl className={classes.input}>
-                <InputLabel htmlFor="role">Role</InputLabel>
-                <Select
-                  value={state.role}
-                  onChange={handleChangeRole}
-                  inputProps={{
-                    name: 'role', 
-                    id: 'role'
-                  }}
-                >
-                  { data && data.roles &&
-                    data.roles.map(role => {
-                      return (
-                        <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
-                      )
-                    })
-                  }
-                </Select>
-              </FormControl>
+              { data && data.roles &&
+                <Dropdown
+                  data={data.roles}
+                  selected={state.role}
+                  placeholder="Role"
+                  handleChange={(role) => (
+                    setState(prev => ({
+                      ...prev,
+                      role,
+                    }))
+                  )}
+                />
+              }              
               <AutoSuggest
                 value={state.team}
                 handleChange={handleChangeTeam}
@@ -262,9 +257,14 @@ const TableToolbar = (props: TableToolbarProps) => {
               <Button type="submit" className={classes.submitButton}>Create new team member</Button>
             </form>
           </div>
-        {/* </ClickAwayListener> */}
+        </ClickAwayListener>
       </div>
       <div className={classes.grow} />
+      { (selected > 0) && 
+        <Typography className={classes.primaryLabel} variant="h6">
+          View {selected} member(s)
+        </Typography>
+      }
       { (selected > 0) && 
         <div className={classes.deleteIcon}>
           <DeleteIcon onClick={handleDelete}/>

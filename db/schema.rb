@@ -34,9 +34,6 @@ ActiveRecord::Schema.define(version: 2019_08_19_141140) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false

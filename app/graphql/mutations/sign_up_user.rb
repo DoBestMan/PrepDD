@@ -63,9 +63,32 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
     if user.valid? && company_name.present?
       company = Company.find_by_name(company_name)
       company&.owner = user
-      company&.save!
+      company&.save!      
 
       company&.errors.messages.each do |path, messages|
+        messages.each do |message|
+          response[:errors].push(
+            { path: path.to_s.camelcase(:lower), message: message }
+          )
+          response[:success] = false
+        end
+      end
+      
+      owner_id = Role.find_by_name('Owner').id
+      user_role = RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)
+
+      user_role.errors.messages.each do |path, messages|
+        messages.each do |message|
+          response[:errors].push(
+            { path: path.to_s.camelcase(:lower), message: message }
+          )
+          response[:success] = false
+        end
+      end
+
+      user_company = UsersCompany.create(user_id: user.id, company_id: company.id)
+
+      user_company.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
             { path: path.to_s.camelcase(:lower), message: message }

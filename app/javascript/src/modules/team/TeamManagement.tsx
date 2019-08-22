@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
+import _ from 'lodash'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
   Table,
-  TableBody,
-  TablePagination
+  TableBody
 } from '@material-ui/core'
 
 import LoadingFallback from '../../components/LoadingFallback'
@@ -49,7 +49,6 @@ function createData(
 }
 
 const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
-
 const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -99,24 +98,41 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
   const [selected, setSelected] = React.useState<string[]>([])
-  const [page, setPage] = React.useState(0)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10)
   const [team, setTeam] = React.useState("")
   const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
 
-  const {state, dispatch} = useGlobalState()
+  const {state} = useGlobalState()
   const { loading, data, error } = useCompanyDetails({id: state.selectedCompany})
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected
   })
+  const responseTeam = useTeamDetails({id: team})
+
+  useEffect(() => {
+    setTeam("")
+    setSelected([])
+  }, [state.selectedCompany])
 
   useEffect(() => {
     const usersList = idx(data, data => data.company.users);
 
     if (loading || !usersList) return;
+    usersList.sort(
+      (a: CompanyDetails_company_users | TeamDetails_team_users, b: CompanyDetails_company_users | TeamDetails_team_users) => {
+        if (a.id > b.id) return 1
+        return -1
+    })
     setMemberList(usersList)
   }, [idx(data, data => data.company.users)])
+
+  useEffect(() => {
+    const usersList = idx(responseTeam, responseTeam => responseTeam.data.team.users);
+
+    if (!usersList) return;
+    console.log("Team Fetch", usersList)
+    setMemberList(usersList)
+  }, [idx(responseTeam, responseTeam => responseTeam.data.team.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -139,6 +155,24 @@ export default function TeamManagement(props: {path?: string}) {
       }
   
       setSelected(newSelected)
+    } else if (event.shiftKey) {
+      let newSelected: string[] = selected
+
+      if (selected.length > 0) {
+        let startIndex = memberList.findIndex(member => member.id === id)
+        let endIndex = memberList.findIndex(member => member.id === selected[selected.length - 1])
+        startIndex > endIndex ? endIndex -= 1 : endIndex += 1
+        newSelected = newSelected.concat(_.range(startIndex, endIndex).map(index => memberList[index].id))
+      } else {
+        let endIndex = memberList.findIndex(member => member.id === id)
+        newSelected = newSelected.concat(_.range(0, endIndex + 1).map(index => memberList[index].id))
+      }
+
+      newSelected = newSelected.filter(
+        (member: string, index: number, self: string[]) => self.indexOf(member) === index
+      )
+
+      setSelected(newSelected)
     } else {
       const selectedIndex = selected.indexOf(id)
       let newSelected: string[] = [];
@@ -153,15 +187,6 @@ export default function TeamManagement(props: {path?: string}) {
     }
   }
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage)
-  }
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(+event.target.value)
-    setPage(0)
-  }
-
   const handleDelete = () => {
     if (confirm("Are you going to delete team members?")) {
       removeCompanyMember()
@@ -170,7 +195,6 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam)
-    // useTeamDetails({id: newTeam})
   }
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1
@@ -204,21 +228,21 @@ export default function TeamManagement(props: {path?: string}) {
             <Table className={classes.table} aria-labelledby="Team Management Table">
               <TableHeader />
               <TableBody>
-                { memberList && memberList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row: CompanyDetails_company_users, index: number) => {
+                { memberList && 
+                  memberList.map((row: CompanyDetails_company_users, index: number) => {
                     const isItemSelected = isSelected(row.id)
                     
                     return (
                       <StyledTableRow
-                        hover
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        key={`member-${row.id}`} 
                         role="team member"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={`member-${row.id}`}
                         selected={isItemSelected}
+                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        hover
                       >
-                        <StyledTableCell>
+                        <StyledTableCell style={{paddingLeft: '31px'}}>
                           <div className={classes.flex} style={{alignItems: 'center'}}>
                             <img 
                               className={classes.round} 
@@ -254,27 +278,30 @@ export default function TeamManagement(props: {path?: string}) {
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <div className={classes.flex}>
-                            { row.teams && row.teams.slice(0, 2).map(team => 
-                                <StyledItem 
-                                  key={`${row.fullName}-${team.id}`}
-                                  label={team.name} 
-                                  selected={isItemSelected}
-                                />
-                              )                      
-                            }
-                            { row.teams && row.teams.length > 2 &&
-                              <ArrowTooltip 
-                                title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
-                                placement="top"
-                              >
-                                <StyledItem
-                                  label={`+${row.teams.length - 2}`}
-                                  selected={isItemSelected}
-                                />
-                              </ArrowTooltip>
-                            }
-                          </div>
+                          { (row.teams && row.teams.length > 0) ? 
+                            <div className={classes.flex}>
+                              { row.teams.slice(0, 2).map(team => 
+                                  <StyledItem 
+                                    key={`${row.fullName}-${team.id}`}
+                                    label={team.name} 
+                                    selected={isItemSelected}
+                                  />
+                                )                      
+                              }
+                              { row.teams && row.teams.length > 2 &&
+                                <ArrowTooltip 
+                                  title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
+                                  placement="top"
+                                >
+                                  <StyledItem
+                                    label={`+${row.teams.length - 2}`}
+                                    selected={isItemSelected}
+                                  />
+                                </ArrowTooltip>
+                              }
+                            </div> : "No Teams"
+                          }
+                          
                         </StyledTableCell>
                         { row.roles && row.roles[0].name && 
                           <StyledTableCell>{row.roles[0].name}</StyledTableCell>
@@ -286,24 +313,6 @@ export default function TeamManagement(props: {path?: string}) {
               </TableBody>
             </Table>
           </div>
-
-          { memberList && (
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={memberList.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                'aria-label': 'previous page',
-              }}
-              nextIconButtonProps={{
-                'aria-label': 'next page',
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          )}
         </Paper>
 
         { selected.length > 0 && 

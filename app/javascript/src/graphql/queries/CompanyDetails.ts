@@ -28,6 +28,10 @@ export const useCompanyDetails = createQueryHook<CompanyDetails, {}>(gql`
           name
         }
       }
+      owner {
+        id
+        fullName
+      }
     }
   }
 `);

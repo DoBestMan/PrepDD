@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     passwordForm: {
-      width: '380px', 
+      minWidth: '250px', 
       paddingLeft: '36px'
     },
     passwordFormTitle: {
@@ -171,15 +171,13 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     if (loading || !currentUser) return;
 
-    console.log(data, currentUser);
-
     setState({
       ...state, 
       fullName: currentUser.fullName, 
       displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
       email: currentUser.email
     })
-  }, [loading])
+  }, [idx(data, data => data.currentUser.user)])
 
   const handleChange = React.useCallback(
     event => {
@@ -338,20 +336,6 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                   </TableRow>
                 </TableHead>
                 <TableBody >
-                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.ownedCompanies &&
-                    data.currentUser.user.ownedCompanies.map(company => (
-                      <TableRow key={company.name}>
-                        <TableCell className={classes.tableCell}>
-                          <div className={classes.flex}>
-                            <div>{company.name}</div>                        
-                          </div>
-                        </TableCell>
-                        <TableCell className={classes.tableCell}>
-                          No Teams
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
                   { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
                     data.currentUser.user.companies.map(company => (
                     <TableRow key={company.name}>
@@ -361,7 +345,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                         </div>
                       </TableCell>
                       <TableCell className={classes.tableCell}>
-                        {company.teams.join(', ')}
+                        { (company.teams.length > 0) ?
+                          company.teams.map(team => team.name).join(', ') :
+                          "No Teams"
+                        }
                       </TableCell>
                     </TableRow>
                   ))}

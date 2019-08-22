@@ -1,11 +1,9 @@
 import React from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import { 
-  TableHead
-} from '@material-ui/core'
+import TableHead from '@material-ui/core/TableHead'
 
-import StyledTableRow from './styled/StyledTableRow'
-import StyledTableCell from './styled/StyledTableCell'
+import StyledTableRow from '../styled/StyledTableRow'
+import StyledTableCell from '../styled/StyledTableCell'
 
 type roleType = 'Member' | 'Admin'
 
@@ -33,25 +31,20 @@ const headRows: HeadRows[] = [
   { id: 'role', label: 'Role'}
 ]
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    visuallyHidden: {
-      border: 0, 
-      clip: 'rect(0 0 0 0)',
-      height: 1, 
-      margin: -1, 
-      overflow: 'hidden',
-      padding: 0, 
-      position: 'absolute', 
-      top: 20, 
-      width: 1
-    },
+    root: {
+      '& th:first-child': {
+        paddingLeft: '31px'
+      }
+    }
   })
 )
 
 export default function TableHeader() {  
+  const classes = useStyles()
   return (
-    <TableHead>
+    <TableHead className={classes.root}>
       <StyledTableRow>
         {headRows.map(row => (
           <StyledTableCell
