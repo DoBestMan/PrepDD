@@ -15,8 +15,9 @@ const useStyles = makeStyles(theme => ({
   title: {
     display: 'none',
     width: '180px', 
+    height: '64px', 
     boxSizing: 'border-box',
-    padding: '18px 24px 19px 24px',
+    padding: '0px 24px 0px 24px',
     borderRight: '1px solid #D8D8D8',
     alignItems: 'center',
     color: '#2C2C2C',
