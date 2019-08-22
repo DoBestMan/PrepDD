@@ -7,7 +7,10 @@ const StyledTableCell = withStyles({
     fontFamily: 'Montserrat',
     fontSize: '12px',
     fontWeight: 600, 
-    color: '#606060'
+    color: '#606060', 
+    '&:last-child': {
+      paddingRight: '0px'
+    }
   }
 })(TableCell)
 

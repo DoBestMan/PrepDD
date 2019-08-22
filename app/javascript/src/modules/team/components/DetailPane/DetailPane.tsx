@@ -22,7 +22,7 @@ import InputForm from './components/InputForm'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
-import {UserDetails_user} from '../../../../graphql/queries/__generated__/UserDetails'
+import {UserDetails_user, UserDetails_user_companies_teams} from '../../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
+      alignItems: 'center'
     },
     grow: {
       flexGrow: 1,
@@ -92,13 +93,6 @@ const useStyles = makeStyles((theme: Theme) =>
     primaryColor: {
       color: '#3A84FF',
     },
-    addLink: {
-      margin: '25px 31px 0px 31px',
-      color: '#3A84FF',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-    },
     resetButton: {
       width: '170px',
       height: '42px',
@@ -132,6 +126,20 @@ const useStyles = makeStyles((theme: Theme) =>
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
       opacity: 0, 
+    },
+    addMember: {
+      color: '#3A84FF',
+      fontWeight: 600,
+      fontSize: '15px',
+      width: '25px', 
+      height: '25px', 
+      padding: '4px 6px 2px 6px', 
+      border: '1px solid #FFFFFF',
+      borderRadius: '3px'
+    },
+    addMemberHover: {
+      padding: '2px 6px 2px 6px', 
+      border: '1px solid #D8D8D8',
     },
     visible: {
       opacity: 1
@@ -261,6 +269,25 @@ export default function DetailPane(props: DetailPaneProps) {
     }
   }
 
+  const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
+    const label = 
+      teams && teams.length > 2 ?
+        teams
+          .slice(0, 2)
+          .map(team => team.name)
+          .join(', ')
+          .concat(` +${teams.length - 2}`) :
+        teams.map(team => team.name).join(', ');
+
+    return (
+      <div className={classes.flex}>
+        { label && <span style={{marginRight: '12px'}}>{label}</span> }
+        <div className={classes.grow} />
+        <i className={clsx("fa fa-plus", classes.addMember)} />
+      </div>
+    )
+  }
+
   return loading ?
     <LoadingFallback /> :
     <Drawer
@@ -355,7 +382,7 @@ export default function DetailPane(props: DetailPaneProps) {
                               onMouseLeave={() => setMoreHover(false)}
                               style={{position: 'relative'}}
                             >
-                              <StyledItem label={`+${company.teams.length - 2}`} />
+                              <StyledItem label={`+${company.teams.length - 2}`} selected />
                               <Paper 
                                 className={clsx(classes.morePaper, moreHover && classes.visible)} 
                                 elevation={0}
@@ -371,10 +398,16 @@ export default function DetailPane(props: DetailPaneProps) {
                                   )
                                 }
                               </Paper>
-                            </div>                            
+                            </div>
                           }
+                          <div className={classes.grow} />
+                          <div 
+                            className={clsx(classes.addMember, classes.addMemberHover)}
+                          >
+                            <i className="fa fa-plus" />
+                          </div>
                         </div> :
-                        (company.teams && company.teams.map(team => team.name).join(', '))
+                        (company.teams && renderTeams(company.teams))
                       }
                     </StyledTableCell>
                   </StyledTableRow>
@@ -383,9 +416,6 @@ export default function DetailPane(props: DetailPaneProps) {
             )}
           </TableBody>
         </Table>
-        <Typography className={classes.addLink} variant="h6">
-          Add new company & team
-        </Typography>
         <Button className={classes.resetButton}>Reset password</Button>
       </>
         
