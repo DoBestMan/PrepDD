@@ -16,6 +16,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/CameraAlt';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 
 import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
@@ -23,8 +24,6 @@ import CheckBox from './components/CheckBox';
 import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
-
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg');
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -127,15 +126,17 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       width: '120px', 
       height: '120px',
+      border: '2px dashed #D8D8D8',
       borderRadius: '50%', 
-      background: '#AFAFAF', 
+      alignItems: 'center',
       justifyContent: 'center'
     }, 
     defaultPhotoName: {
-      color: '#FFFFFF', 
+      color: '#D8D8D8', 
       fontFamily: 'Montserrat', 
-      fontSize: '36px', 
-      fontWeight: 'bold'
+      fontSize: '12px', 
+      fontWeight: 'bold',
+      textAlign: 'center'
     }
   })
 );
@@ -144,7 +145,7 @@ interface StateType {
   email: string;
   fullName: string;
   displayName: string;
-  photo: string;
+  profile_url: string;
   oldPassword: string;
   password: string;
   confirmPassword: string;
@@ -160,7 +161,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     email: '',
     fullName: '',
     displayName: '',
-    photo: '', 
+    profile_url: '', 
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -190,9 +191,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     setState({
       ...state, 
+      email: currentUser.email,
       fullName: currentUser.fullName, 
       displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
-      email: currentUser.email
+      profile_url: currentUser.profileUrl as string
     })
   }, [idx(data, data => data.currentUser.user)])
 
@@ -271,20 +273,22 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     const currentUser = idx(data, data => data.currentUser.user)
 
     if (validity.valid && files && currentUser) {
-      const file = files[0]
+      const user_data = new FormData()
+      user_data.append('profile_picture', files[0])
+      user_data.append('id', currentUser.id)
 
-      console.log("File", file)
-      axios({
-        method: 'post', 
-        url: '/api/update_user_profile', 
-        headers: {
-          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
-        },
-        data: {
-          id: currentUser.id, 
-          profile_picture: files
-        }
+      axios.post("/api/update_user_profile", user_data, {
+          headers: {
+            'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+          },
       })
+        .then(res => {
+          console.log("Res", res, res.data.profile_url)
+          setState({
+            ...state, 
+            profile_url: res.data.profile_url
+          })
+        })
     }
   }
 
@@ -299,13 +303,17 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         onMouseOver={() => setShow(true)}
         onMouseOut={() => setShow(false)}
       >
-        { state.photo ?
-          <img src={state.photo} className={classes.photo} /> :
-          ( <div className={classes.defaultPhoto}>
-              <p className={classes.defaultPhotoName}>
-                RS
-              </p>
-            </div> )
+        { 
+          state.profile_url ?
+          <img src={state.profile_url} className={classes.photo} /> : (
+            <div className={classes.defaultPhoto}>
+              <div className={classes.defaultPhotoName}>
+                <UploadIcon style={{fontSize: '48px'}} />
+                <br />
+                <span>Upload photo</span>
+              </div>
+            </div>
+          )
         }
         <div 
           className={clsx(classes.uploadArea, !show && classes.invisible)}

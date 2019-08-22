@@ -12,9 +12,10 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
       id
       user {
         id
-        fullName
         email
+        fullName
         displayName
+        profileUrl
         ownedCompanies {
           id
           name
