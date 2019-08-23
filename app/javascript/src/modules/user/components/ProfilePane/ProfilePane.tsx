@@ -21,7 +21,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
 
-import { useCurrentUser } from '../../../../graphql/queries/CurrentUser'
+import { useGlobalState } from '../../../../store'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
 
@@ -141,7 +141,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface StateType {
+interface UserType {
   email: string;
   fullName: string;
   displayName: string;
@@ -157,11 +157,12 @@ interface StateType {
 export default function ProfilePane(props: {value?: number; index?: number}) {
   const {value, index} = props;
   const classes = useStyles();
-  const [state, setState] = React.useState<StateType>({
-    email: '',
-    fullName: '',
-    displayName: '',
-    profile_url: '', 
+  const { state, dispatch } = useGlobalState()
+  const [user, setUser] = React.useState<UserType>({
+    email: state.currentUser.email as string,
+    fullName: state.currentUser.fullName as string,
+    displayName: state.currentUser.displayName as string,
+    profile_url: state.currentUser.profileUrl as string, 
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -171,86 +172,80 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   });
   const [show, setShow] = React.useState<boolean>(false);
 
-  const { loading, data } = useCurrentUser({})
-
   const [updateUserPassword] = useUpdateUserPassword({ 
-    oldPassword: state.oldPassword, 
-    password: state.password
+    oldPassword: user.oldPassword, 
+    password: user.password
   })
 
   const [updateUserData] = useUpdateUserData({
-    fullName: state.fullName, 
-    displayName: state.displayName, 
-    email: state.email
+    fullName: user.fullName, 
+    displayName: user.displayName, 
+    email: user.email
   })
-
-  useEffect(() => {
-    const currentUser = idx(data, data => data.currentUser.user);
-
-    if (loading || !currentUser) return;
-
-    setState({
-      ...state, 
-      email: currentUser.email,
-      fullName: currentUser.fullName, 
-      displayName: currentUser.displayName || currentUser.fullName.split(' ')[0], 
-      profile_url: currentUser.profileUrl as string
-    })
-  }, [idx(data, data => data.currentUser.user)])
 
   const handleChange = React.useCallback(
     event => {
       const {name, value} = event.target;
 
-      setState(state => ({...state, [name]: value}));
+      setUser(user => ({...user, [name]: value}));
       if (name == 'password') {
         if (value.match(/[A-Z]/)) {
-          setState(state => ({...state, hasUppercase: true}));
+          setUser(user => ({...user, hasUppercase: true}));
         } else {
-          setState(state => ({...state, hasUppercase: false}));
+          setUser(user => ({...user, hasUppercase: false}));
         }
 
         if (value.length >= 8) {
-          setState(state => ({...state, hasEightChar: true}));
+          setUser(user => ({...user, hasEightChar: true}));
         } else {
-          setState(state => ({...state, hasEightChar: false}));
+          setUser(user => ({...user, hasEightChar: false}));
         }
 
         if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(value)) {
-          setState(state => ({...state, hasSpecialChar: true}));
+          setUser(user => ({...user, hasSpecialChar: true}));
         } else {
-          setState(state => ({...state, hasSpecialChar: false}));
+          setUser(user => ({...user, hasSpecialChar: false}));
         }
       }
     },
-    [setState]
+    [setUser]
   );
 
   const handleChangePassword = () => {
-    if (state.password !== state.confirmPassword) {
+    if (user.password !== user.confirmPassword) {
       alert("Password is not matched")
-      setState(state => ({
-        ...state, 
+      setUser(user => ({
+        ...user, 
         confirmPassword: ''
       }))
       return
     }
-    if (!state.hasEightChar || !state.hasSpecialChar || !state.hasUppercase) {
+    if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
       alert("Password is invalid")
-      setState(state => ({
-        ...state, 
+      setUser(user => ({
+        ...user, 
         confirmPassword: ''
       }))
       return      
     }
 
     updateUserPassword()
-    setState(state => ({
-      ...state, 
+
+    setUser(user => ({
+      ...user, 
       oldPassword: '',
       password: '', 
       confirmPassword: ''
     }))
+    dispatch({
+      type: 'SET_CURRENT_USER', 
+      user: {
+        ...state.currentUser,
+        fullName: user.fullName, 
+        displayName: user.displayName, 
+        email: user.email
+      }
+    })
   }
 
   const handleChangeDetails = () => {
@@ -270,21 +265,28 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     const {
       currentTarget: { validity, files}
     } = event
-    const currentUser = idx(data, data => data.currentUser.user)
 
-    if (validity.valid && files && currentUser) {
+    if (validity.valid && files) {
       const user_data = new FormData()
       user_data.append('profile_picture', files[0])
-      user_data.append('id', currentUser.id)
+      user_data.append('id', state.currentUser.id)
 
       axios.post("/api/update_user_profile", user_data, {
           headers: {
             'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
           },
       }).then(res => {
-        setState({
-          ...state, 
+        setUser({
+          ...user, 
           profile_url: res.data.profile_url
+        })
+
+        dispatch({
+          type: 'SET_CURRENT_USER', 
+          user: {
+            ...state.currentUser,
+            profileUrl: res.data.profile_url
+          }
         })
       })
     }
@@ -301,9 +303,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         onMouseOver={() => setShow(true)}
         onMouseOut={() => setShow(false)}
       >
-        { 
-          state.profile_url ?
-          <img src={state.profile_url} className={classes.photo} /> : (
+        { user.profile_url ?
+          <img src={user.profile_url} className={classes.photo} /> : (
             <div className={classes.defaultPhoto}>
               <div className={classes.defaultPhotoName}>
                 <UploadIcon style={{fontSize: '48px'}} />
@@ -336,7 +337,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           <Grid container spacing={2}>
             <Grid item md={6}>
               <InputForm
-                value={state.fullName}
+                value={user.fullName}
                 label="Full name"
                 name="fullName"
                 placeholder="Full Name"
@@ -346,7 +347,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             </Grid>
             <Grid item md={6}>
               <InputForm
-                value={state.displayName}
+                value={user.displayName}
                 label="Display name"
                 name="displayName"
                 placeholder="Display Name"
@@ -356,7 +357,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             </Grid>
             <Grid item md={12}>
               <InputForm
-                value={state.email}
+                value={user.email}
                 label="Email address"
                 name="email"
                 placeholder="example.123@gmail.com"
@@ -375,8 +376,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                   </TableRow>
                 </TableHead>
                 <TableBody >
-                  { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
-                    data.currentUser.user.companies.map(company => (
+                  { state.currentUser.companies && 
+                    state.currentUser.companies.map(company => (
                     <TableRow key={company.name}>
                       <TableCell className={classes.tableCell}>
                         <div className={classes.flex}>
@@ -406,20 +407,20 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           Password must contain
         </Typography>
         <CheckBox
-          checked={state.hasUppercase}
+          checked={user.hasUppercase}
           label="At least 1 uppercase letter"
         />
         <CheckBox
-          checked={state.hasSpecialChar}
+          checked={user.hasSpecialChar}
           label="At least 1 special character"
         />
         <CheckBox
-          checked={state.hasEightChar}
+          checked={user.hasEightChar}
           label="At least 8 total characters"
         />
 
         <InputForm
-          value={state.oldPassword}
+          value={user.oldPassword}
           label="Current password"
           name="oldPassword"
           type="password"
@@ -428,7 +429,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           style={{marginTop: '24px', marginBottom: '24px'}}
         />
         <InputForm
-          value={state.password}
+          value={user.password}
           label="New Password"
           name="password"
           type="password"
@@ -437,7 +438,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           style={{marginTop: '24px', marginBottom: '24px'}}
         />
         <InputForm
-          value={state.confirmPassword}
+          value={user.confirmPassword}
           label="Confirm password"
           name="confirmPassword"
           type="password"

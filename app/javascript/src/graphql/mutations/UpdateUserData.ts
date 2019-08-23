@@ -12,12 +12,14 @@ export const useUpdateUserData = createMutationHook<
   mutation UpdateUserData(
     $email: String!,
     $fullName: String!,
-    $displayName: String!
+    $displayName: String!,
+    $lastViewedCompanyId: ID, 
   ) {
     updateUserData(
       email: $email, 
       fullName: $fullName, 
       displayName: $displayName, 
+      lastViewedCompanyId: $lastViewedCompanyId
     ) {
       errors {
         path

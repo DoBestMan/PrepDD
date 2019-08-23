@@ -1,13 +1,14 @@
 import React, { useReducer, createContext, useContext } from 'react'
+import { CurrentUser_currentUser_user } from '../graphql/queries/__generated__/CurrentUser'
 
-interface State {
+type State = {
   selectedCompany: string;
+  currentUser: CurrentUser_currentUser_user;
 }
 
-interface Action {
-  type: 'SET_SELECTED_COMPANY';
-  companyId: string 
-}
+type Action =
+  | { type: 'SET_SELECTED_COMPANY', companyId: string }
+  | { type: 'SET_CURRENT_USER', user: CurrentUser_currentUser_user }
 
 const rootReducer: React.Reducer<State, Action> = (state, action) => {
   switch (action.type) {
@@ -17,13 +18,31 @@ const rootReducer: React.Reducer<State, Action> = (state, action) => {
         selectedCompany: action.companyId
       }
       break
+    case 'SET_CURRENT_USER':
+      return {
+        ...state, 
+        currentUser: action.user
+      }
+      break
     default:
       return state
   }
 }
 
 const initialState: State = {
-  selectedCompany: ''
+  selectedCompany: '', 
+  currentUser: {
+    __typename: "User",
+    id: '',
+    email: '',
+    fullName: '',
+    displayName: '',
+    profileUrl: '',
+    lastViewedCompanyId: '', 
+    ownedCompanies: [],
+    companies: [],
+    roles: []
+  }
 }
 
 type ContextType = {

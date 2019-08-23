@@ -5,8 +5,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 
-import {useCurrentUser} from '../../../../../graphql/queries/CurrentUser'
-import {useGlobalState} from '../../../../../store'
+import { useGlobalState } from '../../../../../store'
+import { useUpdateUserData } from '../../../../../graphql/mutations/UpdateUserData'
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -52,27 +52,12 @@ export default function Dropdown() {
   const [open, setOpen] = React.useState(false);
 
   const {state, dispatch} = useGlobalState()
-  const {data, loading, error} = useCurrentUser({})
-
-  useEffect(() => {
-    if (loading) return
-    const owned = idx(data, data => data.currentUser.user.ownedCompanies)
-    
-    if (owned) {
-      dispatch({
-        type: 'SET_SELECTED_COMPANY', 
-        companyId: owned[0].id
-      })
-      return
-    }
-    const companies = idx(data, data => data.currentUser.user.companies)
-    if (companies) {
-      dispatch({
-        type: 'SET_SELECTED_COMPANY', 
-        companyId: companies[0].id
-      })
-    }
-  }, [loading])
+  const [updateUserData] = useUpdateUserData({
+    email: state.currentUser.email, 
+    fullName: state.currentUser.fullName, 
+    displayName: state.currentUser.displayName as string, 
+    lastViewedCompanyId: state.selectedCompany
+  })
 
   const toggleMenu = () => {
     setOpen(prev => !prev);
@@ -82,22 +67,30 @@ export default function Dropdown() {
     setOpen(false);
   };
 
-  const handleClick = (id: string) => {
-    dispatch({
+  const handleClick = async (id: string) => {
+    await dispatch({
       type: 'SET_SELECTED_COMPANY', 
       companyId: id
     })
+    await dispatch({
+      type: 'SET_CURRENT_USER', 
+      user: {
+        ...state.currentUser, 
+        lastViewedCompanyId: id
+      }
+    })
+
+    console.log("Before update", state.currentUser, id)
+    updateUserData()
     setOpen(prev => !prev);
   }
 
   const renderCompanyName = () => {
-    if (!state.selectedCompany) return "";
+    if (!state.selectedCompany || !state.currentUser.companies) return "";
 
-    const companies = idx(data, data => data.currentUser.user.ownedCompanies);
-    
-    if (!companies) return "";
-    const selected = companies.find(company => company.id === state.selectedCompany);
-    if (!selected) return ""
+    const selected = state.currentUser.companies.find(company => company.id === state.selectedCompany);
+    if (!selected) return "";
+
     return selected.name;
   }
 
@@ -118,8 +111,8 @@ export default function Dropdown() {
           </Typography>
           {open ? (
             <Paper className={classes.paper}>
-              { data && data.currentUser && data.currentUser.user && data.currentUser.user.companies && 
-                data.currentUser.user.companies.map(company => {
+              { state.currentUser.companies && 
+                state.currentUser.companies.map(company => {
                   return (
                     <Typography
                       key={company.id}
