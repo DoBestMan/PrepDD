@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core'
 
 import LoadingFallback from '../../components/LoadingFallback'
+import DefaultUserImage from '../../components/DefaultUserImage'
 import TableToolbar from './components/TableToolbar'
 import Searchbar from './components/Searchbar'
 import TableHeader from './components/TableHeader'
@@ -48,7 +49,6 @@ function createData(
   return { name, companies, teams, role }
 }
 
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -120,7 +120,7 @@ export default function TeamManagement(props: {path?: string}) {
     if (loading || !usersList) return;
     usersList.sort(
       (a: CompanyDetails_company_users | TeamDetails_team_users, b: CompanyDetails_company_users | TeamDetails_team_users) => {
-        if (a.id > b.id) return 1
+        if (+a.id > +b.id) return 1
         return -1
     })
     setMemberList(usersList)
@@ -228,49 +228,51 @@ export default function TeamManagement(props: {path?: string}) {
             <Table className={classes.table} aria-labelledby="Team Management Table">
               <TableHeader />
               <TableBody>
-                { memberList && 
-                  memberList.map((row: CompanyDetails_company_users, index: number) => {
-                    const isItemSelected = isSelected(row.id)
+                { memberList && memberList.map(user => {
+                    const isItemSelected = isSelected(user.id)
                     
                     return (
                       <StyledTableRow
-                        key={`member-${row.id}`} 
+                        key={`member-${user.id}`} 
                         role="team member"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         selected={isItemSelected}
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, row.id)}
+                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, user.id)}
                         hover
                       >
                         <StyledTableCell style={{paddingLeft: '31px'}}>
                           <div className={classes.flex} style={{alignItems: 'center'}}>
-                            <img 
-                              className={classes.round} 
-                              src={DefaultPhoto}
-                              width="30" 
-                              height="30" 
-                              alt="Alana" 
-                            />
-                            <span style={{marginLeft: '18px'}}>{row.fullName}</span>
+                            { user.profileUrl ?
+                              <img 
+                                className={classes.round} 
+                                src={user.profileUrl}
+                                width="30" 
+                                height="30" 
+                                alt="Alana" 
+                              /> : 
+                              <DefaultUserImage width={30} height={30} userName={user.fullName} />
+                            }
+                            <span style={{marginLeft: '18px'}}>{user.fullName}</span>
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
                           <div className={classes.flex}>
-                            { row.companies && row.companies.slice(0, 2).map(company => 
+                            { user.companies && user.companies.slice(0, 2).map(company => 
                                 <StyledItem 
-                                  key={`${row.fullName}-${company.id}`}
+                                  key={`${user.fullName}-${company.id}`}
                                   label={company.name} 
                                   selected={isItemSelected}
                                 />
                               )
                             }
-                            { row.companies && row.companies.length > 2 &&
+                            { user.companies && user.companies.length > 2 &&
                               <ArrowTooltip 
-                                title={renderTooltipTitle(row.companies.map(a => a.name).slice(2))} 
+                                title={renderTooltipTitle(user.companies.map(a => a.name).slice(2))} 
                                 placement="top"
                               >
                                 <StyledItem
-                                  label={`+${row.companies.length - 2}`}
+                                  label={`+${user.companies.length - 2}`}
                                   selected={isItemSelected}
                                 />
                               </ArrowTooltip>
@@ -278,23 +280,23 @@ export default function TeamManagement(props: {path?: string}) {
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
-                          { (row.teams && row.teams.length > 0) ? 
+                          { (user.teams && user.teams.length > 0) ? 
                             <div className={classes.flex}>
-                              { row.teams.slice(0, 2).map(team => 
+                              { user.teams.slice(0, 2).map(team => 
                                   <StyledItem 
-                                    key={`${row.fullName}-${team.id}`}
+                                    key={`${user.fullName}-${team.id}`}
                                     label={team.name} 
                                     selected={isItemSelected}
                                   />
                                 )                      
                               }
-                              { row.teams && row.teams.length > 2 &&
+                              { user.teams && user.teams.length > 2 &&
                                 <ArrowTooltip 
-                                  title={renderTooltipTitle(row.teams.map(a => a.name).slice(2))} 
+                                  title={renderTooltipTitle(user.teams.map(a => a.name).slice(2))} 
                                   placement="top"
                                 >
                                   <StyledItem
-                                    label={`+${row.teams.length - 2}`}
+                                    label={`+${user.teams.length - 2}`}
                                     selected={isItemSelected}
                                   />
                                 </ArrowTooltip>
@@ -303,8 +305,8 @@ export default function TeamManagement(props: {path?: string}) {
                           }
                           
                         </StyledTableCell>
-                        { row.roles && row.roles[0].name && 
-                          <StyledTableCell>{row.roles[0].name}</StyledTableCell>
+                        { user.roles && user.roles[0].name && 
+                          <StyledTableCell>{user.roles[0].name}</StyledTableCell>
                         }
                       </StyledTableRow>
                     )

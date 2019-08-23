@@ -28,7 +28,9 @@ export interface UserDetails_user_companies {
 export interface UserDetails_user {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
   roles: UserDetails_user_roles[] | null;
   companies: UserDetails_user_companies[] | null;
 }

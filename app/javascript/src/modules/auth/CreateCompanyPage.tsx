@@ -7,34 +7,36 @@ import * as React from 'react';
 import {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
+import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {Link as RouterLink, navigate} from '@reach/router';
 
 import {useCompanyCreate} from "../../graphql/mutations/CreateCompany";
 
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  flash: {
-    marginBottom: theme.spacing(1),
-  },
-  form: {
-    width: '86%',
-    marginLeft: '7%',
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  companyTitle: {
-    textAlign: 'center',
-  }
-}));
+const useStyles = makeStyles((theme: Theme) => 
+  createStyles({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    flash: {
+      marginBottom: theme.spacing(1),
+    },
+    form: {
+      width: '86%',
+      marginLeft: '7%',
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+    companyTitle: {
+      textAlign: 'center',
+    }
+  })
+);
 
 export default function CreateCompanyPage(_props: {path?: string}) {
 

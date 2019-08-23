@@ -34,6 +34,7 @@ export interface CompanyDetails_company_users {
   __typename: "User";
   id: string;
   fullName: string;
+  profileUrl: string | null;
   companies: CompanyDetails_company_users_companies[] | null;
   teams: CompanyDetails_company_users_teams[] | null;
   roles: CompanyDetails_company_users_roles[] | null;

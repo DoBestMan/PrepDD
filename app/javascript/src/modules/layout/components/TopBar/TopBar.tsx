@@ -9,9 +9,10 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { useMediaQuery } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
 
+import { useGlobalState } from '../../../../store'
+import DefaultUserImage from '../../../../components/DefaultUserImage'
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 
@@ -106,6 +107,11 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '32px',
       height: '32px'
     },
+    roundImage: {
+      width: '30px', 
+      height: '30px', 
+      borderRadius: '50%'
+    },
     grow: {
       flexGrow: 1
     },
@@ -123,6 +129,7 @@ export default function TopBar(props: {open: boolean}) {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
   });
+  const { state, dispatch } = useGlobalState()
 
   return (
     <AppBar 
@@ -165,7 +172,10 @@ export default function TopBar(props: {open: boolean}) {
             aria-label="account of current user"
             color="inherit"
           >
-            <AccountCircle className={classes.appBarItemSize} />
+            { state.currentUser.profileUrl ?
+              <img src={state.currentUser.profileUrl} className={classes.roundImage} /> :
+              <DefaultUserImage userName={state.currentUser.fullName} />
+            }
           </IconButton>
         </Typography>
       </Toolbar>

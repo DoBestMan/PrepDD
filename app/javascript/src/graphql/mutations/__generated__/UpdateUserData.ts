@@ -32,4 +32,5 @@ export interface UpdateUserDataVariables {
   email: string;
   fullName: string;
   displayName: string;
+  lastViewedCompanyId?: string | null;
 }

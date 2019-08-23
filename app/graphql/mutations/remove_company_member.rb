@@ -13,7 +13,7 @@ class Mutations::RemoveCompanyMember < GraphQL::Schema::Mutation
     company = Company.find(company_id)
     company_teams = company.teams.pluck(:id)
 
-    if user_id
+    if user_id.present?
       user_teams = TeamsUser.where(user_id: user_id)
       user_teams.where(team_id: company_teams).destroy_all
       UsersCompany.where(user_id: user_id, company_id: company_id).first&.destroy

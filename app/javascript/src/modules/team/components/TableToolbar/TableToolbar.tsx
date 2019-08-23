@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
@@ -10,7 +10,7 @@ import {
  } from '@material-ui/core'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
-import AutoSuggest from './components/AutoSuggest'
+import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
 import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
@@ -171,6 +171,20 @@ const TableToolbar = (props: TableToolbarProps) => {
     companyId: company
   })
 
+  useEffect(() => {
+    const roles = idx(data, data => data.roles)
+
+    if (loading || !roles) return
+    const userRole = roles.find(role => role.name === 'User')
+
+    if (userRole) {
+      setState({
+        ...state, 
+        role: userRole.id
+      })
+    }
+  }, [idx(data, data => data.roles)])
+
   const handleChange = useCallback(event => {
     const {name, value} = event.target
     setState(state => ({...state, [name]: value}))
@@ -213,7 +227,7 @@ const TableToolbar = (props: TableToolbarProps) => {
               className={classes.primaryButton}
               onClick={handleToggle}
             >
-              Add member
+              Invite member
             </Button>
             <form className={clsx(classes.paper, !open && classes.invisible)} onSubmit={handleSubmit}>
               <Typography className={classes.formTitle} variant="h6">
@@ -226,6 +240,7 @@ const TableToolbar = (props: TableToolbarProps) => {
                 className={classes.input}
                 value={state.fullName}
                 onChange={handleChange}
+                required
               />
               <TextField 
                 id="email"
@@ -254,7 +269,7 @@ const TableToolbar = (props: TableToolbarProps) => {
                 value={state.team}
                 handleChange={handleChangeTeam}
               />
-              <Button type="submit" className={classes.submitButton}>Create new team member</Button>
+              <Button type="submit" className={classes.submitButton}>Invite new team member</Button>
             </form>
           </div>
         </ClickAwayListener>

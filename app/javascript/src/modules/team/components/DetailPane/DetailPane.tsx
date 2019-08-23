@@ -14,20 +14,21 @@ import {
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 
 import LoadingFallback from '../../../../components/LoadingFallback'
+import DefaultUserImage from '../../../../components/DefaultUserImage'
 import Dropdown from '../../../../components/Dropdown'
 import StyledItem from '../styled/StyledItem'
 import StyledTableRow from '../styled/StyledTableRow'
 import StyledTableCell from '../styled/StyledTableCell'
 import InputForm from './components/InputForm'
+import AutoSuggest from '../AutoSuggest'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
-import {UserDetails_user} from '../../../../graphql/queries/__generated__/UserDetails'
+import {UserDetails_user, UserDetails_user_companies_teams} from '../../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
-
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
+import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
 
 const panelWidth = 500
 
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
+      alignItems: 'center'
     },
     grow: {
       flexGrow: 1,
@@ -92,13 +94,6 @@ const useStyles = makeStyles((theme: Theme) =>
     primaryColor: {
       color: '#3A84FF',
     },
-    addLink: {
-      margin: '25px 31px 0px 31px',
-      color: '#3A84FF',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-    },
     resetButton: {
       width: '170px',
       height: '42px',
@@ -125,17 +120,47 @@ const useStyles = makeStyles((theme: Theme) =>
       flexWrap: 'wrap', 
       width: '200px', 
       position: 'absolute', 
-      top: '35px',
+      top: '28px',
       right: '3px', 
       padding: '9px', 
       boxSizing: 'border-box', 
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
-      opacity: 0, 
     },
-    visible: {
-      opacity: 1
-    }
+    addMember: {
+      color: '#3A84FF',
+      fontWeight: 600,
+      fontSize: '15px',
+      width: '25px', 
+      height: '25px', 
+      padding: '4px 6px 2px 6px', 
+      border: '1px solid #FFFFFF',
+      borderRadius: '3px'
+    },
+    addMemberHover: {
+      position: 'relative', 
+      padding: '2px 6px 2px 6px', 
+      border: '1px solid #D8D8D8',
+    },
+    addPaper: {
+      width: '200px', 
+      background: '#FFFFFF', 
+      position: 'absolute', 
+      top: '24px',
+      right: '-2px', 
+      padding: '12px', 
+      boxSizing: 'border-box', 
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
+    addLink: {
+      marginTop: '24px',
+      color: '#3A84FF',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      textTransform: 'capitalize'
+    },
   })
 )
 
@@ -148,6 +173,7 @@ interface DetailPaneProps {
 
 interface UserProps extends UserDetails_user {
   role: string
+  team: string
 }
 
 interface Role {
@@ -161,15 +187,19 @@ export default function DetailPane(props: DetailPaneProps) {
   const [user, setUser] = useState<UserProps>({
     __typename: "User",
     id: '',
+    email: '',
     fullName: '',
-    role: '0', 
+    profileUrl: '', 
     roles: null,
-    companies: null,
+    companies: null, 
+    role: '0', 
+    team: ''
   })
   const [roles, setRoles] = useState<Role[]>([])
   const [companyId, setCompanyId] = useState<string>("")
   const [teamId, setTeamId] = useState<string>("")
   const [moreHover, setMoreHover] = useState<boolean>(false)
+  const [addHover, setAddHover] = useState<boolean>(false)
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
@@ -180,12 +210,19 @@ export default function DetailPane(props: DetailPaneProps) {
     role: user.role, 
   })
   const [removeCompanyMember] = useRemoveCompanyMember({
-    companyId, 
+    companyId: companyId || company, 
     userId: user.id, 
   })
   const [removeTeamMember] = useRemoveTeamMember({
     teamId, 
     userId: user.id
+  })
+  const [addTeamMember] = useAddTeamMember({
+    companyId,
+    fullName: user.fullName, 
+    email: user.email, 
+    role: user.role, 
+    team: user.team,
   })
 
   useEffect(() => {
@@ -211,13 +248,17 @@ export default function DetailPane(props: DetailPaneProps) {
       setUser({
         ...user, 
         id: currentUser.id, 
+        email: currentUser.email, 
         fullName: currentUser.fullName, 
+        profileUrl: currentUser.profileUrl,
         role: currentUser.roles[0].id,
       })
     } else {
       setUser({
         ...user, 
         id: currentUser.id, 
+        email: currentUser.email, 
+        profileUrl: currentUser.profileUrl,
         fullName: currentUser.fullName,
       })
     }
@@ -261,6 +302,42 @@ export default function DetailPane(props: DetailPaneProps) {
     }
   }
 
+  const handleChangeTeam = (newValue: string) => {
+    setUser({
+      ...user, 
+      team: newValue
+    })
+  }
+
+  const handleAddTeamMember = useCallback(event => {
+    event.preventDefault()
+    addTeamMember()
+    setUser({
+      ...user, 
+      team: ''
+    })
+    setAddHover(false)
+  }, [addTeamMember])
+
+  const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
+    const label = 
+      teams && teams.length > 2 ?
+        teams
+          .slice(0, 2)
+          .map(team => team.name)
+          .join(', ')
+          .concat(` +${teams.length - 2}`) :
+        teams.map(team => team.name).join(', ');
+
+    return (
+      <div className={classes.flex}>
+        { label && <span style={{marginRight: '12px'}}>{label}</span> }
+        <div className={classes.grow} />
+        <i className={clsx("fa fa-plus", classes.addMember)} />
+      </div>
+    )
+  }
+
   return loading ?
     <LoadingFallback /> :
     <Drawer
@@ -275,13 +352,16 @@ export default function DetailPane(props: DetailPaneProps) {
       <>
         <div className={classes.drawerSpacer} />
         <div className={classes.drawerHeader}>
-          <img
-            className={classes.round}
-            src={DefaultPhoto}
-            width="30"
-            height="30"
-            alt="Alana"
-          />
+          { user.profileUrl ?
+            <img
+              className={classes.round}
+              src={user.profileUrl}
+              width="30"
+              height="30"
+              alt="Alana"
+            /> : 
+            <DefaultUserImage userName={user.fullName} />
+          }
           <InputForm 
             value={user.fullName} 
             onChange={handleChangeName}
@@ -355,26 +435,57 @@ export default function DetailPane(props: DetailPaneProps) {
                               onMouseLeave={() => setMoreHover(false)}
                               style={{position: 'relative'}}
                             >
-                              <StyledItem label={`+${company.teams.length - 2}`} />
-                              <Paper 
-                                className={clsx(classes.morePaper, moreHover && classes.visible)} 
-                                elevation={0}
-                              >
-                                { company.teams.slice(2).map(team => 
-                                    <StyledItem 
-                                      key={`${user.fullName}-${team.id}`}
-                                      label={team.name} 
-                                      handleClose={() => setTeamId(team.id)}
-                                      selected
-                                      close
-                                    />
-                                  )
-                                }
-                              </Paper>
-                            </div>                            
+                              <StyledItem label={`+${company.teams.length - 2}`} selected />
+                              { moreHover && 
+                                <Paper 
+                                  className={classes.morePaper} 
+                                  elevation={0}
+                                  onMouseOver={() => setMoreHover(true)}
+                                  onMouseLeave={() => setMoreHover(false)}
+                                >
+                                  { company.teams.slice(2).map(team => 
+                                      <StyledItem 
+                                        key={`${user.fullName}-${team.id}`}
+                                        label={team.name} 
+                                        handleClose={() => setTeamId(team.id)}
+                                        selected
+                                        close
+                                      />
+                                    )
+                                  }
+                                </Paper>
+                              }
+                            </div>
                           }
+                          <div className={classes.grow} />
+                          <div 
+                            className={clsx(classes.addMember, classes.addMemberHover)}
+                            onMouseOver={() => setAddHover(true)}
+                            onMouseLeave={() => setAddHover(false)}
+                          >
+                            <i className="fa fa-plus" />
+                            { addHover && 
+                              <form 
+                                className={classes.addPaper} 
+                                onMouseOver={() => setAddHover(true)}
+                                onMouseLeave={() => setAddHover(false)}
+                                onSubmit={handleAddTeamMember}
+                              >
+                                <AutoSuggest
+                                  value={user.team}
+                                  handleChange={handleChangeTeam}                                  
+                                />
+                                <Button 
+                                  type="submit"
+                                  className={classes.addLink} 
+                                >
+                                  Add team
+                                </Button>
+                              </form>
+                            }
+                          </div>
                         </div> :
-                        (company.teams && company.teams.map(team => team.name).join(', '))
+                        (company.teams && renderTeams(company.teams))
                       }
                     </StyledTableCell>
                   </StyledTableRow>
@@ -383,9 +494,6 @@ export default function DetailPane(props: DetailPaneProps) {
             )}
           </TableBody>
         </Table>
-        <Typography className={classes.addLink} variant="h6">
-          Add new company & team
-        </Typography>
         <Button className={classes.resetButton}>Reset password</Button>
       </>
         

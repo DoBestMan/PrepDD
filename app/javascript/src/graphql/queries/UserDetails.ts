@@ -7,7 +7,9 @@ export const useUserDetails = createQueryHook<UserDetails, {}>(gql`
   query UserDetails($id: ID!) {
     user(id: $id) {
       id
+      email
       fullName
+      profileUrl
       roles {
         id
         name
