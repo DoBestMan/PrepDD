@@ -9,9 +9,9 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { useMediaQuery } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
 
+import DefaultUserImage from '../../../../components/DefaultUserImage'
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 
@@ -165,7 +165,7 @@ export default function TopBar(props: {open: boolean}) {
             aria-label="account of current user"
             color="inherit"
           >
-            <AccountCircle className={classes.appBarItemSize} />
+            <DefaultUserImage userName="Ruzza Stefano" />
           </IconButton>
         </Typography>
       </Toolbar>

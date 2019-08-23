@@ -25,16 +25,18 @@ const useStyles = makeStyles((theme: Theme) =>
 interface DefaultUserImageProps {
   width?: number;
   height?: number;
-  label: string;
+  userName: string;
 }
 
 export default function DefaultUserImage(props: DefaultUserImageProps) {
-  const { width, height, label } = props
+  const { width, height, userName } = props
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
-      <p className={classes.label}>{label}</p>
+      <p className={classes.label}>
+        {userName.split(' ').slice(0, 2).map(name=>name[0]).join('')}
+      </p>
     </div>
   )
 }

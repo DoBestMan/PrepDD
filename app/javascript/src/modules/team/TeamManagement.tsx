@@ -49,7 +49,6 @@ function createData(
   return { name, companies, teams, role }
 }
 
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 const panelWidth=500
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -252,9 +251,7 @@ export default function TeamManagement(props: {path?: string}) {
                                 height="30" 
                                 alt="Alana" 
                               /> : 
-                              <DefaultUserImage 
-                                label={user.fullName.split(' ').slice(0, 2).map(name => name[0]).join('')} 
-                              />
+                              <DefaultUserImage width={30} height={30} userName={user.fullName} />
                             }
                             <span style={{marginLeft: '18px'}}>{user.fullName}</span>
                           </div>

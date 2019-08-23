@@ -14,6 +14,7 @@ import {
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 
 import LoadingFallback from '../../../../components/LoadingFallback'
+import DefaultUserImage from '../../../../components/DefaultUserImage'
 import Dropdown from '../../../../components/Dropdown'
 import StyledItem from '../styled/StyledItem'
 import StyledTableRow from '../styled/StyledTableRow'
@@ -28,8 +29,6 @@ import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMembe
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
-
-const DefaultPhoto = require('images/dummy/photos/Alana.jpg')
 
 const panelWidth = 500
 
@@ -251,6 +250,7 @@ export default function DetailPane(props: DetailPaneProps) {
         id: currentUser.id, 
         email: currentUser.email, 
         fullName: currentUser.fullName, 
+        profileUrl: currentUser.profileUrl,
         role: currentUser.roles[0].id,
       })
     } else {
@@ -258,6 +258,7 @@ export default function DetailPane(props: DetailPaneProps) {
         ...user, 
         id: currentUser.id, 
         email: currentUser.email, 
+        profileUrl: currentUser.profileUrl,
         fullName: currentUser.fullName,
       })
     }
@@ -354,11 +355,12 @@ export default function DetailPane(props: DetailPaneProps) {
           { user.profileUrl ?
             <img
               className={classes.round}
-              src={DefaultPhoto}
+              src={user.profileUrl}
               width="30"
               height="30"
               alt="Alana"
-            /> : null
+            /> : 
+            <DefaultUserImage userName={user.fullName} />
           }
           <InputForm 
             value={user.fullName} 
