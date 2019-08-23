@@ -188,8 +188,9 @@ export default function DetailPane(props: DetailPaneProps) {
   const [user, setUser] = useState<UserProps>({
     __typename: "User",
     id: '',
-    fullName: '',
     email: '',
+    fullName: '',
+    profileUrl: '', 
     roles: null,
     companies: null, 
     role: '0', 
@@ -350,13 +351,15 @@ export default function DetailPane(props: DetailPaneProps) {
       <>
         <div className={classes.drawerSpacer} />
         <div className={classes.drawerHeader}>
-          <img
-            className={classes.round}
-            src={DefaultPhoto}
-            width="30"
-            height="30"
-            alt="Alana"
-          />
+          { user.profileUrl ?
+            <img
+              className={classes.round}
+              src={DefaultPhoto}
+              width="30"
+              height="30"
+              alt="Alana"
+            /> : null
+          }
           <InputForm 
             value={user.fullName} 
             onChange={handleChangeName}

@@ -11,6 +11,7 @@ export const useTeamDetails = createQueryHook<TeamDetails, {}>(gql`
       users {
         id
         fullName
+        profileUrl
         companies {
           id
           name

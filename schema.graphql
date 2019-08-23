@@ -78,7 +78,7 @@ type Mutation {
   signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
   updateCompany(autoPdf: Boolean!, autoWatermark: Boolean!, id: ID!, name: String!, previewOnly: Boolean!): UpdateCompanyPayload
   updateTeamMember(companyId: ID!, fullName: String!, id: ID!, role: ID!): UpdateTeamMemberPayload
-  updateUserData(displayName: String!, email: String!, fullName: String!): UpdateUserDataPayload
+  updateUserData(displayName: String!, email: String!, fullName: String!, lastViewedCompanyId: ID): UpdateUserDataPayload
   updateUserNotificatiosn(input: UpdateUserNotificatiosnInput!): UpdateUserNotificatiosnPayload
   updateUserPassword(oldPassword: String!, password: String!): UpdateUserPasswordPayload
 }
@@ -108,6 +108,11 @@ type Query {
   Return details of a user
   """
   user(id: ID!): User!
+
+  """
+  Find a user by id
+  """
+  userDetails(id: ID!): UserDetails
 
   """
   Information for resetting a users password
@@ -263,13 +268,23 @@ User
 """
 type User {
   companies: [Company!]
-  displayName: String!
+  displayName: String
   email: String!
   fullName: String!
   id: ID!
+  lastViewedCompanyId: ID
   ownedCompanies: [Company!]
+  profileUrl: String
   roles: [Role!]
   teams: [Team!]
+}
+
+"""
+UserDetails
+"""
+type UserDetails {
+  id: String!
+  user: User
 }
 
 """

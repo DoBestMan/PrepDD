@@ -28,6 +28,7 @@ export interface TeamDetails_team_users {
   __typename: "User";
   id: string;
   fullName: string;
+  profileUrl: string | null;
   companies: TeamDetails_team_users_companies[] | null;
   teams: TeamDetails_team_users_teams[] | null;
   roles: TeamDetails_team_users_roles[] | null;
