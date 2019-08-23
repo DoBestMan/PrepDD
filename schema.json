@@ -70,7 +70,7 @@
               "description": "Return details of a user",
               "args": [
                 {
-                  "name": "id",
+                  "name": "CompanyId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -80,6 +80,16 @@
                       "name": "ID",
                       "ofType": null
                     }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "TeamId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
                   },
                   "defaultValue": null
                 },

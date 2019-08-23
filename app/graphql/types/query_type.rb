@@ -49,16 +49,20 @@ module Types
 
     field :company_users, CompanyUsersType, null: false do
       description 'Return details of a user'
-      argument :id, ID, required: true
+      argument :CompanyId, ID, required: true
+      argument :TeamId, ID, required: false
       argument :limit, Integer, required: false
       argument :offset, Integer, required: false
     end
 
-    def company_users(id:, limit:, offset:)
-      company = Company.find(id)
+    def company_users(company_id:, team_id: nil, limit:, offset:)
+      company = Company.find(company_id)
       users = company.users.limit(limit).offset(offset)
-
-      {company: company, users: users}
+      if team_id.present?
+        team = Team.find(team_id)
+        users = team.users
+      end
+      { company: company, users: users }
     end
 
     def current_user

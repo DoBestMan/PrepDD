@@ -100,7 +100,7 @@ type Query {
   """
   Return details of a user
   """
-  companyUsers(id: ID!, limit: Int, offset: Int): CompanyUsers!
+  companyUsers(CompanyId: ID!, TeamId: ID, limit: Int, offset: Int): CompanyUsers!
 
   """
   The currently logged in user
