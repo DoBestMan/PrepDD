@@ -19,6 +19,12 @@ export interface CompanyUsers_companyUsers_company {
   teams: CompanyUsers_companyUsers_company_teams[];
 }
 
+export interface CompanyUsers_companyUsers_users_roles {
+  __typename: "Role";
+  id: string;
+  name: string;
+}
+
 export interface CompanyUsers_companyUsers_users_teams {
   __typename: "Team";
   id: string;
@@ -36,6 +42,8 @@ export interface CompanyUsers_companyUsers_users {
   __typename: "User";
   id: string;
   fullName: string;
+  profileUrl: string | null;
+  roles: CompanyUsers_companyUsers_users_roles[] | null;
   teams: CompanyUsers_companyUsers_users_teams[] | null;
   companies: CompanyUsers_companyUsers_users_companies[] | null;
 }

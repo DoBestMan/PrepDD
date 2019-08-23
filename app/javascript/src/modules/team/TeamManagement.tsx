@@ -22,32 +22,12 @@ import ArrowTooltip from './components/ArrowTooltip'
 
 import {useGlobalState} from '../../store'
 
-import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
-import {useTeamDetails} from '../../graphql/queries/TeamDetails'
+import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
-import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
-import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
-
-interface Company {
-  url: string;
-  label: string;
-}
-
-interface Data {
-  name: string;
-  companies: Company[];
-  teams: string[];
-  role: string;
-}
-
-function createData(
-  name: string, 
-  companies: Company[], 
-  teams: string[], 
-  role: string
-  ): Data {
-  return { name, companies, teams, role }
-}
+import {
+  CompanyUsers_companyUsers_users, 
+  CompanyUsers_companyUsers_company
+} from '../../graphql/queries/__generated__/CompanyUsers' 
 
 const panelWidth=500
 
@@ -99,15 +79,19 @@ export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
   const [selected, setSelected] = React.useState<string[]>([])
   const [team, setTeam] = React.useState("")
-  const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
+  const [memberList, setMemberList] = React.useState<CompanyUsers_companyUsers_users[]>([])
 
   const {state} = useGlobalState()
-  const {loading, data, error} = useCompanyDetails({id: state.selectedCompany});
+  const {loading, data, error} = useCompanyUsers({
+    companyId: state.selectedCompany,
+    teamId: team, 
+    limit: 10, 
+    offset: 0
+  });
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected
   })
-  const responseTeam = useTeamDetails({id: team})
 
   useEffect(() => {
     setTeam("")
@@ -115,24 +99,16 @@ export default function TeamManagement(props: {path?: string}) {
   }, [state.selectedCompany])
 
   useEffect(() => {
-    const usersList = idx(data, data => data.company.users);
+    const usersList = idx(data, data => data.companyUsers.users);
 
     if (loading || !usersList) return;
     usersList.sort(
-      (a: CompanyDetails_company_users | TeamDetails_team_users, b: CompanyDetails_company_users | TeamDetails_team_users) => {
+      (a: CompanyUsers_companyUsers_users, b: CompanyUsers_companyUsers_users) => {
         if (+a.id > +b.id) return 1
         return -1
     })
     setMemberList(usersList)
-  }, [idx(data, data => data.company.users)])
-
-  useEffect(() => {
-    const usersList = idx(responseTeam, responseTeam => responseTeam.data.team.users);
-
-    if (!usersList) return;
-    console.log("Team Fetch", usersList)
-    setMemberList(usersList)
-  }, [idx(responseTeam, responseTeam => responseTeam.data.team.users)])
+  }, [idx(data, data => data.companyUsers.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -221,8 +197,8 @@ export default function TeamManagement(props: {path?: string}) {
             handleDelete={handleDelete}
             company={state.selectedCompany}
           />
-          { data && data.company && data.company.teams && 
-            <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
+          { data && data.companyUsers.company && data.companyUsers.company.teams && 
+            <Searchbar data={data.companyUsers.company.teams} value={team} handleUpdate={handleChangeTeam} />
           }
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="Team Management Table">
