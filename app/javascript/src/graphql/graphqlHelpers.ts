@@ -6,7 +6,7 @@ import {QueryResult, MutationTuple} from 'react-apollo';
 export {gql, useQuery};
 
 export function createQueryHook<TData, TVariables>(
-  query: DocumentNode
+  query: DocumentNode,
 ): (variables: TVariables) => QueryResult<TData, TVariables> {
   return function(variables) {
     return useQuery(query, {variables});

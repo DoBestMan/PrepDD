@@ -60,7 +60,7 @@ module Types
       users = company.users.limit(limit).offset(offset)
       if team_id.present?
         team = Team.find(team_id)
-        users = team.users
+        users = team.users.limit(limit).offset(offset)
       end
       { company: company, users: users }
     end

@@ -1,7 +1,8 @@
-import React, {useEffect, useMemo} from 'react'
+import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
+import { useQuery } from 'react-apollo'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -24,12 +25,10 @@ import {useGlobalState} from '../../store'
 
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
-import {
-  CompanyUsers_companyUsers_users, 
-  CompanyUsers_companyUsers_company
-} from '../../graphql/queries/__generated__/CompanyUsers' 
+import {CompanyUsers_companyUsers_users, CompanyUsers, CompanyUsersVariables} from '../../graphql/queries/__generated__/CompanyUsers' 
 
-const panelWidth=500
+const PANEL_WIDTH = 500
+const LIMIT = 10
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
       })
     },
     paperShift: {
-      width: `calc(100% - ${panelWidth}px)`,
+      width: `calc(100% - ${PANEL_WIDTH}px)`,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut, 
         duration: theme.transitions.duration.enteringScreen
@@ -82,15 +81,68 @@ export default function TeamManagement(props: {path?: string}) {
   const [memberList, setMemberList] = React.useState<CompanyUsers_companyUsers_users[]>([])
 
   const {state} = useGlobalState()
-  const {loading, data, error} = useCompanyUsers({
+  const {loading, data, error, fetchMore} = useCompanyUsers({
     companyId: state.selectedCompany,
     teamId: team, 
-    limit: 10, 
+    limit: LIMIT, 
     offset: 0
   });
   const [removeCompanyMember] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected
+  })
+
+  useEffect(() => {
+    const handleOnScroll = () => {
+      console.log("Scroll Event")
+
+      let scrollTop = (document.documentElement && document.documentElement.scrollTop) ||
+        document.body.scrollTop
+      let scrollHeight = (document.documentElement && document.documentElement.scrollHeight) ||
+        document.body.scrollHeight
+      let clientHeight = document.documentElement.clientHeight || window.innerHeight
+      let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+
+      if (scrolledToBottom) {
+        console.log("Scroll Bottom")
+        fetchMore({
+          variables: {
+            companyId: state.selectedCompany,
+            teamId: team, 
+            limit: LIMIT, 
+            offset: memberList.length
+          },
+          updateQuery: (previousQueryResult: CompanyUsers, options: {
+            fetchMoreResult?: CompanyUsers;
+            variables?: CompanyUsersVariables;
+          }) => {
+            const fetchMoreResult = idx(options, options => options.fetchMoreResult)
+    
+            if (!fetchMoreResult)
+              return previousQueryResult
+    
+            return {
+              companyUsers: {
+                ...previousQueryResult.companyUsers, 
+                users: [
+                  ...previousQueryResult.companyUsers.users,
+                  ...fetchMoreResult.companyUsers.users
+                ]
+              }
+            }
+    
+          }
+        })
+      }
+    }
+
+    console.log("Add Event Listener")
+    window.addEventListener("scroll", handleOnScroll)
+
+    return () => {
+      console.log("Remove Event Listener")
+      window.removeEventListener("scroll", handleOnScroll)
+    }
   })
 
   useEffect(() => {
@@ -102,11 +154,6 @@ export default function TeamManagement(props: {path?: string}) {
     const usersList = idx(data, data => data.companyUsers.users);
 
     if (loading || !usersList) return;
-    usersList.sort(
-      (a: CompanyUsers_companyUsers_users, b: CompanyUsers_companyUsers_users) => {
-        if (+a.id > +b.id) return 1
-        return -1
-    })
     setMemberList(usersList)
   }, [idx(data, data => data.companyUsers.users)])
 
@@ -173,6 +220,8 @@ export default function TeamManagement(props: {path?: string}) {
     setTeam(newTeam)
   }
 
+  
+
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
@@ -201,7 +250,10 @@ export default function TeamManagement(props: {path?: string}) {
             <Searchbar data={data.companyUsers.company.teams} value={team} handleUpdate={handleChangeTeam} />
           }
           <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="Team Management Table">
+            <Table 
+              className={classes.table} 
+              aria-labelledby="Team Management Table"
+            >
               <TableHeader />
               <TableBody>
                 { memberList && memberList.map(user => {
