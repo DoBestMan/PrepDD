@@ -47,6 +47,20 @@ module Types
       argument :id, ID, required: true
     end
 
+    field :company_users, CompanyUsersType, null: false do
+      description 'Return details of a user'
+      argument :id, ID, required: true
+      argument :limit, Integer, required: false
+      argument :offset, Integer, required: false
+    end
+
+    def company_users(id:, limit:, offset:)
+      company = Company.find(id)
+      users = company.users.limit(limit).offset(offset)
+
+      {company: company, users: users}
+    end
+
     def current_user
       user = context[:controller].current_user
       { id: 'current_user', user: user }
