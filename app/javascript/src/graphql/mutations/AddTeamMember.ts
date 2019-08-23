@@ -28,6 +28,19 @@ export const useAddTeamMember = createMutationHook<
         message
       }
       success
+      user{
+      id 
+      fullName
+      email
+      }
+      teams{
+      id
+      name
+      }
+      role{
+      id
+      name
+      }
     }
   }
 `);
