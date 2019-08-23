@@ -30,6 +30,7 @@ CompanyUsers
 """
 type CompanyUsers {
   company: Company!
+  id: ID!
   users: [User!]
 }
 
