@@ -6,6 +6,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
   argument :role, ID, required: true
 
   field :user, Types::UserType, null: false
+  field :companies, [Types::CompanyType], null: false
   field :teams, [Types::TeamType], null: false
   field :role, Types::RoleType, null: false
   field :errors, [Types::FormErrorType], null: false
@@ -70,13 +71,14 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
       end
     end
 
+    companies = user.companies
     teams = user.teams.where(company_id: company_id)
-    role_id = RolesUser.where(user_id: user.id, company_id: company_id).first.role_id
-    role = Role.find(role_id)
+    role = RolesUser.where(user_id: user.id, company_id: company_id).first.role
 
     if user&.persisted?
       response[:success] = true
       response[:user] = user
+      response[:companies] = companies
       response[:teams] = teams
       response[:role] = role
       response
