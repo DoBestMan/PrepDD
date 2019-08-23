@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
-import idx from 'idx';
 import axios from 'axios';
+import ReactDropzone, { useDropzone } from 'react-dropzone';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
@@ -292,6 +292,26 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     }
   }
 
+  const handleDrop = (acceptedFiles: File[]) => {
+    console.log(acceptedFiles);
+  }
+
+  const renderDropzone = () => {
+    const { getRootProps, getInputProps } = useDropzone()
+    // <div className={classes.defaultPhoto}>
+    //   <div className={classes.defaultPhotoName}>
+    //     <UploadIcon style={{fontSize: '48px'}} />
+    //     <br />
+    //     <span>Upload photo</span>
+    //   </div>
+    // </div>
+    return (
+      <ReactDropzone>
+        Drop file here.
+      </ReactDropzone>
+    )
+  }
+
   return (
     <Paper
       className={clsx(classes.root, value !== index && classes.invisible)}
@@ -304,17 +324,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         onMouseOut={() => setShow(false)}
       >
         { user.profile_url ?
-          <img src={user.profile_url} className={classes.photo} /> : (
-            <div className={classes.defaultPhoto}>
-              <div className={classes.defaultPhotoName}>
-                <UploadIcon style={{fontSize: '48px'}} />
-                <br />
-                <span>Upload photo</span>
-              </div>
-            </div>
-          )
+          <img src={user.profile_url} className={classes.photo} /> : 
+          renderDropzone()
         }
-        <div 
+        {/* <div 
           className={clsx(classes.uploadArea, !show && classes.invisible)}
           onClick={handleOpenFile}
         >
@@ -329,7 +342,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             type="file" 
             onChange={e => handleChangePhoto(e)}
           />
-        </div>
+        </div> */}
       </div>
 
       <Card className={classes.profile} elevation={0}>
