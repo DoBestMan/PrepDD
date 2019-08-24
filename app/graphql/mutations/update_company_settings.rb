@@ -23,6 +23,14 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
              preview_only: preview_only,
              dynamic_watermarking: dynamic_watermarking
     )
+
+    if parent_id.present?
+      ParentCompany(child_company_id: company&.id, parent_company_id: parent_id)
+    end
+
+    if broker_id.present?
+      BrokerCompany.create(child_broker_id: company&.id, parent_broker_id: broker_id)
+    end
     
     if company&.persisted?
       response[:success] = true
