@@ -386,21 +386,26 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                 </TableHead>
                 <TableBody >
                   { state.currentUser.companies && 
-                    state.currentUser.companies.map(company => (
-                    <TableRow key={company.name}>
-                      <TableCell className={classes.tableCell}>
-                        <div className={classes.flex}>
-                          <div>{company.name}</div>                        
-                        </div>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        { (company.teams.length > 0) ?
-                          company.teams.map(team => team.name).join(', ') :
-                          "No Teams"
-                        }
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                    state.currentUser.companies.map(company => {
+                      const findUser = company.users.find(user => user.id === state.currentUser.id)
+
+                      return (
+                        <TableRow key={company.name}>
+                          <TableCell className={classes.tableCell}>
+                            <div className={classes.flex}>
+                              <div>{company.name}</div>                        
+                            </div>
+                          </TableCell>
+                          <TableCell className={classes.tableCell}>
+                            { (findUser && findUser.teams && findUser.teams.length > 0) ?
+                              findUser.teams.map(team => team.name).join(', ') :
+                              "No Teams"
+                            }
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  }
                 </TableBody>
               </Table>
             </Grid>
