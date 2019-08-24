@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import clsx from 'clsx'
+import axios from 'axios'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import ReactDropzone from 'react-dropzone'
 
 import UploadIcon from '@material-ui/icons/CloudUpload'
-
-const MicrosoftLogo = require('images/dummy/logos/microsoft-logo.svg');
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -13,9 +13,12 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '250px', 
       height: '250px',
       position: 'relative', 
-      border: '1px solid #D8D8D8',
+      border: '2px dashed #D8D8D8',
       borderRadius: '3px',
-      padding: '12px'
+      padding: '12px',
+      '&:focus': {
+        outline: 'none'
+      }
     },
     uploadArea: {
       width: '250px', 
@@ -38,43 +41,87 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '15px',
       fontWeight: 600, 
     },
+    uploadFileLabel: {
+      color: '#D8D8D8', 
+      fontFamily: 'Montserrat', 
+      fontSize: '18px', 
+      fontWeight: 'bold',
+      textAlign: 'center'
+    },
     invisible: {
       display: 'none'
     }
   })
 )
 
-export default function UploadPanel() {
+export default function UploadPanel(props: {url?: string}) {
+  const { url } = props
   const classes = useStyles()
   const [showUpload, setShowUpload] = useState(false)
 
-  const handleOpenFile = () => {
-    const input = document.getElementById("company-logo")
 
-    if (input) input.click()
+
+  const handleDrop = (acceptedFiles: File[]) => {
+    console.log(acceptedFiles);
+
+    const user_data = new FormData()
+    user_data.append('profile_picture', acceptedFiles[0])
+    // user_data.append('id', state.currentUser.id)
+
+    // axios.post("/api/update_user_profile", user_data, {
+    //     headers: {
+    //       'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+    //     },
+    // }).then(res => {
+    //   setUser({
+    //     ...user, 
+    //     profile_url: res.data.profile_url
+    //   })
+
+    //   dispatch({
+    //     type: 'SET_CURRENT_USER', 
+    //     user: {
+    //       ...state.currentUser,
+    //       profileUrl: res.data.profile_url
+    //     }
+    //   })
+    // })
   }
 
   return (
-    <div 
-      className={classes.root}
-      onMouseOver={() => setShowUpload(true)}
-      onMouseOut={() => setShowUpload(false)}
+    <ReactDropzone
+      accept="image/*"
+      onDrop={handleDrop}
     >
-      <img src={MicrosoftLogo} width="226" height="226" alt="Microsoft" />
-      <div 
-        className={clsx(classes.uploadArea, !showUpload && classes.invisible)}
-        onClick={handleOpenFile}
-      >
-        <div className={classes.uploadLabel}>
-          <UploadIcon />
-          <span style={{marginLeft: '12px'}}>Update Logo</span>
+      {({getRootProps, getInputProps}) => (
+        <div {...getRootProps()} className={classes.root}>
+          <input {...getInputProps()} />
+          { url ?
+            <div
+              onMouseOver={() => setShowUpload(true)}
+              onMouseOut={() => setShowUpload(false)}              
+            >
+              <img src={url} width="226" height="226" alt="Microsoft" />
+              <div className={clsx(classes.uploadArea, !showUpload && classes.invisible)}>
+                <div className={classes.uploadLabel}>
+                  <UploadIcon />
+                  <span style={{marginLeft: '12px'}}>Update Logo</span>
+                </div>
+                <input 
+                  id="company-logo" 
+                  className={classes.invisible} 
+                  type="file" 
+                />
+              </div>
+            </div> :
+            <div className={classes.uploadFileLabel}>
+              <UploadIcon style={{fontSize: '120px'}} />
+              <br />
+              <span>Drag ang Drop/<br />upload logo</span>
+            </div> 
+          }
         </div>
-        <input 
-          id="company-logo" 
-          className={classes.invisible} 
-          type="file" 
-        />
-      </div>
-    </div>
+      )}
+    </ReactDropzone>
   )
 }

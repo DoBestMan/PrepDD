@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import axios from 'axios';
-import ReactDropzone, { useDropzone } from 'react-dropzone';
+import ReactDropzone from 'react-dropzone';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
