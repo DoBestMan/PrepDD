@@ -12,8 +12,13 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
-import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
+import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember'
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
+import { 
+  CompanyUsers_companyUsers_users_companies,
+  CompanyUsers_companyUsers_company_teams,
+  CompanyUsers_companyUsers_users_roles
+} from '../../../../graphql/queries/__generated__/CompanyUsers'
 
 const useToolbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -148,10 +153,19 @@ interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
+  updateMemberList: (
+    params: {
+      id: string, 
+      fullName: string, 
+      companies: CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: CompanyUsers_companyUsers_company_teams[] | null, 
+      roles: CompanyUsers_companyUsers_users_roles[] | null
+    }
+  ) => void;
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const { selected, handleDelete, company } = props
+  const { selected, company, handleDelete, updateMemberList} = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
@@ -163,7 +177,11 @@ const TableToolbar = (props: TableToolbarProps) => {
 
   const {data, loading, error} = useAllRoles({})
 
-  const [addTeamMember, response] = useAddTeamMember({
+  const [addTeamMember, {
+    loading: addTeamMemberLoading, 
+    data: addTeamMemberRes, 
+    error: addTeamMemberError
+  }] = useAddTeamMember({
     fullName: state.fullName, 
     email: state.email, 
     role: state.role, 
@@ -184,6 +202,22 @@ const TableToolbar = (props: TableToolbarProps) => {
       })
     }
   }, [idx(data, data => data.roles)])
+
+  useEffect(() => {
+    const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
+    const addedCompanies = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.companies)
+    const addedTeams = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.teams)
+    const addedRole = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.role)
+
+    if (addTeamMemberLoading || !addedUser) return
+    updateMemberList({
+      id: addedUser.id, 
+      fullName: addedUser.fullName, 
+      companies: addedCompanies as CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: addedTeams as CompanyUsers_companyUsers_company_teams[] | null, 
+      roles: [addedRole] as CompanyUsers_companyUsers_users_roles[] | null
+    })
+  }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   const handleChange = useCallback(event => {
     const {name, value} = event.target

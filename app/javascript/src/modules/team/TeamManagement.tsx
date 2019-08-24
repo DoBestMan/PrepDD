@@ -25,10 +25,17 @@ import {useGlobalState} from '../../store'
 
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
-import {CompanyUsers_companyUsers_users, CompanyUsers, CompanyUsersVariables} from '../../graphql/queries/__generated__/CompanyUsers' 
+import {
+  CompanyUsers_companyUsers_users, 
+  CompanyUsers, 
+  CompanyUsersVariables,
+  CompanyUsers_companyUsers_users_companies, 
+  CompanyUsers_companyUsers_company_teams,
+  CompanyUsers_companyUsers_users_roles
+} from '../../graphql/queries/__generated__/CompanyUsers' 
 
 const PANEL_WIDTH = 500
-const LIMIT = 10
+const LIMIT = 20
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,6 +81,14 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface UpdateTeamMemberProps {
+  id: string;
+  fullName: string;
+  companies: CompanyUsers_companyUsers_users_companies[] | null;
+  teams: CompanyUsers_companyUsers_company_teams[] | null;
+  roles: CompanyUsers_companyUsers_users_roles[] | null;
+}
+
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
   const [selected, setSelected] = React.useState<string[]>([])
@@ -92,58 +107,58 @@ export default function TeamManagement(props: {path?: string}) {
     userIds: selected
   })
 
-  useEffect(() => {
-    const handleOnScroll = () => {
-      console.log("Scroll Event")
+  // useEffect(() => {
+  //   const handleOnScroll = () => {
+  //     console.log("Scroll Event")
 
-      let scrollTop = (document.documentElement && document.documentElement.scrollTop) ||
-        document.body.scrollTop
-      let scrollHeight = (document.documentElement && document.documentElement.scrollHeight) ||
-        document.body.scrollHeight
-      let clientHeight = document.documentElement.clientHeight || window.innerHeight
-      let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+  //     let scrollTop = (document.documentElement && document.documentElement.scrollTop) ||
+  //       document.body.scrollTop
+  //     let scrollHeight = (document.documentElement && document.documentElement.scrollHeight) ||
+  //       document.body.scrollHeight
+  //     let clientHeight = document.documentElement.clientHeight || window.innerHeight
+  //     let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
 
-      if (scrolledToBottom) {
-        console.log("Scroll Bottom")
-        fetchMore({
-          variables: {
-            companyId: state.selectedCompany,
-            teamId: team, 
-            limit: LIMIT, 
-            offset: memberList.length
-          },
-          updateQuery: (previousQueryResult: CompanyUsers, options: {
-            fetchMoreResult?: CompanyUsers;
-            variables?: CompanyUsersVariables;
-          }) => {
-            const fetchMoreResult = idx(options, options => options.fetchMoreResult)
+  //     if (scrolledToBottom) {
+  //       console.log("Scroll Bottom")
+  //       fetchMore({
+  //         variables: {
+  //           companyId: state.selectedCompany,
+  //           teamId: team, 
+  //           limit: LIMIT, 
+  //           offset: memberList.length
+  //         },
+  //         updateQuery: (previousQueryResult: CompanyUsers, options: {
+  //           fetchMoreResult?: CompanyUsers;
+  //           variables?: CompanyUsersVariables;
+  //         }) => {
+  //           const fetchMoreResult = idx(options, options => options.fetchMoreResult)
     
-            if (!fetchMoreResult)
-              return previousQueryResult
+  //           if (!fetchMoreResult)
+  //             return previousQueryResult
     
-            return {
-              companyUsers: {
-                ...previousQueryResult.companyUsers, 
-                users: [
-                  ...previousQueryResult.companyUsers.users,
-                  ...fetchMoreResult.companyUsers.users
-                ]
-              }
-            }
+  //           return {
+  //             companyUsers: {
+  //               ...previousQueryResult.companyUsers, 
+  //               users: [
+  //                 ...previousQueryResult.companyUsers.users,
+  //                 ...fetchMoreResult.companyUsers.users
+  //               ]
+  //             }
+  //           }
     
-          }
-        })
-      }
-    }
+  //         }
+  //       })
+  //     }
+  //   }
 
-    console.log("Add Event Listener")
-    window.addEventListener("scroll", handleOnScroll, true)
+  //   console.log("Add Event Listener")
+  //   window.addEventListener("scroll", handleOnScroll, true)
 
-    return () => {
-      console.log("Remove Event Listener")
-      window.removeEventListener("scroll", handleOnScroll, true)
-    }
-  }, [])
+  //   return () => {
+  //     console.log("Remove Event Listener")
+  //     window.removeEventListener("scroll", handleOnScroll, true)
+  //   }
+  // }, [])
 
   useEffect(() => {
     setTeam("")
@@ -228,6 +243,26 @@ export default function TeamManagement(props: {path?: string}) {
     setTeam(newTeam)
   }
 
+  const updateTeamMemberList = (params: UpdateTeamMemberProps) => {
+    console.log("Params", params)
+
+    const findMember = memberList.find(member => member.id === params.id)
+
+    if (findMember) {
+      // Update member
+    } else {
+      // Add member
+      setMemberList([
+        ...memberList, 
+        {
+          ...params,
+          __typename: 'User',
+          profileUrl: '',
+        } as CompanyUsers_companyUsers_users
+      ])
+    }
+  }
+
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
@@ -251,6 +286,7 @@ export default function TeamManagement(props: {path?: string}) {
             selected={selected.length}
             handleDelete={handleDelete}
             company={state.selectedCompany}
+            updateMemberList={updateTeamMemberList}
           />
           { data && data.companyUsers.company && data.companyUsers.company.teams && 
             <Searchbar data={data.companyUsers.company.teams} value={team} handleUpdate={handleChangeTeam} />
@@ -322,7 +358,7 @@ export default function TeamManagement(props: {path?: string}) {
                                     label={team.name} 
                                     selected={isItemSelected}
                                   />
-                                )                      
+                                )
                               }
                               { user.teams && user.teams.length > 2 &&
                                 <ArrowTooltip 
