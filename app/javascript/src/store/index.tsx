@@ -41,6 +41,7 @@ const initialState: State = {
     lastViewedCompanyId: '', 
     ownedCompanies: [],
     companies: [],
+    teams: [],
     roles: []
   }
 }

@@ -24,6 +24,7 @@ import CheckBox from './components/CheckBox';
 import { useGlobalState } from '../../../../store'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
+import { CurrentUser_currentUser_user_teams } from '../../../../graphql/queries/__generated__/CurrentUser'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -387,7 +388,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                 <TableBody >
                   { state.currentUser.companies && 
                     state.currentUser.companies.map(company => {
-                      const findUser = company.users.find(user => user.id === state.currentUser.id)
+                      let teams:CurrentUser_currentUser_user_teams[] = []
+                      
+                      if (state.currentUser.teams) {
+                        teams = state.currentUser.teams.filter(team => team.companyId === company.id)
+                      }
 
                       return (
                         <TableRow key={company.name}>
@@ -397,8 +402,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                             </div>
                           </TableCell>
                           <TableCell className={classes.tableCell}>
-                            { (findUser && findUser.teams && findUser.teams.length > 0) ?
-                              findUser.teams.map(team => team.name).join(', ') :
+                            { (teams && teams.length > 0) ?
+                              teams.map(team => team.name).join(', ') :
                               "No Teams"
                             }
                           </TableCell>

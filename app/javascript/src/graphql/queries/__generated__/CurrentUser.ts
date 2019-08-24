@@ -12,22 +12,17 @@ export interface CurrentUser_currentUser_user_ownedCompanies {
   name: string;
 }
 
-export interface CurrentUser_currentUser_user_companies_users_teams {
-  __typename: "Team";
-  name: string;
-}
-
-export interface CurrentUser_currentUser_user_companies_users {
-  __typename: "User";
-  id: string;
-  teams: CurrentUser_currentUser_user_companies_users_teams[] | null;
-}
-
 export interface CurrentUser_currentUser_user_companies {
   __typename: "Company";
   id: string;
   name: string;
-  users: CurrentUser_currentUser_user_companies_users[];
+}
+
+export interface CurrentUser_currentUser_user_teams {
+  __typename: "Team";
+  id: string;
+  companyId: string;
+  name: string;
 }
 
 export interface CurrentUser_currentUser_user_roles {
@@ -45,6 +40,7 @@ export interface CurrentUser_currentUser_user {
   lastViewedCompanyId: string | null;
   ownedCompanies: CurrentUser_currentUser_user_ownedCompanies[] | null;
   companies: CurrentUser_currentUser_user_companies[] | null;
+  teams: CurrentUser_currentUser_user_teams[] | null;
   roles: CurrentUser_currentUser_user_roles[] | null;
 }
 
