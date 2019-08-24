@@ -13,11 +13,14 @@ class Company < ApplicationRecord
   has_many :roles_users
   has_many :roles, through: :roles_users
 
+  has_one_attached :logo
+
   validates :name, presence: true
   validates :name, uniqueness: true
 
   before_create :generate_encryption_key
   after_create :create_s3_kms
+
 
   def create_s3_kms
     Company::CompanyS3BucketCreationWorker.perform_async(self.id)
