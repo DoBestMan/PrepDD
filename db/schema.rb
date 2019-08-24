@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_034212) do
+ActiveRecord::Schema.define(version: 2019_08_24_161311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,15 @@ ActiveRecord::Schema.define(version: 2019_08_22_034212) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "broker_companies", force: :cascade do |t|
+    t.bigint "child_broker_id"
+    t.bigint "parent_broker_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["child_broker_id"], name: "index_broker_companies_on_child_broker_id"
+    t.index ["parent_broker_id"], name: "index_broker_companies_on_parent_broker_id"
   end
 
   create_table "companies", force: :cascade do |t|
