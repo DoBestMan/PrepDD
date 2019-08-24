@@ -265,9 +265,17 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [data])
 
   useEffect(() => {
-    if (teamId)
+    if (teamId && confirm("Are you going to remove this member?")) {
       removeTeamMember()
+    }
   }, [teamId])
+
+  useEffect(() => {
+    if (user.role !== '0') {
+      console.log("Before updating", user)
+      updateTeamMember()
+    }
+  }, [user.role])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
@@ -281,7 +289,6 @@ export default function DetailPane(props: DetailPaneProps) {
       ...user,
       role: newRole
     })
-    updateTeamMember()
   }
 
   const handleDelete = () => {
@@ -307,17 +314,18 @@ export default function DetailPane(props: DetailPaneProps) {
       ...user, 
       team: newValue
     })
+    console.log("Change Team", user)
   }
 
-  const handleAddTeamMember = useCallback(event => {
+  const handleAddTeamMember = (event: React.FormEvent<unknown>) => {
     event.preventDefault()
     addTeamMember()
+    setAddHover(false)
     setUser({
       ...user, 
       team: ''
     })
-    setAddHover(false)
-  }, [addTeamMember])
+  }
 
   const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
     const label = 

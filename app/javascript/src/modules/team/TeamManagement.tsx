@@ -137,13 +137,13 @@ export default function TeamManagement(props: {path?: string}) {
     }
 
     console.log("Add Event Listener")
-    window.addEventListener("scroll", handleOnScroll)
+    window.addEventListener("scroll", handleOnScroll, true)
 
     return () => {
       console.log("Remove Event Listener")
-      window.removeEventListener("scroll", handleOnScroll)
+      window.removeEventListener("scroll", handleOnScroll, true)
     }
-  })
+  }, [])
 
   useEffect(() => {
     setTeam("")

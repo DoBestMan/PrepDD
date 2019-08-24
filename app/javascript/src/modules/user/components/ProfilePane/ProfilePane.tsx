@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import clsx from 'clsx';
-import idx from 'idx';
 import axios from 'axios';
+import ReactDropzone, { useDropzone } from 'react-dropzone';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
@@ -129,7 +129,10 @@ const useStyles = makeStyles((theme: Theme) =>
       border: '2px dashed #D8D8D8',
       borderRadius: '50%', 
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      '&:focus': {
+        outline: 'none'
+      }
     }, 
     defaultPhotoName: {
       color: '#D8D8D8', 
@@ -260,36 +263,68 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     }
   }
 
-  const handleChangePhoto = (event: React.SyntheticEvent<HTMLInputElement>) => {
-    event.persist()
-    const {
-      currentTarget: { validity, files}
-    } = event
+  const handleDrop = (acceptedFiles: File[]) => {
+    console.log(acceptedFiles);
 
-    if (validity.valid && files) {
-      const user_data = new FormData()
-      user_data.append('profile_picture', files[0])
-      user_data.append('id', state.currentUser.id)
+    const user_data = new FormData()
+    user_data.append('profile_picture', acceptedFiles[0])
+    user_data.append('id', state.currentUser.id)
 
-      axios.post("/api/update_user_profile", user_data, {
-          headers: {
-            'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
-          },
-      }).then(res => {
-        setUser({
-          ...user, 
-          profile_url: res.data.profile_url
-        })
-
-        dispatch({
-          type: 'SET_CURRENT_USER', 
-          user: {
-            ...state.currentUser,
-            profileUrl: res.data.profile_url
-          }
-        })
+    axios.post("/api/update_user_profile", user_data, {
+        headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+        },
+    }).then(res => {
+      setUser({
+        ...user, 
+        profile_url: res.data.profile_url
       })
-    }
+
+      dispatch({
+        type: 'SET_CURRENT_USER', 
+        user: {
+          ...state.currentUser,
+          profileUrl: res.data.profile_url
+        }
+      })
+    })
+  }
+
+  const renderDropzone = () => {
+    return (
+      <ReactDropzone
+        accept="image/*"
+        onDrop={handleDrop}
+      >
+        {({getRootProps, getInputProps}) => (
+            <div {...getRootProps()} className={classes.defaultPhoto}>
+              <input {...getInputProps()}/>
+              { user.profile_url ?
+                <div
+                  onMouseOver={() => setShow(true)}
+                  onMouseOut={() => setShow(false)}
+                >
+                  <img src={user.profile_url} className={classes.photo} />
+                  <div 
+                    className={clsx(classes.uploadArea, !show && classes.invisible)}
+                  >
+                    <div className={classes.uploadLabel}>
+                      <CameraIcon fontSize="small" />
+                      <br />
+                      Update
+                    </div>
+                  </div>
+                </div> :
+                <div className={classes.defaultPhotoName}>
+                  <UploadIcon style={{fontSize: '48px'}} />
+                  <br />
+                  <span>Upload photo</span>
+                </div>                
+              }
+            </div>
+        )}
+      </ReactDropzone>
+    )
   }
 
   return (
@@ -303,33 +338,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         onMouseOver={() => setShow(true)}
         onMouseOut={() => setShow(false)}
       >
-        { user.profile_url ?
-          <img src={user.profile_url} className={classes.photo} /> : (
-            <div className={classes.defaultPhoto}>
-              <div className={classes.defaultPhotoName}>
-                <UploadIcon style={{fontSize: '48px'}} />
-                <br />
-                <span>Upload photo</span>
-              </div>
-            </div>
-          )
-        }
-        <div 
-          className={clsx(classes.uploadArea, !show && classes.invisible)}
-          onClick={handleOpenFile}
-        >
-          <div className={classes.uploadLabel}>
-            <CameraIcon fontSize="small" />
-            <br />
-            Update
-          </div>
-          <input 
-            id="file-input" 
-            className={classes.invisible} 
-            type="file" 
-            onChange={e => handleChangePhoto(e)}
-          />
-        </div>
+        { renderDropzone() }        
       </div>
 
       <Card className={classes.profile} elevation={0}>
