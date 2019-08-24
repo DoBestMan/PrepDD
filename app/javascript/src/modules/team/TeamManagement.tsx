@@ -212,15 +212,21 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleDelete = () => {
     if (confirm("Are you going to delete team members?")) {
-      removeCompanyMember()
+      removeCompanyMember();
+
+      let newMemberList = memberList
+      selected.map(id => {
+        newMemberList = newMemberList.filter(member => member.id !== id)
+      })
+
+      setSelected([])
+      setMemberList(newMemberList)
     }
   }
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam)
   }
-
-  
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 

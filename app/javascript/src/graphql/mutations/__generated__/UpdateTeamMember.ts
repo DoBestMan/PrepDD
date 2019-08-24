@@ -18,9 +18,38 @@ export interface UpdateTeamMember_updateTeamMember_errors {
   message: string;
 }
 
+export interface UpdateTeamMember_updateTeamMember_user {
+  __typename: "User";
+  id: string;
+  fullName: string;
+  email: string;
+}
+
+export interface UpdateTeamMember_updateTeamMember_companies {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
+export interface UpdateTeamMember_updateTeamMember_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+}
+
+export interface UpdateTeamMember_updateTeamMember_role {
+  __typename: "Role";
+  id: string;
+  name: string;
+}
+
 export interface UpdateTeamMember_updateTeamMember {
   __typename: "UpdateTeamMemberPayload";
   errors: UpdateTeamMember_updateTeamMember_errors[];
+  user: UpdateTeamMember_updateTeamMember_user;
+  companies: UpdateTeamMember_updateTeamMember_companies[];
+  teams: UpdateTeamMember_updateTeamMember_teams[];
+  role: UpdateTeamMember_updateTeamMember_role;
   success: boolean;
 }
 

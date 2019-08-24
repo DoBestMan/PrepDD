@@ -4,7 +4,10 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
   argument :companyId, ID, required: true
   argument :role, ID, required: true
 
-  field :team, Types::TeamType, null: true
+  field :user, Types::UserType, null: false
+  field :companies, [Types::CompanyType], null: false
+  field :teams, [Types::TeamType], null: false
+  field :role, Types::RoleType, null: false
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
@@ -45,8 +48,16 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
       end
     end
 
+    teams = user.teams.where(company_id: company_id)
+    role = RolesUser.where(user_id: user.id, company_id: company_id).first.role
+    companies = user.companies
+
     if user&.persisted?
       response[:success] = true
+      response[:user] = user
+      response[:companies] = companies
+      response[:teams] = teams
+      response[:role] = role
       response
     end
 

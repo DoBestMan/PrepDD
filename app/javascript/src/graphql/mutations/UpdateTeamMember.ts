@@ -24,6 +24,23 @@ export const useUpdateTeamMember = createMutationHook<
         path
         message
       }
+      user{
+        id 
+        fullName
+        email
+      }
+      companies {
+        id
+        name
+      }
+      teams{
+        id
+        name
+      }
+      role{
+        id
+        name
+      }
       success
     }
   }

@@ -18,10 +18,39 @@ export interface AddTeamMember_addTeamMember_errors {
   message: string;
 }
 
+export interface AddTeamMember_addTeamMember_user {
+  __typename: "User";
+  id: string;
+  fullName: string;
+  email: string;
+}
+
+export interface AddTeamMember_addTeamMember_companies {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
+export interface AddTeamMember_addTeamMember_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+}
+
+export interface AddTeamMember_addTeamMember_role {
+  __typename: "Role";
+  id: string;
+  name: string;
+}
+
 export interface AddTeamMember_addTeamMember {
   __typename: "AddTeamMemberPayload";
   errors: AddTeamMember_addTeamMember_errors[];
   success: boolean;
+  user: AddTeamMember_addTeamMember_user;
+  companies: AddTeamMember_addTeamMember_companies[];
+  teams: AddTeamMember_addTeamMember_teams[];
+  role: AddTeamMember_addTeamMember_role;
 }
 
 export interface AddTeamMember {
