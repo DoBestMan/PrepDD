@@ -1,15 +1,25 @@
 class Company < ApplicationRecord
+  # Broker Companies
+  has_many :child_broker, :class_name => 'BrokerCompany', :foreign_key => 'parent_broker_id'
+  has_many :broker_children, :through => :child_broker
 
-  belongs_to :parent, class_name: 'Company', optional: true
+  has_many :parent_broker, :class_name => 'BrokerCompany', :foreign_key => 'child_broker_id'
+  has_many :broker_parents, :through => :parent_broker
 
-  belongs_to :broker, class_name: 'Company', optional: true, foreign_key:  'broker_co_id'
-  has_many :children, class_name: 'Company', foreign_key: 'parent_id'
+  # Parent Companies
+  # belongs_to :parent, class_name: 'Company', optional: true
+  #
+  # belongs_to :broker, class_name: 'Company', optional: true, foreign_key:  'broker_co_id'
+  # has_many :children, class_name: 'Company', foreign_key: 'parent_id'
 
   belongs_to :owner, class_name: 'User', optional: true
+
   has_many :users_companies
   has_many :users, through: :users_companies
+
   belongs_to :subscription, optional: true
   has_many :teams
+
   has_many :roles_users
   has_many :roles, through: :roles_users
 
