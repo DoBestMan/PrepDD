@@ -7,7 +7,7 @@ import {
 
 export const useAddTeamMember = createMutationHook<
   AddTeamMember,
-  AddTeamMemberVariables 
+  AddTeamMemberVariables
   >(gql`
   mutation AddTeamMember(
     $email: String!,
@@ -28,6 +28,23 @@ export const useAddTeamMember = createMutationHook<
         message
       }
       success
+      user{
+        id 
+        fullName
+        email
+      }
+      companies {
+        id
+        name
+      }
+      teams{
+        id
+        name
+      }
+      role{
+        id
+        name
+      }
     }
   }
 `);
