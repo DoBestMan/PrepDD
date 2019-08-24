@@ -203,7 +203,11 @@ export default function DetailPane(props: DetailPaneProps) {
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
-  const [updateTeamMember] = useUpdateTeamMember({
+  const [updateTeamMember, {
+    loading: updateTeamMemberLoading, 
+    data: updateTeamMemberRes, 
+    error: updateTeamMemberError, 
+  }] = useUpdateTeamMember({
     id: user.id,
     fullName: user.fullName, 
     companyId: company, 
@@ -262,7 +266,15 @@ export default function DetailPane(props: DetailPaneProps) {
         fullName: currentUser.fullName,
       })
     }
-  }, [data])
+  }, [loading, idx(data, data => data.user)])
+
+  useEffect(() => {
+    const updatedUser = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)
+    const updatedTeam = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.teams)
+    const updatedRole = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.role)
+
+    
+  }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
     if (teamId && confirm("Are you going to remove this member?")) {
