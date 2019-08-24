@@ -128,7 +128,7 @@ type Query {
   """
   Find a user by id
   """
-  userDetails(id: ID!): UserDetails
+  userDetails(companyId: ID, id: ID!): UserDetails
 
   """
   Information for resetting a users password
@@ -304,6 +304,7 @@ UserDetails
 """
 type UserDetails {
   id: String!
+  role: Role
   user: User
 }
 
