@@ -3,9 +3,6 @@ class Api::CompaniesController < ApiController
   before_action :set_company, only: %i[ update_log ]
 
   def update_log
-    p 'PPPPP'
-    p @company
-    p 'YYYYY'
     logo = params[:logo]
     if logo.content_type.in?(%['image/jpeg image/jpg image/png'])
       @company.logo.attach(params[:logo])
@@ -18,7 +15,7 @@ class Api::CompaniesController < ApiController
   private
 
   def set_company
-    @company = Company.find(params[:id])
+    @company = Company.find(company_params[:id])
   end
 
   def company_params
