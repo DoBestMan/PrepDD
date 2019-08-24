@@ -19,20 +19,5 @@ module Types
         Rails.application.routes.url_helpers.rails_blob_url(user.profile_picture, only_path: true)
       end
     end
-
-    # def companies
-    #   team_ids  = object.teams.pluck(:id)
-    #   role_ids = object.roles.pluck(:id)
-    #   object.companies.includes(:teams).where(teams: {id: team_ids})
-    #     .references(:teams).includes(:roles)
-    #     .where(roles: {id: role_ids}).references(:roles)
-    # end
-
-    # def ownedCompanies
-    #   team_ids  = object.teams.pluck(:id)
-    #   object.owned_companies.includes(:teams).where(teams: {id: team_ids})
-    #     .references(:teams).includes(:roles)
-    #     .where(roles: {id: role_ids}).references(:roles)
-    # end
   end
 end

@@ -24,11 +24,12 @@ import AutoSuggest from '../AutoSuggest'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
-import {UserDetails_user, UserDetails_user_companies_users_teams} from '../../../../graphql/queries/__generated__/UserDetails'
+import {UserDetails_user, UserDetails_user_teams} from '../../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
+import { copySync } from 'fs-extra';
 
 const panelWidth = 500
 
@@ -189,8 +190,9 @@ export default function DetailPane(props: DetailPaneProps) {
     id: '',
     email: '',
     fullName: '',
-    profileUrl: '', 
-    roles: null,
+    profileUrl: '',
+    roles: null, 
+    teams: null, 
     companies: null, 
     role: '0', 
     team: ''
@@ -266,14 +268,16 @@ export default function DetailPane(props: DetailPaneProps) {
         fullName: currentUser.fullName,
       })
     }
-  }, [loading, idx(data, data => data.user)])
+  }, [loading])
 
   useEffect(() => {
     const updatedUser = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)
-    const updatedTeam = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.teams)
-    const updatedRole = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.role)
-
     
+    if (updateTeamMemberLoading || !updatedUser) return
+    setUser({
+      ...user, 
+      companies: updatedUser.companies
+    })
   }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
@@ -284,7 +288,7 @@ export default function DetailPane(props: DetailPaneProps) {
 
   useEffect(() => {
     if (user.role !== '0') {
-      console.log("Before updating", user)
+      console.log("Before updating role", user)
       updateTeamMember()
     }
   }, [user.role])
@@ -326,7 +330,6 @@ export default function DetailPane(props: DetailPaneProps) {
       ...user, 
       team: newValue
     })
-    console.log("Change Team", user)
   }
 
   const handleAddTeamMember = (event: React.FormEvent<unknown>) => {
@@ -339,7 +342,11 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const renderTeams = (teams: UserDetails_user_companies_users_teams[]) => {
+  const renderTeams = (teams: UserDetails_user_teams[]) => {
+    if (!teams.length) {
+      return "No teams"
+    }
+
     const label = 
       teams && teams.length > 2 ?
         teams
@@ -418,8 +425,11 @@ export default function DetailPane(props: DetailPaneProps) {
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
                 const isHover = (companyId === company.id)
-                const findUser = company.users.find(user => user.id === id)
-                const teams = idx(findUser, findUser => findUser.teams)
+                let teams: UserDetails_user_teams[] = []
+                
+                if (data.user.teams) {
+                  teams = data.user.teams.filter(team => team.companyId === company.id)
+                }
 
                 return (
                   <StyledTableRow 
@@ -441,6 +451,7 @@ export default function DetailPane(props: DetailPaneProps) {
                     <StyledTableCell>
                       { isHover ? 
                         <div className={classes.flex}>
+                          { !teams.length && "No teams"}
                           { teams && teams.slice(0, 2).map(team => 
                               <StyledItem 
                                 key={`${user.fullName}-${team.id}`}

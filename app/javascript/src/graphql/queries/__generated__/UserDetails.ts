@@ -12,23 +12,17 @@ export interface UserDetails_user_roles {
   name: string;
 }
 
-export interface UserDetails_user_companies_users_teams {
+export interface UserDetails_user_teams {
   __typename: "Team";
   id: string;
   name: string;
-}
-
-export interface UserDetails_user_companies_users {
-  __typename: "User";
-  id: string;
-  teams: UserDetails_user_companies_users_teams[] | null;
+  companyId: string;
 }
 
 export interface UserDetails_user_companies {
   __typename: "Company";
   id: string;
   name: string;
-  users: UserDetails_user_companies_users[];
 }
 
 export interface UserDetails_user {
@@ -38,6 +32,7 @@ export interface UserDetails_user {
   fullName: string;
   profileUrl: string | null;
   roles: UserDetails_user_roles[] | null;
+  teams: UserDetails_user_teams[] | null;
   companies: UserDetails_user_companies[] | null;
 }
 

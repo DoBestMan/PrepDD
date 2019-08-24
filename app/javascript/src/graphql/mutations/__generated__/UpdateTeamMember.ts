@@ -18,39 +18,44 @@ export interface UpdateTeamMember_updateTeamMember_errors {
   message: string;
 }
 
-export interface UpdateTeamMember_updateTeamMember_user {
-  __typename: "User";
-  id: string;
-  fullName: string;
-  email: string;
-}
-
-export interface UpdateTeamMember_updateTeamMember_companies {
-  __typename: "Company";
-  id: string;
-  name: string;
-}
-
-export interface UpdateTeamMember_updateTeamMember_teams {
+export interface UpdateTeamMember_updateTeamMember_user_companies_users_teams {
   __typename: "Team";
   id: string;
   name: string;
 }
 
-export interface UpdateTeamMember_updateTeamMember_role {
+export interface UpdateTeamMember_updateTeamMember_user_companies_users {
+  __typename: "User";
+  id: string;
+  teams: UpdateTeamMember_updateTeamMember_user_companies_users_teams[] | null;
+}
+
+export interface UpdateTeamMember_updateTeamMember_user_companies {
+  __typename: "Company";
+  id: string;
+  name: string;
+  users: UpdateTeamMember_updateTeamMember_user_companies_users[];
+}
+
+export interface UpdateTeamMember_updateTeamMember_user_roles {
   __typename: "Role";
   id: string;
   name: string;
 }
 
+export interface UpdateTeamMember_updateTeamMember_user {
+  __typename: "User";
+  id: string;
+  fullName: string;
+  companies: UpdateTeamMember_updateTeamMember_user_companies[] | null;
+  roles: UpdateTeamMember_updateTeamMember_user_roles[] | null;
+}
+
 export interface UpdateTeamMember_updateTeamMember {
   __typename: "UpdateTeamMemberPayload";
+  success: boolean;
   errors: UpdateTeamMember_updateTeamMember_errors[];
   user: UpdateTeamMember_updateTeamMember_user;
-  companies: UpdateTeamMember_updateTeamMember_companies[];
-  teams: UpdateTeamMember_updateTeamMember_teams[];
-  role: UpdateTeamMember_updateTeamMember_role;
-  success: boolean;
 }
 
 export interface UpdateTeamMember {

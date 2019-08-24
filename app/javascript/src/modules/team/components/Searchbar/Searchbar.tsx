@@ -4,7 +4,7 @@ import InputBase from '@material-ui/core/InputBase'
 import SearchIcon from '@material-ui/icons/Search'
 
 import Dropdown from '../../../../components/Dropdown'
-import {CompanyDetails_company_teams} from '../../../../graphql/queries/__generated__/CompanyDetails'
+import {CompanyUsers_companyUsers_company_teams} from '../../../../graphql/queries/__generated__/CompanyUsers'
 
 const useSearchbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -58,7 +58,7 @@ interface Option {
 }
 
 interface SearchbarProps {
-  data: CompanyDetails_company_teams[];
+  data: CompanyUsers_companyUsers_company_teams[];
   value: string;
   handleUpdate: (newTeam: string) => void;
 }

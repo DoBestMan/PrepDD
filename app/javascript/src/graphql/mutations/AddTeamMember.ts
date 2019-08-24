@@ -39,6 +39,7 @@ export const useAddTeamMember = createMutationHook<
       }
       teams{
         id
+        companyId
         name
       }
       role{

@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
-import { useQuery } from 'react-apollo'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
@@ -30,8 +29,8 @@ import {
   CompanyUsers, 
   CompanyUsersVariables,
   CompanyUsers_companyUsers_users_companies, 
-  CompanyUsers_companyUsers_company_teams,
-  CompanyUsers_companyUsers_users_roles
+  CompanyUsers_companyUsers_users_roles,
+  CompanyUsers_companyUsers_users_teams
 } from '../../graphql/queries/__generated__/CompanyUsers' 
 
 const PANEL_WIDTH = 500
@@ -85,7 +84,7 @@ interface UpdateTeamMemberProps {
   id: string;
   fullName: string;
   companies: CompanyUsers_companyUsers_users_companies[] | null;
-  teams: CompanyUsers_companyUsers_company_teams[] | null;
+  teams: CompanyUsers_companyUsers_users_teams[] | null;
   roles: CompanyUsers_companyUsers_users_roles[] | null;
 }
 
@@ -300,6 +299,11 @@ export default function TeamManagement(props: {path?: string}) {
               <TableBody>
                 { memberList && memberList.map(user => {
                     const isItemSelected = isSelected(user.id)
+                    let teams: CompanyUsers_companyUsers_users_teams[] = []
+
+                    if (user.teams) {
+                      teams = user.teams.filter(team => team.companyId === state.selectedCompany)
+                    }
                     
                     return (
                       <StyledTableRow
@@ -350,9 +354,9 @@ export default function TeamManagement(props: {path?: string}) {
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
-                          { (user.teams && user.teams.length > 0) ? 
+                          { (teams.length > 0) ? 
                             <div className={classes.flex}>
-                              { user.teams.slice(0, 2).map(team => 
+                              { teams.slice(0, 2).map(team => 
                                   <StyledItem 
                                     key={`${user.fullName}-${team.id}`}
                                     label={team.name} 
@@ -360,13 +364,13 @@ export default function TeamManagement(props: {path?: string}) {
                                   />
                                 )
                               }
-                              { user.teams && user.teams.length > 2 &&
+                              { teams && teams.length > 2 &&
                                 <ArrowTooltip 
-                                  title={renderTooltipTitle(user.teams.map(a => a.name).slice(2))} 
+                                  title={renderTooltipTitle(teams.map(a => a.name).slice(2))} 
                                   placement="top"
                                 >
                                   <StyledItem
-                                    label={`+${user.teams.length - 2}`}
+                                    label={`+${teams.length - 2}`}
                                     selected={isItemSelected}
                                   />
                                 </ArrowTooltip>

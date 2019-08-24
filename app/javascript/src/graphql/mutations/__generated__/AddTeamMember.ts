@@ -34,6 +34,7 @@ export interface AddTeamMember_addTeamMember_companies {
 export interface AddTeamMember_addTeamMember_teams {
   __typename: "Team";
   id: string;
+  companyId: string;
   name: string;
 }
 
