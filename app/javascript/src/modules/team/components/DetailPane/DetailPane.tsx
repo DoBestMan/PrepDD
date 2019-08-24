@@ -24,7 +24,7 @@ import AutoSuggest from '../AutoSuggest'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
-import {UserDetails_user, UserDetails_user_companies_teams} from '../../../../graphql/queries/__generated__/UserDetails'
+import {UserDetails_user, UserDetails_user_companies_users_teams} from '../../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
@@ -339,7 +339,7 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
+  const renderTeams = (teams: UserDetails_user_companies_users_teams[]) => {
     const label = 
       teams && teams.length > 2 ?
         teams
@@ -418,6 +418,8 @@ export default function DetailPane(props: DetailPaneProps) {
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
                 const isHover = (companyId === company.id)
+                const findUser = company.users.find(user => user.id === id)
+                const teams = idx(findUser, findUser => findUser.teams)
 
                 return (
                   <StyledTableRow 
@@ -439,7 +441,7 @@ export default function DetailPane(props: DetailPaneProps) {
                     <StyledTableCell>
                       { isHover ? 
                         <div className={classes.flex}>
-                          { company.teams && company.teams.slice(0, 2).map(team => 
+                          { teams && teams.slice(0, 2).map(team => 
                               <StyledItem 
                                 key={`${user.fullName}-${team.id}`}
                                 label={team.name} 
@@ -449,13 +451,13 @@ export default function DetailPane(props: DetailPaneProps) {
                               />
                             )
                           }
-                          { company.teams && company.teams.length > 2 &&
+                          { teams && teams.length > 2 &&
                             <div 
                               onMouseOver={() => setMoreHover(true)}
                               onMouseLeave={() => setMoreHover(false)}
                               style={{position: 'relative'}}
                             >
-                              <StyledItem label={`+${company.teams.length - 2}`} selected />
+                              <StyledItem label={`+${teams.length - 2}`} selected />
                               { moreHover && 
                                 <Paper 
                                   className={classes.morePaper} 
@@ -463,7 +465,7 @@ export default function DetailPane(props: DetailPaneProps) {
                                   onMouseOver={() => setMoreHover(true)}
                                   onMouseLeave={() => setMoreHover(false)}
                                 >
-                                  { company.teams.slice(2).map(team => 
+                                  { teams.slice(2).map(team => 
                                       <StyledItem 
                                         key={`${user.fullName}-${team.id}`}
                                         label={team.name} 
@@ -505,7 +507,7 @@ export default function DetailPane(props: DetailPaneProps) {
                             }
                           </div>
                         </div> :
-                        (company.teams && renderTeams(company.teams))
+                        (teams && renderTeams(teams))
                       }
                     </StyledTableCell>
                   </StyledTableRow>
