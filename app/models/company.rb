@@ -7,10 +7,11 @@ class Company < ApplicationRecord
   has_many :broker_parents, :through => :parent_broker
 
   # Parent Companies
-  # belongs_to :parent, class_name: 'Company', optional: true
-  #
-  # belongs_to :broker, class_name: 'Company', optional: true, foreign_key:  'broker_co_id'
-  # has_many :children, class_name: 'Company', foreign_key: 'parent_id'
+  has_many :company_child, :class_name => 'ParentCompany', :foreign_key => 'parent_company_id'
+  has_many :company_chidlren, :through => :company_child
+
+  has_many :company_parent, :class_name => 'BrokerCompany', :foreign_key => 'child_company_id'
+  has_many :company_parents, :through => :company_parent
 
   belongs_to :owner, class_name: 'User', optional: true
 
