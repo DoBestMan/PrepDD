@@ -96,12 +96,11 @@ export default function FormPanel() {
     const companyData = idx(data, data => data.company);
 
     if (loading || !companyData) return;
-
-    console.log("Company Data", companyData)
+    
     setCompany({
       ...companyData
     })
-  }, [idx(data, data => data.company)])
+  }, [loading, idx(data, data => data.company)])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCompany({
@@ -114,18 +113,18 @@ export default function FormPanel() {
     updateCompany()
   }
 
-  const handleAutoPDF = () => {
-    setCompany({...company, autoPdf: !company.autoPdf})
+  const handleAutoPDF = async () => {
+    await setCompany({...company, autoPdf: !company.autoPdf})
     updateCompany()
   }
 
-  const handleAutoWatermark = () => {
-    setCompany({...company, autoWatermark: !company.autoWatermark})
+  const handleAutoWatermark = async () => {
+    await setCompany({...company, autoWatermark: !company.autoWatermark})
     updateCompany()
   }
 
-  const handlePreviewOnly = () => {
-    setCompany({...company, previewOnly: !company.previewOnly})
+  const handlePreviewOnly = async () => {
+    await setCompany({...company, previewOnly: !company.previewOnly})
     updateCompany()
   }
 
