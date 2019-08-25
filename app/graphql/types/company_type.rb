@@ -17,6 +17,13 @@ module Types
     field :users, [UserType], null: false
     field :teams, [TeamType], null: false
     field :roles, [RoleType], null: false
+    field :logo_url, String, null: true
+
+    def logo_url
+      if object.logo.attached?
+        Rails.application.routes.url_helpers.rails_blob_url(object.logo, only_path: true)
+      end
+    end
 
     def total_users
       object.users.count
