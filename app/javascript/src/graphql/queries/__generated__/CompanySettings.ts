@@ -10,12 +10,14 @@ export interface CompanySettings_company_parent {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface CompanySettings_company_broker {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface CompanySettings_company_subscription {

@@ -12,10 +12,12 @@ export const useCompanySettings = createQueryHook<CompanySettings, {}>(gql`
       parent {
         id
         name
+        logoUrl
       }
       broker {
         id
         name
+        logoUrl
       }
       totalUsers
       totalStorage

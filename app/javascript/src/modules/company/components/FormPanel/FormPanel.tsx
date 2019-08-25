@@ -78,7 +78,8 @@ export default function FormPanel(props: FormPanelProps) {
   }
 
   const handleUpdateName = () => {
-    handleUpdate()
+    console.log("Name updated")
+    // handleUpdate()
   }
 
   const handleAutoPDF = async () => {

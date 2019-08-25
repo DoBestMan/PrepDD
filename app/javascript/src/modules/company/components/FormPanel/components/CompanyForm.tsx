@@ -1,15 +1,19 @@
 import React, {useState} from'react'
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Button from '@material-ui/core/Button'
 
-import {CompanySettings_company_parent, CompanySettings_company_broker} from '../../../../../graphql/queries/__generated__/CompanySettings'
+import {
+  CompanySettings_company_parent, 
+  CompanySettings_company_broker
+} from '../../../../../graphql/queries/__generated__/CompanySettings'
 import StyledItem from './StyledItem'
-
-const G2Logo = require('images/dummy/logos/g2-logo.svg')
-const PrepDDLogo = require('images/logos/prepdd-logo.svg')
+import AutoSuggest from './AutoSuggest'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      position: 'relative', 
       marginTop: '24px',
       color: '#606060',
       fontFamily: 'Montserrat',
@@ -26,7 +30,30 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 600, 
       fontSize: '15px', 
       textTransform: 'capitalize',
-    }
+    },
+    clickableArea: {
+      flexGrow: 1,
+      height: '25px'
+    },
+    addPaper: {
+      width: '100%', 
+      background: '#FFFFFF', 
+      position: 'absolute', 
+      top: '30px',
+      right: '0px', 
+      padding: '12px', 
+      boxSizing: 'border-box', 
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
+    addLink: {
+      marginTop: '24px',
+      color: '#3A84FF',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      textTransform: 'capitalize'
+    },
   })
 )
 
@@ -39,16 +66,42 @@ interface CompanyFormProps {
 export default function CompanyForm(props: CompanyFormProps) {
   const {label, placeholder, company} = props
   const classes = useStyles()
+  const [open, setOpen] = useState<boolean>(false)
+  const [parent, setParent] = useState<string>("")
 
   return (
     <div className={classes.root}>
       <p>{label}</p>
       <div className={classes.companyList}>
         { company ?
-          <StyledItem key={label} label={label} /> :
+          <StyledItem label={company.name} /> :
           placeholder
         }
+        <div 
+          className={classes.clickableArea}
+          onClick={() => setOpen(true)}
+          style={{position: 'relative'}}
+        />
       </div>
+
+      { open && 
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <form 
+            className={classes.addPaper}
+          >
+            <AutoSuggest
+              value={parent}
+              handleChange={(newParent: string) => setParent(newParent)}
+            />
+            <Button 
+              type="submit"
+              className={classes.addLink} 
+            >
+              Invite new company
+            </Button>
+          </form>
+        </ClickAwayListener>
+      }
     </div>
   )
 }
