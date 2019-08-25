@@ -1,5 +1,4 @@
-import React, {useState, useEffect} from 'react'
-import idx from 'idx'
+import React from 'react'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Card, 
@@ -15,13 +14,9 @@ import {
 import InputForm from './components/InputForm'
 import CompanyForm from './components/CompanyForm'
 import SwitchForm from './components/SwitchForm'
-import StyledTableRow from './components/StyledTableRow'
 import StyledTableCell from './components/StyledTableCell'
 
-import {useGlobalState} from '../../../../store'
-import {useCompanySettings} from '../../../../graphql/queries/CompanySettings'
-import {useUpdateCompany} from '../../../../graphql/mutations/UpdateCompany'
-import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings'
+import { CompanySettings_company } from '../../../../graphql/queries/__generated__/CompanySettings'
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -65,42 +60,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function FormPanel() {
+interface FormPanelProps {
+  company: CompanySettings_company;
+  setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
+  handleUpdate: () => void;
+}
+
+export default function FormPanel(props: FormPanelProps) {
+  const { company, setCompany, handleUpdate } = props
   const classes = useStyles()
-  const {state} = useGlobalState()
-  const [company, setCompany] = useState<CompanySettings_company>({
-    __typename: "Company",
-    id: '',
-    name: '', 
-    parent: null, 
-    broker: null,
-    totalUsers: 0,
-    totalStorage: 0,
-    subscription: null,
-    autoPdf: false, 
-    autoWatermark: false, 
-    previewOnly: false
-  })
-  
-  const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
-
-  const [updateCompany] = useUpdateCompany({
-    id: company.id, 
-    name: company.name, 
-    autoPdf: company.autoPdf as boolean, 
-    autoWatermark: company.autoWatermark as boolean, 
-    previewOnly: company.previewOnly as boolean
-  })
-
-  useEffect(() => {
-    const companyData = idx(data, data => data.company);
-
-    if (loading || !companyData) return;
-    
-    setCompany({
-      ...companyData
-    })
-  }, [loading, idx(data, data => data.company)])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCompany({
@@ -110,22 +78,22 @@ export default function FormPanel() {
   }
 
   const handleUpdateName = () => {
-    updateCompany()
+    handleUpdate()
   }
 
   const handleAutoPDF = async () => {
     await setCompany({...company, autoPdf: !company.autoPdf})
-    updateCompany()
+    handleUpdate()
   }
 
   const handleAutoWatermark = async () => {
     await setCompany({...company, autoWatermark: !company.autoWatermark})
-    updateCompany()
+    handleUpdate()
   }
 
   const handlePreviewOnly = async () => {
     await setCompany({...company, previewOnly: !company.previewOnly})
-    updateCompany()
+    handleUpdate()
   }
 
   return (

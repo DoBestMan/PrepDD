@@ -29,6 +29,7 @@ export interface CompanySettings_company {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
   parent: CompanySettings_company_parent | null;
   broker: CompanySettings_company_broker | null;
   totalUsers: number | null;

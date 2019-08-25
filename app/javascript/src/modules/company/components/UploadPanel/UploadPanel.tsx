@@ -4,7 +4,9 @@ import axios from 'axios'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import ReactDropzone from 'react-dropzone'
 
+import { useGlobalState } from '../../../../store'
 import UploadIcon from '@material-ui/icons/CloudUpload'
+import { CompanySettings_company } from '../../../../graphql/queries/__generated__/CompanySettings'
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -54,38 +56,34 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function UploadPanel(props: {url?: string}) {
-  const { url } = props
+interface UploadPanelProps {
+  company: CompanySettings_company;
+  setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
+}
+
+export default function UploadPanel(props: UploadPanelProps) {
+  const { company, setCompany } = props
   const classes = useStyles()
   const [showUpload, setShowUpload] = useState(false)
 
-
+  const { state } = useGlobalState()
 
   const handleDrop = (acceptedFiles: File[]) => {
-    console.log(acceptedFiles);
 
     const user_data = new FormData()
-    user_data.append('profile_picture', acceptedFiles[0])
-    // user_data.append('id', state.currentUser.id)
+    user_data.append('logo', acceptedFiles[0])
+    user_data.append('id', state.currentUser.id)
 
-    // axios.post("/api/update_user_profile", user_data, {
-    //     headers: {
-    //       'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
-    //     },
-    // }).then(res => {
-    //   setUser({
-    //     ...user, 
-    //     profile_url: res.data.profile_url
-    //   })
-
-    //   dispatch({
-    //     type: 'SET_CURRENT_USER', 
-    //     user: {
-    //       ...state.currentUser,
-    //       profileUrl: res.data.profile_url
-    //     }
-    //   })
-    // })
+    axios.post("/api/update_company_logo", user_data, {
+        headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+        },
+    }).then(res => {
+      setCompany({
+        ...company, 
+        logoUrl: res.data.logo_url
+      })
+    })
   }
 
   return (
@@ -96,12 +94,12 @@ export default function UploadPanel(props: {url?: string}) {
       {({getRootProps, getInputProps}) => (
         <div {...getRootProps()} className={classes.root}>
           <input {...getInputProps()} />
-          { url ?
+          { company.logoUrl ?
             <div
               onMouseOver={() => setShowUpload(true)}
               onMouseOut={() => setShowUpload(false)}              
             >
-              <img src={url} width="226" height="226" alt="Microsoft" />
+              <img src={company.logoUrl} width="226" height="226" alt="Microsoft" />
               <div className={clsx(classes.uploadArea, !showUpload && classes.invisible)}>
                 <div className={classes.uploadLabel}>
                   <UploadIcon />

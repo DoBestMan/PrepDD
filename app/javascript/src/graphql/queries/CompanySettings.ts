@@ -8,6 +8,7 @@ export const useCompanySettings = createQueryHook<CompanySettings, {}>(gql`
     company(id: $id) {
       id
       name
+      logoUrl
       parent {
         id
         name

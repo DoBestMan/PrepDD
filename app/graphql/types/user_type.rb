@@ -14,9 +14,8 @@ module Types
     field :profile_url, String, null: true
 
     def profile_url
-      user = User.find(object.id)
-      if user.profile_picture.attached?
-        Rails.application.routes.url_helpers.rails_blob_url(user.profile_picture, only_path: true)
+      if object.profile_picture.attached?
+        Rails.application.routes.url_helpers.rails_blob_url(object.profile_picture, only_path: true)
       end
     end
   end
