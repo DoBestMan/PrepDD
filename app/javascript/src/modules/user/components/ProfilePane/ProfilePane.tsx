@@ -135,6 +135,10 @@ const useStyles = makeStyles((theme: Theme) =>
         outline: 'none'
       }
     }, 
+    activePhoto: {    
+      background: '#EBF2FF',
+      borderColor: '#3A84FF'
+    },
     defaultPhotoName: {
       color: '#D8D8D8', 
       fontFamily: 'Montserrat', 
@@ -166,7 +170,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
     displayName: state.currentUser.displayName as string,
-    profile_url: state.currentUser.profileUrl as string, 
+    profile_url: '', 
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -297,8 +301,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         accept="image/*"
         onDrop={handleDrop}
       >
-        {({getRootProps, getInputProps}) => (
-            <div {...getRootProps()} className={classes.defaultPhoto}>
+        {({getRootProps, getInputProps, isDragActive}) => (
+            <div 
+              {...getRootProps()} 
+              className={clsx(classes.defaultPhoto, isDragActive && classes.activePhoto)}
+            >
               <input {...getInputProps()}/>
               { user.profile_url ?
                 <div

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '250px', 
       height: '42px', 
       position: 'absolute', 
-      top: '208px', 
+      top: '205px', 
       left: '0px', 
       backgroundColor: 'rgba(48, 48, 48, 0.5)',
       '&:hover': {
@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '18px', 
       fontWeight: 'bold',
       textAlign: 'center'
+    },
+    uploadActive: {    
+      background: '#EBF2FF',
+      borderColor: '#3A84FF'
     },
     invisible: {
       display: 'none'
@@ -91,8 +95,11 @@ export default function UploadPanel(props: UploadPanelProps) {
       accept="image/*"
       onDrop={handleDrop}
     >
-      {({getRootProps, getInputProps}) => (
-        <div {...getRootProps()} className={classes.root}>
+      {({getRootProps, getInputProps, isDragActive}) => (
+        <div 
+          {...getRootProps()} 
+          className={clsx(classes.root, isDragActive && classes.uploadActive)}
+        >
           <input {...getInputProps()} />
           { company.logoUrl ?
             <div
@@ -105,11 +112,6 @@ export default function UploadPanel(props: UploadPanelProps) {
                   <UploadIcon />
                   <span style={{marginLeft: '12px'}}>Update Logo</span>
                 </div>
-                <input 
-                  id="company-logo" 
-                  className={classes.invisible} 
-                  type="file" 
-                />
               </div>
             </div> :
             <div className={classes.uploadFileLabel}>
