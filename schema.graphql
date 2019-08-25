@@ -13,12 +13,13 @@ type AddTeamMemberPayload {
 type Company {
   autoPdf: Boolean
   autoWatermark: Boolean
-  broker: Company
+  brokers: [Company!]
   id: ID!
   isActive: Boolean
+  logoUrl: String
   name: String!
   owner: User!
-  parent: Company
+  parents: [Company!]
   previewOnly: Boolean
   roles: [Role!]!
   subscription: Subscription

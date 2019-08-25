@@ -11,13 +11,21 @@ module Types
     field :total_storage, Integer, null: true
 
     field :owner, UserType, null: false
-    field :parent, CompanyType, null: true
-    field :broker, CompanyType, null: true
+    field :parents, [CompanyType], null: true
+    field :brokers, [CompanyType], null: true
 
     field :users, [UserType], null: false
     field :teams, [TeamType], null: false
     field :roles, [RoleType], null: false
     field :logo_url, String, null: true
+
+    def parents
+      object.company_parents
+    end
+
+    def brokers
+      object.broker_parents
+    end
 
     def logo_url
       if object.logo.attached?
