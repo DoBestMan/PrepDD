@@ -25,7 +25,7 @@ export interface CompanyDetails_company_users_teams {
 }
 
 export interface CompanyDetails_company_users_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
   name: string;
 }

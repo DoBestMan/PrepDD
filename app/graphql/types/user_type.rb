@@ -9,7 +9,7 @@ module Types
     field :ownedCompanies, [CompanyType], null: true
     field :companies, [CompanyType], null: true
     field :teams, [TeamType], null: true
-    field :roles, [RoleType], null: true
+    field :roles, [RolesUserType], null: true
     field :lastViewedCompanyId, ID, null: true
     field :profile_url, String, null: true
 
@@ -19,19 +19,8 @@ module Types
       end
     end
 
-    # def companies
-    #   team_ids  = object.teams.pluck(:id)
-    #   role_ids = object.roles.pluck(:id)
-    #   object.companies.includes(:teams).where(teams: {id: team_ids})
-    #     .references(:teams).includes(:roles)
-    #     .where(roles: {id: role_ids}).references(:roles)
-    # end
-
-    # def ownedCompanies
-    #   team_ids  = object.teams.pluck(:id)
-    #   object.owned_companies.includes(:teams).where(teams: {id: team_ids})
-    #     .references(:teams).includes(:roles)
-    #     .where(roles: {id: role_ids}).references(:roles)
-    # end
+    def roles
+      object.roles_users
+    end
   end
 end
