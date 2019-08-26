@@ -18,27 +18,22 @@ export interface UpdateTeamMember_updateTeamMember_errors {
   message: string;
 }
 
-export interface UpdateTeamMember_updateTeamMember_user_companies_users_teams {
+export interface UpdateTeamMember_updateTeamMember_user_roles {
+  __typename: "RolesUser";
+  id: string;
+  name: string;
+  companyId: string;
+}
+
+export interface UpdateTeamMember_updateTeamMember_user_teams {
   __typename: "Team";
   id: string;
   name: string;
-}
-
-export interface UpdateTeamMember_updateTeamMember_user_companies_users {
-  __typename: "User";
-  id: string;
-  teams: UpdateTeamMember_updateTeamMember_user_companies_users_teams[] | null;
+  companyId: string;
 }
 
 export interface UpdateTeamMember_updateTeamMember_user_companies {
   __typename: "Company";
-  id: string;
-  name: string;
-  users: UpdateTeamMember_updateTeamMember_user_companies_users[];
-}
-
-export interface UpdateTeamMember_updateTeamMember_user_roles {
-  __typename: "RolesUser";
   id: string;
   name: string;
 }
@@ -47,8 +42,10 @@ export interface UpdateTeamMember_updateTeamMember_user {
   __typename: "User";
   id: string;
   fullName: string;
-  companies: UpdateTeamMember_updateTeamMember_user_companies[] | null;
+  profileUrl: string | null;
   roles: UpdateTeamMember_updateTeamMember_user_roles[] | null;
+  teams: UpdateTeamMember_updateTeamMember_user_teams[] | null;
+  companies: UpdateTeamMember_updateTeamMember_user_companies[] | null;
 }
 
 export interface UpdateTeamMember_updateTeamMember {

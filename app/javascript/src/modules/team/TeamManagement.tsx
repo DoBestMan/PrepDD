@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface UpdateTeamMemberProps {
   id: string;
   fullName: string;
+  profileUrl?: string;
   companies: CompanyUsers_companyUsers_users_companies[] | null;
   teams: CompanyUsers_companyUsers_users_teams[] | null;
   roles: CompanyUsers_companyUsers_users_roles[] | null;
@@ -170,6 +171,7 @@ export default function TeamManagement(props: {path?: string}) {
 
     if (loading || !usersList) return;
     setMemberList(usersList)
+    console.log("After fetching list", usersList)
   }, [idx(data, data => data.companyUsers.users)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
@@ -244,12 +246,20 @@ export default function TeamManagement(props: {path?: string}) {
   }
 
   const updateTeamMemberList = (params: UpdateTeamMemberProps) => {
-    console.log("Params", params)
 
-    const findMember = memberList.find(member => member.id === params.id)
+    const findMember = memberList.findIndex(member => member.id === params.id)
 
-    if (findMember) {
+    if (findMember >= 0) {
       // Update member
+      let newList: CompanyUsers_companyUsers_users[] = memberList
+
+      newList[findMember] = {
+        ...params,
+        __typename: 'User',
+      } as CompanyUsers_companyUsers_users
+      setMemberList([
+        ...newList
+      ])
     } else {
       // Add member
       setMemberList([
@@ -317,10 +327,6 @@ export default function TeamManagement(props: {path?: string}) {
                     }
                     
                     if (user.roles) {
-                      if (user.id === "1") {
-                        console.log("Company Id", state.selectedCompany)
-                        console.log("User Roles", user.roles)
-                      }
                       role = user.roles.filter(role => role.companyId === state.selectedCompany)[0]
                     }
                     
@@ -416,6 +422,7 @@ export default function TeamManagement(props: {path?: string}) {
             open={isOpen()} 
             company={state.selectedCompany}
             handleClose={() => setSelected([])}
+            updateMemberList={updateTeamMemberList}
           />
         }
       </div>

@@ -29,7 +29,11 @@ import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMembe
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
-import { copySync } from 'fs-extra';
+import { 
+  CompanyUsers_companyUsers_users_companies,
+  CompanyUsers_companyUsers_users_teams,
+  CompanyUsers_companyUsers_users_roles
+} from '../../../../graphql/queries/__generated__/CompanyUsers'
 
 const panelWidth = 500
 
@@ -166,24 +170,34 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface DetailPaneProps {
-  id: string
-  open: boolean
-  company: string
-  handleClose: () => void
+  id: string;
+  open: boolean;
+  company: string;
+  handleClose: () => void;
+  updateMemberList: (
+    params: {
+      id: string, 
+      fullName: string, 
+      profileUrl?: string, 
+      companies: CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: CompanyUsers_companyUsers_users_teams[] | null, 
+      roles: CompanyUsers_companyUsers_users_roles[] | null
+    }
+  ) => void;
 }
 
 interface UserProps extends UserDetails_user {
-  role: string
-  team: string
+  role: string;
+  team: string;
 }
 
 interface Role {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, handleClose} = props
+  const {id, open, company, handleClose, updateMemberList} = props
   const classes = useStyles()
   const [user, setUser] = useState<UserProps>({
     __typename: "User",
@@ -251,13 +265,15 @@ export default function DetailPane(props: DetailPaneProps) {
     if (loading || !currentUser) return
 
     if (currentUser.roles) {
+      const findRole = currentUser.roles.filter(role => role.companyId === company)[0]
+
       setUser({
         ...user, 
         id: currentUser.id, 
         email: currentUser.email, 
         fullName: currentUser.fullName, 
         profileUrl: currentUser.profileUrl,
-        role: currentUser.roles[0].id,
+        role: findRole ? findRole.id : '0',
       })
     } else {
       setUser({
@@ -268,7 +284,7 @@ export default function DetailPane(props: DetailPaneProps) {
         fullName: currentUser.fullName,
       })
     }
-  }, [loading])
+  }, [loading, idx(data, data => data.user)])
 
   useEffect(() => {
     const updatedUser = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)
@@ -278,6 +294,15 @@ export default function DetailPane(props: DetailPaneProps) {
       ...user, 
       companies: updatedUser.companies
     })
+    console.log("Updated User: ", updatedUser)
+    updateMemberList({
+      id: updatedUser.id, 
+      fullName: updatedUser.fullName, 
+      profileUrl: updatedUser.profileUrl as string,
+      companies: updatedUser.companies as CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: updatedUser.teams, 
+      roles: updatedUser.roles as CompanyUsers_companyUsers_users_roles[] | null
+    })
   }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
@@ -286,13 +311,6 @@ export default function DetailPane(props: DetailPaneProps) {
     }
   }, [teamId])
 
-  useEffect(() => {
-    if (user.role !== '0') {
-      console.log("Before updating role", user)
-      updateTeamMember()
-    }
-  }, [user.role])
-
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
       ...user,
@@ -300,11 +318,13 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const handleChangeRole = (newRole: string) => {
-    setUser({
+  const handleChangeRole = async (newRole: string) => {
+    await setUser({
       ...user,
       role: newRole
     })
+
+    updateTeamMember()
   }
 
   const handleDelete = () => {
