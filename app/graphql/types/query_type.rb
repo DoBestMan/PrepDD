@@ -15,6 +15,7 @@ module Types
     field :user_details, UserDetailsType, null: true do
       description 'Find a user by id'
       argument :id, ID, required: true
+      argument :companyId, ID, required: false
     end
 
     field :user_for_password_reset,
@@ -70,9 +71,10 @@ module Types
       { id: 'current_user', user: user }
     end
 
-    def user_details(id:)
+    def user_details(id:, company_id: nil)
       user = User.find(id)
-      { id: 'user details', user: user }
+      role = RolesUser.where(user_id: id, company_id: company_id).first&.role
+      { id: 'user details', user: user, role: role }
     end
 
     def user(id:)
