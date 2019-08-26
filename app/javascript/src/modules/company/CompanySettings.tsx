@@ -33,6 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function CompanySettings(props: {path?: string;}) {
   const classes = useStyles()
   const { state } = useGlobalState()
+  const [addedParent, setAddedParent] = useState<string>("")
+  const [addedBroker, setAddedBroker] = useState<string>("")
   const [company, setCompany] = useState<CompanySettings_company>({
     __typename: "Company",
     id: '',
@@ -49,9 +51,15 @@ export default function CompanySettings(props: {path?: string;}) {
   })
 
   const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
-  const [updateCompany] = useUpdateCompany({
+  const [updateCompany, {
+    loading: updateCompanyLoading, 
+    data: updateCompanyRes, 
+    error: updateCompanyError
+  }] = useUpdateCompany({
     id: company.id, 
     name: company.name, 
+    parentName: addedParent, 
+    brokerName: addedBroker, 
     autoPdf: company.autoPdf as boolean, 
     autoWatermark: company.autoWatermark as boolean, 
     previewOnly: company.previewOnly as boolean
@@ -67,12 +75,26 @@ export default function CompanySettings(props: {path?: string;}) {
     })
   }, [loading, idx(data, data => data.company)])
 
+  useEffect(() => {
+    const companyData = idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)
+
+    if (loading || !companyData) return;
+
+    setCompany({
+      ...companyData
+    })
+    setAddedParent("")
+    setAddedBroker("")
+  }, [updateCompanyLoading, idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)])
+
   return (
     <div className={classes.root}>
       <div className={classes.settingsPanel}>
         <FormPanel 
           company={company} 
           setCompany={setCompany}
+          setAddedParent={setAddedParent}
+          setAddedBroker={setAddedBroker}
           handleUpdate={() => updateCompany()}
         />
       </div>

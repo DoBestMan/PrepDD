@@ -4,7 +4,6 @@ module Types
     field :removeCompanyMember, mutation: Mutations::RemoveCompanyMember
     field :updateTeamMember, mutation: Mutations::UpdateTeamMember
     field :removeTeamMember, mutation: Mutations::RemoveTeamMember
-    field :updateCompany, mutation: Mutations::UpdateCompany
     field :addTeamMember, mutation: Mutations::AddTeamMember
     field :createTeam, mutation: Mutations::CreateTeam
     field :createCompany, mutation: Mutations::CreateCompany

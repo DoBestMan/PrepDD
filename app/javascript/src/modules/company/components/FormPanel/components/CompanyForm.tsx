@@ -61,28 +61,36 @@ interface CompanyFormProps {
   label: string;
   placeholder: string;
   companies: CompanySettings_company_parents[] | CompanySettings_company_brokers[] | null;
+  onUpdate: (newValue: string) => void;
 }
 
 export default function CompanyForm(props: CompanyFormProps) {
-  const {label, placeholder, companies} = props
+  const {label, placeholder, companies, onUpdate} = props
   const classes = useStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [parent, setParent] = useState<string>("")
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    onUpdate(parent)
+    setOpen(false)
+  }
   return (
     <div className={classes.root}>
       <p>{label}</p>
       <div className={classes.companyList}>
         { companies && companies.map(company => (
             <StyledItem key={company.id} label={company.name} />
-        ))
+          ))
         }
         <div 
           className={classes.clickableArea}
           onClick={() => setOpen(true)}
           style={{position: 'relative'}}
         >
-          { !companies && placeholder }
+          { (!companies || !companies.length) ?
+            placeholder : null
+          }
         </div>
       </div>
 
@@ -90,6 +98,7 @@ export default function CompanyForm(props: CompanyFormProps) {
         <ClickAwayListener onClickAway={() => setOpen(false)}>
           <form 
             className={classes.addPaper}
+            onSubmit={handleSubmit}
           >
             <AutoSuggest
               value={parent}

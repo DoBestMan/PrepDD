@@ -63,11 +63,19 @@ const useStyles = makeStyles((theme: Theme) =>
 interface FormPanelProps {
   company: CompanySettings_company;
   setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
+  setAddedParent: (value: React.SetStateAction<string>) => void;
+  setAddedBroker: (value: React.SetStateAction<string>) => void;
   handleUpdate: () => void;
 }
 
 export default function FormPanel(props: FormPanelProps) {
-  const { company, setCompany, handleUpdate } = props
+  const { 
+    company, 
+    setCompany, 
+    setAddedParent, 
+    setAddedBroker,
+    handleUpdate 
+  } = props
   const classes = useStyles()
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,8 +86,17 @@ export default function FormPanel(props: FormPanelProps) {
   }
 
   const handleUpdateName = () => {
-    console.log("Name updated")
-    // handleUpdate()
+    handleUpdate()
+  }
+
+  const handleUpdateParent = async (newValue: string) => {
+    await setAddedParent(newValue)
+    handleUpdate()
+  }
+
+  const handleUpdateBroker = async (newValue: string) => {
+    await setAddedBroker(newValue)
+    handleUpdate()
   }
 
   const handleAutoPDF = async () => {
@@ -116,6 +133,7 @@ export default function FormPanel(props: FormPanelProps) {
             label="Parent company" 
             placeholder="Assign parent company..."
             companies={company.parents}
+            onUpdate={handleUpdateParent}
           />
         </Grid>
         <Grid item md={6}>
@@ -123,6 +141,7 @@ export default function FormPanel(props: FormPanelProps) {
             label="Broker"
             placeholder="Assign broker...."
             companies={company.brokers}
+            onUpdate={handleUpdateBroker}
           />
         </Grid>
         <Grid item md={12}>

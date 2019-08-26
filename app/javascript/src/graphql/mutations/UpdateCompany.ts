@@ -11,22 +11,55 @@ export const useUpdateCompany = createMutationHook<
   mutation UpdateCompany(
     $id: ID!,
     $name: String!, 
+    $parentName: String, 
+    $brokerName: String, 
+    $deleteParentId: ID, 
+    $deleteBrokerId: ID, 
     $autoPdf: Boolean!, 
     $autoWatermark: Boolean!, 
     $previewOnly: Boolean!
   ) {
-    updateCompany(
+    updateCompanySettings(
       id: $id, 
-      name: $name, 
-      autoPdf: $autoPdf, 
-      autoWatermark: $autoWatermark, 
+      name: $name,
+      parentName: $parentName, 
+      brokerName: $brokerName,  
+      automaticPdf: $autoPdf, 
+      dynamicWatermarking: $autoWatermark, 
       previewOnly: $previewOnly
+      deleteParentId: $deleteParentId, 
+      deleteBrokerId: $deleteBrokerId, 
     ) {
       errors {
         path
         message
       }
       success
+      company {
+        id
+        name
+        logoUrl
+        parents {
+          id
+          name
+          logoUrl
+        }
+        brokers {
+          id
+          name
+          logoUrl
+        }
+        totalUsers
+        totalStorage
+        subscription {
+          id
+          maxUsers
+          maxStorage
+        }
+        autoPdf
+        autoWatermark
+        previewOnly        
+      }
     }
   }
 `);

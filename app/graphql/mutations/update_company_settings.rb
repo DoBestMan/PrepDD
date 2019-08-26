@@ -25,9 +25,9 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
 
     company&.update(
       name: name,
-      automatic_pdf: automatic_pdf,
+      auto_pdf: automatic_pdf,
       preview_only: preview_only,
-      dynamic_watermarking: dynamic_watermarking
+      auto_watermark: dynamic_watermarking
     )
 
     if parent_name.present?
@@ -42,7 +42,7 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
     if broker_name.present?
       broker = Company.find_by_name(broker_name)
       if broker
-        BrokerCompany.create(child_broker_id: company&.id, parent_broker_id: broker_id)
+        BrokerCompany.create(child_broker_id: company&.id, parent_broker_id: broker.id)
       else
         #ToDo Create Broker Company & User
       end
