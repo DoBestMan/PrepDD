@@ -8,6 +8,8 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
   argument :previewOnly, Boolean, required: false
 
   field :company, Types::CompanyType, null: false
+  field :parents, [Types::CompanyType], null: true
+  field :brokers, [Types::CompanyType], null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
@@ -31,10 +33,15 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
     if broker_id.present?
       BrokerCompany.create(child_broker_id: company&.id, parent_broker_id: broker_id)
     end
-    
+
+    parents = company.company_parents
+    brokers = company.broker_parents
+
     if company&.persisted?
       response[:success] = true
-      response[:companies] = company
+      response[:company] = company
+      response[:parents] = parents
+      response[:brokers] = brokers
       response
     end
 
