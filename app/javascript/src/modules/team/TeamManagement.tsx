@@ -93,6 +93,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [selected, setSelected] = React.useState<string[]>([])
   const [team, setTeam] = React.useState("")
   const [memberList, setMemberList] = React.useState<CompanyUsers_companyUsers_users[]>([])
+  const [filteredName, setFilteredName] = React.useState<string>("")
 
   const {state} = useGlobalState()
   const {loading, data, error, fetchMore} = useCompanyUsers({
@@ -288,7 +289,13 @@ export default function TeamManagement(props: {path?: string}) {
             updateMemberList={updateTeamMemberList}
           />
           { data && data.companyUsers.company && data.companyUsers.company.teams && 
-            <Searchbar data={data.companyUsers.company.teams} value={team} handleUpdate={handleChangeTeam} />
+            <Searchbar 
+              data={data.companyUsers.company.teams} 
+              filteredName={filteredName}
+              handleChangeFiltered={(newValue) => setFilteredName(newValue)}
+              value={team} 
+              handleUpdate={handleChangeTeam} 
+            />
           }
           <div className={classes.tableWrapper}>
             <Table 
@@ -297,7 +304,10 @@ export default function TeamManagement(props: {path?: string}) {
             >
               <TableHeader />
               <TableBody>
-                { memberList && memberList.map(user => {
+                { memberList && 
+                  memberList
+                  .filter(member => member.fullName.includes(filteredName))
+                  .map(user => {
                     const isItemSelected = isSelected(user.id)
                     let teams: CompanyUsers_companyUsers_users_teams[] = []
 

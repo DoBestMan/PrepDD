@@ -59,12 +59,14 @@ interface Option {
 
 interface SearchbarProps {
   data: CompanyUsers_companyUsers_company_teams[];
+  filteredName: string;
+  handleChangeFiltered: (newValue: string) => void;
   value: string;
   handleUpdate: (newTeam: string) => void;
 }
 
 export default function Searchbar(props: SearchbarProps) {
-  const { data, value, handleUpdate } = props
+  const { data, filteredName, handleChangeFiltered, value, handleUpdate } = props
   const classes = useSearchbarStyles()
 
   const teamOptions = data.map(team => ({
@@ -76,6 +78,10 @@ export default function Searchbar(props: SearchbarProps) {
     name: "Select team"
   });
 
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleChangeFiltered(event.target.value)
+  }
+
   return (
     <div className={classes.root}>
       <div className={classes.search}>
@@ -83,12 +89,14 @@ export default function Searchbar(props: SearchbarProps) {
           <SearchIcon fontSize="small" />
         </div>
         <InputBase
+          value={filteredName}
           placeholder="Search for team members"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
           inputProps={{"aria-label": "search"}}
+          onChange={handleChangeName}
         />
       </div>
       <Dropdown 
