@@ -229,15 +229,27 @@ export default function DetailPane(props: DetailPaneProps) {
     companyId: company, 
     role: user.role, 
   })
-  const [removeCompanyMember] = useRemoveCompanyMember({
+  const [removeCompanyMember, {
+    loading: removeCompanyMemberLoading, 
+    data: removeCompanyMemberRes, 
+    error: removeCompanyMemberError,
+  }] = useRemoveCompanyMember({
     companyId: companyId || company, 
     userId: user.id, 
   })
-  const [removeTeamMember] = useRemoveTeamMember({
+  const [removeTeamMember, {
+    loading: removeTeamMemberLoading, 
+    data: removeTeamMemberRes, 
+    error: removeTeammemberError, 
+  }] = useRemoveTeamMember({
     teamId, 
     userId: user.id
   })
-  const [addTeamMember] = useAddTeamMember({
+  const [addTeamMember, {
+    loading: addTeamMemberLoading, 
+    data: addTeamMemberRes, 
+    error: addTeamMemberError
+  }] = useAddTeamMember({
     companyId,
     fullName: user.fullName, 
     email: user.email, 
@@ -290,11 +302,27 @@ export default function DetailPane(props: DetailPaneProps) {
     const updatedUser = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)
     
     if (updateTeamMemberLoading || !updatedUser) return
+    handleUpdateMemberList(updatedUser as UserDetails_user)
+  }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
+
+  useEffect(() => {
+    const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
+    
+    if (addTeamMemberLoading || !addedUser) return
+    handleUpdateMemberList(addedUser as UserDetails_user)
+  }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
+
+  useEffect(() => {
+    if (teamId && confirm("Are you going to remove this member?")) {
+      removeTeamMember()
+    }
+  }, [teamId])
+
+  const handleUpdateMemberList = (updatedUser: UserDetails_user) => {
     setUser({
       ...user, 
-      companies: updatedUser.companies
+      ...updatedUser
     })
-    console.log("Updated User: ", updatedUser)
     updateMemberList({
       id: updatedUser.id, 
       fullName: updatedUser.fullName, 
@@ -303,13 +331,7 @@ export default function DetailPane(props: DetailPaneProps) {
       teams: updatedUser.teams, 
       roles: updatedUser.roles as CompanyUsers_companyUsers_users_roles[] | null
     })
-  }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
-
-  useEffect(() => {
-    if (teamId && confirm("Are you going to remove this member?")) {
-      removeTeamMember()
-    }
-  }, [teamId])
+  }
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({

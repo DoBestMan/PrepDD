@@ -205,22 +205,17 @@ const TableToolbar = (props: TableToolbarProps) => {
 
   useEffect(() => {
     const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
-    const addedCompanies = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.companies)
-    const addedTeams = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.teams)
-    const addedRole = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.role)
+    const addedCompanies = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.companies)
+    const addedTeams = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.teams)
+    const addedRole = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.roles)
 
     if (addTeamMemberLoading || !addedUser || !addedRole) return
     updateMemberList({
       id: addedUser.id, 
       fullName: addedUser.fullName, 
-      companies: addedCompanies as CompanyUsers_companyUsers_users_companies[] | null, 
-      teams: addedTeams as CompanyUsers_companyUsers_users_teams[] | null, 
-      roles: [{
-        __typename: "RolesUser",
-        id: addedRole.id, 
-        name: addedRole.name, 
-        companyId: company
-      }] as CompanyUsers_companyUsers_users_roles[] | null
+      companies: addedUser.companies, 
+      teams: addedUser.teams, 
+      roles: addedUser.roles
     })
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
