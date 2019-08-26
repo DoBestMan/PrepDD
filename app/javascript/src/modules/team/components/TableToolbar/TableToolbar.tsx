@@ -251,7 +251,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     setState({
       fullName: '', 
       email: '', 
-      role: '3', 
+      role: '5', 
       team: ''
     })
   }, [addTeamMember])

@@ -170,7 +170,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
     displayName: state.currentUser.displayName as string,
-    profile_url: '', 
+    profile_url: state.currentUser.profileUrl as string, 
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -296,6 +296,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   }
 
   const renderDropzone = () => {
+    console.log("Current User", user)
     return (
       <ReactDropzone
         accept="image/*"

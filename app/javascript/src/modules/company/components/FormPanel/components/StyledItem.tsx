@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface StyledItemProps {
-  logo?: string;
+  logo?: string | null;
   label: string;
   onClose: () => void;
 }

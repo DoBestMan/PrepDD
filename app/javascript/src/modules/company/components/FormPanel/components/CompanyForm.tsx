@@ -89,6 +89,7 @@ export default function CompanyForm(props: CompanyFormProps) {
         { companies && companies.map(company => (
             <StyledItem 
               key={company.id} 
+              logo={company.logoUrl}
               label={company.name} 
               onClose={() => onDelete(company.id)}
             />
