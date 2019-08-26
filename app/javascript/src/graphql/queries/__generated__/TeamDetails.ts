@@ -19,7 +19,7 @@ export interface TeamDetails_team_users_teams {
 }
 
 export interface TeamDetails_team_users_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
   name: string;
 }

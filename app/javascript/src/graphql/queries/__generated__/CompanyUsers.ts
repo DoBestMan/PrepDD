@@ -20,7 +20,7 @@ export interface CompanyUsers_companyUsers_company {
 }
 
 export interface CompanyUsers_companyUsers_users_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
   name: string;
 }

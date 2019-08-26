@@ -9,7 +9,7 @@ module Types
     field :ownedCompanies, [CompanyType], null: true
     field :companies, [CompanyType], null: true
     field :teams, [TeamType], null: true
-    field :roles, [RoleType], null: true
+    field :roles, [RolesUserType], null: true
     field :lastViewedCompanyId, ID, null: true
     field :profile_url, String, null: true
 
@@ -17,6 +17,10 @@ module Types
       if object.profile_picture.attached?
         Rails.application.routes.url_helpers.rails_blob_url(object.profile_picture, only_path: true)
       end
+    end
+
+    def roles
+      object.roles_users
     end
   end
 end

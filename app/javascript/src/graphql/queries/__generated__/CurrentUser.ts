@@ -26,7 +26,7 @@ export interface CurrentUser_currentUser_user_teams {
 }
 
 export interface CurrentUser_currentUser_user_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
 }
 

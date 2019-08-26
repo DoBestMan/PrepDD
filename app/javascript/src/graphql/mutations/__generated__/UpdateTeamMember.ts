@@ -38,7 +38,7 @@ export interface UpdateTeamMember_updateTeamMember_user_companies {
 }
 
 export interface UpdateTeamMember_updateTeamMember_user_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
   name: string;
 }

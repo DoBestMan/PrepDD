@@ -7,7 +7,7 @@
 // ====================================================
 
 export interface UserDetails_user_roles {
-  __typename: "Role";
+  __typename: "RolesUser";
   id: string;
   name: string;
 }
