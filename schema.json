@@ -2005,21 +2005,21 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "parentID",
+                  "name": "parentName",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "ID",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null
                 },
                 {
-                  "name": "brokerID",
+                  "name": "brokerName",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
-                    "name": "ID",
+                    "name": "String",
                     "ofType": null
                   },
                   "defaultValue": null
