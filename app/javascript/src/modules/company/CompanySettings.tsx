@@ -35,6 +35,8 @@ export default function CompanySettings(props: {path?: string;}) {
   const { state } = useGlobalState()
   const [addedParent, setAddedParent] = useState<string>("")
   const [addedBroker, setAddedBroker] = useState<string>("")
+  const [deletedParent, setDeletedParent] = useState<string>("")
+  const [deletedBroker, setDeletedBroker] = useState<string>("")
   const [company, setCompany] = useState<CompanySettings_company>({
     __typename: "Company",
     id: '',
@@ -62,7 +64,9 @@ export default function CompanySettings(props: {path?: string;}) {
     brokerName: addedBroker, 
     autoPdf: company.autoPdf as boolean, 
     autoWatermark: company.autoWatermark as boolean, 
-    previewOnly: company.previewOnly as boolean
+    previewOnly: company.previewOnly as boolean,
+    deleteParentId: deletedParent, 
+    deleteBrokerId: deletedBroker
   })  
 
   useEffect(() => {
@@ -85,6 +89,8 @@ export default function CompanySettings(props: {path?: string;}) {
     })
     setAddedParent("")
     setAddedBroker("")
+    setDeletedParent("")
+    setDeletedBroker("")
   }, [updateCompanyLoading, idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)])
 
   return (
@@ -95,6 +101,8 @@ export default function CompanySettings(props: {path?: string;}) {
           setCompany={setCompany}
           setAddedParent={setAddedParent}
           setAddedBroker={setAddedBroker}
+          setDeletedParent={setDeletedParent}
+          setDeletedBroker={setDeletedBroker}
           handleUpdate={() => updateCompany()}
         />
       </div>

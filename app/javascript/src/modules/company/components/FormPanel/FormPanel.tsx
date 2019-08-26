@@ -65,6 +65,8 @@ interface FormPanelProps {
   setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
   setAddedParent: (value: React.SetStateAction<string>) => void;
   setAddedBroker: (value: React.SetStateAction<string>) => void;
+  setDeletedParent: (value: React.SetStateAction<string>) => void;
+  setDeletedBroker: (value: React.SetStateAction<string>) => void;
   handleUpdate: () => void;
 }
 
@@ -74,6 +76,8 @@ export default function FormPanel(props: FormPanelProps) {
     setCompany, 
     setAddedParent, 
     setAddedBroker,
+    setDeletedParent, 
+    setDeletedBroker,
     handleUpdate 
   } = props
   const classes = useStyles()
@@ -96,6 +100,16 @@ export default function FormPanel(props: FormPanelProps) {
 
   const handleUpdateBroker = async (newValue: string) => {
     await setAddedBroker(newValue)
+    handleUpdate()
+  }
+
+  const handleUpdateDeletedParent = async (newValue: string) => {
+    await setDeletedParent(newValue)
+    handleUpdate()
+  }
+
+  const handleUpdateDeletedBroker = async (newValue: string) => {
+    await setDeletedBroker(newValue)
     handleUpdate()
   }
 
@@ -134,6 +148,7 @@ export default function FormPanel(props: FormPanelProps) {
             placeholder="Assign parent company..."
             companies={company.parents}
             onUpdate={handleUpdateParent}
+            onDelete={handleUpdateDeletedParent}
           />
         </Grid>
         <Grid item md={6}>
@@ -142,6 +157,7 @@ export default function FormPanel(props: FormPanelProps) {
             placeholder="Assign broker...."
             companies={company.brokers}
             onUpdate={handleUpdateBroker}
+            onDelete={handleUpdateDeletedBroker}
           />
         </Grid>
         <Grid item md={12}>

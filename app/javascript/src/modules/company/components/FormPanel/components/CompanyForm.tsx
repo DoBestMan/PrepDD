@@ -62,10 +62,17 @@ interface CompanyFormProps {
   placeholder: string;
   companies: CompanySettings_company_parents[] | CompanySettings_company_brokers[] | null;
   onUpdate: (newValue: string) => void;
+  onDelete: (newValue: string) => void;
 }
 
 export default function CompanyForm(props: CompanyFormProps) {
-  const {label, placeholder, companies, onUpdate} = props
+  const {
+    label, 
+    placeholder, 
+    companies, 
+    onUpdate,
+    onDelete
+  } = props
   const classes = useStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [parent, setParent] = useState<string>("")
@@ -80,7 +87,11 @@ export default function CompanyForm(props: CompanyFormProps) {
       <p>{label}</p>
       <div className={classes.companyList}>
         { companies && companies.map(company => (
-            <StyledItem key={company.id} label={company.name} />
+            <StyledItem 
+              key={company.id} 
+              label={company.name} 
+              onClose={() => onDelete(company.id)}
+            />
           ))
         }
         <div 
