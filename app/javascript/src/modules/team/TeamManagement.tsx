@@ -309,10 +309,19 @@ export default function TeamManagement(props: {path?: string}) {
                   .filter(member => member.fullName.includes(filteredName))
                   .map(user => {
                     const isItemSelected = isSelected(user.id)
+                    let role: CompanyUsers_companyUsers_users_roles | null = null
                     let teams: CompanyUsers_companyUsers_users_teams[] = []
 
                     if (user.teams) {
                       teams = user.teams.filter(team => team.companyId === state.selectedCompany)
+                    }
+                    
+                    if (user.roles) {
+                      if (user.id === "1") {
+                        console.log("Company Id", state.selectedCompany)
+                        console.log("User Roles", user.roles)
+                      }
+                      role = user.roles.filter(role => role.companyId === state.selectedCompany)[0]
                     }
                     
                     return (
@@ -389,8 +398,8 @@ export default function TeamManagement(props: {path?: string}) {
                           }
                           
                         </StyledTableCell>
-                        { user.roles && user.roles[0].name && 
-                          <StyledTableCell>{user.roles[0].name}</StyledTableCell>
+                        { role && 
+                          <StyledTableCell>{role.name}</StyledTableCell>
                         }
                       </StyledTableRow>
                     )

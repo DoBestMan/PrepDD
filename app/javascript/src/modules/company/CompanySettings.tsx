@@ -38,18 +38,8 @@ export default function CompanySettings(props: {path?: string;}) {
     id: '',
     name: '',
     logoUrl: '',
-    parent: {
-      __typename: "Company",
-      id: '', 
-      name: 'PrepDD', 
-      logoUrl: ''
-    }, 
-    broker: {
-      __typename: "Company",
-      id: '', 
-      name: 'G2 Crowd', 
-      logoUrl: ''
-    },
+    parents: null, 
+    brokers: null, 
     totalUsers: 0, 
     totalStorage: 0,
     subscription: null, 
@@ -58,7 +48,7 @@ export default function CompanySettings(props: {path?: string;}) {
     previewOnly: false
   })
 
-  // const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
+  const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
   const [updateCompany] = useUpdateCompany({
     id: company.id, 
     name: company.name, 
@@ -67,15 +57,15 @@ export default function CompanySettings(props: {path?: string;}) {
     previewOnly: company.previewOnly as boolean
   })  
 
-  // useEffect(() => {
-  //   const companyData = idx(data, data => data.company);
+  useEffect(() => {
+    const companyData = idx(data, data => data.company);
 
-  //   if (loading || !companyData) return;
+    if (loading || !companyData) return;
 
-  //   setCompany({
-  //     ...companyData
-  //   })
-  // }, [loading, idx(data, data => data.company)])
+    setCompany({
+      ...companyData
+    })
+  }, [loading, idx(data, data => data.company)])
 
   return (
     <div className={classes.root}>

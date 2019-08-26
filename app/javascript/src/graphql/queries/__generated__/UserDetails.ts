@@ -10,6 +10,7 @@ export interface UserDetails_user_roles {
   __typename: "RolesUser";
   id: string;
   name: string;
+  companyId: string;
 }
 
 export interface UserDetails_user_teams {

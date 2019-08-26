@@ -209,13 +209,18 @@ const TableToolbar = (props: TableToolbarProps) => {
     const addedTeams = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.teams)
     const addedRole = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.role)
 
-    if (addTeamMemberLoading || !addedUser) return
+    if (addTeamMemberLoading || !addedUser || !addedRole) return
     updateMemberList({
       id: addedUser.id, 
       fullName: addedUser.fullName, 
       companies: addedCompanies as CompanyUsers_companyUsers_users_companies[] | null, 
       teams: addedTeams as CompanyUsers_companyUsers_users_teams[] | null, 
-      roles: [addedRole] as CompanyUsers_companyUsers_users_roles[] | null
+      roles: [{
+        __typename: "RolesUser",
+        id: addedRole.id, 
+        name: addedRole.name, 
+        companyId: company
+      }] as CompanyUsers_companyUsers_users_roles[] | null
     })
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 

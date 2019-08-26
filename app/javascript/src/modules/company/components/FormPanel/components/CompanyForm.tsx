@@ -4,8 +4,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Button from '@material-ui/core/Button'
 
 import {
-  CompanySettings_company_parent, 
-  CompanySettings_company_broker
+  CompanySettings_company_parents, 
+  CompanySettings_company_brokers
 } from '../../../../../graphql/queries/__generated__/CompanySettings'
 import StyledItem from './StyledItem'
 import AutoSuggest from './AutoSuggest'
@@ -60,11 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 interface CompanyFormProps {
   label: string;
   placeholder: string;
-  company: CompanySettings_company_parent | CompanySettings_company_broker | null;
+  companies: CompanySettings_company_parents[] | CompanySettings_company_brokers[] | null;
 }
 
 export default function CompanyForm(props: CompanyFormProps) {
-  const {label, placeholder, company} = props
+  const {label, placeholder, companies} = props
   const classes = useStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [parent, setParent] = useState<string>("")
@@ -73,15 +73,17 @@ export default function CompanyForm(props: CompanyFormProps) {
     <div className={classes.root}>
       <p>{label}</p>
       <div className={classes.companyList}>
-        { company ?
-          <StyledItem label={company.name} /> :
-          placeholder
+        { companies && companies.map(company => (
+            <StyledItem key={company.id} label={company.name} />
+        ))
         }
         <div 
           className={classes.clickableArea}
           onClick={() => setOpen(true)}
           style={{position: 'relative'}}
-        />
+        >
+          { !companies && placeholder }
+        </div>
       </div>
 
       { open && 

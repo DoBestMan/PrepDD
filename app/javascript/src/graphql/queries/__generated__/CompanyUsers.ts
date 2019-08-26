@@ -23,6 +23,7 @@ export interface CompanyUsers_companyUsers_users_roles {
   __typename: "RolesUser";
   id: string;
   name: string;
+  companyId: string;
 }
 
 export interface CompanyUsers_companyUsers_users_teams {

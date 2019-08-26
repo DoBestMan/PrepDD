@@ -115,14 +115,14 @@ export default function FormPanel(props: FormPanelProps) {
           <CompanyForm 
             label="Parent company" 
             placeholder="Assign parent company..."
-            company={company.parent}
+            companies={company.parents}
           />
         </Grid>
         <Grid item md={6}>
           <CompanyForm
             label="Broker"
             placeholder="Assign broker...."
-            company={company.broker}
+            companies={company.brokers}
           />
         </Grid>
         <Grid item md={12}>

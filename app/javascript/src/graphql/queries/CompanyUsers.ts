@@ -31,6 +31,7 @@ export const useCompanyUsers = createQueryHook<CompanyUsers, {}>(gql`
         roles {
           id
           name
+          companyId
         }
         teams {
           id
