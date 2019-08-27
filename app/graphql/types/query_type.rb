@@ -57,8 +57,8 @@ module Types
     end
 
     field :search_user_companies, [UserType], null: false do
-      description 'Find companies by user email'
-      argument :email, String, required: true
+      description 'Find companies by user email OR Name'
+      argument :text, String, required: true
     end
 
     def company_users(company_id:, team_id: nil, limit:, offset:)
@@ -102,8 +102,8 @@ module Types
       User.find(id)
     end
 
-    def search_user_companies(email:)
-      User.where("email LIKE ?", "%#{email}%")
+    def search_user_companies(text:)
+      User.where("lower(email) LIKE :text OR lower(full_name) LIKE :text", text:  "%#{text.downcase}%")
     end
   end
 end

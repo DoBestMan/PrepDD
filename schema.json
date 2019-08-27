@@ -168,10 +168,10 @@
             },
             {
               "name": "searchUserCompanies",
-              "description": "Find companies by user email",
+              "description": "Find companies by user email OR Name",
               "args": [
                 {
-                  "name": "email",
+                  "name": "text",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
