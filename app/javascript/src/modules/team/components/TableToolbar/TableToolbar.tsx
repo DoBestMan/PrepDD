@@ -205,11 +205,8 @@ const TableToolbar = (props: TableToolbarProps) => {
 
   useEffect(() => {
     const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
-    const addedCompanies = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.companies)
-    const addedTeams = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.teams)
-    const addedRole = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user.roles)
 
-    if (addTeamMemberLoading || !addedUser || !addedRole) return
+    if (addTeamMemberLoading || !addedUser) return
     updateMemberList({
       id: addedUser.id, 
       fullName: addedUser.fullName, 

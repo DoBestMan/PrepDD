@@ -47,18 +47,6 @@ export const useAddTeamMember = createMutationHook<
           name
         }
       }
-      companies {
-        id
-        name
-      }
-      teams {
-        id
-        name
-      }
-      role {
-        id
-        name
-      }
     }
   }
 `);
