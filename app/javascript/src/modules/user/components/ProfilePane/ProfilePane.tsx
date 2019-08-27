@@ -130,7 +130,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       width: '120px', 
       height: '120px',
-      border: '2px dashed #D8D8D8',
       borderRadius: '50%', 
       alignItems: 'center',
       justifyContent: 'center',
@@ -138,6 +137,9 @@ const useStyles = makeStyles((theme: Theme) =>
         outline: 'none'
       }
     }, 
+    dashedBorder: {
+      border: '2px dashed #D8D8D8',
+    },
     activePhoto: {    
       background: '#EBF2FF',
       borderColor: '#3A84FF'
@@ -330,13 +332,18 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         {({getRootProps, getInputProps, isDragActive}) => (
             <div 
               {...getRootProps()} 
-              className={clsx(classes.defaultPhoto, isDragActive && classes.activePhoto)}
+              className={clsx(
+                classes.defaultPhoto, 
+                isDragActive && classes.activePhoto,
+                !user.profile_url && classes.dashedBorder
+              )}
             >
               <input {...getInputProps()}/>
               { user.profile_url ?
                 <div
                   onMouseOver={() => setShow(true)}
                   onMouseOut={() => setShow(false)}
+                  style={{border: 'none'}}
                 >
                   <img src={user.profile_url} className={classes.photo} />
                   <div 
