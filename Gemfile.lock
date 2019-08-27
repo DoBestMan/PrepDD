@@ -840,6 +840,7 @@ GEM
     crass (1.0.4)
     data_migrate (5.3.2)
       rails (>= 4.2)
+    database_cleaner (1.7.0)
     devise (4.6.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -1062,6 +1063,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   chromedriver-helper
   data_migrate
+  database_cleaner (~> 1.7)
   devise
   factory_bot_rails (~> 5.0.2)
   faker
