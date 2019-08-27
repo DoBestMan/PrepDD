@@ -36,7 +36,7 @@ import {
 import FlashMessage from '../common/FlashMessage';
 
 const PANEL_WIDTH = 500
-const LIMIT = 20
+const LIMIT = 12
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,6 +66,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableWrapper: {
       overflowX: 'auto',
+      overflowY: 'auto', 
+      height: `calc(100vh - 300px)`,
+      '& thead th': {
+        background: '#D8D8D8', 
+        position: 'sticky', 
+        top: '0px'
+      }
     },
     table: {
       minWidth: 750
@@ -110,59 +117,6 @@ export default function TeamManagement(props: {path?: string}) {
     companyId: state.selectedCompany, 
     userIds: selected
   })
-
-  // useEffect(() => {
-  //   const handleOnScroll = () => {
-  //     console.log("Scroll Event")
-
-  //     let scrollTop = (document.documentElement && document.documentElement.scrollTop) ||
-  //       document.body.scrollTop
-  //     let scrollHeight = (document.documentElement && document.documentElement.scrollHeight) ||
-  //       document.body.scrollHeight
-  //     let clientHeight = document.documentElement.clientHeight || window.innerHeight
-  //     let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-
-  //     if (scrolledToBottom) {
-  //       console.log("Scroll Bottom")
-  //       fetchMore({
-  //         variables: {
-  //           companyId: state.selectedCompany,
-  //           teamId: team, 
-  //           limit: LIMIT, 
-  //           offset: memberList.length
-  //         },
-  //         updateQuery: (previousQueryResult: CompanyUsers, options: {
-  //           fetchMoreResult?: CompanyUsers;
-  //           variables?: CompanyUsersVariables;
-  //         }) => {
-  //           const fetchMoreResult = idx(options, options => options.fetchMoreResult)
-    
-  //           if (!fetchMoreResult)
-  //             return previousQueryResult
-    
-  //           return {
-  //             companyUsers: {
-  //               ...previousQueryResult.companyUsers, 
-  //               users: [
-  //                 ...previousQueryResult.companyUsers.users,
-  //                 ...fetchMoreResult.companyUsers.users
-  //               ]
-  //             }
-  //           }
-    
-  //         }
-  //       })
-  //     }
-  //   }
-
-  //   console.log("Add Event Listener")
-  //   window.addEventListener("scroll", handleOnScroll, true)
-
-  //   return () => {
-  //     console.log("Remove Event Listener")
-  //     window.removeEventListener("scroll", handleOnScroll, true)
-  //   }
-  // }, [])
 
   useEffect(() => {
     setTeam("")
@@ -248,6 +202,49 @@ export default function TeamManagement(props: {path?: string}) {
     setTeam(newTeam)
   }
 
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    event.persist()
+    const scrollHeight = (event.target as HTMLDivElement).scrollHeight
+    const scrollTop = (event.target as HTMLDivElement).scrollTop
+    const height = (event.target as HTMLDivElement).clientHeight
+    const delta = 10
+
+    if (scrollTop + height + delta >= scrollHeight && !loading) {
+      loadMore()
+    }
+  }
+
+  const loadMore = () => {
+    fetchMore({
+      variables: {
+        companyId: state.selectedCompany,
+        teamId: team, 
+        limit: LIMIT, 
+        offset: memberList.length
+      },
+      updateQuery: (previousQueryResult: CompanyUsers, options: {
+        fetchMoreResult?: CompanyUsers;
+        variables?: CompanyUsersVariables;
+      }) => {
+        const fetchMoreResult = idx(options, options => options.fetchMoreResult)
+
+        if (!fetchMoreResult)
+          return previousQueryResult
+
+        return {
+          companyUsers: {
+            ...previousQueryResult.companyUsers, 
+            users: [
+              ...previousQueryResult.companyUsers.users,
+              ...fetchMoreResult.companyUsers.users
+            ]
+          }
+        }
+
+      }
+    })
+  }
+
   const updateTeamMemberList = (params: UpdateTeamMemberProps) => {
 
     const findMember = memberList.findIndex(member => member.id === params.id)
@@ -330,7 +327,10 @@ export default function TeamManagement(props: {path?: string}) {
             handleUpdate={handleChangeTeam} 
           />
         }
-        <div className={classes.tableWrapper}>
+        <div 
+          className={classes.tableWrapper}
+          onScroll={handleScroll}
+        >
           <Table 
             className={classes.table} 
             aria-labelledby="Team Management Table"

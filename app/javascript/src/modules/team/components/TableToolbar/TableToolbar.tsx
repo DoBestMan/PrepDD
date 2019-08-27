@@ -76,7 +76,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       position: 'absolute', 
       top: '42px', 
       left: '0px',
-      zIndex: 1, 
+      zIndex: 2, 
       background: '#FFFFFF',
       padding: '24px',
       border: '1px solid #CACACA',

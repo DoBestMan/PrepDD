@@ -50,6 +50,7 @@ export default function TableHeader() {
           <StyledTableCell
             key={row.id}
             align="left"
+            style={{zIndex: 1}}
           >
             {row.label}
           </StyledTableCell>
