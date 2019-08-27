@@ -6,7 +6,7 @@ import {
 
 export const useRemoveTeamMember = createMutationHook<
   RemoveTeamMember,
-  RemoveTeamMemberVariables 
+  RemoveTeamMemberVariables
   >(gql`
   mutation RemoveTeamMember(
     $teamId: ID!, 
@@ -18,6 +18,23 @@ export const useRemoveTeamMember = createMutationHook<
       userId: $userId, 
       userIds: $userIds, 
     ) {
+    user{
+    id
+    fullName
+    }
+    companies{
+    id
+    name
+    }
+    teams{
+    id
+    name
+    companyId
+    }
+    role{
+    id
+    name
+    }
       errors {
         path
         message

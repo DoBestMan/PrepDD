@@ -3,7 +3,9 @@ class Mutations::RemoveCompanyMember < GraphQL::Schema::Mutation
   argument :userId, ID, required: false
   argument :userIds, [ID], required: false
 
-  field :team, Types::TeamType, null: true
+  field :user, Types::UserType, null: true
+  field :companies, [Types::CompanyType], null: true
+  field :teams, [Types::TeamType], null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
@@ -29,8 +31,14 @@ class Mutations::RemoveCompanyMember < GraphQL::Schema::Mutation
       end
     end
 
+    user = User.find(user_id)
+    teams = user.teams
+    companies = user.companies
+
     response[:success] = true
-    response
+    response[:user] = user
+    response[:companies] = companies
+    response[:teams] = teams
 
     response
   end
