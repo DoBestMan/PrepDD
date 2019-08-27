@@ -14,6 +14,5 @@ class Company::CompanyS3BucketCreationWorker
         company.save!
       end
     end
-
   end
 end

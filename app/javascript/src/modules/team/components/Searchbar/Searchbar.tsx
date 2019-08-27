@@ -1,56 +1,56 @@
-import React from 'react'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import InputBase from '@material-ui/core/InputBase'
-import SearchIcon from '@material-ui/icons/Search'
+import React from 'react';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 
-import Dropdown from '../../../../components/Dropdown'
-import {CompanyUsers_companyUsers_company_teams} from '../../../../graphql/queries/__generated__/CompanyUsers'
+import Dropdown from '../../../../components/Dropdown';
+import {CompanyUsers_companyUsers_company_teams} from '../../../../graphql/queries/__generated__/CompanyUsers';
 
-const useSearchbarStyles = makeStyles((theme: Theme) => 
+const useSearchbarStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex', 
-      margin: '24px 31px 42px 31px'
+      display: 'flex',
+      margin: '24px 31px 42px 31px',
     },
     search: {
       position: 'relative',
       width: '100%',
       height: '42px',
-      marginRight: '24px', 
+      marginRight: '24px',
       border: '1px solid #CACACA',
       borderRadius: '3px',
       color: '#D6D6D6',
       fontFamily: 'Montserrat',
       fontWeight: 600,
       fontSize: '12px',
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     searchIcon: {
       width: theme.spacing(7),
       height: '100%',
       position: 'absolute',
       pointerEvents: 'none',
-      color: '#606060', 
+      color: '#606060',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
     },
     inputRoot: {
-      width: '100%', 
-      height: 42, 
+      width: '100%',
+      height: 42,
       fontFamily: 'Montserrat',
       fontSize: '12px',
-      fontWeight: 'bold', 
-      color: 'black'
+      fontWeight: 'bold',
+      color: 'black',
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 6),
       transition: theme.transitions.create('width'),
       width: '100%',
-      height: 42, 
+      height: 42,
     },
   })
-)
+);
 
 interface Option {
   id: string;
@@ -66,21 +66,21 @@ interface SearchbarProps {
 }
 
 export default function Searchbar(props: SearchbarProps) {
-  const { data, filteredName, handleChangeFiltered, value, handleUpdate } = props
-  const classes = useSearchbarStyles()
+  const {data, filteredName, handleChangeFiltered, value, handleUpdate} = props;
+  const classes = useSearchbarStyles();
 
   const teamOptions = data.map(team => ({
-    id : team.id,
-    name: team.name
+    id: team.id,
+    name: team.name,
   }));
   teamOptions.unshift({
-    id: "",
-    name: "Select team"
+    id: '',
+    name: 'Select team',
   });
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleChangeFiltered(event.target.value)
-  }
+    handleChangeFiltered(event.target.value);
+  };
 
   return (
     <div className={classes.root}>
@@ -95,16 +95,16 @@ export default function Searchbar(props: SearchbarProps) {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          inputProps={{"aria-label": "search"}}
+          inputProps={{'aria-label': 'search'}}
           onChange={handleChangeName}
         />
       </div>
-      <Dropdown 
-        options={teamOptions} 
+      <Dropdown
+        options={teamOptions}
         selected={value}
-        placeholder="Select role" 
+        placeholder="Select role"
         handleUpdate={handleUpdate}
       />
     </div>
-  )
+  );
 }

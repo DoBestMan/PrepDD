@@ -1,18 +1,18 @@
-import React from 'react'
-import { render } from 'react-dom'
-import ApolloClient from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
-import { createHttpLink } from 'apollo-link-http'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ThemeProvider } from '@material-ui/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import App from './containers/app'
-import theme from './config/theme'
-import {Provider} from './store'
+import React from 'react';
+import {render} from 'react-dom';
+import ApolloClient from 'apollo-client';
+import {ApolloProvider} from 'react-apollo';
+import {createHttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {ThemeProvider} from '@material-ui/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import App from './containers/app';
+import theme from './config/theme';
+import {Provider} from './store';
 
 function getCSRFToken(): string {
-  const el = document.querySelector('meta[name="csrf-token"]')
-  return (el && el.getAttribute('content')) || ''
+  const el = document.querySelector('meta[name="csrf-token"]');
+  return (el && el.getAttribute('content')) || '';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,13 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
     headers: {
       'X-CSRF-Token': getCSRFToken(),
     },
-  })
+  });
 
   const client = new ApolloClient({
     link,
     cache: new InMemoryCache(),
     connectToDevTools: true,
-  })
+  });
 
   render(
     <Provider>
@@ -39,5 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
       </ApolloProvider>
     </Provider>,
     document.body.appendChild(document.createElement('div'))
-  )
-})
+  );
+});

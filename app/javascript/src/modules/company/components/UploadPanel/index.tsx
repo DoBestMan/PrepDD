@@ -1,3 +1,3 @@
-import UploadPanel from './UploadPanel'
+import UploadPanel from './UploadPanel';
 
-export default UploadPanel
+export default UploadPanel;

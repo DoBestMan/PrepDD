@@ -15,7 +15,10 @@ module Types
 
     def profile_url
       if object.profile_picture.attached?
-        Rails.application.routes.url_helpers.rails_blob_url(object.profile_picture, only_path: true)
+        Rails.application.routes.url_helpers.rails_blob_url(
+          object.profile_picture,
+          only_path: true
+        )
       end
     end
 

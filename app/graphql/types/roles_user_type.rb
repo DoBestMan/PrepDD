@@ -12,7 +12,7 @@ module Types
 
     def name
       object.role.name
-      end
+    end
 
     def name
       object.role.name

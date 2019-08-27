@@ -12,8 +12,16 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(full_name: nil, email: nil, password: nil, company_name: nil, social_login: nil,
-              token_id: nil, provider: nil, uu_id: nil)
+  def resolve(
+    full_name: nil,
+    email: nil,
+    password: nil,
+    company_name: nil,
+    social_login: nil,
+    token_id: nil,
+    provider: nil,
+    uu_id: nil
+  )
     response = { errors: [] }
 
     if context[:controller].user_signed_in?
@@ -27,15 +35,17 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
         profile = User.linkedin_auth(token_id)
         if profile
           full_name = profile["localizedFirstName"] + " " + profile["localizedLastName"]
-          uu_id = profile["id"]
-          email = uu_id + "@linkedin.com"
+          uu_id = profile['id']
+          email = uu_id + '@linkedin.com'
         else
-          response[:errors].push({ path: 'root', message: 'Could not use your LinkedIn account.' })
+          response[:errors].push(
+            { path: 'root', message: 'Could not use your LinkedIn account.' }
+          )
           response[:success] = false
           return response
         end
       end
-      password = Devise.friendly_token[0,20]
+      password = Devise.friendly_token[0, 20]
     end
 
     user =
@@ -66,7 +76,10 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       company&.save!
 
       owner_id = Role.find_by_name('Owner').id
-      user_role = RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)
+      user_role =
+        RolesUser.create(
+          user_id: user.id, role_id: owner_id, company_id: company.id
+        )
 
       company&.errors.messages.each do |path, messages|
         messages.each do |message|
@@ -86,7 +99,8 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
         end
       end
 
-      user_company = UsersCompany.create(user_id: user.id, company_id: company.id)
+      user_company =
+        UsersCompany.create(user_id: user.id, company_id: company.id)
 
       user_company.errors.messages.each do |path, messages|
         messages.each do |message|

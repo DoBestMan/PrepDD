@@ -6,17 +6,13 @@ import {
 
 export const useRemoveCompanyMember = createMutationHook<
   RemoveCompanyMember,
-  RemoveCompanyMemberVariables 
-  >(gql`
-  mutation RemoveCompanyMember(
-    $companyId: ID!, 
-    $userId: ID, 
-    $userIds: [ID!]
-  ) {
+  RemoveCompanyMemberVariables
+>(gql`
+  mutation RemoveCompanyMember($companyId: ID!, $userId: ID, $userIds: [ID!]) {
     removeCompanyMember(
-      companyId: $companyId, 
-      userId: $userId, 
-      userIds: $userIds, 
+      companyId: $companyId
+      userId: $userId
+      userIds: $userIds
     ) {
       errors {
         path
@@ -45,5 +41,3 @@ export const useRemoveCompanyMember = createMutationHook<
     }
   }
 `);
-
-

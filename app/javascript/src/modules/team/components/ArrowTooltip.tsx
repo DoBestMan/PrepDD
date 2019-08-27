@@ -1,6 +1,6 @@
-import React from 'react'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import Tooltip, { TooltipProps } from '@material-ui/core/Tooltip'
+import React from 'react';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import Tooltip, {TooltipProps} from '@material-ui/core/Tooltip';
 
 function arrowGenerator(color: string) {
   return {
@@ -46,7 +46,7 @@ function arrowGenerator(color: string) {
         borderColor: `transparent transparent transparent ${color}`,
       },
     },
-  }
+  };
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,12 +67,12 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     popper: arrowGenerator(theme.palette.grey[700]),
-  }),
+  })
 );
 
 export default function ArrowTooltip(props: TooltipProps) {
-  const { arrow, ...classes } = useStyles()
-  const [arrowRef, setArrowRef] = React.useState<HTMLSpanElement | null>(null)
+  const {arrow, ...classes} = useStyles();
+  const [arrowRef, setArrowRef] = React.useState<HTMLSpanElement | null>(null);
 
   return (
     <Tooltip
@@ -95,5 +95,5 @@ export default function ArrowTooltip(props: TooltipProps) {
         </React.Fragment>
       }
     />
-  )
+  );
 }

@@ -1,3 +1,3 @@
-import DetailPane from './DetailPane'
+import DetailPane from './DetailPane';
 
-export default DetailPane
+export default DetailPane;

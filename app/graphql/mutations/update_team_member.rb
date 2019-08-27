@@ -16,17 +16,15 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
 
     user = User.find(id)
 
-    if user && full_name
-      user.update(
-        full_name: full_name
-      )
-    end
+    user.update(full_name: full_name) if user && full_name
 
     if role && company_id
       RolesUser.where(user_id: user.id, company_id: company_id).first&.destroy!
 
-      user_new_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
-
+      user_new_role =
+        RolesUser.create(
+          user_id: user.id, role_id: role, company_id: company_id
+        )
 
       user_new_role.errors.messages.each do |path, messages|
         messages.each do |message|
@@ -36,7 +34,6 @@ class Mutations::UpdateTeamMember < GraphQL::Schema::Mutation
           response[:success] = false
         end
       end
-
     end
 
     user.errors.messages.each do |path, messages|

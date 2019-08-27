@@ -1,3 +1,3 @@
-import ProfilePane from './ProfilePane'
+import ProfilePane from './ProfilePane';
 
-export default ProfilePane
+export default ProfilePane;

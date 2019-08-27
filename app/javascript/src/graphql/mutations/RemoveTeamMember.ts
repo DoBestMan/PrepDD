@@ -7,17 +7,9 @@ import {
 export const useRemoveTeamMember = createMutationHook<
   RemoveTeamMember,
   RemoveTeamMemberVariables
-  >(gql`
-  mutation RemoveTeamMember(
-    $teamId: ID!, 
-    $userId: ID!, 
-    $userIds: [ID!]
-  ) {
-    removeTeamMember(
-      teamId: $teamId, 
-      userId: $userId, 
-      userIds: $userIds, 
-    ) {
+>(gql`
+  mutation RemoveTeamMember($teamId: ID!, $userId: ID!, $userIds: [ID!]) {
+    removeTeamMember(teamId: $teamId, userId: $userId, userIds: $userIds) {
       user {
         id
         fullName
@@ -45,5 +37,3 @@ export const useRemoveTeamMember = createMutationHook<
     }
   }
 `);
-
-

@@ -4,10 +4,10 @@ import React from 'react';
 import idx from 'idx';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useUserForPasswordReset} from '../../graphql/queries/UserForPasswordReset';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       marginTop: theme.spacing(8),

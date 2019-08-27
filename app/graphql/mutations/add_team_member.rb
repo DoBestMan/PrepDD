@@ -1,4 +1,4 @@
-class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
+class Mutations::AddTeamMember < GraphQL::Schema::Mutation
   argument :team, String, required: true
   argument :companyId, ID, required: true
   argument :email, String, required: true
@@ -18,14 +18,14 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
     user = User.find_by_email(email)
 
     if !user.present?
-      password = Devise.friendly_token[0,20]
+      password = Devise.friendly_token[0, 20]
       user =
         User.create(
           {
             full_name: full_name,
             email: email,
             password: password,
-            password_confirmation: password,
+            password_confirmation: password
           }
         )
     end
@@ -34,7 +34,7 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
 
     if team.present?
       company_team = company.teams.where(name: team).first_or_create
-      team_user = TeamsUser.create( user_id: user.id, team_id: company_team.id)
+      team_user = TeamsUser.create(user_id: user.id, team_id: company_team.id)
 
       team_user.errors.messages.each do |path, messages|
         messages.each do |message|
@@ -46,11 +46,14 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
       end
     end
 
-    user_role = RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
+    user_role =
+      RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
 
-    user_company = UsersCompany.where(user_id: user.id, company_id: company_id).all
+    user_company =
+      UsersCompany.where(user_id: user.id, company_id: company_id).all
     if !user_company.present?
-      user_company = UsersCompany.create(user_id: user.id, company_id: company_id)
+      user_company =
+        UsersCompany.create(user_id: user.id, company_id: company_id)
     end
 
     user_role.errors.messages.each do |path, messages|
@@ -86,5 +89,4 @@ class Mutations::AddTeamMember <  GraphQL::Schema::Mutation
 
     response
   end
-
 end

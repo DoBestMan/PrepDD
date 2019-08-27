@@ -1,36 +1,36 @@
-import React from 'react'
-import clsx from 'clsx'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import CheckCircle from '@material-ui/icons/CheckCircle'
-import { mergeClasses } from '@material-ui/styles';
+import React from 'react';
+import clsx from 'clsx';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import CheckCircle from '@material-ui/icons/CheckCircle';
+import {mergeClasses} from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
-      marginTop: '8px'
+      marginTop: '8px',
     },
     unCheckedCircle: {
-      width: '18px', 
+      width: '18px',
       height: '18px',
       color: 'green',
-      opacity: 0.1
+      opacity: 0.1,
     },
     unCheckedLabel: {
-      color: '#2C2C2C', 
-      fontFamily: 'Montserrat', 
+      color: '#2C2C2C',
+      fontFamily: 'Montserrat',
       fontWeight: 'normal',
-      fontSize: '12px', 
-      marginLeft: '10px'
-    }, 
+      fontSize: '12px',
+      marginLeft: '10px',
+    },
     checkedCircle: {
-      opacity: 1
+      opacity: 1,
     },
     checkedLabel: {
-      fontWeight: 'bold'
-    }
+      fontWeight: 'bold',
+    },
   })
-)
+);
 
 interface CheckBoxProps {
   label?: string;
@@ -38,13 +38,25 @@ interface CheckBoxProps {
 }
 
 export default function CheckBox(props: CheckBoxProps) {
-  const { label, checked } = props
-  const classes = useStyles()
+  const {label, checked} = props;
+  const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <CheckCircle className={clsx(classes.unCheckedCircle, checked && classes.checkedCircle)} />
-      <span className={clsx(classes.unCheckedLabel, checked && classes.checkedLabel)}>{label}</span>
+      <CheckCircle
+        className={clsx(
+          classes.unCheckedCircle,
+          checked && classes.checkedCircle
+        )}
+      />
+      <span
+        className={clsx(
+          classes.unCheckedLabel,
+          checked && classes.checkedLabel
+        )}
+      >
+        {label}
+      </span>
     </div>
-  )
+  );
 }

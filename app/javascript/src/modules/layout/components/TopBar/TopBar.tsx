@@ -1,26 +1,31 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Theme, makeStyles, createStyles, useTheme } from '@material-ui/core/styles';
+import {
+  Theme,
+  makeStyles,
+  createStyles,
+  useTheme,
+} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import InputBase from '@material-ui/core/InputBase';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import { useMediaQuery } from '@material-ui/core';
+import {useMediaQuery} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined'
+import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 
-import { useGlobalState } from '../../../../store'
-import DefaultUserImage from '../../../../components/DefaultUserImage'
+import {useGlobalState} from '../../../../store';
+import DefaultUserImage from '../../../../components/DefaultUserImage';
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 
-const drawerWidth = 210
-const miniDrawerWidth = 72
-const topBarHeight = 64
+const drawerWidth = 210;
+const miniDrawerWidth = 72;
+const topBarHeight = 64;
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
@@ -33,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
-      })
+      }),
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -44,14 +49,14 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
     },
     toolbar: {
-      height: topBarHeight
+      height: topBarHeight,
     },
     search: {
       position: 'relative',
       marginRight: theme.spacing(2),
       marginLeft: 0,
       width: '100%',
-      height: '36px', 
+      height: '36px',
       background: '#F2F2F2',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
@@ -73,14 +78,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inputRoot: {
       width: '100%',
-      height: 33, 
+      height: 33,
       fontFamily: 'Montserrat',
       fontSize: '12px',
-      fontWeight: 'bold', 
-      color: 'black'
+      fontWeight: 'bold',
+      color: 'black',
     },
     inputInput: {
-      padding: '10px 8px 8px 48px', 
+      padding: '10px 8px 8px 48px',
       transition: theme.transitions.create('width'),
       width: '100%',
       [theme.breakpoints.up('md')]: {
@@ -89,58 +94,57 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     inviteButton: {
       width: '72px',
-      height: '36px', 
+      height: '36px',
       background: '#3A84FF',
       borderRadius: '3px',
       fontFamily: 'Montserrat',
-      fontWeight: 'bold', 
+      fontWeight: 'bold',
       fontSize: '12px',
       color: '#FFFFFF',
       textAlign: 'center',
       textTransform: 'capitalize',
       '&:hover': {
         opacity: 0.7,
-        background: '#3A84FF'
-      }
+        background: '#3A84FF',
+      },
     },
     appBarItemSize: {
       width: '32px',
-      height: '32px'
+      height: '32px',
     },
     roundImage: {
-      width: '30px', 
-      height: '30px', 
-      borderRadius: '50%'
+      width: '30px',
+      height: '30px',
+      borderRadius: '50%',
     },
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     mr39: {
-      marginRight: '39px'
-    }    
+      marginRight: '39px',
+    },
   })
 );
 
-  
 export default function TopBar(props: {open: boolean}) {
-  const { open } = props;
+  const {open} = props;
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-    defaultMatches: true
+    defaultMatches: true,
   });
-  const { state, dispatch } = useGlobalState()
+  const {state, dispatch} = useGlobalState();
 
   return (
-    <AppBar 
+    <AppBar
       className={clsx(classes.appBar, open && classes.appBarShift)}
-      position="fixed" 
+      position="fixed"
       elevation={0}
     >
       <Toolbar className={classes.toolbar} disableGutters>
         <Dropdown />
 
-        { isDesktop ? (
+        {isDesktop ? (
           <div className={clsx(classes.search, classes.grow)}>
             <div className={classes.searchIcon}>
               <SearchIcon fontSize="small" />
@@ -151,18 +155,20 @@ export default function TopBar(props: {open: boolean}) {
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{"aria-label": "search"}}
+              inputProps={{'aria-label': 'search'}}
             />
-          </div> ) : (
-            <div className={classes.grow} />
-          )
-        }
+          </div>
+        ) : (
+          <div className={classes.grow} />
+        )}
 
         <Typography variant="inherit">
-          <Button className={classes.inviteButton}>
-            Invite
-          </Button>
-          <IconButton aria-label="show 4 new notifications" color="inherit" style={{marginLeft: "6px"}}>
+          <Button className={classes.inviteButton}>Invite</Button>
+          <IconButton
+            aria-label="show 4 new notifications"
+            color="inherit"
+            style={{marginLeft: '6px'}}
+          >
             <StyledBadge badgeContent={4} color="secondary">
               <NotificationsIcon className={classes.appBarItemSize} />
             </StyledBadge>
@@ -172,13 +178,17 @@ export default function TopBar(props: {open: boolean}) {
             aria-label="account of current user"
             color="inherit"
           >
-            { state.currentUser.profileUrl ?
-              <img src={state.currentUser.profileUrl} className={classes.roundImage} /> :
+            {state.currentUser.profileUrl ? (
+              <img
+                src={state.currentUser.profileUrl}
+                className={classes.roundImage}
+              />
+            ) : (
               <DefaultUserImage userName={state.currentUser.fullName} />
-            }
+            )}
           </IconButton>
         </Typography>
       </Toolbar>
     </AppBar>
-  )
+  );
 }

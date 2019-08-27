@@ -6,19 +6,19 @@ import {
 
 export const useUpdateTeamMember = createMutationHook<
   UpdateTeamMember,
-  UpdateTeamMemberVariables 
-  >(gql`
+  UpdateTeamMemberVariables
+>(gql`
   mutation UpdateTeamMember(
-    $id: ID!,
-    $fullName: String!,
-    $companyId: ID!, 
-    $role: ID!,
+    $id: ID!
+    $fullName: String!
+    $companyId: ID!
+    $role: ID!
   ) {
     updateTeamMember(
-      id: $id, 
-      fullName: $fullName, 
-      companyId: $companyId, 
-      role: $role,
+      id: $id
+      fullName: $fullName
+      companyId: $companyId
+      role: $role
     ) {
       success
       errors {
@@ -47,5 +47,3 @@ export const useUpdateTeamMember = createMutationHook<
     }
   }
 `);
-
-

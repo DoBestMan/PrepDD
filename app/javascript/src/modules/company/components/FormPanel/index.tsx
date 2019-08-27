@@ -1,3 +1,3 @@
-import FormPanel from './FormPanel'
+import FormPanel from './FormPanel';
 
-export default FormPanel
+export default FormPanel;

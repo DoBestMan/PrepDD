@@ -1,7 +1,5 @@
 import {createQueryHook, gql} from '../graphqlHelpers';
-import {
-  UserDetails,
-} from './__generated__/UserDetails';
+import {UserDetails} from './__generated__/UserDetails';
 
 export const useUserDetails = createQueryHook<UserDetails, {}>(gql`
   query UserDetails($id: ID!) {

@@ -14,7 +14,7 @@ import {
 } from 'react-google-login';
 import {Link as RouterLink, navigate} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
 import Paper from '@material-ui/core/Paper';
@@ -25,7 +25,7 @@ import CircleChecked from '@material-ui/icons/CheckCircleOutline';
 import CircleCheckedFilled from '@material-ui/icons/CheckCircle';
 import CircleUnchecked from '@material-ui/icons/RadioButtonUnchecked';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       marginTop: theme.spacing(8),

@@ -1,3 +1,3 @@
-import TeamManagement from './TeamManagement'
+import TeamManagement from './TeamManagement';
 
-export default TeamManagement
+export default TeamManagement;

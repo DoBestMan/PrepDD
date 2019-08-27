@@ -1,4 +1,3 @@
-
 import {createMutationHook, gql} from '../graphqlHelpers';
 import {
   UpdateUserData,
@@ -8,17 +7,17 @@ import {
 export const useUpdateUserData = createMutationHook<
   UpdateUserData,
   UpdateUserDataVariables
-  >(gql`
+>(gql`
   mutation UpdateUserData(
-    $email: String!,
-    $fullName: String!,
-    $displayName: String!,
-    $lastViewedCompanyId: ID, 
+    $email: String!
+    $fullName: String!
+    $displayName: String!
+    $lastViewedCompanyId: ID
   ) {
     updateUserData(
-      email: $email, 
-      fullName: $fullName, 
-      displayName: $displayName, 
+      email: $email
+      fullName: $fullName
+      displayName: $displayName
       lastViewedCompanyId: $lastViewedCompanyId
     ) {
       errors {
@@ -29,5 +28,3 @@ export const useUpdateUserData = createMutationHook<
     }
   }
 `);
-
-

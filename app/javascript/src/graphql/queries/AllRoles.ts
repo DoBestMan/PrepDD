@@ -1,7 +1,5 @@
 import {createQueryHook, gql} from '../graphqlHelpers';
-import {
-  AllRoles,
-} from './__generated__/AllRoles';
+import {AllRoles} from './__generated__/AllRoles';
 
 export const useAllRoles = createQueryHook<AllRoles, {}>(gql`
   query AllRoles {

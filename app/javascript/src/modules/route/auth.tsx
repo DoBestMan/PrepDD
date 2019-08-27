@@ -1,7 +1,7 @@
 import LoadingFallback from '../../components/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter} from '@reach/router';
-import { LinkedInPopUp } from 'react-linkedin-login-oauth2';
+import {LinkedInPopUp} from 'react-linkedin-login-oauth2';
 
 const CreateCompanyPage = lazy(() => import('../auth/CreateCompanyPage'));
 const SignUpPage = lazy(() => import('../auth/SignUpPage'));

@@ -38,5 +38,3 @@ class Mutations::RemoveTeamMember < GraphQL::Schema::Mutation
     response
   end
 end
-
-
