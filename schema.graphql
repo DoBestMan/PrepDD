@@ -118,6 +118,11 @@ type Query {
   roles: [Role!]!
 
   """
+  Find companies by user email
+  """
+  searchUserCompanies(email: String!): [Company!]!
+
+  """
   Find a team by id
   """
   team(id: ID!): Team!

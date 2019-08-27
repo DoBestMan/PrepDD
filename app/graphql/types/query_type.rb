@@ -8,9 +8,9 @@ module Types
           null: true, description: 'The currently logged in user'
 
     field :user, UserType, null: true do
-      description 'Find a user by id' 
+      description 'Find a user by id'
       argument :id, ID, required: true
-      end
+    end
 
     field :user_details, UserDetailsType, null: true do
       description 'Find a user by id'
@@ -37,11 +37,11 @@ module Types
     field :team, TeamType, null: false do
       description 'Find a team by id'
       argument :id, ID, required: true
-      end
+    end
 
     field :roles, [RoleType], null: false do
       description 'Return All available roles'
-      end
+    end
 
     field :user, UserType, null: false do
       description 'Return details of a user'
@@ -54,6 +54,11 @@ module Types
       argument :TeamId, ID, required: false
       argument :limit, Integer, required: false
       argument :offset, Integer, required: false
+    end
+
+    field :search_user_companies, [CompanyType], null: false do
+      description 'Find companies by user email'
+      argument :email, String, required: true
     end
 
     def company_users(company_id:, team_id: nil, limit:, offset:)
@@ -77,10 +82,6 @@ module Types
       { id: 'user details', user: user, role: role }
     end
 
-    def user(id:)
-      User.find(id)
-    end
-
     def user_for_password_reset(token:)
       User.where(reset_password_token: token).first
     end
@@ -99,6 +100,11 @@ module Types
 
     def user(id:)
       User.find(id)
+    end
+
+    def search_user_companies(email:)
+      user = User.where("email LIKE ?", "%#{email}%").first
+      user.companies
     end
   end
 end
