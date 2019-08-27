@@ -1,11 +1,11 @@
-import React from 'react'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import TableHead from '@material-ui/core/TableHead'
+import React from 'react';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import TableHead from '@material-ui/core/TableHead';
 
-import StyledTableRow from '../styled/StyledTableRow'
-import StyledTableCell from '../styled/StyledTableCell'
+import StyledTableRow from '../styled/StyledTableRow';
+import StyledTableCell from '../styled/StyledTableCell';
 
-type roleType = 'Member' | 'Admin'
+type roleType = 'Member' | 'Admin';
 
 interface Company {
   url: string;
@@ -25,37 +25,33 @@ interface HeadRows {
 }
 
 const headRows: HeadRows[] = [
-  { id: 'name', label: 'Name'}, 
-  { id: 'companies', label: 'Company(s)'},
-  { id: 'teams', label: 'Team(s)'}, 
-  { id: 'role', label: 'Role'}
-]
+  {id: 'name', label: 'Name'},
+  {id: 'companies', label: 'Company(s)'},
+  {id: 'teams', label: 'Team(s)'},
+  {id: 'role', label: 'Role'},
+];
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       '& th:first-child': {
-        paddingLeft: '31px'
-      }
-    }
+        paddingLeft: '31px',
+      },
+    },
   })
-)
+);
 
-export default function TableHeader() {  
-  const classes = useStyles()
+export default function TableHeader() {
+  const classes = useStyles();
   return (
     <TableHead className={classes.root}>
       <StyledTableRow>
         {headRows.map(row => (
-          <StyledTableCell
-            key={row.id}
-            align="left"
-            style={{zIndex: 1}}
-          >
+          <StyledTableCell key={row.id} align="left" style={{zIndex: 1}}>
             {row.label}
           </StyledTableCell>
         ))}
       </StyledTableRow>
     </TableHead>
-  )
+  );
 }

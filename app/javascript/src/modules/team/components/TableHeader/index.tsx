@@ -1,3 +1,3 @@
-import TableHeader from './TableHeader'
+import TableHeader from './TableHeader';
 
-export default TableHeader
+export default TableHeader;

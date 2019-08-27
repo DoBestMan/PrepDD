@@ -1,7 +1,5 @@
 import {createQueryHook, gql} from '../graphqlHelpers';
-import {
-  CompanySettings,
-} from './__generated__/CompanySettings';
+import {CompanySettings} from './__generated__/CompanySettings';
 
 export const useCompanySettings = createQueryHook<CompanySettings, {}>(gql`
   query CompanySettings($id: ID!) {

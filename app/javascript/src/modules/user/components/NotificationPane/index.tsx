@@ -1,3 +1,3 @@
-import NotificationPane from './NotificationPane'
+import NotificationPane from './NotificationPane';
 
-export default NotificationPane
+export default NotificationPane;

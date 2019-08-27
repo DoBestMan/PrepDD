@@ -16,10 +16,17 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(id: nil, name: nil, parent_name: nil, broker_name: nil, automatic_pdf: nil,
-              dynamic_watermarking: nil, preview_only: nil, delete_broker_id: nil,
-              delete_parent_id: nil)
-
+  def resolve(
+    id: nil,
+    name: nil,
+    parent_name: nil,
+    broker_name: nil,
+    automatic_pdf: nil,
+    dynamic_watermarking: nil,
+    preview_only: nil,
+    delete_broker_id: nil,
+    delete_parent_id: nil
+  )
     response = { errors: [] }
     company = Company.find(id)
 
@@ -33,7 +40,9 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
     if parent_name.present?
       parent = Company.find_by_name(parent_name)
       if parent
-        ParentCompany.create(child_company_id: company&.id, parent_company_id: parent.id)
+        ParentCompany.create(
+          child_company_id: company&.id, parent_company_id: parent.id
+        )
       else
         #ToDo Create Parent Company & User
       end
@@ -42,7 +51,9 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
     if broker_name.present?
       broker = Company.find_by_name(broker_name)
       if broker
-        BrokerCompany.create(child_broker_id: company&.id, parent_broker_id: broker.id)
+        BrokerCompany.create(
+          child_broker_id: company&.id, parent_broker_id: broker.id
+        )
       else
         #ToDo Create Broker Company & User
       end

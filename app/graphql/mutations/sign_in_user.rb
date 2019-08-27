@@ -11,7 +11,14 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(email: nil, password: nil, social_login: nil, token_id: nil, provider: nil, uu_id: nil)
+  def resolve(
+    email: nil,
+    password: nil,
+    social_login: nil,
+    token_id: nil,
+    provider: nil,
+    uu_id: nil
+  )
     response = { errors: [] }
 
     if context[:controller].user_signed_in?
@@ -23,7 +30,7 @@ class Mutations::SignInUser < GraphQL::Schema::Mutation
     if social_login.present? && token_id
       if provider == 'linkedIn'
         profile = User.linkedin_auth(token_id)
-        uu_id = profile["id"]
+        uu_id = profile['id']
       end
       user = User.find_by_uuid(uu_id)
       user&.update(token_id: token_id)

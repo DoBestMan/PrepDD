@@ -1,73 +1,78 @@
-import React, { useState, useEffect } from 'react'
-import idx from 'idx'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import React, {useState, useEffect} from 'react';
+import idx from 'idx';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 
-import { useGlobalState } from '../../store'
-import { useCompanySettings } from '../../graphql/queries/CompanySettings'
-import { useUpdateCompany } from '../../graphql/mutations/UpdateCompany'
-import { CompanySettings_company } from '../../graphql/queries/__generated__/CompanySettings'
+import {useGlobalState} from '../../store';
+import {useCompanySettings} from '../../graphql/queries/CompanySettings';
+import {useUpdateCompany} from '../../graphql/mutations/UpdateCompany';
+import {CompanySettings_company} from '../../graphql/queries/__generated__/CompanySettings';
 
-import FormPanel from './components/FormPanel'
-import UploadPanel from './components/UploadPanel'
+import FormPanel from './components/FormPanel';
+import UploadPanel from './components/UploadPanel';
 
-const panelWidth = 1095
+const panelWidth = 1095;
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex', 
+      display: 'flex',
       height: 'calc(100vh - 64px)',
-      margin: `72px calc((100% - ${panelWidth}px) / 2) 72px calc((100% - ${panelWidth}px) / 2)`
-    }, 
+      margin: `72px calc((100% - ${panelWidth}px) / 2) 72px calc((100% - ${panelWidth}px) / 2)`,
+    },
     settingsPanel: {
       display: 'block',
-      width: '772px'
+      width: '772px',
     },
     uploadPanel: {
-      display: 'block', 
-      marginLeft: '72px'
+      display: 'block',
+      marginLeft: '72px',
     },
   })
-)
+);
 
-export default function CompanySettings(props: {path?: string;}) {
-  const classes = useStyles()
-  const { state } = useGlobalState()
-  const [addedParent, setAddedParent] = useState<string>("")
-  const [addedBroker, setAddedBroker] = useState<string>("")
-  const [deletedParent, setDeletedParent] = useState<string>("")
-  const [deletedBroker, setDeletedBroker] = useState<string>("")
+export default function CompanySettings(props: {path?: string}) {
+  const classes = useStyles();
+  const {state} = useGlobalState();
+  const [addedParent, setAddedParent] = useState<string>('');
+  const [addedBroker, setAddedBroker] = useState<string>('');
+  const [deletedParent, setDeletedParent] = useState<string>('');
+  const [deletedBroker, setDeletedBroker] = useState<string>('');
   const [company, setCompany] = useState<CompanySettings_company>({
-    __typename: "Company",
+    __typename: 'Company',
     id: '',
     name: '',
     logoUrl: '',
-    parents: null, 
-    brokers: null, 
-    totalUsers: 0, 
+    parents: null,
+    brokers: null,
+    totalUsers: 0,
     totalStorage: 0,
-    subscription: null, 
-    autoPdf: false, 
-    autoWatermark: false, 
-    previewOnly: false
-  })
+    subscription: null,
+    autoPdf: false,
+    autoWatermark: false,
+    previewOnly: false,
+  });
 
-  const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
-  const [updateCompany, {
-    loading: updateCompanyLoading, 
-    data: updateCompanyRes, 
-    error: updateCompanyError
-  }] = useUpdateCompany({
-    id: company.id, 
-    name: company.name, 
-    parentName: addedParent, 
-    brokerName: addedBroker, 
-    autoPdf: company.autoPdf as boolean, 
-    autoWatermark: company.autoWatermark as boolean, 
+  const {data, error, loading} = useCompanySettings({
+    id: state.selectedCompany,
+  });
+  const [
+    updateCompany,
+    {
+      loading: updateCompanyLoading,
+      data: updateCompanyRes,
+      error: updateCompanyError,
+    },
+  ] = useUpdateCompany({
+    id: company.id,
+    name: company.name,
+    parentName: addedParent,
+    brokerName: addedBroker,
+    autoPdf: company.autoPdf as boolean,
+    autoWatermark: company.autoWatermark as boolean,
     previewOnly: company.previewOnly as boolean,
-    deleteParentId: deletedParent, 
-    deleteBrokerId: deletedBroker
-  })  
+    deleteParentId: deletedParent,
+    deleteBrokerId: deletedBroker,
+  });
 
   useEffect(() => {
     const companyData = idx(data, data => data.company);
@@ -75,29 +80,38 @@ export default function CompanySettings(props: {path?: string;}) {
     if (loading || !companyData) return;
 
     setCompany({
-      ...companyData
-    })
-  }, [loading, idx(data, data => data.company)])
+      ...companyData,
+    });
+  }, [loading, idx(data, data => data.company)]);
 
   useEffect(() => {
-    const companyData = idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)
+    const companyData = idx(
+      updateCompanyRes,
+      updateCompanyRes => updateCompanyRes.updateCompanySettings.company
+    );
 
     if (loading || !companyData) return;
 
     setCompany({
-      ...companyData
-    })
-    setAddedParent("")
-    setAddedBroker("")
-    setDeletedParent("")
-    setDeletedBroker("")
-  }, [updateCompanyLoading, idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)])
+      ...companyData,
+    });
+    setAddedParent('');
+    setAddedBroker('');
+    setDeletedParent('');
+    setDeletedBroker('');
+  }, [
+    updateCompanyLoading,
+    idx(
+      updateCompanyRes,
+      updateCompanyRes => updateCompanyRes.updateCompanySettings.company
+    ),
+  ]);
 
   return (
     <div className={classes.root}>
       <div className={classes.settingsPanel}>
-        <FormPanel 
-          company={company} 
+        <FormPanel
+          company={company}
           setCompany={setCompany}
           setAddedParent={setAddedParent}
           setAddedBroker={setAddedBroker}
@@ -107,11 +121,8 @@ export default function CompanySettings(props: {path?: string;}) {
         />
       </div>
       <div className={classes.uploadPanel}>
-        <UploadPanel
-          company={company}
-          setCompany={setCompany}
-        />
+        <UploadPanel company={company} setCompany={setCompany} />
       </div>
     </div>
-  )
+  );
 }

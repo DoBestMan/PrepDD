@@ -1,6 +1,6 @@
 class Api::CompaniesController < ApiController
   skip_before_action :verify_authenticity_token
-  before_action :set_company, only: %i[ update_log ]
+  before_action :set_company, only: %i[update_log]
 
   def update_log
     logo = params[:logo]

@@ -1,4 +1,3 @@
-
 import {createMutationHook, gql} from '../graphqlHelpers';
 import {
   AddTeamMember,
@@ -8,19 +7,19 @@ import {
 export const useAddTeamMember = createMutationHook<
   AddTeamMember,
   AddTeamMemberVariables
-  >(gql`
+>(gql`
   mutation AddTeamMember(
-    $email: String!,
-    $fullName: String!,
-    $role: ID!, 
-    $team: String!,
+    $email: String!
+    $fullName: String!
+    $role: ID!
+    $team: String!
     $companyId: ID!
   ) {
     addTeamMember(
-      email: $email, 
-      fullName: $fullName, 
-      role: $role, 
-      team: $team,
+      email: $email
+      fullName: $fullName
+      role: $role
+      team: $team
       companyId: $companyId
     ) {
       errors {
@@ -28,7 +27,7 @@ export const useAddTeamMember = createMutationHook<
         message
       }
       success
-      user{
+      user {
         id
         fullName
         profileUrl
@@ -50,5 +49,3 @@ export const useAddTeamMember = createMutationHook<
     }
   }
 `);
-
-

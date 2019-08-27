@@ -1,13 +1,13 @@
-import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
-import Tab from '@material-ui/core/Tab'
+import React from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import Tab from '@material-ui/core/Tab';
 
 const StyledTab = withStyles(theme => ({
   root: {
-    minWidth: 36, 
-    padding: 0, 
+    minWidth: 36,
+    padding: 0,
     fontSize: '12px',
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
     color: '#606060',
     fontFamily: 'Montserrat',
     lineHeight: '20px',
@@ -15,16 +15,16 @@ const StyledTab = withStyles(theme => ({
     marginLeft: '24px',
     '&:hover': {
       color: '#40a9ff',
-      opacity: 1
+      opacity: 1,
     },
     '&$selected': {
-      color: '#3A84FF'
+      color: '#3A84FF',
     },
     '&:focus': {
-      color: '#40a9ff'      
-    }
+      color: '#40a9ff',
+    },
   },
-  selected: {}
-}))((props: any) => <Tab disableRipple {...props} />)
+  selected: {},
+}))((props: any) => <Tab disableRipple {...props} />);
 
-export default StyledTab
+export default StyledTab;

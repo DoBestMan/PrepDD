@@ -7,13 +7,13 @@ import * as React from 'react';
 import {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {Link as RouterLink, navigate} from '@reach/router';
 
-import {useCompanyCreate} from "../../graphql/mutations/CreateCompany";
+import {useCompanyCreate} from '../../graphql/mutations/CreateCompany';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       marginTop: theme.spacing(8),
@@ -34,20 +34,18 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     companyTitle: {
       textAlign: 'center',
-    }
+    },
   })
 );
 
 export default function CreateCompanyPage(_props: {path?: string}) {
-
   const classes = useStyles({});
 
   const [state, setState] = useState<{
-    name: string
+    name: string;
   }>({
-    name: ''
+    name: '',
   });
-
 
   const [createCompany, {data}] = useCompanyCreate({
     name: state.name,
@@ -55,8 +53,8 @@ export default function CreateCompanyPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.createCompany.success)) {
-      console.log(data)
-      navigate('/signup?companyName='+ state.name);
+      console.log(data);
+      navigate('/signup?companyName=' + state.name);
     }
   }, [data]);
 
@@ -92,8 +90,7 @@ export default function CreateCompanyPage(_props: {path?: string}) {
     <Container component="main" maxWidth="xl">
       <div className={classes.paper}>
         <Grid container spacing={5}>
-          <Grid item xs={4}>
-          </Grid>
+          <Grid item xs={4}></Grid>
           <Grid item xs={4}>
             <div className={classes.companyTitle}>
               <Typography component="h1" variant="h5">

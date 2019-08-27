@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   root to: 'welcome#index'
 
-# Redirect all html requests to the root so they can be handled by javascript
+  # Redirect all html requests to the root so they can be handled by javascript
   get '*path',
       to: 'welcome#index',
       constraints: ->(request) { !request.xhr? && request.format.html? }

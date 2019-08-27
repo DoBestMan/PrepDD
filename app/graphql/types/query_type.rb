@@ -8,9 +8,9 @@ module Types
           null: true, description: 'The currently logged in user'
 
     field :user, UserType, null: true do
-      description 'Find a user by id' 
+      description 'Find a user by id'
       argument :id, ID, required: true
-      end
+    end
 
     field :user_details, UserDetailsType, null: true do
       description 'Find a user by id'
@@ -37,11 +37,11 @@ module Types
     field :team, TeamType, null: false do
       description 'Find a team by id'
       argument :id, ID, required: true
-      end
+    end
 
     field :roles, [RoleType], null: false do
       description 'Return All available roles'
-      end
+    end
 
     field :user, UserType, null: false do
       description 'Return details of a user'
@@ -94,7 +94,7 @@ module Types
     end
 
     def roles
-      Role.all.where("id != ?", 1)
+      Role.all.where('id != ?', 1)
     end
 
     def user(id:)

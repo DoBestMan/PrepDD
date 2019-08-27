@@ -1,34 +1,34 @@
-import React from 'react'
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
-import Paper from '@material-ui/core/Paper'
-import GetApp from '@material-ui/icons/GetApp'
+import React from 'react';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import GetApp from '@material-ui/icons/GetApp';
 
-const Excel = require('images/dummy/logos/excel.svg')
+const Excel = require('images/dummy/logos/excel.svg');
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '0px 24px 0px 24px'
+      padding: '0px 24px 0px 24px',
     },
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     flexAttr: {
-      display: 'flex'
+      display: 'flex',
     },
     title: {
-      marginLeft: '10px'
+      marginLeft: '10px',
     },
     modify: {
       fontFamily: 'Montserrat',
       fontSize: '12px',
       color: '#606060',
       lineHeight: '20px',
-      marginRight: '20px'
+      marginRight: '20px',
     },
   })
 );
@@ -36,41 +36,41 @@ const useStyles = makeStyles((theme: Theme) =>
 const rows = [
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
+    modified: '12 hours ago',
   },
   {
     title: '_title of excel doc_',
-    modified: '12 hours ago'
-  }
-]
+    modified: '12 hours ago',
+  },
+];
 
 interface FilesPaneProps {
   children?: React.ReactNode;
@@ -79,12 +79,12 @@ interface FilesPaneProps {
 }
 
 export default function FilesPane(props: FilesPaneProps) {
-  const { children, value, index, ...other } = props
+  const {children, value, index, ...other} = props;
 
-  const classes = useStyles()
+  const classes = useStyles();
 
   return (
-    <Paper 
+    <Paper
       className={classes.root}
       role="tabpanel"
       hidden={value !== index}
@@ -111,5 +111,5 @@ export default function FilesPane(props: FilesPaneProps) {
         </TableBody>
       </Table>
     </Paper>
-  )
+  );
 }

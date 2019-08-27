@@ -1,19 +1,16 @@
-import React from 'react'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import TableSortLabel from '@material-ui/core/TableSortLabel'
-import useStyles from '../style'
+import React from 'react';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import useStyles from '../style';
 
-import {
-  StyledTableCell, 
-  StyledCheckBox
-} from './styled'
+import {StyledTableCell, StyledCheckBox} from './styled';
 
 const Drag = require('images/dummy/logos/drag.svg');
 
 interface Data {
   company: string;
-  name: string; 
+  name: string;
   status: string;
   statusText: string;
   modified: string;
@@ -25,38 +22,46 @@ interface HeadRow {
 }
 
 const headRows: HeadRow[] = [
-  { id: 'company', label: 'Company' },
-  { id: 'name', label: 'Name' },
-  { id: 'statusText', label: 'Status' },
-  { id: 'modified', label: 'Modified' }
-]
+  {id: 'company', label: 'Company'},
+  {id: 'name', label: 'Name'},
+  {id: 'statusText', label: 'Status'},
+  {id: 'modified', label: 'Modified'},
+];
 
-type Order = 'asc' | 'desc'
+type Order = 'asc' | 'desc';
 
 interface EnhancedTableHeadProps {
   classes: ReturnType<typeof useStyles>;
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+  onRequestSort: (
+    event: React.MouseEvent<unknown>,
+    property: keyof Data
+  ) => void;
+  onSelectAllClick: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
 }
 
 const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
-  const { 
-    classes, 
-    order, 
-    orderBy, 
-    numSelected, 
-    rowCount, 
+  const {
+    classes,
+    order,
+    orderBy,
+    numSelected,
+    rowCount,
     onRequestSort,
-    onSelectAllClick, 
-  } = props
+    onSelectAllClick,
+  } = props;
 
-  const createSortHandler = (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-    onRequestSort(event, property)
-  }
+  const createSortHandler = (property: keyof Data) => (
+    event: React.MouseEvent<unknown>
+  ) => {
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>
@@ -64,7 +69,7 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
         <StyledTableCell padding="checkbox">
           <div className={classes.flex}>
             <img src={Drag} alt="Drag" className={classes.invisibleButton} />
-            <StyledCheckBox 
+            <StyledCheckBox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
@@ -94,7 +99,7 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
         ))}
       </TableRow>
     </TableHead>
-  )
-}
+  );
+};
 
-export default EnhancedTableHead
+export default EnhancedTableHead;

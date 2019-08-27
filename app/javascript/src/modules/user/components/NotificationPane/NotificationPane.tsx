@@ -1,32 +1,27 @@
-import React from 'react'
-import clsx from 'clsx'
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
-import {
-  Paper, 
-  Typography,
-  Select,
-  MenuItem
-} from '@material-ui/core'
+import React from 'react';
+import clsx from 'clsx';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import {Paper, Typography, Select, MenuItem} from '@material-ui/core';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      paddingTop: '36px'
-    }, 
+      paddingTop: '36px',
+    },
     invisible: {
-      display: 'none'
+      display: 'none',
     },
     title: {
-      fontFamily: 'Montserrat', 
-      fontSize: '24px', 
-      fontWeight: 'bold', 
-      color: '#2C2C2C'
+      fontFamily: 'Montserrat',
+      fontSize: '24px',
+      fontWeight: 'bold',
+      color: '#2C2C2C',
     },
     settings: {
-      display: 'flex'
-    }
+      display: 'flex',
+    },
   })
-)
+);
 
 interface NotificationPaneProps {
   value?: number;
@@ -34,12 +29,12 @@ interface NotificationPaneProps {
 }
 
 export default function NotificationPane(props: NotificationPaneProps) {
-  const { value, index } = props
-  const classes = useStyles()
+  const {value, index} = props;
+  const classes = useStyles();
 
   return (
     <Paper
-      className={clsx(classes.root, (value !== index) && classes.invisible)}
+      className={clsx(classes.root, value !== index && classes.invisible)}
       aria-labelledby="Notification Settings"
       elevation={0}
     >
@@ -47,5 +42,5 @@ export default function NotificationPane(props: NotificationPaneProps) {
         Alert Notifications
       </Typography>
     </Paper>
-  )
+  );
 }

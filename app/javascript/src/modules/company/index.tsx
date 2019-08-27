@@ -1,3 +1,3 @@
-import CompanySettings from './CompanySettings'
+import CompanySettings from './CompanySettings';
 
-export default CompanySettings
+export default CompanySettings;

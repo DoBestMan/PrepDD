@@ -10,16 +10,14 @@ class Mutations::CreateTeam < GraphQL::Schema::Mutation
     response = { errors: [] }
 
     if !context[:controller].user_signed_in?
-      response[:errors].push({ path: 'root', message: 'Not authorized to do it.' })
+      response[:errors].push(
+        { path: 'root', message: 'Not authorized to do it.' }
+      )
       response[:success] = false
       return response
     end
 
-    team = Team.create(
-                 name: name,
-                 company_id: company_id,
-                 is_active: true
-    )
+    team = Team.create(name: name, company_id: company_id, is_active: true)
 
     team.errors.messages.each do |path, messages|
       messages.each do |message|

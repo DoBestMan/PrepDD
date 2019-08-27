@@ -7,28 +7,28 @@ import {
 export const useUpdateCompany = createMutationHook<
   UpdateCompany,
   UpdateCompanyVariables
-  >(gql`
+>(gql`
   mutation UpdateCompany(
-    $id: ID!,
-    $name: String!, 
-    $parentName: String, 
-    $brokerName: String, 
-    $deleteParentId: ID, 
-    $deleteBrokerId: ID, 
-    $autoPdf: Boolean!, 
-    $autoWatermark: Boolean!, 
+    $id: ID!
+    $name: String!
+    $parentName: String
+    $brokerName: String
+    $deleteParentId: ID
+    $deleteBrokerId: ID
+    $autoPdf: Boolean!
+    $autoWatermark: Boolean!
     $previewOnly: Boolean!
   ) {
     updateCompanySettings(
-      id: $id, 
-      name: $name,
-      parentName: $parentName, 
-      brokerName: $brokerName,  
-      automaticPdf: $autoPdf, 
-      dynamicWatermarking: $autoWatermark, 
+      id: $id
+      name: $name
+      parentName: $parentName
+      brokerName: $brokerName
+      automaticPdf: $autoPdf
+      dynamicWatermarking: $autoWatermark
       previewOnly: $previewOnly
-      deleteParentId: $deleteParentId, 
-      deleteBrokerId: $deleteBrokerId, 
+      deleteParentId: $deleteParentId
+      deleteBrokerId: $deleteBrokerId
     ) {
       errors {
         path
@@ -58,10 +58,8 @@ export const useUpdateCompany = createMutationHook<
         }
         autoPdf
         autoWatermark
-        previewOnly        
+        previewOnly
       }
     }
   }
 `);
-
-

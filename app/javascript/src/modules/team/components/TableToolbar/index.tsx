@@ -1,3 +1,3 @@
-import TableToolbar from './TableToolbar'
+import TableToolbar from './TableToolbar';
 
-export default TableToolbar
+export default TableToolbar;

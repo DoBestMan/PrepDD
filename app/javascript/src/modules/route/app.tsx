@@ -11,7 +11,7 @@ const ListRoutes = lazy(() => import('./list'));
 export default function Router(props: {path: string}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <Layout >
+      <Layout>
         <ReachRouter>
           <CompanyRoutes path="/company/*" />
           <TeamRoutes path="/team/*" />

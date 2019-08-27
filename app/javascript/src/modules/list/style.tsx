@@ -1,89 +1,89 @@
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
-const panelWidth = 539
+const panelWidth = 539;
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      width: '100%'
+      width: '100%',
     },
     flex: {
-      display: 'flex'
+      display: 'flex',
     },
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     alignCenter: {
-      alignItems: 'center'
+      alignItems: 'center',
     },
     paper: {
       width: '100%',
       marginBottom: theme.spacing(2),
       transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp, 
-        duration: theme.transitions.duration.leavingScreen
-      })
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
     paperShift: {
       width: `calc(100% - ${panelWidth}px)`,
       transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut, 
-        duration: theme.transitions.duration.enteringScreen
-      })
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
     table: {
-      minWidth: 750
+      minWidth: 750,
     },
     tableWrapper: {
       overflowX: 'auto',
     },
     fixedWidth: {
-      width: 120
+      width: 120,
     },
     visuallyHidden: {
-      border: 0, 
+      border: 0,
       clip: 'rect(0 0 0 0)',
-      height: 1, 
-      margin: -1, 
+      height: 1,
+      margin: -1,
       overflow: 'hidden',
-      padding: 0, 
-      position: 'absolute', 
-      top: 20, 
-      width: 1
+      padding: 0,
+      position: 'absolute',
+      top: 20,
+      width: 1,
     },
     invisibleButton: {
-      visibility: 'hidden'
+      visibility: 'hidden',
     },
     visibleButton: {
       visibility: 'visible',
-      float: 'right'
+      float: 'right',
     },
     position: {
-      marginTop: '9px'
+      marginTop: '9px',
     },
     statusBadge: {
       borderRadius: '50%',
       width: '10px',
       height: '10px',
-      marginTop: '5px'
+      marginTop: '5px',
     },
     high: {
       backgroundColor: '#2A894B',
     },
     medium: {
-      backgroundColor: '#1969A5'
+      backgroundColor: '#1969A5',
     },
     low: {
-      backgroundColor: '#81AFFF'
+      backgroundColor: '#81AFFF',
     },
     textFlow: {
-      display: 'inline-block', 
+      display: 'inline-block',
       width: 'calc(80%)',
       whiteSpace: 'nowrap',
-      overflow: 'hidden', 
-      textOverflow: 'ellipsis'
-    }
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
   })
 );
 
-export default useStyles
+export default useStyles;

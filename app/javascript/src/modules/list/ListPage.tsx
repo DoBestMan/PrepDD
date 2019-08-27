@@ -248,15 +248,9 @@ export default function List(props: {path?: string}) {
                       <StyledTableCell padding="checkbox">
                         <div className={classes.flex}>
                           {isItemSelected ? (
-                            <img
-                              src={DragSelect}
-                              alt="Drag"
-                            />
+                            <img src={DragSelect} alt="Drag" />
                           ) : (
-                            <img
-                              src={Drag}
-                              alt="Drag"
-                            />
+                            <img src={Drag} alt="Drag" />
                           )}
                           <StyledCheckBox
                             checked={isItemSelected}

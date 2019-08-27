@@ -1,15 +1,15 @@
-import StyledButton from './StyledButton'
-import StyledTab from './StyledTab'
-import StyledTableCell from './StyledTableCell'
-import StyledTableRow from './StyledTableRow'
-import StyledTabs from './StyledTabs'
-import StyledCheckBox from '../../../../components/StyledCheckBox'
+import StyledButton from './StyledButton';
+import StyledTab from './StyledTab';
+import StyledTableCell from './StyledTableCell';
+import StyledTableRow from './StyledTableRow';
+import StyledTabs from './StyledTabs';
+import StyledCheckBox from '../../../../components/StyledCheckBox';
 
 export {
-  StyledButton, 
-  StyledTab, 
-  StyledTableCell, 
-  StyledTableRow, 
+  StyledButton,
+  StyledTab,
+  StyledTableCell,
+  StyledTableRow,
   StyledTabs,
-  StyledCheckBox
-}
+  StyledCheckBox,
+};

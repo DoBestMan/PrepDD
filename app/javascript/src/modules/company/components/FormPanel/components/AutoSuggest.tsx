@@ -7,22 +7,22 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Popper from '@material-ui/core/Popper';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 
 interface OptionType {
   label: string;
 }
 
 const suggestions: OptionType[] = [
-  { label: 'G2 Crowd' },
-  { label: 'PrepDD' },
-  { label: 'Infor' },
-  { label: 'NetSuite' },
-  { label: 'Zendesk' },
+  {label: 'G2 Crowd'},
+  {label: 'PrepDD'},
+  {label: 'Infor'},
+  {label: 'NetSuite'},
+  {label: 'Zendesk'},
 ];
 
 function renderInputComponent(inputProps: any) {
-  const { classes, inputRef = () => {}, ref, ...other } = inputProps;
+  const {classes, inputRef = () => {}, ref, ...other} = inputProps;
 
   return (
     <TextField
@@ -43,7 +43,7 @@ function renderInputComponent(inputProps: any) {
 
 function renderSuggestion(
   suggestion: OptionType,
-  { query, isHighlighted }: Autosuggest.RenderSuggestionParams,
+  {query, isHighlighted}: Autosuggest.RenderSuggestionParams
 ) {
   const matches = match(suggestion.label, query);
   const parts = parse(suggestion.label, matches);
@@ -52,7 +52,10 @@ function renderSuggestion(
     <MenuItem selected={isHighlighted} component="div">
       <div>
         {parts.map(part => (
-          <span key={part.text} style={{ fontWeight: part.highlight ? 500 : 400 }}>
+          <span
+            key={part.text}
+            style={{fontWeight: part.highlight ? 500 : 400}}
+          >
             {part.text}
           </span>
         ))}
@@ -70,7 +73,8 @@ function getSuggestions(value: string) {
     ? []
     : suggestions.filter(suggestion => {
         const keep =
-          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+          count < 5 &&
+          suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
 
         if (keep) {
           count += 1;
@@ -93,15 +97,15 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       position: 'relative',
       '& label': {
-        color: '#606060', 
-        fontFamily: 'Montserrat', 
-        fontWeight: 600, 
+        color: '#606060',
+        fontFamily: 'Montserrat',
+        fontWeight: 600,
         fontSize: '12px',
       },
       '& input': {
-        color: '#000000', 
+        color: '#000000',
         font: 'inherit',
-        fontWeight: 600     
+        fontWeight: 600,
       },
       '&:selected': {
         color: '#3A84FF',
@@ -121,8 +125,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 0,
       padding: 0,
       listStyleType: 'none',
-    }
-  }),
+    },
+  })
 );
 
 interface IntegrationAutosuggestProps {
@@ -130,11 +134,13 @@ interface IntegrationAutosuggestProps {
   handleChange: (newValue: string) => void;
 }
 
-export default function IntegrationAutosuggest(props: IntegrationAutosuggestProps) {
+export default function IntegrationAutosuggest(
+  props: IntegrationAutosuggestProps
+) {
   const classes = useStyles();
   const [stateSuggestions, setSuggestions] = React.useState<OptionType[]>([]);
 
-  const handleSuggestionsFetchRequested = ({ value }: any) => {
+  const handleSuggestionsFetchRequested = ({value}: any) => {
     setSuggestions(getSuggestions(value));
   };
 
@@ -144,9 +150,9 @@ export default function IntegrationAutosuggest(props: IntegrationAutosuggestProp
 
   const handleChange = () => (
     event: React.ChangeEvent<{}>,
-    { newValue }: Autosuggest.ChangeEvent,
+    {newValue}: Autosuggest.ChangeEvent
   ) => {
-    props.handleChange(newValue)
+    props.handleChange(newValue);
   };
 
   const autosuggestProps = {

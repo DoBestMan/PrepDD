@@ -29,7 +29,10 @@ module Types
 
     def logo_url
       if object.logo.attached?
-        Rails.application.routes.url_helpers.rails_blob_url(object.logo, only_path: true)
+        Rails.application.routes.url_helpers.rails_blob_url(
+          object.logo,
+          only_path: true
+        )
       end
     end
 

@@ -1,8 +1,4 @@
-import React, { 
-  useState, 
-  useEffect, 
-  SyntheticEvent
-} from 'react';
+import React, {useState, useEffect, SyntheticEvent} from 'react';
 import axios from 'axios';
 import clsx from 'clsx';
 import idx from 'idx';
@@ -19,7 +15,7 @@ import {
   TableCell,
   Button,
   Typography,
-  Snackbar
+  Snackbar,
 } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 import UploadIcon from '@material-ui/icons/CloudUpload';
@@ -27,10 +23,10 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
 
-import { useGlobalState } from '../../../../store'
-import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
-import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
-import { CurrentUser_currentUser_user_teams } from '../../../../graphql/queries/__generated__/CurrentUser'
+import {useGlobalState} from '../../../../store';
+import {useUpdateUserPassword} from '../../../../graphql/mutations/UpdateUserPassword';
+import {useUpdateUserData} from '../../../../graphql/mutations/UpdateUserData';
+import {CurrentUser_currentUser_user_teams} from '../../../../graphql/queries/__generated__/CurrentUser';
 import FlashMessage from '../../../common/FlashMessage';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -79,8 +75,8 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     passwordForm: {
-      minWidth: '250px', 
-      paddingLeft: '36px'
+      minWidth: '250px',
+      paddingLeft: '36px',
     },
     passwordFormTitle: {
       color: '#606060',
@@ -97,7 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
       lineHeight: '20px',
     },
     primaryButton: {
-      height: '42px', 
+      height: '42px',
       padding: '12px 36px 12px 36px',
       background: '#3A84FF',
       borderRadius: '3px',
@@ -109,8 +105,8 @@ const useStyles = makeStyles((theme: Theme) =>
       textTransform: 'capitalize',
       '&:hover': {
         opacity: 0.7,
-        background: '#3A84FF'
-      }
+        background: '#3A84FF',
+      },
     },
     tableHead: {
       paddingLeft: 0,
@@ -123,38 +119,38 @@ const useStyles = makeStyles((theme: Theme) =>
     tableCell: {
       padding: '12px 0px 12px 0px',
       color: '#2C2C2C',
-      fontFamily: 'Montserrat', 
-      fontSize: '12px', 
+      fontFamily: 'Montserrat',
+      fontSize: '12px',
       fontWeight: 600,
     },
     flex: {
       display: 'flex',
     },
     defaultPhoto: {
-      display: 'flex', 
-      width: '120px', 
+      display: 'flex',
+      width: '120px',
       height: '120px',
-      borderRadius: '50%', 
+      borderRadius: '50%',
       alignItems: 'center',
       justifyContent: 'center',
       '&:focus': {
-        outline: 'none'
-      }
-    }, 
+        outline: 'none',
+      },
+    },
     dashedBorder: {
       border: '2px dashed #D8D8D8',
     },
-    activePhoto: {    
+    activePhoto: {
       background: '#EBF2FF',
-      borderColor: '#3A84FF'
+      borderColor: '#3A84FF',
     },
     defaultPhotoName: {
-      color: '#D8D8D8', 
-      fontFamily: 'Montserrat', 
-      fontSize: '12px', 
+      color: '#D8D8D8',
+      fontFamily: 'Montserrat',
+      fontSize: '12px',
       fontWeight: 'bold',
-      textAlign: 'center'
-    }
+      textAlign: 'center',
+    },
   })
 );
 
@@ -172,19 +168,19 @@ interface UserType {
 }
 
 interface ErrorType {
-  variant: "success" | "warning" | "error" | "info";
+  variant: 'success' | 'warning' | 'error' | 'info';
   message: string;
 }
 
 export default function ProfilePane(props: {value?: number; index?: number}) {
   const {value, index} = props;
   const classes = useStyles();
-  const { state, dispatch } = useGlobalState()
+  const {state, dispatch} = useGlobalState();
   const [user, setUser] = useState<UserType>({
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
     displayName: state.currentUser.displayName || state.currentUser.fullName as string,
-    profile_url: state.currentUser.profileUrl as string, 
+    profile_url: state.currentUser.profileUrl as string,
     oldPassword: '',
     password: '',
     confirmPassword: '',
@@ -193,66 +189,87 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     hasEightChar: false,
   });
   const [show, setShow] = useState<boolean>(false);
-  const [messageOpen, setMessageOpen] = useState<boolean>(false)
-  const [errors, setErrors] = useState<ErrorType | null>(null)
+  const [messageOpen, setMessageOpen] = useState<boolean>(false);
+  const [errors, setErrors] = useState<ErrorType | null>(null);
 
-  const [updateUserPassword, {
-    loading: updateUserPasswordLoading, 
-    data: updateUserPasswordRes, 
-    error: updateUserPasswordError, 
-  }] = useUpdateUserPassword({ 
-    oldPassword: user.oldPassword, 
-    password: user.password
-  })
+  const [
+    updateUserPassword,
+    {
+      loading: updateUserPasswordLoading,
+      data: updateUserPasswordRes,
+      error: updateUserPasswordError,
+    },
+  ] = useUpdateUserPassword({
+    oldPassword: user.oldPassword,
+    password: user.password,
+  });
 
-  const [updateUserData, {
-    loading: updateUserDataLoading, 
-    data: updateUserDataRes, 
-    error: updateUserDataError, 
-  }] = useUpdateUserData({
-    fullName: user.fullName, 
-    displayName: user.displayName, 
-    email: user.email
-  })
+  const [
+    updateUserData,
+    {
+      loading: updateUserDataLoading,
+      data: updateUserDataRes,
+      error: updateUserDataError,
+    },
+  ] = useUpdateUserData({
+    fullName: user.fullName,
+    displayName: user.displayName,
+    email: user.email,
+  });
 
   useEffect(() => {
-    const updateErrors = idx(updateUserDataRes, updateUserDataRes => updateUserDataRes.updateUserData.errors)
+    const updateErrors = idx(
+      updateUserDataRes,
+      updateUserDataRes => updateUserDataRes.updateUserData.errors
+    );
 
     if (updateErrors && !updateErrors.length) {
       setErrors({
-        variant: 'success', 
-        message: 'Update user successfully'
-      })
+        variant: 'success',
+        message: 'Update user successfully',
+      });
     } else if (updateErrors && updateErrors.length) {
       setErrors({
-        variant: 'warning', 
-        message: updateErrors[0].message
-      })
+        variant: 'warning',
+        message: updateErrors[0].message,
+      });
     }
-  }, [idx(updateUserDataRes, updateUserDataRes => updateUserDataRes.updateUserData.errors)])
+  }, [
+    idx(
+      updateUserDataRes,
+      updateUserDataRes => updateUserDataRes.updateUserData.errors
+    ),
+  ]);
 
   useEffect(() => {
-    const updateErrors = idx(updateUserPasswordRes, updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors)
+    const updateErrors = idx(
+      updateUserPasswordRes,
+      updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors
+    );
 
     if (updateErrors && !updateErrors.length) {
       setErrors({
-        variant: 'success', 
-        message: 'Update password successfully'
-      })
+        variant: 'success',
+        message: 'Update password successfully',
+      });
     } else if (updateErrors && updateErrors.length) {
       setErrors({
-        variant: 'warning', 
-        message: updateErrors[0].message
-      })
+        variant: 'warning',
+        message: updateErrors[0].message,
+      });
     }
-  }, [idx(updateUserPasswordRes, updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors)])
+  }, [
+    idx(
+      updateUserPasswordRes,
+      updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors
+    ),
+  ]);
 
   useEffect(() => {
     if (errors) {
-      setMessageOpen(true)
+      setMessageOpen(true);
     }
-  }, [errors])
-
+  }, [errors]);
 
   const handleChange = React.useCallback(
     event => {
@@ -285,145 +302,148 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   const handleChangePassword = () => {
     if (user.password !== user.confirmPassword) {
       setErrors({
-        variant: 'warning', 
-        message: 'Password is not matched'
-      })
+        variant: 'warning',
+        message: 'Password is not matched',
+      });
       setUser(user => ({
-        ...user, 
-        confirmPassword: ''
-      }))
-      return
+        ...user,
+        confirmPassword: '',
+      }));
+      return;
     }
     if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
       setErrors({
-        variant: 'warning', 
-        message: 'Password is not valid'
-      })
+        variant: 'warning',
+        message: 'Password is not valid',
+      });
       setUser(user => ({
-        ...user, 
-        confirmPassword: ''
-      }))
-      return      
+        ...user,
+        confirmPassword: '',
+      }));
+      return;
     }
 
-    updateUserPassword()
+    updateUserPassword();
 
     setUser(user => ({
-      ...user, 
+      ...user,
       oldPassword: '',
-      password: '', 
-      confirmPassword: ''
-    }))
+      password: '',
+      confirmPassword: '',
+    }));
     dispatch({
-      type: 'SET_CURRENT_USER', 
+      type: 'SET_CURRENT_USER',
       user: {
         ...state.currentUser,
-        fullName: user.fullName, 
-        displayName: user.displayName, 
-        email: user.email
-      }
-    })
-  }
+        fullName: user.fullName,
+        displayName: user.displayName,
+        email: user.email,
+      },
+    });
+  };
 
   const handleChangeDetails = () => {
-    updateUserData()
-  }
+    updateUserData();
+  };
 
   const handleDrop = (acceptedFiles: File[]) => {
+    const user_data = new FormData();
+    user_data.append('profile_picture', acceptedFiles[0]);
+    user_data.append('id', state.currentUser.id);
 
-    const user_data = new FormData()
-    user_data.append('profile_picture', acceptedFiles[0])
-    user_data.append('id', state.currentUser.id)
-
-    axios.post("/api/update_user_profile", user_data, {
+    axios
+      .post('/api/update_user_profile', user_data, {
         headers: {
-          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w'
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
         },
-    }).then(res => {
-      setUser({
-        ...user, 
-        profile_url: res.data.profile_url
       })
-      setErrors({
-        variant: 'success', 
-        message: 'Upload photo successfully'
-      })
+      .then(res => {
+        setUser({
+          ...user,
+          profile_url: res.data.profile_url,
+        });
+        setErrors({
+          variant: 'success',
+          message: 'Upload photo successfully',
+        });
 
-      dispatch({
-        type: 'SET_CURRENT_USER', 
-        user: {
-          ...state.currentUser,
-          profileUrl: res.data.profile_url
-        }
+        dispatch({
+          type: 'SET_CURRENT_USER',
+          user: {
+            ...state.currentUser,
+            profileUrl: res.data.profile_url,
+          },
+        });
       })
-    }).catch(error => {
-      setErrors({
-        variant: 'warning', 
-        message: 'Upload photo failed'
-      })
-    })
-  }
+      .catch(error => {
+        setErrors({
+          variant: 'warning',
+          message: 'Upload photo failed',
+        });
+      });
+  };
 
   const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
-      return
+      return;
     }
 
-    setMessageOpen(false)
-  }
+    setMessageOpen(false);
+  };
 
   const renderDropzone = () => {
     return (
-      <ReactDropzone
-        accept="image/*"
-        onDrop={handleDrop}
-      >
+      <ReactDropzone accept="image/*" onDrop={handleDrop}>
         {({getRootProps, getInputProps, isDragActive}) => (
-            <div 
-              {...getRootProps()} 
-              className={clsx(
-                classes.defaultPhoto, 
-                isDragActive && classes.activePhoto,
-                !user.profile_url && classes.dashedBorder
-              )}
-            >
-              <input {...getInputProps()}/>
-              { user.profile_url ?
+          <div
+            {...getRootProps()}
+            className={clsx(
+              classes.defaultPhoto,
+              isDragActive && classes.activePhoto,
+              !user.profile_url && classes.dashedBorder
+            )}
+          >
+            <input {...getInputProps()} />
+            {user.profile_url ? (
+              <div
+                onMouseOver={() => setShow(true)}
+                onMouseOut={() => setShow(false)}
+                style={{border: 'none'}}
+              >
+                <img src={user.profile_url} className={classes.photo} />
                 <div
-                  onMouseOver={() => setShow(true)}
-                  onMouseOut={() => setShow(false)}
-                  style={{border: 'none'}}
+                  className={clsx(
+                    classes.uploadArea,
+                    !show && classes.invisible
+                  )}
                 >
-                  <img src={user.profile_url} className={classes.photo} />
-                  <div 
-                    className={clsx(classes.uploadArea, !show && classes.invisible)}
-                  >
-                    <div className={classes.uploadLabel}>
-                      <CameraIcon fontSize="small" />
-                      <br />
-                      Update
-                    </div>
+                  <div className={classes.uploadLabel}>
+                    <CameraIcon fontSize="small" />
+                    <br />
+                    Update
                   </div>
-                </div> :
-                <div className={classes.defaultPhotoName}>
-                  <UploadIcon style={{fontSize: '48px'}} />
-                  <br />
-                  <span>Upload photo</span>
-                </div>                
-              }
-            </div>
+                </div>
+              </div>
+            ) : (
+              <div className={classes.defaultPhotoName}>
+                <UploadIcon style={{fontSize: '48px'}} />
+                <br />
+                <span>Upload photo</span>
+              </div>
+            )}
+          </div>
         )}
       </ReactDropzone>
-    )
-  }
+    );
+  };
 
   return (
     <>
-      { errors && 
+      {errors && (
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom', 
-            horizontal: 'right'
+            vertical: 'bottom',
+            horizontal: 'right',
           }}
           open={messageOpen}
           autoHideDuration={3000}
@@ -434,8 +454,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             message={errors.message}
             onClose={handleCloseMessage}
           />
-        </Snackbar> 
-      }
+        </Snackbar>
+      )}
       <Paper
         className={clsx(classes.root, value !== index && classes.invisible)}
         aria-labelledby="Personal Information"
@@ -446,7 +466,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           onMouseOver={() => setShow(true)}
           onMouseOut={() => setShow(false)}
         >
-          { renderDropzone() }        
+          {renderDropzone()}
         </div>
 
         <Card className={classes.profile} elevation={0}>
@@ -489,35 +509,37 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                       <TableCell className={classes.tableHead}>
                         Company(s)
                       </TableCell>
-                      <TableCell className={classes.tableHead}>Team(s)</TableCell>
+                      <TableCell className={classes.tableHead}>
+                        Team(s)
+                      </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody >
-                    { state.currentUser.companies && 
+                  <TableBody>
+                    {state.currentUser.companies &&
                       state.currentUser.companies.map(company => {
-                          let teams:CurrentUser_currentUser_user_teams[] = []
-                        
+                        let teams: CurrentUser_currentUser_user_teams[] = [];
+
                         if (state.currentUser.teams) {
-                          teams = state.currentUser.teams.filter(team => team.companyId === company.id)
+                          teams = state.currentUser.teams.filter(
+                            team => team.companyId === company.id
+                          );
                         }
 
                         return (
                           <TableRow key={company.name}>
                             <TableCell className={classes.tableCell}>
                               <div className={classes.flex}>
-                                <div>{company.name}</div>                        
+                                <div>{company.name}</div>
                               </div>
                             </TableCell>
                             <TableCell className={classes.tableCell}>
-                              { (teams && teams.length > 0) ?
-                                teams.map(team => team.name).join(', ') :
-                                "No Teams"
-                              }
+                              {teams && teams.length > 0
+                                ? teams.map(team => team.name).join(', ')
+                                : 'No Teams'}
                             </TableCell>
                           </TableRow>
-                        )
-                      })
-                    }
+                        );
+                      })}
                   </TableBody>
                 </Table>
               </Grid>
@@ -572,8 +594,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
             onChange={handleChange}
             style={{marginBottom: '36px'}}
           />
-          <Button 
-            className={classes.primaryButton} variant="contained" 
+          <Button
+            className={classes.primaryButton}
+            variant="contained"
             onClick={handleChangePassword}
             fullWidth
           >

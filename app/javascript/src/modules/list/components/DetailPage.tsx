@@ -1,27 +1,27 @@
-import React from 'react'
-import { Theme, createStyles, makeStyles } from '@material-ui/core/styles'
-import Drawer from '@material-ui/core/Drawer'
-import Typography from '@material-ui/core/Typography'
-import Box from '@material-ui/core/Box'
-import MoreIcon from '@material-ui/icons/MoreHoriz'
+import React from 'react';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import MoreIcon from '@material-ui/icons/MoreHoriz';
 
-import { StyledTabs, StyledTab } from './styled'
-import FilesPane from './FilesPane'
+import {StyledTabs, StyledTab} from './styled';
+import FilesPane from './FilesPane';
 
-const panelWidth = 539
-const G2Logo = require('images/dummy/logos/g2-logo.svg')
+const panelWidth = 539;
+const G2Logo = require('images/dummy/logos/g2-logo.svg');
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     drawer: {
-      width: panelWidth, 
-      flexShrink: 0
+      width: panelWidth,
+      flexShrink: 0,
     },
     drawerPaper: {
-      width: panelWidth
+      width: panelWidth,
     },
     drawerSpacer: {
-      marginTop: 64
+      marginTop: 64,
     },
     drawerHeader: {
       padding: '24px 24px 0px 24px',
@@ -32,14 +32,14 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
       fontSize: '14px',
       color: '#606060',
-      lineHeight: '20px'
+      lineHeight: '20px',
     },
     drawerSubTitle: {
       marginRight: '10px',
       color: '#2C2C2C',
       fontFamily: 'Montserrat',
       fontWeight: 'bold',
-      fontSize: '24px'
+      fontSize: '24px',
     },
     description: {
       marginTop: '6px',
@@ -47,22 +47,22 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '14px',
       fontWeight: 600,
       color: '#606060',
-      lineHeight: '20px'
+      lineHeight: '20px',
     },
     grow: {
-      flexGrow: 1
-    }
+      flexGrow: 1,
+    },
   })
 );
 
 interface TabPanelProps {
-  children?: React.ReactNode, 
-  value: any, 
-  index: any
+  children?: React.ReactNode;
+  value: any;
+  index: any;
 }
 
 const TabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props
+  const {children, value, index, ...other} = props;
 
   return (
     <Typography
@@ -75,17 +75,17 @@ const TabPanel = (props: TabPanelProps) => {
     >
       <Box p={3}>{children}</Box>
     </Typography>
-  )
-}
+  );
+};
 
 export default function ListDetailPage(props: {open: boolean}) {
-  const classes = useStyles()
-  const [index, setIndex] = React.useState(2)
+  const classes = useStyles();
+  const [index, setIndex] = React.useState(2);
 
   const handleChange = (event: unknown, newIndex: number) => {
-    setIndex(newIndex)
-  }
-  
+    setIndex(newIndex);
+  };
+
   return (
     <Drawer
       className={classes.drawer}
@@ -93,7 +93,7 @@ export default function ListDetailPage(props: {open: boolean}) {
       anchor="right"
       open={props.open}
       classes={{
-        paper: classes.drawerPaper
+        paper: classes.drawerPaper,
       }}
     >
       <div className={classes.drawerSpacer} />
@@ -110,7 +110,11 @@ export default function ListDetailPage(props: {open: boolean}) {
           Request by Tom Hardin from G2 Crowd
         </Typography>
       </div>
-      <StyledTabs value={index} onChange={handleChange} aria-label="right panel">
+      <StyledTabs
+        value={index}
+        onChange={handleChange}
+        aria-label="right panel"
+      >
         <StyledTab label="overview" />
         <StyledTab label="timeline" />
         <StyledTab label="files" />
@@ -127,5 +131,5 @@ export default function ListDetailPage(props: {open: boolean}) {
         Messages
       </TabPanel>
     </Drawer>
-  )
+  );
 }

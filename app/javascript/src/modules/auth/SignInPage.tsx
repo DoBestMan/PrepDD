@@ -16,11 +16,11 @@ import {
 } from 'react-google-login';
 import {Link as RouterLink} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
-import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
 import {useSignInUser} from '../../graphql/mutations/SignInUser';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
       marginTop: theme.spacing(8),

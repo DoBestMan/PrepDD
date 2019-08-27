@@ -1,19 +1,12 @@
 import {createQueryHook, gql} from '../graphqlHelpers';
-import {
-  CompanyUsers,
-} from './__generated__/CompanyUsers';
+import {CompanyUsers} from './__generated__/CompanyUsers';
 
 export const useCompanyUsers = createQueryHook<CompanyUsers, {}>(gql`
-  query CompanyUsers(
-    $companyId: ID!,
-    $teamId: ID, 
-    $limit: Int, 
-    $offset: Int
-  ) {
+  query CompanyUsers($companyId: ID!, $teamId: ID, $limit: Int, $offset: Int) {
     companyUsers(
-      CompanyId: $companyId, 
-      TeamId: $teamId, 
-      limit: $limit, 
+      CompanyId: $companyId
+      TeamId: $teamId
+      limit: $limit
       offset: $offset
     ) {
       company {

@@ -2,7 +2,7 @@ import LoadingFallback from '../../components/LoadingFallback';
 import NotFoundPage from '../../components/NotFoundPage';
 import React, {lazy, Suspense} from 'react';
 import {Router as ReachRouter, Redirect} from '@reach/router';
-import { isAuthenticated } from '../../hooks/auth';
+import {isAuthenticated} from '../../hooks/auth';
 
 const AuthRoutes = lazy(() => import('./auth'));
 const AppRoutes = lazy(() => import('./app'));
@@ -12,7 +12,7 @@ export default function Router() {
     <Suspense fallback={<LoadingFallback />}>
       <ReachRouter>
         <AuthRoutes path="/*" />
-        { isAuthenticated && <AppRoutes path="/app/*" /> }
+        {isAuthenticated && <AppRoutes path="/app/*" />}
         <NotFoundPage default />
       </ReachRouter>
     </Suspense>

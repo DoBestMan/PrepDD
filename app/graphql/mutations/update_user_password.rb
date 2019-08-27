@@ -10,7 +10,9 @@ class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
     response = { errors: [] }
 
     if !context[:controller].user_signed_in?
-      response[:errors].push({ path: 'root', message: 'Not authorized to do it' })
+      response[:errors].push(
+        { path: 'root', message: 'Not authorized to do it' }
+      )
       response[:success] = false
       return response
     end
@@ -18,13 +20,11 @@ class Mutations::UpdateUserPassword < GraphQL::Schema::Mutation
     user = context[:controller].current_user
 
     if user.valid_password?(old_password)
-      user.update({
-                    password: password,
-                    password_confirmation: password
-                  })
-
+      user.update({ password: password, password_confirmation: password })
     else
-      response[:errors].push({ path: 'root', message: 'Current password is wrong' })
+      response[:errors].push(
+        { path: 'root', message: 'Current password is wrong' }
+      )
       response[:success] = false
       return response
     end
