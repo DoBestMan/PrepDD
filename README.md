@@ -12,6 +12,8 @@ PrepDD is a normal Rails 5 application and follows the usual conventions and set
 4. Install gems: `bundle install`
 5. Install node packages: `yarn install`
 6. Set up database: `bundle exec rake db:create:all db:migrate db:seed`
+7. Run `bundle exec rake data:migrate` to seed data
+
 
 Finally, you are ready to start the server by running `bundle exec foreman start -f Procfile.dev`.
 
