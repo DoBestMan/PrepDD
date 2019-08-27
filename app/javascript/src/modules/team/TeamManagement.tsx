@@ -69,13 +69,14 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'auto', 
       height: `calc(100vh - 300px)`,
       '& thead th': {
-        background: '#D8D8D8', 
+        background: '#FFFFFF', 
         position: 'sticky', 
         top: '0px'
       }
     },
     table: {
-      minWidth: 750
+      minWidth: 750,
+      borderCollapse: 'separate'
     },
     round: {
       borderRadius: '50%'
