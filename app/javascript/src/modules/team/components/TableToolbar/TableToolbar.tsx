@@ -14,6 +14,7 @@ import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
 import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember'
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
+import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../../../graphql/mutations/__generated__/AddTeamMember'
 import { 
   CompanyUsers_companyUsers_users_companies,
   CompanyUsers_companyUsers_users_teams,
@@ -153,7 +154,7 @@ interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
-  setErrors: (value: React.SetStateAction<string>) => void;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType[]>>;
   updateMemberList: (
     params: {
       id: string, 
@@ -214,7 +215,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     const addMemberErrors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
 
     if (!addMemberErrors) return
-    setErrors("Invite new member failed")
+    setErrors(addMemberErrors as ErrorType[])
   }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
 
   useEffect(() => {

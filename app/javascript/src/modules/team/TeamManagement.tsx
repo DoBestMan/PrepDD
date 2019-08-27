@@ -24,6 +24,7 @@ import {useGlobalState} from '../../store'
 
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
+import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../graphql/mutations/__generated__/AddTeamMember'
 import {
   CompanyUsers_companyUsers_users, 
   CompanyUsers, 
@@ -96,7 +97,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [team, setTeam] = useState("")
   const [memberList, setMemberList] = useState<CompanyUsers_companyUsers_users[]>([])
   const [filteredName, setFilteredName] = useState<string>("")
-  const [errors, setErrors] = useState<string>("")
+  const [errors, setErrors] = useState<ErrorType[]>([])
   
   const {state} = useGlobalState()
   const {loading, data, error, fetchMore} = useCompanyUsers({
@@ -302,10 +303,15 @@ export default function TeamManagement(props: {path?: string}) {
     /> : (
     <div className={classes.root}>
       { errors && 
-        <FlashMessage
-          variant="warning"
-          message={errors}
-        />
+        errors.map((error, index) => {
+          return (
+            <FlashMessage
+              key={index}
+              variant="warning"
+              message={error.message}
+            />
+          )
+        })
       }
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
         <TableToolbar 

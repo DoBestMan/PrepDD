@@ -29,6 +29,7 @@ import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMembe
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
+import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../../../graphql/mutations/__generated__/AddTeamMember'
 import { 
   CompanyUsers_companyUsers_users_companies,
   CompanyUsers_companyUsers_users_teams,
@@ -174,7 +175,7 @@ interface DetailPaneProps {
   open: boolean;
   company: string;
   handleClose: () => void;
-  setErrors: (value: React.SetStateAction<string>) => void;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType[]>>;
   updateMemberList: (
     params: {
       id: string, 
@@ -314,9 +315,10 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
-    if (updateTeamMemberError) return
-    setErrors("Update team member failed")
-  }, [updateTeamMemberError])
+    const errors = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)
+    if (!errors) return
+    setErrors(errors as ErrorType[])
+  }, [idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)])
 
   useEffect(() => {
     const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
@@ -326,9 +328,10 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   useEffect(() => {
-    if (addTeamMemberError) return
-    setErrors("Add team member failed")
-  }, [addTeamMemberError])
+    const errors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
+    if (!errors) return
+    setErrors(errors as ErrorType[])
+  }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
 
   useEffect(() => {
     const removedUser = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)
@@ -338,9 +341,10 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [removeTeamMemberLoading, idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)])
 
   useEffect(() => {
-    if (removeTeammemberError) return
-    setErrors("Remove team member failed")
-  }, [removeTeammemberError])
+    const errors = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)
+    if (!errors) return
+    setErrors(errors as ErrorType[])
+  }, [idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)])
 
   useEffect(() => {
     const removedUser = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)
@@ -354,9 +358,10 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [removeCompanyMemberLoading, idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)])
 
   useEffect(() => {
-    if (removeCompanyMemberError) return
-    setErrors("Remove company member failed")
-  }, [removeCompanyMemberError])
+    const errors = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)
+    if (!errors) return
+    setErrors(errors as ErrorType[])
+  }, [idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)])
 
   useEffect(() => {
     if (teamId && confirm("Are you going to remove this member?")) {
