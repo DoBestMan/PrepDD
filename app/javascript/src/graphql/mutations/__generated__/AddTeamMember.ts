@@ -18,29 +18,34 @@ export interface AddTeamMember_addTeamMember_errors {
   message: string;
 }
 
-export interface AddTeamMember_addTeamMember_user {
-  __typename: "User";
+export interface AddTeamMember_addTeamMember_user_roles {
+  __typename: "RolesUser";
   id: string;
-  fullName: string;
-  email: string;
+  name: string;
+  companyId: string;
 }
 
-export interface AddTeamMember_addTeamMember_companies {
+export interface AddTeamMember_addTeamMember_user_teams {
+  __typename: "Team";
+  id: string;
+  name: string;
+  companyId: string;
+}
+
+export interface AddTeamMember_addTeamMember_user_companies {
   __typename: "Company";
   id: string;
   name: string;
 }
 
-export interface AddTeamMember_addTeamMember_teams {
-  __typename: "Team";
+export interface AddTeamMember_addTeamMember_user {
+  __typename: "User";
   id: string;
-  name: string;
-}
-
-export interface AddTeamMember_addTeamMember_role {
-  __typename: "Role";
-  id: string;
-  name: string;
+  fullName: string;
+  profileUrl: string | null;
+  roles: AddTeamMember_addTeamMember_user_roles[] | null;
+  teams: AddTeamMember_addTeamMember_user_teams[] | null;
+  companies: AddTeamMember_addTeamMember_user_companies[] | null;
 }
 
 export interface AddTeamMember_addTeamMember {
@@ -48,9 +53,6 @@ export interface AddTeamMember_addTeamMember {
   errors: AddTeamMember_addTeamMember_errors[];
   success: boolean;
   user: AddTeamMember_addTeamMember_user;
-  companies: AddTeamMember_addTeamMember_companies[];
-  teams: AddTeamMember_addTeamMember_teams[];
-  role: AddTeamMember_addTeamMember_role;
 }
 
 export interface AddTeamMember {

@@ -6,16 +6,18 @@
 // GraphQL query operation: CompanySettings
 // ====================================================
 
-export interface CompanySettings_company_parent {
+export interface CompanySettings_company_parents {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
-export interface CompanySettings_company_broker {
+export interface CompanySettings_company_brokers {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface CompanySettings_company_subscription {
@@ -29,8 +31,9 @@ export interface CompanySettings_company {
   __typename: "Company";
   id: string;
   name: string;
-  parent: CompanySettings_company_parent | null;
-  broker: CompanySettings_company_broker | null;
+  logoUrl: string | null;
+  parents: CompanySettings_company_parents[] | null;
+  brokers: CompanySettings_company_brokers[] | null;
   totalUsers: number | null;
   totalStorage: number | null;
   subscription: CompanySettings_company_subscription | null;

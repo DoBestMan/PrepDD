@@ -64,9 +64,6 @@ ActiveRecord::Schema.define(version: 2019_08_24_162739) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "parent_companies", force: :cascade do |t|
     t.bigint "child_company_id"
     t.bigint "parent_company_id"

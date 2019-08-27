@@ -1,5 +1,11 @@
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
+import idx from 'idx'
 import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
+
+import { useGlobalState } from '../../store'
+import { useCompanySettings } from '../../graphql/queries/CompanySettings'
+import { useUpdateCompany } from '../../graphql/mutations/UpdateCompany'
+import { CompanySettings_company } from '../../graphql/queries/__generated__/CompanySettings'
 
 import FormPanel from './components/FormPanel'
 import UploadPanel from './components/UploadPanel'
@@ -11,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex', 
       height: 'calc(100vh - 64px)',
-      padding: `72px calc((100% - ${panelWidth}px) / 2) 72px calc((100% - ${panelWidth}px) / 2)`
+      margin: `72px calc((100% - ${panelWidth}px) / 2) 72px calc((100% - ${panelWidth}px) / 2)`
     }, 
     settingsPanel: {
       display: 'block',
@@ -26,14 +32,85 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function CompanySettings(props: {path?: string;}) {
   const classes = useStyles()
+  const { state } = useGlobalState()
+  const [addedParent, setAddedParent] = useState<string>("")
+  const [addedBroker, setAddedBroker] = useState<string>("")
+  const [deletedParent, setDeletedParent] = useState<string>("")
+  const [deletedBroker, setDeletedBroker] = useState<string>("")
+  const [company, setCompany] = useState<CompanySettings_company>({
+    __typename: "Company",
+    id: '',
+    name: '',
+    logoUrl: '',
+    parents: null, 
+    brokers: null, 
+    totalUsers: 0, 
+    totalStorage: 0,
+    subscription: null, 
+    autoPdf: false, 
+    autoWatermark: false, 
+    previewOnly: false
+  })
+
+  const {data, error, loading} = useCompanySettings({id: state.selectedCompany})
+  const [updateCompany, {
+    loading: updateCompanyLoading, 
+    data: updateCompanyRes, 
+    error: updateCompanyError
+  }] = useUpdateCompany({
+    id: company.id, 
+    name: company.name, 
+    parentName: addedParent, 
+    brokerName: addedBroker, 
+    autoPdf: company.autoPdf as boolean, 
+    autoWatermark: company.autoWatermark as boolean, 
+    previewOnly: company.previewOnly as boolean,
+    deleteParentId: deletedParent, 
+    deleteBrokerId: deletedBroker
+  })  
+
+  useEffect(() => {
+    const companyData = idx(data, data => data.company);
+
+    if (loading || !companyData) return;
+
+    setCompany({
+      ...companyData
+    })
+  }, [loading, idx(data, data => data.company)])
+
+  useEffect(() => {
+    const companyData = idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)
+
+    if (loading || !companyData) return;
+
+    setCompany({
+      ...companyData
+    })
+    setAddedParent("")
+    setAddedBroker("")
+    setDeletedParent("")
+    setDeletedBroker("")
+  }, [updateCompanyLoading, idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.company)])
 
   return (
     <div className={classes.root}>
       <div className={classes.settingsPanel}>
-        <FormPanel />
+        <FormPanel 
+          company={company} 
+          setCompany={setCompany}
+          setAddedParent={setAddedParent}
+          setAddedBroker={setAddedBroker}
+          setDeletedParent={setDeletedParent}
+          setDeletedBroker={setDeletedBroker}
+          handleUpdate={() => updateCompany()}
+        />
       </div>
       <div className={classes.uploadPanel}>
-        <UploadPanel />
+        <UploadPanel
+          company={company}
+          setCompany={setCompany}
+        />
       </div>
     </div>
   )

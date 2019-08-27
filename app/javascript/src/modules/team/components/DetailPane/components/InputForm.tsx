@@ -63,9 +63,9 @@ export default function InputForm(props: InputFormProps) {
   const [editable, setEditable] = useState<boolean>(false)
 
   const handleClickAway = () => {
-    setEditable(false)
-    if (onUpdate)
+    if (onUpdate && editable)
       onUpdate()
+    setEditable(false)
   }
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {

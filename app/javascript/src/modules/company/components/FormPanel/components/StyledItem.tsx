@@ -29,19 +29,26 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface StyledItemProps {
-  logo?: string;
+  logo?: string | null;
   label: string;
+  onClose: () => void;
 }
 
 const StyledItem = React.forwardRef((props: StyledItemProps, ref: React.Ref<HTMLDivElement>) => {
-  const { logo, label, ...other } = props
+  const { logo, label, onClose, ...other } = props
   const classes = useStyles()
 
+  const handleClick = () => {
+    if (confirm("Are you going to delete this company?")) {
+      onClose()
+    }
+  }
+  
   return (
     <div  {...other} className={classes.root} ref={ref}>
       { logo && <img src={logo} width="18" height="18" style={{marginRight: '6px'}} alt={label} />}
       <div className={classes.label}>{label}</div>
-      <CloseIcon className={classes.close} />
+      <CloseIcon className={classes.close} onClick={handleClick}/>
     </div>
   )
 })

@@ -9,6 +9,7 @@ describe('User Profile Page', () => {
     const wrapper = shallow(<UserProfilePage />)
     expect(wrapper.find(ProfilePane).length).toBe(1)
   })
+  
   it('renders notification pane', () => {
     const wrapper = shallow(<UserProfilePage />)
     expect(wrapper.find(NotificationPane).length).toBe(1)

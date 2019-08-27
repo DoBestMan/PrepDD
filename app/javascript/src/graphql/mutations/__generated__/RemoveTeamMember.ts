@@ -6,29 +6,34 @@
 // GraphQL mutation operation: RemoveTeamMember
 // ====================================================
 
-export interface RemoveTeamMember_removeTeamMember_user {
-  __typename: "User";
-  id: string;
-  fullName: string;
-}
-
-export interface RemoveTeamMember_removeTeamMember_companies {
-  __typename: "Company";
+export interface RemoveTeamMember_removeTeamMember_user_roles {
+  __typename: "RolesUser";
   id: string;
   name: string;
+  companyId: string;
 }
 
-export interface RemoveTeamMember_removeTeamMember_teams {
+export interface RemoveTeamMember_removeTeamMember_user_teams {
   __typename: "Team";
   id: string;
   name: string;
   companyId: string;
 }
 
-export interface RemoveTeamMember_removeTeamMember_role {
-  __typename: "Role";
+export interface RemoveTeamMember_removeTeamMember_user_companies {
+  __typename: "Company";
   id: string;
   name: string;
+}
+
+export interface RemoveTeamMember_removeTeamMember_user {
+  __typename: "User";
+  id: string;
+  fullName: string;
+  profileUrl: string | null;
+  roles: RemoveTeamMember_removeTeamMember_user_roles[] | null;
+  teams: RemoveTeamMember_removeTeamMember_user_teams[] | null;
+  companies: RemoveTeamMember_removeTeamMember_user_companies[] | null;
 }
 
 export interface RemoveTeamMember_removeTeamMember_errors {
@@ -46,9 +51,6 @@ export interface RemoveTeamMember_removeTeamMember_errors {
 export interface RemoveTeamMember_removeTeamMember {
   __typename: "RemoveTeamMemberPayload";
   user: RemoveTeamMember_removeTeamMember_user | null;
-  companies: RemoveTeamMember_removeTeamMember_companies[] | null;
-  teams: RemoveTeamMember_removeTeamMember_teams[] | null;
-  role: RemoveTeamMember_removeTeamMember_role | null;
   errors: RemoveTeamMember_removeTeamMember_errors[];
   success: boolean;
 }

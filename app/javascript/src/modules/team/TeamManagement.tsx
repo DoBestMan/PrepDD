@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo} from 'react'
+import React, { useState, useEffect, SyntheticEvent } from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
@@ -6,7 +6,8 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
   Table,
-  TableBody
+  TableBody,
+  Snackbar
 } from '@material-ui/core'
 
 import LoadingFallback from '../../components/LoadingFallback'
@@ -22,34 +23,20 @@ import ArrowTooltip from './components/ArrowTooltip'
 
 import {useGlobalState} from '../../store'
 
-import {useCompanyDetails} from '../../graphql/queries/CompanyDetails'
-import {useTeamDetails} from '../../graphql/queries/TeamDetails'
+import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
-import {CompanyDetails_company_users} from '../../graphql/queries/__generated__/CompanyDetails'
-import {TeamDetails_team_users} from '../../graphql/queries/__generated__/TeamDetails'
+import {
+  CompanyUsers_companyUsers_users, 
+  CompanyUsers, 
+  CompanyUsersVariables,
+  CompanyUsers_companyUsers_users_companies, 
+  CompanyUsers_companyUsers_users_roles,
+  CompanyUsers_companyUsers_users_teams, 
+} from '../../graphql/queries/__generated__/CompanyUsers' 
+import FlashMessage from '../common/FlashMessage';
 
-interface Company {
-  url: string;
-  label: string;
-}
-
-interface Data {
-  name: string;
-  companies: Company[];
-  teams: string[];
-  role: string;
-}
-
-function createData(
-  name: string, 
-  companies: Company[], 
-  teams: string[], 
-  role: string
-  ): Data {
-  return { name, companies, teams, role }
-}
-
-const panelWidth=500
+const PANEL_WIDTH = 500
+const LIMIT = 12
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -71,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
       })
     },
     paperShift: {
-      width: `calc(100% - ${panelWidth}px)`,
+      width: `calc(100% - ${PANEL_WIDTH}px)`,
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.easeOut, 
         duration: theme.transitions.duration.enteringScreen
@@ -79,9 +66,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableWrapper: {
       overflowX: 'auto',
+      overflowY: 'auto', 
+      height: `calc(100vh - 300px)`,
+      '& thead th': {
+        background: '#FFFFFF', 
+        position: 'sticky', 
+        top: '0px'
+      }
     },
     table: {
-      minWidth: 750
+      minWidth: 750,
+      borderCollapse: 'separate'
     },
     round: {
       borderRadius: '50%'
@@ -95,19 +90,44 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface UpdateTeamMemberProps {
+  id: string;
+  fullName: string;
+  profileUrl?: string;
+  companies: CompanyUsers_companyUsers_users_companies[] | null;
+  teams: CompanyUsers_companyUsers_users_teams[] | null;
+  roles: CompanyUsers_companyUsers_users_roles[] | null;
+}
+
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
-  const [selected, setSelected] = React.useState<string[]>([])
-  const [team, setTeam] = React.useState("")
-  const [memberList, setMemberList] = React.useState<CompanyDetails_company_users[] | TeamDetails_team_users[]>([])
-
+  const [selected, setSelected] = useState<string[]>([])
+  const [team, setTeam] = useState("")
+  const [memberList, setMemberList] = useState<CompanyUsers_companyUsers_users[]>([])
+  const [filteredName, setFilteredName] = useState<string>("")
+  const [errors, setErrors] = useState<ErrorType | null>(null)
+  const [messageOpen, setMessageOpen] = useState<boolean>(false)
+  
   const {state} = useGlobalState()
-  const {loading, data, error} = useCompanyDetails({id: state.selectedCompany});
-  const [removeCompanyMember] = useRemoveCompanyMember({
+  const {loading, data, error, fetchMore} = useCompanyUsers({
+    companyId: state.selectedCompany,
+    teamId: team, 
+    limit: LIMIT, 
+    offset: 0
+  });
+  const [removeCompanyMember, {
+    loading: removeCompanyMemberLoading, 
+    data: removeCompanyMemberRes, 
+    error: removeCompanyMemberError
+  }] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected
   })
-  const responseTeam = useTeamDetails({id: team})
 
   useEffect(() => {
     setTeam("")
@@ -115,24 +135,42 @@ export default function TeamManagement(props: {path?: string}) {
   }, [state.selectedCompany])
 
   useEffect(() => {
-    const usersList = idx(data, data => data.company.users);
-
-    if (loading || !usersList) return;
-    usersList.sort(
-      (a: CompanyDetails_company_users | TeamDetails_team_users, b: CompanyDetails_company_users | TeamDetails_team_users) => {
-        if (+a.id > +b.id) return 1
-        return -1
-    })
-    setMemberList(usersList)
-  }, [idx(data, data => data.company.users)])
+    if (errors) {
+      setMessageOpen(true)
+    }
+  }, [errors])
 
   useEffect(() => {
-    const usersList = idx(responseTeam, responseTeam => responseTeam.data.team.users);
+    const usersList = idx(data, data => data.companyUsers.users);
 
-    if (!usersList) return;
-    console.log("Team Fetch", usersList)
+    if (loading || !usersList) return;
     setMemberList(usersList)
-  }, [idx(responseTeam, responseTeam => responseTeam.data.team.users)])
+    console.log("After fetching list", usersList)
+  }, [idx(data, data => data.companyUsers.users)])
+
+  useEffect(() => {
+    const removeErrors = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)
+
+    if (removeErrors && !removeErrors.length) {
+      setErrors({
+        variant: 'success', 
+        message: 'Remove company member successfully'
+      })
+
+      let newMemberList = memberList
+      selected.map(id => {
+        newMemberList = newMemberList.filter(member => member.id !== id)
+      })
+
+      setSelected([])
+      setMemberList(newMemberList)
+    } else if (removeErrors && removeErrors.length) {
+      setErrors({
+        variant: 'warning', 
+        message: removeErrors[0].message
+      })
+    }
+  }, [idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -197,6 +235,89 @@ export default function TeamManagement(props: {path?: string}) {
     setTeam(newTeam)
   }
 
+  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setMessageOpen(false)
+  }
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    event.persist()
+    const scrollHeight = (event.target as HTMLDivElement).scrollHeight
+    const scrollTop = (event.target as HTMLDivElement).scrollTop
+    const height = (event.target as HTMLDivElement).clientHeight
+    const delta = 10
+
+    if (scrollTop + height + delta >= scrollHeight && !loading) {
+      loadMore()
+    }
+  }
+
+  const loadMore = () => {
+    fetchMore({
+      variables: {
+        companyId: state.selectedCompany,
+        teamId: team, 
+        limit: LIMIT, 
+        offset: memberList.length
+      },
+      updateQuery: (previousQueryResult: CompanyUsers, options: {
+        fetchMoreResult?: CompanyUsers;
+        variables?: CompanyUsersVariables;
+      }) => {
+        const fetchMoreResult = idx(options, options => options.fetchMoreResult)
+
+        if (!fetchMoreResult)
+          return previousQueryResult
+
+        return {
+          companyUsers: {
+            ...previousQueryResult.companyUsers, 
+            users: [
+              ...previousQueryResult.companyUsers.users,
+              ...fetchMoreResult.companyUsers.users
+            ]
+          }
+        }
+
+      }
+    })
+  }
+
+  const updateTeamMemberList = (params: UpdateTeamMemberProps) => {
+
+    const findMember = memberList.findIndex(member => member.id === params.id)
+
+    if (findMember >= 0) {
+      // Update member
+      let newList: CompanyUsers_companyUsers_users[] = memberList
+
+      if (params.companies && params.companies.find(company => company.id === state.selectedCompany)) {
+        newList[findMember] = {
+          ...params,
+          __typename: 'User',
+        } as CompanyUsers_companyUsers_users
+      } else {
+        newList = newList.filter((member, index) => index !== findMember)
+      }
+      setMemberList([
+        ...newList
+      ])
+    } else {
+      // Add member
+      setMemberList([
+        ...memberList, 
+        {
+          ...params,
+          __typename: 'User',
+          profileUrl: '',
+        } as CompanyUsers_companyUsers_users
+      ])
+    }
+  }
+
   const isSelected = (id: string) => selected.indexOf(id) !== -1
 
   const isOpen = () => selected.length > 0
@@ -213,118 +334,168 @@ export default function TeamManagement(props: {path?: string}) {
 
   return loading ? 
     <LoadingFallback /> :
-    (
-      <div className={classes.root}>
-        <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-          <TableToolbar 
-            selected={selected.length}
-            handleDelete={handleDelete}
-            company={state.selectedCompany}
+    error ?
+    <FlashMessage
+      variant="warning"
+      message="Loading error"
+    /> : (
+    <div className={classes.root}>
+      { errors && 
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom', 
+            horizontal: 'right'
+          }}
+          open={messageOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseMessage}
+        >
+          <FlashMessage
+            variant={errors.variant}
+            message={errors.message}
+            onClose={handleCloseMessage}
           />
-          { data && data.company && data.company.teams && 
-            <Searchbar data={data.company.teams} value={team} handleUpdate={handleChangeTeam} />
-          }
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="Team Management Table">
-              <TableHeader />
-              <TableBody>
-                { memberList && memberList.map(user => {
-                    const isItemSelected = isSelected(user.id)
-                    
-                    return (
-                      <StyledTableRow
-                        key={`member-${user.id}`} 
-                        role="team member"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        selected={isItemSelected}
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, user.id)}
-                        hover
-                      >
-                        <StyledTableCell style={{paddingLeft: '31px'}}>
-                          <div className={classes.flex} style={{alignItems: 'center'}}>
-                            { user.profileUrl ?
-                              <img 
-                                className={classes.round} 
-                                src={user.profileUrl}
-                                width="30" 
-                                height="30" 
-                                alt="Alana" 
-                              /> : 
-                              <DefaultUserImage width={30} height={30} userName={user.fullName} />
-                            }
-                            <span style={{marginLeft: '18px'}}>{user.fullName}</span>
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
+        </Snackbar> 
+      }
+      <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
+        <TableToolbar 
+          selected={selected.length}
+          handleDelete={handleDelete}
+          company={state.selectedCompany}
+          updateMemberList={updateTeamMemberList}
+          setErrors={setErrors}
+        />
+        { data && data.companyUsers.company && data.companyUsers.company.teams && 
+          <Searchbar 
+            data={data.companyUsers.company.teams} 
+            filteredName={filteredName}
+            handleChangeFiltered={(newValue) => setFilteredName(newValue)}
+            value={team} 
+            handleUpdate={handleChangeTeam} 
+          />
+        }
+        <div 
+          className={classes.tableWrapper}
+          onScroll={handleScroll}
+        >
+          <Table 
+            className={classes.table} 
+            aria-labelledby="Team Management Table"
+          >
+            <TableHeader />
+            <TableBody>
+              { memberList && 
+                memberList
+                .filter(member => member.fullName.includes(filteredName))
+                .map(user => {
+                  const isItemSelected = isSelected(user.id)
+                  let role: CompanyUsers_companyUsers_users_roles | null = null
+                  let teams: CompanyUsers_companyUsers_users_teams[] = []
+
+                  if (user.teams) {
+                    teams = user.teams.filter(team => team.companyId === state.selectedCompany)
+                  }
+                  
+                  if (user.roles) {
+                    role = user.roles.filter(role => role.companyId === state.selectedCompany)[0]
+                  }
+                  
+                  return (
+                    <StyledTableRow
+                      key={`member-${user.id}`} 
+                      role="team member"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      selected={isItemSelected}
+                      onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, user.id)}
+                      hover
+                    >
+                      <StyledTableCell style={{paddingLeft: '31px'}}>
+                        <div className={classes.flex} style={{alignItems: 'center'}}>
+                          { user.profileUrl ?
+                            <img 
+                              className={classes.round} 
+                              src={user.profileUrl}
+                              width="30" 
+                              height="30" 
+                              alt="Alana" 
+                            /> : 
+                            <DefaultUserImage width={30} height={30} userName={user.fullName} />
+                          }
+                          <span style={{marginLeft: '18px'}}>{user.fullName}</span>
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { user.companies && user.companies.slice(0, 2).map(company => 
+                              <StyledItem 
+                                key={`${user.fullName}-${company.id}`}
+                                label={company.name} 
+                                selected={isItemSelected}
+                              />
+                            )
+                          }
+                          { user.companies && user.companies.length > 2 &&
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(user.companies.map(a => a.name).slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${user.companies.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        { (teams.length > 0) ? 
                           <div className={classes.flex}>
-                            { user.companies && user.companies.slice(0, 2).map(company => 
+                            { teams.slice(0, 2).map(team => 
                                 <StyledItem 
-                                  key={`${user.fullName}-${company.id}`}
-                                  label={company.name} 
+                                  key={`${user.fullName}-${team.id}`}
+                                  label={team.name} 
                                   selected={isItemSelected}
                                 />
                               )
                             }
-                            { user.companies && user.companies.length > 2 &&
+                            { teams && teams.length > 2 &&
                               <ArrowTooltip 
-                                title={renderTooltipTitle(user.companies.map(a => a.name).slice(2))} 
+                                title={renderTooltipTitle(teams.map(a => a.name).slice(2))} 
                                 placement="top"
                               >
                                 <StyledItem
-                                  label={`+${user.companies.length - 2}`}
+                                  label={`+${teams.length - 2}`}
                                   selected={isItemSelected}
                                 />
                               </ArrowTooltip>
                             }
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          { (user.teams && user.teams.length > 0) ? 
-                            <div className={classes.flex}>
-                              { user.teams.slice(0, 2).map(team => 
-                                  <StyledItem 
-                                    key={`${user.fullName}-${team.id}`}
-                                    label={team.name} 
-                                    selected={isItemSelected}
-                                  />
-                                )                      
-                              }
-                              { user.teams && user.teams.length > 2 &&
-                                <ArrowTooltip 
-                                  title={renderTooltipTitle(user.teams.map(a => a.name).slice(2))} 
-                                  placement="top"
-                                >
-                                  <StyledItem
-                                    label={`+${user.teams.length - 2}`}
-                                    selected={isItemSelected}
-                                  />
-                                </ArrowTooltip>
-                              }
-                            </div> : "No Teams"
-                          }
-                          
-                        </StyledTableCell>
-                        { user.roles && user.roles[0].name && 
-                          <StyledTableCell>{user.roles[0].name}</StyledTableCell>
+                          </div> : "No Teams"
                         }
-                      </StyledTableRow>
-                    )
-                  })
-                }
-              </TableBody>
-            </Table>
-          </div>
-        </Paper>
+                        
+                      </StyledTableCell>
+                      { role && 
+                        <StyledTableCell>{role.name}</StyledTableCell>
+                      }
+                    </StyledTableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        </div>
+      </Paper>
 
-        { selected.length > 0 && 
-          <DetailPane 
-            id={selected[0]} 
-            open={isOpen()} 
-            company={state.selectedCompany}
-            handleClose={() => setSelected([])}
-          />
-        }
-      </div>
-    )
+      { selected.length > 0 && 
+        <DetailPane 
+          id={selected[0]} 
+          open={isOpen()} 
+          company={state.selectedCompany}
+          handleClose={() => setSelected([])}
+          updateMemberList={updateTeamMemberList}
+          setErrors={setErrors}
+        />
+      }
+    </div>
+  )
 }

@@ -23,6 +23,25 @@ export const useRemoveCompanyMember = createMutationHook<
         message
       }
       success
+      user {
+        id
+        fullName
+        profileUrl
+        roles {
+          id
+          name
+          companyId
+        }
+        teams {
+          id
+          name
+          companyId
+        }
+        companies {
+          id
+          name
+        }
+      }
     }
   }
 `);

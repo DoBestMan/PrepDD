@@ -20,28 +20,30 @@ export const useUpdateTeamMember = createMutationHook<
       companyId: $companyId, 
       role: $role,
     ) {
+      success
       errors {
         path
         message
       }
-           user{
-        id 
+      user {
+        id
         fullName
-        email
+        profileUrl
+        roles {
+          id
+          name
+          companyId
+        }
+        teams {
+          id
+          name
+          companyId
+        }
+        companies {
+          id
+          name
+        }
       }
-      companies {
-        id
-        name
-      }
-      teams{
-        id
-        name
-      }
-      role{
-        id
-        name
-      }
-      success
     }
   }
 `);

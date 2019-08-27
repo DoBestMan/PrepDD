@@ -12,8 +12,13 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
-import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember';
+import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember'
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
+import { 
+  CompanyUsers_companyUsers_users_companies,
+  CompanyUsers_companyUsers_users_teams,
+  CompanyUsers_companyUsers_users_roles
+} from '../../../../graphql/queries/__generated__/CompanyUsers'
 
 const useToolbarStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -70,7 +75,7 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
       position: 'absolute', 
       top: '42px', 
       left: '0px',
-      zIndex: 1, 
+      zIndex: 2, 
       background: '#FFFFFF',
       padding: '24px',
       border: '1px solid #CACACA',
@@ -144,14 +149,35 @@ interface StateProps {
   team: string;
 }
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
+  updateMemberList: (
+    params: {
+      id: string, 
+      fullName: string, 
+      companies: CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: CompanyUsers_companyUsers_users_teams[] | null, 
+      roles: CompanyUsers_companyUsers_users_roles[] | null
+    }
+  ) => void;
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const { selected, handleDelete, company } = props
+  const { 
+    selected, 
+    company, 
+    setErrors, 
+    handleDelete, 
+    updateMemberList
+  } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
@@ -163,7 +189,11 @@ const TableToolbar = (props: TableToolbarProps) => {
 
   const {data, loading, error} = useAllRoles({})
 
-  const [addTeamMember, response] = useAddTeamMember({
+  const [addTeamMember, {
+    loading: addTeamMemberLoading, 
+    data: addTeamMemberRes, 
+    error: addTeamMemberError
+  }] = useAddTeamMember({
     fullName: state.fullName, 
     email: state.email, 
     role: state.role, 
@@ -184,6 +214,33 @@ const TableToolbar = (props: TableToolbarProps) => {
       })
     }
   }, [idx(data, data => data.roles)])
+
+  useEffect(() => {
+    const addMemberErrors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
+
+    if (!addMemberErrors || !addMemberErrors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: addMemberErrors[0].message
+    })
+  }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
+
+  useEffect(() => {
+    const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
+
+    if (addTeamMemberLoading || !addedUser) return
+    updateMemberList({
+      id: addedUser.id, 
+      fullName: addedUser.fullName, 
+      companies: addedUser.companies, 
+      teams: addedUser.teams, 
+      roles: addedUser.roles
+    })
+    setErrors({
+      variant: 'success', 
+      message: 'Add team member successfully'
+    })
+  }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   const handleChange = useCallback(event => {
     const {name, value} = event.target
@@ -212,7 +269,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     setState({
       fullName: '', 
       email: '', 
-      role: '', 
+      role: '5', 
       team: ''
     })
   }, [addTeamMember])
@@ -246,6 +303,7 @@ const TableToolbar = (props: TableToolbarProps) => {
                 id="email"
                 name="email"
                 label="Email"
+                type="email"
                 className={classes.input}
                 value={state.email}
                 onChange={handleChange}

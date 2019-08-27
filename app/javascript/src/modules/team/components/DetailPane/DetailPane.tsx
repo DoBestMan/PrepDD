@@ -24,11 +24,16 @@ import AutoSuggest from '../AutoSuggest'
 
 import {useUserDetails} from '../../../../graphql/queries/UserDetails'
 import {useAllRoles} from '../../../../graphql/queries/AllRoles'
-import {UserDetails_user, UserDetails_user_companies_teams} from '../../../../graphql/queries/__generated__/UserDetails'
+import {UserDetails_user, UserDetails_user_teams} from '../../../../graphql/queries/__generated__/UserDetails'
 import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMember'
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
+import { 
+  CompanyUsers_companyUsers_users_companies,
+  CompanyUsers_companyUsers_users_teams,
+  CompanyUsers_companyUsers_users_roles
+} from '../../../../graphql/queries/__generated__/CompanyUsers'
 
 const panelWidth = 500
 
@@ -164,33 +169,57 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 interface DetailPaneProps {
-  id: string
-  open: boolean
-  company: string
-  handleClose: () => void
+  id: string;
+  open: boolean;
+  company: string;
+  handleClose: () => void;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
+  updateMemberList: (
+    params: {
+      id: string, 
+      fullName: string, 
+      profileUrl?: string, 
+      companies: CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: CompanyUsers_companyUsers_users_teams[] | null, 
+      roles: CompanyUsers_companyUsers_users_roles[] | null
+    }
+  ) => void;
 }
 
 interface UserProps extends UserDetails_user {
-  role: string
-  team: string
+  role: string;
+  team: string;
 }
 
 interface Role {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, handleClose} = props
+  const {
+    id, 
+    open, 
+    company, 
+    setErrors, 
+    handleClose, 
+    updateMemberList
+  } = props
   const classes = useStyles()
   const [user, setUser] = useState<UserProps>({
     __typename: "User",
     id: '',
     email: '',
     fullName: '',
-    profileUrl: '', 
-    roles: null,
+    profileUrl: '',
+    roles: null, 
+    teams: null, 
     companies: null, 
     role: '0', 
     team: ''
@@ -203,21 +232,37 @@ export default function DetailPane(props: DetailPaneProps) {
   
   const {loading, data, error} = useUserDetails({id, })
   const rolesData = useAllRoles({})
-  const [updateTeamMember] = useUpdateTeamMember({
+  const [updateTeamMember, {
+    loading: updateTeamMemberLoading, 
+    data: updateTeamMemberRes, 
+    error: updateTeamMemberError, 
+  }] = useUpdateTeamMember({
     id: user.id,
     fullName: user.fullName, 
     companyId: company, 
     role: user.role, 
   })
-  const [removeCompanyMember] = useRemoveCompanyMember({
+  const [removeCompanyMember, {
+    loading: removeCompanyMemberLoading, 
+    data: removeCompanyMemberRes, 
+    error: removeCompanyMemberError,
+  }] = useRemoveCompanyMember({
     companyId: companyId || company, 
     userId: user.id, 
   })
-  const [removeTeamMember] = useRemoveTeamMember({
+  const [removeTeamMember, {
+    loading: removeTeamMemberLoading, 
+    data: removeTeamMemberRes, 
+    error: removeTeammemberError, 
+  }] = useRemoveTeamMember({
     teamId, 
     userId: user.id
   })
-  const [addTeamMember] = useAddTeamMember({
+  const [addTeamMember, {
+    loading: addTeamMemberLoading, 
+    data: addTeamMemberRes, 
+    error: addTeamMemberError
+  }] = useAddTeamMember({
     companyId,
     fullName: user.fullName, 
     email: user.email, 
@@ -245,13 +290,15 @@ export default function DetailPane(props: DetailPaneProps) {
     if (loading || !currentUser) return
 
     if (currentUser.roles) {
+      const findRole = currentUser.roles.filter(role => role.companyId === company)[0]
+
       setUser({
         ...user, 
         id: currentUser.id, 
         email: currentUser.email, 
         fullName: currentUser.fullName, 
         profileUrl: currentUser.profileUrl,
-        role: currentUser.roles[0].id,
+        role: findRole ? findRole.id : '0',
       })
     } else {
       setUser({
@@ -262,12 +309,116 @@ export default function DetailPane(props: DetailPaneProps) {
         fullName: currentUser.fullName,
       })
     }
-  }, [data])
+  }, [loading, idx(data, data => data.user)])
 
   useEffect(() => {
-    if (teamId)
+    const updatedUser = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)
+    
+    if (updateTeamMemberLoading || !updatedUser) return
+    handleUpdateMemberList(updatedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Update team member successfully'
+    })
+  }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
+
+  useEffect(() => {
+    const errors = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
+  }, [idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)])
+
+  useEffect(() => {
+    const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
+    
+    if (addTeamMemberLoading || !addedUser) return
+    handleUpdateMemberList(addedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Add team member successfully'
+    })
+  }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
+
+  useEffect(() => {
+    const errors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
+  }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
+
+  useEffect(() => {
+    const removedUser = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)
+    
+    if (removeTeamMemberLoading || !removedUser) return
+    handleUpdateMemberList(removedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Remove team member successfully'
+    })
+  }, [removeTeamMemberLoading, idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)])
+
+  useEffect(() => {
+    const errors = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
+  }, [idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)])
+
+  useEffect(() => {
+    const removedUser = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)
+    
+    if (removeCompanyMemberLoading || !removedUser) return
+    handleUpdateMemberList(removedUser as UserDetails_user)
+
+    if (companyId === company) {
+      handleClose()
+    }
+    setErrors({
+      variant: 'success', 
+      message: 'Remove company member successfully'
+    })
+  }, [removeCompanyMemberLoading, idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)])
+
+  useEffect(() => {
+    const errors = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)
+   
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
+  }, [idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)])
+
+  useEffect(() => {
+    if (teamId && confirm("Are you going to remove this member?")) {
       removeTeamMember()
+    }
   }, [teamId])
+
+  const handleUpdateMemberList = (updatedUser: UserDetails_user) => {
+    setUser({
+      ...user, 
+      ...updatedUser
+    })
+    updateMemberList({
+      id: updatedUser.id, 
+      fullName: updatedUser.fullName, 
+      profileUrl: updatedUser.profileUrl as string,
+      companies: updatedUser.companies as CompanyUsers_companyUsers_users_companies[] | null, 
+      teams: updatedUser.teams, 
+      roles: updatedUser.roles as CompanyUsers_companyUsers_users_roles[] | null
+    })
+  }
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUser({
@@ -276,19 +427,19 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const handleChangeRole = (newRole: string) => {
-    setUser({
+  const handleChangeRole = async (newRole: string) => {
+    await setUser({
       ...user,
       role: newRole
     })
+
     updateTeamMember()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you going to delete this member?")) {
-      setCompanyId(company)
+      await setCompanyId(company)
       removeCompanyMember()
-      handleClose()
     }
   }
 
@@ -309,17 +460,21 @@ export default function DetailPane(props: DetailPaneProps) {
     })
   }
 
-  const handleAddTeamMember = useCallback(event => {
+  const handleAddTeamMember = (event: React.FormEvent<unknown>) => {
     event.preventDefault()
     addTeamMember()
+    setAddHover(false)
     setUser({
       ...user, 
       team: ''
     })
-    setAddHover(false)
-  }, [addTeamMember])
+  }
 
-  const renderTeams = (teams: UserDetails_user_companies_teams[]) => {
+  const renderTeams = (teams: UserDetails_user_teams[]) => {
+    if (!teams.length) {
+      return "No teams"
+    }
+
     const label = 
       teams && teams.length > 2 ?
         teams
@@ -398,6 +553,11 @@ export default function DetailPane(props: DetailPaneProps) {
             { data && data.user && data.user.companies && 
               data.user.companies.map(company => {
                 const isHover = (companyId === company.id)
+                let teams: UserDetails_user_teams[] = []
+                
+                if (data.user.teams) {
+                  teams = data.user.teams.filter(team => team.companyId === company.id)
+                }
 
                 return (
                   <StyledTableRow 
@@ -419,7 +579,8 @@ export default function DetailPane(props: DetailPaneProps) {
                     <StyledTableCell>
                       { isHover ? 
                         <div className={classes.flex}>
-                          { company.teams && company.teams.slice(0, 2).map(team => 
+                          { !teams.length && "No teams"}
+                          { teams && teams.slice(0, 2).map(team => 
                               <StyledItem 
                                 key={`${user.fullName}-${team.id}`}
                                 label={team.name} 
@@ -429,13 +590,13 @@ export default function DetailPane(props: DetailPaneProps) {
                               />
                             )
                           }
-                          { company.teams && company.teams.length > 2 &&
+                          { teams && teams.length > 2 &&
                             <div 
                               onMouseOver={() => setMoreHover(true)}
                               onMouseLeave={() => setMoreHover(false)}
                               style={{position: 'relative'}}
                             >
-                              <StyledItem label={`+${company.teams.length - 2}`} selected />
+                              <StyledItem label={`+${teams.length - 2}`} selected />
                               { moreHover && 
                                 <Paper 
                                   className={classes.morePaper} 
@@ -443,7 +604,7 @@ export default function DetailPane(props: DetailPaneProps) {
                                   onMouseOver={() => setMoreHover(true)}
                                   onMouseLeave={() => setMoreHover(false)}
                                 >
-                                  { company.teams.slice(2).map(team => 
+                                  { teams.slice(2).map(team => 
                                       <StyledItem 
                                         key={`${user.fullName}-${team.id}`}
                                         label={team.name} 
@@ -485,7 +646,7 @@ export default function DetailPane(props: DetailPaneProps) {
                             }
                           </div>
                         </div> :
-                        (company.teams && renderTeams(company.teams))
+                        (teams && renderTeams(teams))
                       }
                     </StyledTableCell>
                   </StyledTableRow>
