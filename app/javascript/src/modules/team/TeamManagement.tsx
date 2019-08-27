@@ -32,6 +32,7 @@ import {
   CompanyUsers_companyUsers_users_roles,
   CompanyUsers_companyUsers_users_teams, 
 } from '../../graphql/queries/__generated__/CompanyUsers' 
+import FlashMessage from '../common/FlashMessage';
 
 const PANEL_WIDTH = 500
 const LIMIT = 20
@@ -95,6 +96,7 @@ export default function TeamManagement(props: {path?: string}) {
   const [team, setTeam] = useState("")
   const [memberList, setMemberList] = useState<CompanyUsers_companyUsers_users[]>([])
   const [filteredName, setFilteredName] = useState<string>("")
+  const [errors, setErrors] = useState<string>("")
   
   const {state} = useGlobalState()
   const {loading, data, error, fetchMore} = useCompanyUsers({
@@ -293,142 +295,154 @@ export default function TeamManagement(props: {path?: string}) {
 
   return loading ? 
     <LoadingFallback /> :
-    (
-      <div className={classes.root}>
-        <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
-          <TableToolbar 
-            selected={selected.length}
-            handleDelete={handleDelete}
-            company={state.selectedCompany}
-            updateMemberList={updateTeamMemberList}
+    error ?
+    <FlashMessage
+      variant="warning"
+      message="Loading error"
+    /> : (
+    <div className={classes.root}>
+      { errors && 
+        <FlashMessage
+          variant="warning"
+          message={errors}
+        />
+      }
+      <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
+        <TableToolbar 
+          selected={selected.length}
+          handleDelete={handleDelete}
+          company={state.selectedCompany}
+          updateMemberList={updateTeamMemberList}
+          setErrors={setErrors}
+        />
+        { data && data.companyUsers.company && data.companyUsers.company.teams && 
+          <Searchbar 
+            data={data.companyUsers.company.teams} 
+            filteredName={filteredName}
+            handleChangeFiltered={(newValue) => setFilteredName(newValue)}
+            value={team} 
+            handleUpdate={handleChangeTeam} 
           />
-          { data && data.companyUsers.company && data.companyUsers.company.teams && 
-            <Searchbar 
-              data={data.companyUsers.company.teams} 
-              filteredName={filteredName}
-              handleChangeFiltered={(newValue) => setFilteredName(newValue)}
-              value={team} 
-              handleUpdate={handleChangeTeam} 
-            />
-          }
-          <div className={classes.tableWrapper}>
-            <Table 
-              className={classes.table} 
-              aria-labelledby="Team Management Table"
-            >
-              <TableHeader />
-              <TableBody>
-                { memberList && 
-                  memberList
-                  .filter(member => member.fullName.includes(filteredName))
-                  .map(user => {
-                    const isItemSelected = isSelected(user.id)
-                    let role: CompanyUsers_companyUsers_users_roles | null = null
-                    let teams: CompanyUsers_companyUsers_users_teams[] = []
+        }
+        <div className={classes.tableWrapper}>
+          <Table 
+            className={classes.table} 
+            aria-labelledby="Team Management Table"
+          >
+            <TableHeader />
+            <TableBody>
+              { memberList && 
+                memberList
+                .filter(member => member.fullName.includes(filteredName))
+                .map(user => {
+                  const isItemSelected = isSelected(user.id)
+                  let role: CompanyUsers_companyUsers_users_roles | null = null
+                  let teams: CompanyUsers_companyUsers_users_teams[] = []
 
-                    if (user.teams) {
-                      teams = user.teams.filter(team => team.companyId === state.selectedCompany)
-                    }
-                    
-                    if (user.roles) {
-                      role = user.roles.filter(role => role.companyId === state.selectedCompany)[0]
-                    }
-                    
-                    return (
-                      <StyledTableRow
-                        key={`member-${user.id}`} 
-                        role="team member"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        selected={isItemSelected}
-                        onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, user.id)}
-                        hover
-                      >
-                        <StyledTableCell style={{paddingLeft: '31px'}}>
-                          <div className={classes.flex} style={{alignItems: 'center'}}>
-                            { user.profileUrl ?
-                              <img 
-                                className={classes.round} 
-                                src={user.profileUrl}
-                                width="30" 
-                                height="30" 
-                                alt="Alana" 
-                              /> : 
-                              <DefaultUserImage width={30} height={30} userName={user.fullName} />
-                            }
-                            <span style={{marginLeft: '18px'}}>{user.fullName}</span>
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
+                  if (user.teams) {
+                    teams = user.teams.filter(team => team.companyId === state.selectedCompany)
+                  }
+                  
+                  if (user.roles) {
+                    role = user.roles.filter(role => role.companyId === state.selectedCompany)[0]
+                  }
+                  
+                  return (
+                    <StyledTableRow
+                      key={`member-${user.id}`} 
+                      role="team member"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      selected={isItemSelected}
+                      onClick={(event: React.MouseEvent<HTMLTableRowElement>) => handleClick(event, user.id)}
+                      hover
+                    >
+                      <StyledTableCell style={{paddingLeft: '31px'}}>
+                        <div className={classes.flex} style={{alignItems: 'center'}}>
+                          { user.profileUrl ?
+                            <img 
+                              className={classes.round} 
+                              src={user.profileUrl}
+                              width="30" 
+                              height="30" 
+                              alt="Alana" 
+                            /> : 
+                            <DefaultUserImage width={30} height={30} userName={user.fullName} />
+                          }
+                          <span style={{marginLeft: '18px'}}>{user.fullName}</span>
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className={classes.flex}>
+                          { user.companies && user.companies.slice(0, 2).map(company => 
+                              <StyledItem 
+                                key={`${user.fullName}-${company.id}`}
+                                label={company.name} 
+                                selected={isItemSelected}
+                              />
+                            )
+                          }
+                          { user.companies && user.companies.length > 2 &&
+                            <ArrowTooltip 
+                              title={renderTooltipTitle(user.companies.map(a => a.name).slice(2))} 
+                              placement="top"
+                            >
+                              <StyledItem
+                                label={`+${user.companies.length - 2}`}
+                                selected={isItemSelected}
+                              />
+                            </ArrowTooltip>
+                          }
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        { (teams.length > 0) ? 
                           <div className={classes.flex}>
-                            { user.companies && user.companies.slice(0, 2).map(company => 
+                            { teams.slice(0, 2).map(team => 
                                 <StyledItem 
-                                  key={`${user.fullName}-${company.id}`}
-                                  label={company.name} 
+                                  key={`${user.fullName}-${team.id}`}
+                                  label={team.name} 
                                   selected={isItemSelected}
                                 />
                               )
                             }
-                            { user.companies && user.companies.length > 2 &&
+                            { teams && teams.length > 2 &&
                               <ArrowTooltip 
-                                title={renderTooltipTitle(user.companies.map(a => a.name).slice(2))} 
+                                title={renderTooltipTitle(teams.map(a => a.name).slice(2))} 
                                 placement="top"
                               >
                                 <StyledItem
-                                  label={`+${user.companies.length - 2}`}
+                                  label={`+${teams.length - 2}`}
                                   selected={isItemSelected}
                                 />
                               </ArrowTooltip>
                             }
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          { (teams.length > 0) ? 
-                            <div className={classes.flex}>
-                              { teams.slice(0, 2).map(team => 
-                                  <StyledItem 
-                                    key={`${user.fullName}-${team.id}`}
-                                    label={team.name} 
-                                    selected={isItemSelected}
-                                  />
-                                )
-                              }
-                              { teams && teams.length > 2 &&
-                                <ArrowTooltip 
-                                  title={renderTooltipTitle(teams.map(a => a.name).slice(2))} 
-                                  placement="top"
-                                >
-                                  <StyledItem
-                                    label={`+${teams.length - 2}`}
-                                    selected={isItemSelected}
-                                  />
-                                </ArrowTooltip>
-                              }
-                            </div> : "No Teams"
-                          }
-                          
-                        </StyledTableCell>
-                        { role && 
-                          <StyledTableCell>{role.name}</StyledTableCell>
+                          </div> : "No Teams"
                         }
-                      </StyledTableRow>
-                    )
-                  })
-                }
-              </TableBody>
-            </Table>
-          </div>
-        </Paper>
+                        
+                      </StyledTableCell>
+                      { role && 
+                        <StyledTableCell>{role.name}</StyledTableCell>
+                      }
+                    </StyledTableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        </div>
+      </Paper>
 
-        { selected.length > 0 && 
-          <DetailPane 
-            id={selected[0]} 
-            open={isOpen()} 
-            company={state.selectedCompany}
-            handleClose={() => setSelected([])}
-            updateMemberList={updateTeamMemberList}
-          />
-        }
-      </div>
-    )
+      { selected.length > 0 && 
+        <DetailPane 
+          id={selected[0]} 
+          open={isOpen()} 
+          company={state.selectedCompany}
+          handleClose={() => setSelected([])}
+          updateMemberList={updateTeamMemberList}
+          setErrors={setErrors}
+        />
+      }
+    </div>
+  )
 }

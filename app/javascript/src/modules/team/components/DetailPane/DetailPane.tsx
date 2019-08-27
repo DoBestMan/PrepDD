@@ -174,6 +174,7 @@ interface DetailPaneProps {
   open: boolean;
   company: string;
   handleClose: () => void;
+  setErrors: (value: React.SetStateAction<string>) => void;
   updateMemberList: (
     params: {
       id: string, 
@@ -197,7 +198,14 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, handleClose, updateMemberList} = props
+  const {
+    id, 
+    open, 
+    company, 
+    setErrors, 
+    handleClose, 
+    updateMemberList
+  } = props
   const classes = useStyles()
   const [user, setUser] = useState<UserProps>({
     __typename: "User",
@@ -306,6 +314,11 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
+    if (updateTeamMemberError) return
+    setErrors("Update team member failed")
+  }, [updateTeamMemberError])
+
+  useEffect(() => {
     const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
     
     if (addTeamMemberLoading || !addedUser) return
@@ -313,11 +326,21 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   useEffect(() => {
+    if (addTeamMemberError) return
+    setErrors("Add team member failed")
+  }, [addTeamMemberError])
+
+  useEffect(() => {
     const removedUser = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)
     
     if (removeTeamMemberLoading || !removedUser) return
     handleUpdateMemberList(removedUser as UserDetails_user)
   }, [removeTeamMemberLoading, idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)])
+
+  useEffect(() => {
+    if (removeTeammemberError) return
+    setErrors("Remove team member failed")
+  }, [removeTeammemberError])
 
   useEffect(() => {
     const removedUser = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)
@@ -329,6 +352,11 @@ export default function DetailPane(props: DetailPaneProps) {
       handleClose()
     }
   }, [removeCompanyMemberLoading, idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)])
+
+  useEffect(() => {
+    if (removeCompanyMemberError) return
+    setErrors("Remove company member failed")
+  }, [removeCompanyMemberError])
 
   useEffect(() => {
     if (teamId && confirm("Are you going to remove this member?")) {

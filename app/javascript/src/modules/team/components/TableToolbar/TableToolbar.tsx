@@ -153,6 +153,7 @@ interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
+  setErrors: (value: React.SetStateAction<string>) => void;
   updateMemberList: (
     params: {
       id: string, 
@@ -165,7 +166,13 @@ interface TableToolbarProps {
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const { selected, company, handleDelete, updateMemberList} = props
+  const { 
+    selected, 
+    company, 
+    setErrors, 
+    handleDelete, 
+    updateMemberList
+  } = props
   const classes = useToolbarStyles()
   const [open, setOpen] = useState<boolean>(false)
   const [state, setState] = useState<StateProps>({
@@ -202,6 +209,13 @@ const TableToolbar = (props: TableToolbarProps) => {
       })
     }
   }, [idx(data, data => data.roles)])
+
+  useEffect(() => {
+    const addMemberErrors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
+
+    if (!addMemberErrors) return
+    setErrors("Invite new member failed")
+  }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
 
   useEffect(() => {
     const addedUser = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)
