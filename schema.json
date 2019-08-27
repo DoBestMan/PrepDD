@@ -196,7 +196,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "Company",
+                      "name": "User",
                       "ofType": null
                     }
                   }

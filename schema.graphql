@@ -120,7 +120,7 @@ type Query {
   """
   Find companies by user email
   """
-  searchUserCompanies(email: String!): [Company!]!
+  searchUserCompanies(email: String!): [User!]!
 
   """
   Find a team by id

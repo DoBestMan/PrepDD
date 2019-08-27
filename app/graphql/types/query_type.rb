@@ -56,7 +56,7 @@ module Types
       argument :offset, Integer, required: false
     end
 
-    field :search_user_companies, [CompanyType], null: false do
+    field :search_user_companies, [UserType], null: false do
       description 'Find companies by user email'
       argument :email, String, required: true
     end
@@ -103,8 +103,7 @@ module Types
     end
 
     def search_user_companies(email:)
-      user = User.where("email LIKE ?", "%#{email}%").first
-      user.companies
+      User.where("email LIKE ?", "%#{email}%")
     end
   end
 end
