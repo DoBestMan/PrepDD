@@ -3,8 +3,8 @@ local:
   root: <%= Rails.root.join("storage") %>
 
 amazon:
-  service: S3
+  service: "S3"
   access_key_id: <%= ENV.fetch('AWS_ACCESS_KEY_ID') %>
   secret_access_key: <%= ENV.fetch('AWS_SECRET_ACCESS_KEY') %>
-  bucket: "prepdd-main"
+  bucket: "main-prepdd"
   region: "us-east-1"
