@@ -1,4 +1,8 @@
-import React, {useEffect} from 'react';
+import React, { 
+  useState, 
+  useEffect, 
+  SyntheticEvent
+} from 'react';
 import axios from 'axios';
 import clsx from 'clsx';
 import idx from 'idx';
@@ -15,6 +19,7 @@ import {
   TableCell,
   Button,
   Typography,
+  Snackbar
 } from '@material-ui/core';
 import CameraIcon from '@material-ui/icons/CameraAlt';
 import UploadIcon from '@material-ui/icons/CloudUpload';
@@ -25,7 +30,6 @@ import CheckBox from './components/CheckBox';
 import { useGlobalState } from '../../../../store'
 import { useUpdateUserPassword } from '../../../../graphql/mutations/UpdateUserPassword'
 import { useUpdateUserData } from '../../../../graphql/mutations/UpdateUserData'
-import { UpdateUserData_updateUserData_errors } from '../../../../graphql/mutations/__generated__/UpdateUserData'
 import { CurrentUser_currentUser_user_teams } from '../../../../graphql/queries/__generated__/CurrentUser'
 import FlashMessage from '../../../common/FlashMessage';
 
@@ -167,11 +171,16 @@ interface UserType {
   hasEightChar: boolean;
 }
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 export default function ProfilePane(props: {value?: number; index?: number}) {
   const {value, index} = props;
   const classes = useStyles();
   const { state, dispatch } = useGlobalState()
-  const [user, setUser] = React.useState<UserType>({
+  const [user, setUser] = useState<UserType>({
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
     displayName: state.currentUser.displayName || state.currentUser.fullName as string,
@@ -183,8 +192,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     hasSpecialChar: false,
     hasEightChar: false,
   });
-  const [show, setShow] = React.useState<boolean>(false);
-  const [errors, setErrors] = React.useState<UpdateUserData_updateUserData_errors[]>([])
+  const [show, setShow] = useState<boolean>(false);
+  const [messageOpen, setMessageOpen] = useState<boolean>(false)
+  const [errors, setErrors] = useState<ErrorType | null>(null)
 
   const [updateUserPassword, {
     loading: updateUserPasswordLoading, 
@@ -208,16 +218,41 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   useEffect(() => {
     const updateErrors = idx(updateUserDataRes, updateUserDataRes => updateUserDataRes.updateUserData.errors)
 
-    if (!updateErrors) return
-    setErrors(updateErrors)
+    if (updateErrors && !updateErrors.length) {
+      setErrors({
+        variant: 'success', 
+        message: 'Update user successfully'
+      })
+    } else if (updateErrors && updateErrors.length) {
+      setErrors({
+        variant: 'warning', 
+        message: updateErrors[0].message
+      })
+    }
   }, [idx(updateUserDataRes, updateUserDataRes => updateUserDataRes.updateUserData.errors)])
 
   useEffect(() => {
     const updateErrors = idx(updateUserPasswordRes, updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors)
 
-    if (!updateErrors) return
-    setErrors(updateErrors as UpdateUserData_updateUserData_errors[])
+    if (updateErrors && !updateErrors.length) {
+      console.log("Update Password Error", updateErrors)
+      setErrors({
+        variant: 'success', 
+        message: 'Update password successfully'
+      })
+    } else if (updateErrors && updateErrors.length) {
+      setErrors({
+        variant: 'warning', 
+        message: updateErrors[0].message
+      })
+    }
   }, [idx(updateUserPasswordRes, updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors)])
+
+  useEffect(() => {
+    if (errors) {
+      setMessageOpen(true)
+    }
+  }, [errors])
 
 
   const handleChange = React.useCallback(
@@ -250,7 +285,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   const handleChangePassword = () => {
     if (user.password !== user.confirmPassword) {
-      alert("Password is not matched")
+      setErrors({
+        variant: 'warning', 
+        message: 'Password is not matched'
+      })
       setUser(user => ({
         ...user, 
         confirmPassword: ''
@@ -258,7 +296,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       return
     }
     if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
-      alert("Password is invalid")
+      setErrors({
+        variant: 'warning', 
+        message: 'Password is not valid'
+      })
       setUser(user => ({
         ...user, 
         confirmPassword: ''
@@ -304,6 +345,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         ...user, 
         profile_url: res.data.profile_url
       })
+      setErrors({
+        variant: 'success', 
+        message: 'Upload photo successfully'
+      })
 
       dispatch({
         type: 'SET_CURRENT_USER', 
@@ -313,14 +358,19 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         }
       })
     }).catch(error => {
-      setErrors([
-        {
-          __typename: "FormError",
-          path: null, 
-          message: "Upload photo failed"
-        } as UpdateUserData_updateUserData_errors
-      ])
+      setErrors({
+        variant: 'warning', 
+        message: 'Upload photo failed'
+      })
     })
+  }
+
+  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setMessageOpen(false)
   }
 
   const renderDropzone = () => {
@@ -371,15 +421,21 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   return (
     <>
       { errors && 
-        errors.map((error, index) => {
-          return (
-            <FlashMessage
-              key={index}
-              variant="warning"
-              message={error.message}
-            />
-          )
-        })
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom', 
+            horizontal: 'right'
+          }}
+          open={messageOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseMessage}
+        >
+          <FlashMessage
+            variant={errors.variant}
+            message={errors.message}
+            onClose={handleCloseMessage}
+          />
+        </Snackbar> 
       }
       <Paper
         className={clsx(classes.root, value !== index && classes.invisible)}
