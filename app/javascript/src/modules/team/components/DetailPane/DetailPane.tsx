@@ -371,7 +371,6 @@ export default function DetailPane(props: DetailPaneProps) {
     if (confirm("Are you going to delete this member?")) {
       await setCompanyId(company)
       removeCompanyMember()
-      // handleClose()
     }
   }
 

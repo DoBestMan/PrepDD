@@ -277,6 +277,7 @@ const TableToolbar = (props: TableToolbarProps) => {
                 id="email"
                 name="email"
                 label="Email"
+                type="email"
                 className={classes.input}
                 value={state.email}
                 onChange={handleChange}

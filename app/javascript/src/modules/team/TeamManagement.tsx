@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
@@ -30,7 +30,7 @@ import {
   CompanyUsersVariables,
   CompanyUsers_companyUsers_users_companies, 
   CompanyUsers_companyUsers_users_roles,
-  CompanyUsers_companyUsers_users_teams
+  CompanyUsers_companyUsers_users_teams, 
 } from '../../graphql/queries/__generated__/CompanyUsers' 
 
 const PANEL_WIDTH = 500
@@ -91,11 +91,11 @@ interface UpdateTeamMemberProps {
 
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
-  const [selected, setSelected] = React.useState<string[]>([])
-  const [team, setTeam] = React.useState("")
-  const [memberList, setMemberList] = React.useState<CompanyUsers_companyUsers_users[]>([])
-  const [filteredName, setFilteredName] = React.useState<string>("")
-
+  const [selected, setSelected] = useState<string[]>([])
+  const [team, setTeam] = useState("")
+  const [memberList, setMemberList] = useState<CompanyUsers_companyUsers_users[]>([])
+  const [filteredName, setFilteredName] = useState<string>("")
+  
   const {state} = useGlobalState()
   const {loading, data, error, fetchMore} = useCompanyUsers({
     companyId: state.selectedCompany,
