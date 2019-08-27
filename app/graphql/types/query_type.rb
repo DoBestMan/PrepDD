@@ -103,7 +103,7 @@ module Types
     end
 
     def search_user_companies(text:)
-      User.where("lower(email) LIKE :text OR lower(full_name) LIKE :text", text:  "%#{text.downcase}%")
+      User.search(text)
     end
   end
 end
