@@ -253,10 +253,14 @@ export default function TeamManagement(props: {path?: string}) {
       // Update member
       let newList: CompanyUsers_companyUsers_users[] = memberList
 
-      newList[findMember] = {
-        ...params,
-        __typename: 'User',
-      } as CompanyUsers_companyUsers_users
+      if (params.companies && params.companies.find(company => company.id === state.selectedCompany)) {
+        newList[findMember] = {
+          ...params,
+          __typename: 'User',
+        } as CompanyUsers_companyUsers_users
+      } else {
+        newList = newList.filter((member, index) => index !== findMember)
+      }
       setMemberList([
         ...newList
       ])

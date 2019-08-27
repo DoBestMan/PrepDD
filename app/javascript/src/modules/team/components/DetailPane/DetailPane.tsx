@@ -313,6 +313,24 @@ export default function DetailPane(props: DetailPaneProps) {
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   useEffect(() => {
+    const removedUser = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)
+    
+    if (removeTeamMemberLoading || !removedUser) return
+    handleUpdateMemberList(removedUser as UserDetails_user)
+  }, [removeTeamMemberLoading, idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)])
+
+  useEffect(() => {
+    const removedUser = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)
+    
+    if (removeCompanyMemberLoading || !removedUser) return
+    handleUpdateMemberList(removedUser as UserDetails_user)
+
+    if (companyId === company) {
+      handleClose()
+    }
+  }, [removeCompanyMemberLoading, idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)])
+
+  useEffect(() => {
     if (teamId && confirm("Are you going to remove this member?")) {
       removeTeamMember()
     }
@@ -349,11 +367,11 @@ export default function DetailPane(props: DetailPaneProps) {
     updateTeamMember()
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you going to delete this member?")) {
-      setCompanyId(company)
+      await setCompanyId(company)
       removeCompanyMember()
-      handleClose()
+      // handleClose()
     }
   }
 
