@@ -14,7 +14,6 @@ import AutoSuggest from '../AutoSuggest'
 import Dropdown from './components/Dropdown'
 import { useAddTeamMember } from '../../../../graphql/mutations/AddTeamMember'
 import { useAllRoles } from '../../../../graphql/queries/AllRoles'
-import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../../../graphql/mutations/__generated__/AddTeamMember'
 import { 
   CompanyUsers_companyUsers_users_companies,
   CompanyUsers_companyUsers_users_teams,
@@ -150,11 +149,16 @@ interface StateProps {
   team: string;
 }
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
-  setErrors: React.Dispatch<React.SetStateAction<ErrorType[]>>;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
   updateMemberList: (
     params: {
       id: string, 
@@ -214,8 +218,11 @@ const TableToolbar = (props: TableToolbarProps) => {
   useEffect(() => {
     const addMemberErrors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
 
-    if (!addMemberErrors) return
-    setErrors(addMemberErrors as ErrorType[])
+    if (!addMemberErrors || !addMemberErrors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: addMemberErrors[0].message
+    })
   }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
 
   useEffect(() => {
@@ -228,6 +235,10 @@ const TableToolbar = (props: TableToolbarProps) => {
       companies: addedUser.companies, 
       teams: addedUser.teams, 
       roles: addedUser.roles
+    })
+    setErrors({
+      variant: 'success', 
+      message: 'Add team member successfully'
     })
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 

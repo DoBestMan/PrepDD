@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, SyntheticEvent } from 'react'
 import clsx from 'clsx'
 import idx from 'idx'
 import _ from 'lodash'
@@ -6,7 +6,8 @@ import { Theme, makeStyles, createStyles } from '@material-ui/core/styles'
 import {
   Paper,
   Table,
-  TableBody
+  TableBody,
+  Snackbar
 } from '@material-ui/core'
 
 import LoadingFallback from '../../components/LoadingFallback'
@@ -24,7 +25,6 @@ import {useGlobalState} from '../../store'
 
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers'
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember'
-import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../graphql/mutations/__generated__/AddTeamMember'
 import {
   CompanyUsers_companyUsers_users, 
   CompanyUsers, 
@@ -99,13 +99,19 @@ interface UpdateTeamMemberProps {
   roles: CompanyUsers_companyUsers_users_roles[] | null;
 }
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles()
   const [selected, setSelected] = useState<string[]>([])
   const [team, setTeam] = useState("")
   const [memberList, setMemberList] = useState<CompanyUsers_companyUsers_users[]>([])
   const [filteredName, setFilteredName] = useState<string>("")
-  const [errors, setErrors] = useState<ErrorType[]>([])
+  const [errors, setErrors] = useState<ErrorType | null>(null)
+  const [messageOpen, setMessageOpen] = useState<boolean>(false)
   
   const {state} = useGlobalState()
   const {loading, data, error, fetchMore} = useCompanyUsers({
@@ -114,7 +120,11 @@ export default function TeamManagement(props: {path?: string}) {
     limit: LIMIT, 
     offset: 0
   });
-  const [removeCompanyMember] = useRemoveCompanyMember({
+  const [removeCompanyMember, {
+    loading: removeCompanyMemberLoading, 
+    data: removeCompanyMemberRes, 
+    error: removeCompanyMemberError
+  }] = useRemoveCompanyMember({
     companyId: state.selectedCompany, 
     userIds: selected
   })
@@ -125,12 +135,42 @@ export default function TeamManagement(props: {path?: string}) {
   }, [state.selectedCompany])
 
   useEffect(() => {
+    if (errors) {
+      setMessageOpen(true)
+    }
+  }, [errors])
+
+  useEffect(() => {
     const usersList = idx(data, data => data.companyUsers.users);
 
     if (loading || !usersList) return;
     setMemberList(usersList)
     console.log("After fetching list", usersList)
   }, [idx(data, data => data.companyUsers.users)])
+
+  useEffect(() => {
+    const removeErrors = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)
+
+    if (removeErrors && !removeErrors.length) {
+      setErrors({
+        variant: 'success', 
+        message: 'Remove company member successfully'
+      })
+
+      let newMemberList = memberList
+      selected.map(id => {
+        newMemberList = newMemberList.filter(member => member.id !== id)
+      })
+
+      setSelected([])
+      setMemberList(newMemberList)
+    } else if (removeErrors && removeErrors.length) {
+      setErrors({
+        variant: 'warning', 
+        message: removeErrors[0].message
+      })
+    }
+  }, [idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)])
 
   const handleClick = (event: React.MouseEvent<HTMLTableRowElement>, id: string) => {
     event.persist()
@@ -187,20 +227,20 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleDelete = () => {
     if (confirm("Are you going to delete team members?")) {
-      removeCompanyMember();
-
-      let newMemberList = memberList
-      selected.map(id => {
-        newMemberList = newMemberList.filter(member => member.id !== id)
-      })
-
-      setSelected([])
-      setMemberList(newMemberList)
+      removeCompanyMember()
     }
   }
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam)
+  }
+
+  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setMessageOpen(false)
   }
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
@@ -301,15 +341,21 @@ export default function TeamManagement(props: {path?: string}) {
     /> : (
     <div className={classes.root}>
       { errors && 
-        errors.map((error, index) => {
-          return (
-            <FlashMessage
-              key={index}
-              variant="warning"
-              message={error.message}
-            />
-          )
-        })
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom', 
+            horizontal: 'right'
+          }}
+          open={messageOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseMessage}
+        >
+          <FlashMessage
+            variant={errors.variant}
+            message={errors.message}
+            onClose={handleCloseMessage}
+          />
+        </Snackbar> 
       }
       <Paper className={clsx(classes.paper, isOpen() && classes.paperShift)} elevation={0}>
         <TableToolbar 

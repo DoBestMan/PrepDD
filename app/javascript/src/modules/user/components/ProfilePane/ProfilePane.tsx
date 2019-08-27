@@ -235,7 +235,6 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     const updateErrors = idx(updateUserPasswordRes, updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors)
 
     if (updateErrors && !updateErrors.length) {
-      console.log("Update Password Error", updateErrors)
       setErrors({
         variant: 'success', 
         message: 'Update password successfully'

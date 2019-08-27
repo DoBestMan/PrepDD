@@ -29,7 +29,6 @@ import {useUpdateTeamMember} from '../../../../graphql/mutations/UpdateTeamMembe
 import {useRemoveCompanyMember} from '../../../../graphql/mutations/RemoveCompanyMember'
 import {useRemoveTeamMember} from '../../../../graphql/mutations/RemoveTeamMember'
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember'
-import {AddTeamMember_addTeamMember_errors as ErrorType} from '../../../../graphql/mutations/__generated__/AddTeamMember'
 import { 
   CompanyUsers_companyUsers_users_companies,
   CompanyUsers_companyUsers_users_teams,
@@ -170,12 +169,17 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
+interface ErrorType {
+  variant: "success" | "warning" | "error" | "info";
+  message: string;
+}
+
 interface DetailPaneProps {
   id: string;
   open: boolean;
   company: string;
   handleClose: () => void;
-  setErrors: React.Dispatch<React.SetStateAction<ErrorType[]>>;
+  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
   updateMemberList: (
     params: {
       id: string, 
@@ -312,12 +316,20 @@ export default function DetailPane(props: DetailPaneProps) {
     
     if (updateTeamMemberLoading || !updatedUser) return
     handleUpdateMemberList(updatedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Update team member successfully'
+    })
   }, [updateTeamMemberLoading, idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.user)])
 
   useEffect(() => {
     const errors = idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)
-    if (!errors) return
-    setErrors(errors as ErrorType[])
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
   }, [idx(updateTeamMemberRes, updateTeamMemberRes => updateTeamMemberRes.updateTeamMember.errors)])
 
   useEffect(() => {
@@ -325,12 +337,20 @@ export default function DetailPane(props: DetailPaneProps) {
     
     if (addTeamMemberLoading || !addedUser) return
     handleUpdateMemberList(addedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Add team member successfully'
+    })
   }, [addTeamMemberLoading, idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.user)])
 
   useEffect(() => {
     const errors = idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)
-    if (!errors) return
-    setErrors(errors as ErrorType[])
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
   }, [idx(addTeamMemberRes, addTeamMemberRes => addTeamMemberRes.addTeamMember.errors)])
 
   useEffect(() => {
@@ -338,12 +358,20 @@ export default function DetailPane(props: DetailPaneProps) {
     
     if (removeTeamMemberLoading || !removedUser) return
     handleUpdateMemberList(removedUser as UserDetails_user)
+    setErrors({
+      variant: 'success', 
+      message: 'Remove team member successfully'
+    })
   }, [removeTeamMemberLoading, idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.user)])
 
   useEffect(() => {
     const errors = idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)
-    if (!errors) return
-    setErrors(errors as ErrorType[])
+    
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
   }, [idx(removeTeamMemberRes, removeTeamMemberRes => removeTeamMemberRes.removeTeamMember.errors)])
 
   useEffect(() => {
@@ -355,12 +383,20 @@ export default function DetailPane(props: DetailPaneProps) {
     if (companyId === company) {
       handleClose()
     }
+    setErrors({
+      variant: 'success', 
+      message: 'Remove company member successfully'
+    })
   }, [removeCompanyMemberLoading, idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.user)])
 
   useEffect(() => {
     const errors = idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)
-    if (!errors) return
-    setErrors(errors as ErrorType[])
+   
+    if (!errors || !errors.length) return
+    setErrors({
+      variant: 'warning', 
+      message: errors[0].message
+    })
   }, [idx(removeCompanyMemberRes, removeCompanyMemberRes => removeCompanyMemberRes.removeCompanyMember.errors)])
 
   useEffect(() => {

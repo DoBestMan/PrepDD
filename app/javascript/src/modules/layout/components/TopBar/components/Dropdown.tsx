@@ -80,7 +80,6 @@ export default function Dropdown() {
       }
     })
 
-    console.log("Before update", state.currentUser, id)
     updateUserData()
     setOpen(prev => !prev);
   }
