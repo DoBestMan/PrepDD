@@ -28,6 +28,18 @@ class Mutations::AddTeamMember < GraphQL::Schema::Mutation
             password_confirmation: password
           }
         )
+
+      user_role =
+        RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
+
+      user_role.errors.messages&.each do |path, messages|
+        messages.each do |message|
+          response[:errors].push(
+            { path: path.to_s.camelcase(:lower), message: message }
+          )
+          response[:success] = false
+        end
+      end
     end
 
     company = Company.find(company_id)
@@ -46,26 +58,14 @@ class Mutations::AddTeamMember < GraphQL::Schema::Mutation
       end
     end
 
-    user_role =
-      RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
-
     user_company =
-      UsersCompany.where(user_id: user.id, company_id: company_id).all
+      UsersCompany.where(user_id: user.id, company_id: company_id).first
     if !user_company.present?
       user_company =
         UsersCompany.create(user_id: user.id, company_id: company_id)
     end
 
-    user_role.errors.messages.each do |path, messages|
-      messages.each do |message|
-        response[:errors].push(
-          { path: path.to_s.camelcase(:lower), message: message }
-        )
-        response[:success] = false
-      end
-    end
-
-    user.errors.messages.each do |path, messages|
+    user&.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(
           { path: path.to_s.camelcase(:lower), message: message }
