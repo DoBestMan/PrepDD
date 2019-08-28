@@ -56,6 +56,11 @@ module Types
       argument :offset, Integer, required: false
     end
 
+    field :search_user_companies, [UserType], null: false do
+      description 'Find companies by user email OR Name'
+      argument :text, String, required: true
+    end
+
     def company_users(company_id:, team_id: nil, limit:, offset:)
       company = Company.find(company_id)
       users = company.users.limit(limit).offset(offset)
@@ -77,10 +82,6 @@ module Types
       { id: 'user details', user: user, role: role }
     end
 
-    def user(id:)
-      User.find(id)
-    end
-
     def user_for_password_reset(token:)
       User.where(reset_password_token: token).first
     end
@@ -99,6 +100,10 @@ module Types
 
     def user(id:)
       User.find(id)
+    end
+
+    def search_user_companies(text:)
+      User.search(text)
     end
   end
 end
