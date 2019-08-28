@@ -2,7 +2,7 @@ require 'rails_helper'
 
 module Mutations
 
-  RSpec.describe UpdateCompany, type: :request do
+  RSpec.describe UpdateCompanySettings, type: :request do
     describe '.resolve' do
       it 'update a company details' do
         company = create(:company)
