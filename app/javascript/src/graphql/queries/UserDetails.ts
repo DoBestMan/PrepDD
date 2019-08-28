@@ -21,6 +21,7 @@ export const useUserDetails = createQueryHook<UserDetails, {}>(gql`
       companies {
         id
         name
+        logoUrl
       }
     }
   }

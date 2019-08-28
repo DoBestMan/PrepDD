@@ -10,6 +10,7 @@ export interface TeamDetails_team_users_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface TeamDetails_team_users_teams {

@@ -13,6 +13,7 @@ export const useTeamDetails = createQueryHook<TeamDetails, {}>(gql`
         companies {
           id
           name
+          logoUrl
         }
         teams {
           id

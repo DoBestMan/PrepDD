@@ -472,13 +472,26 @@ export default function TeamManagement(props: {path?: string}) {
                             {user.companies &&
                               user.companies
                                 .slice(0, 2)
-                                .map(company => (
-                                  <StyledItem
-                                    key={`${user.fullName}-${company.id}`}
-                                    label={company.name}
-                                    selected={isItemSelected}
-                                  />
-                                ))}
+                                .map(company => {
+                                  let logoUrl: string = company.logoUrl as string;
+
+                                  if (state.currentUser.companies) {
+                                    const findIndex = state.currentUser.companies.findIndex(a => a.id === company.id);
+  
+                                    if (findIndex >= 0) {
+                                      logoUrl = state.currentUser.companies[findIndex].logoUrl as string;
+                                    }
+                                  }
+
+                                  return (
+                                    <StyledItem
+                                      key={`${user.fullName}-${company.id}`}
+                                      logo={logoUrl}
+                                      label={company.name}
+                                      selected={isItemSelected}
+                                    />
+                                  )
+                                })}
                             {user.companies && user.companies.length > 2 && (
                               <ArrowTooltip
                                 title={renderTooltipTitle(

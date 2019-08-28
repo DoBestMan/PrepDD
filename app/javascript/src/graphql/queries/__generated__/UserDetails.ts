@@ -24,6 +24,7 @@ export interface UserDetails_user_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface UserDetails_user {
