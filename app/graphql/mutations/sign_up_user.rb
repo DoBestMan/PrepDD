@@ -89,7 +89,7 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
           response[:success] = false
         end
       end
-      
+
       user_role.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
