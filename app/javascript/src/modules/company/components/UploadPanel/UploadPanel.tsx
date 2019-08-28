@@ -105,6 +105,8 @@ export default function UploadPanel(props: UploadPanelProps) {
       });
   };
 
+  console.log("Company: ", company)
+
   return (
     <ReactDropzone accept="image/*" onDrop={handleDrop}>
       {({getRootProps, getInputProps, isDragActive}) => (
@@ -120,8 +122,8 @@ export default function UploadPanel(props: UploadPanelProps) {
             >
               <img
                 src={company.logoUrl}
-                width="226"
-                height="226"
+                width="222"
+                height="222"
                 alt="Microsoft"
               />
               <div
