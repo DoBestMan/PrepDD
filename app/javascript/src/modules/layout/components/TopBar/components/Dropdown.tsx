@@ -41,15 +41,18 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 64,
       left: 0,
     },
-    pl12: {
-      paddingLeft: 12,
-    },
+    companyLogo: {
+      width: '24px', 
+      height: '24px', 
+      marginRight: '12px'
+    }
   })
 );
 
 export default function Dropdown() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  let selectedCompanyIndex = -1;
 
   const {state, dispatch} = useGlobalState();
   const [updateUserData] = useUpdateUserData({
@@ -84,16 +87,9 @@ export default function Dropdown() {
     setOpen(prev => !prev);
   };
 
-  const renderCompanyName = () => {
-    if (!state.selectedCompany || !state.currentUser.companies) return '';
-
-    const selected = state.currentUser.companies.find(
-      company => company.id === state.selectedCompany
-    );
-    if (!selected) return '';
-
-    return selected.name;
-  };
+  if (state.currentUser.companies) {
+    selectedCompanyIndex = state.currentUser.companies.findIndex(company => company.id === state.selectedCompany);
+  }
 
   return (
     <div className={classes.root}>
@@ -104,7 +100,18 @@ export default function Dropdown() {
             variant="inherit"
             onClick={toggleMenu}
           >
-            <span>{renderCompanyName()}</span>
+            {(state.currentUser.companies && selectedCompanyIndex >= 0) && (
+              <img
+                src={state.currentUser.companies[selectedCompanyIndex].logoUrl as string}
+                className={classes.companyLogo}
+                alt={state.currentUser.companies[selectedCompanyIndex].name}
+              />
+            )}
+            <span>
+              {(state.currentUser.companies && selectedCompanyIndex >= 0) ?
+                state.currentUser.companies[selectedCompanyIndex].name : ''
+              }
+            </span>
             <div className={classes.grow} />
             <i className="fa fa-caret-down"></i>
           </Typography>
@@ -119,6 +126,13 @@ export default function Dropdown() {
                       variant="inherit"
                       onClick={() => handleClick(company.id)}
                     >
+                      {company.logoUrl && (
+                        <img 
+                          src={company.logoUrl}
+                          className={classes.companyLogo}
+                          alt={company.name} 
+                        />
+                      )}
                       <span>{company.name} </span>
                     </Typography>
                   );
