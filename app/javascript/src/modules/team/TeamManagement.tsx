@@ -17,7 +17,7 @@ import StyledItem from './components/styled/StyledItem';
 import ArrowTooltip from './components/ArrowTooltip';
 
 import {useGlobalState} from '../../store';
-
+import * as cs from '../../constants/types';
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers';
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember';
 import {
@@ -94,11 +94,6 @@ interface UpdateTeamMemberProps {
   roles: CompanyUsers_companyUsers_users_roles[] | null;
 }
 
-interface ErrorType {
-  variant: 'success' | 'warning' | 'error' | 'info';
-  message: string;
-}
-
 export default function TeamManagement(props: {path?: string}) {
   const classes = useStyles();
   const [selected, setSelected] = useState<string[]>([]);
@@ -107,7 +102,7 @@ export default function TeamManagement(props: {path?: string}) {
     CompanyUsers_companyUsers_users[]
   >([]);
   const [filteredName, setFilteredName] = useState<string>('');
-  const [errors, setErrors] = useState<ErrorType | null>(null);
+  const [notification, setNotification] = useState<cs.NotificationType | null>(null);
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
 
   const {state} = useGlobalState();
@@ -135,10 +130,10 @@ export default function TeamManagement(props: {path?: string}) {
   }, [state.selectedCompany]);
 
   useEffect(() => {
-    if (errors) {
+    if (notification) {
       setMessageOpen(true);
     }
-  }, [errors]);
+  }, [notification]);
 
   useEffect(() => {
     const usersList = idx(data, data => data.companyUsers.users);
@@ -156,7 +151,7 @@ export default function TeamManagement(props: {path?: string}) {
     );
 
     if (removeErrors && !removeErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'success',
         message: 'Remove company member successfully',
       });
@@ -169,7 +164,7 @@ export default function TeamManagement(props: {path?: string}) {
       setSelected([]);
       setMemberList(newMemberList);
     } else if (removeErrors && removeErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'warning',
         message: removeErrors[0].message,
       });
@@ -364,7 +359,7 @@ export default function TeamManagement(props: {path?: string}) {
     <FlashMessage variant="warning" message="Loading error" />
   ) : (
     <div className={classes.root}>
-      {errors && (
+      {notification && (
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -375,8 +370,8 @@ export default function TeamManagement(props: {path?: string}) {
           onClose={handleCloseMessage}
         >
           <FlashMessage
-            variant={errors.variant}
-            message={errors.message}
+            variant={notification.variant}
+            message={notification.message}
             onClose={handleCloseMessage}
           />
         </Snackbar>
@@ -390,7 +385,7 @@ export default function TeamManagement(props: {path?: string}) {
           handleDelete={handleDelete}
           company={state.selectedCompany}
           updateMemberList={updateTeamMemberList}
-          setErrors={setErrors}
+          setNotification={setNotification}
         />
         {data &&
           data.companyUsers.company &&
@@ -551,7 +546,7 @@ export default function TeamManagement(props: {path?: string}) {
           company={state.selectedCompany}
           handleClose={() => setSelected([])}
           updateMemberList={updateTeamMemberList}
-          setErrors={setErrors}
+          setNotification={setNotification}
         />
       )}
     </div>

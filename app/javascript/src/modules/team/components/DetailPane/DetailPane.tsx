@@ -22,6 +22,7 @@ import StyledTableCell from '../styled/StyledTableCell';
 import InputForm from './components/InputForm';
 import AutoSuggest from '../AutoSuggest';
 
+import * as cs from '../../../../constants/types';
 import {useUserDetails} from '../../../../graphql/queries/UserDetails';
 import {useAllRoles} from '../../../../graphql/queries/AllRoles';
 import {
@@ -172,17 +173,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface ErrorType {
-  variant: 'success' | 'warning' | 'error' | 'info';
-  message: string;
-}
-
 interface DetailPaneProps {
   id: string;
   open: boolean;
   company: string;
   handleClose: () => void;
-  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
+  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
   updateMemberList: (params: {
     id: string;
     fullName: string;
@@ -204,7 +200,7 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, setErrors, handleClose, updateMemberList} = props;
+  const {id, open, company, setNotification, handleClose, updateMemberList} = props;
   const classes = useStyles();
   const [user, setUser] = useState<UserProps>({
     __typename: 'User',
@@ -327,7 +323,7 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (updateTeamMemberLoading || !updatedUser) return;
     handleUpdateMemberList(updatedUser as UserDetails_user);
-    setErrors({
+    setNotification({
       variant: 'success',
       message: 'Update team member successfully',
     });
@@ -346,7 +342,7 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setErrors({
+    setNotification({
       variant: 'warning',
       message: errors[0].message,
     });
@@ -365,7 +361,7 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (addTeamMemberLoading || !addedUser) return;
     handleUpdateMemberList(addedUser as UserDetails_user);
-    setErrors({
+    setNotification({
       variant: 'success',
       message: 'Add team member successfully',
     });
@@ -384,7 +380,7 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setErrors({
+    setNotification({
       variant: 'warning',
       message: errors[0].message,
     });
@@ -403,7 +399,7 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (removeTeamMemberLoading || !removedUser) return;
     handleUpdateMemberList(removedUser as UserDetails_user);
-    setErrors({
+    setNotification({
       variant: 'success',
       message: 'Remove team member successfully',
     });
@@ -422,7 +418,7 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setErrors({
+    setNotification({
       variant: 'warning',
       message: errors[0].message,
     });
@@ -445,7 +441,7 @@ export default function DetailPane(props: DetailPaneProps) {
     if (companyId === company) {
       handleClose();
     }
-    setErrors({
+    setNotification({
       variant: 'success',
       message: 'Remove company member successfully',
     });
@@ -465,7 +461,7 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setErrors({
+    setNotification({
       variant: 'warning',
       message: errors[0].message,
     });
