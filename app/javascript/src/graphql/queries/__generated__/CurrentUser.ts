@@ -16,6 +16,7 @@ export interface CurrentUser_currentUser_user_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface CurrentUser_currentUser_user_teams {

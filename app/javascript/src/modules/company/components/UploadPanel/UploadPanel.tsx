@@ -70,12 +70,12 @@ export default function UploadPanel(props: UploadPanelProps) {
   const classes = useStyles();
   const [showUpload, setShowUpload] = useState(false);
 
-  const {state} = useGlobalState();
+  const {state, dispatch} = useGlobalState();
 
   const handleDrop = (acceptedFiles: File[]) => {
     const user_data = new FormData();
     user_data.append('logo', acceptedFiles[0]);
-    user_data.append('id', state.currentUser.id);
+    user_data.append('id', company.id);
 
     axios
       .post('/api/update_company_logo', user_data, {
@@ -88,6 +88,20 @@ export default function UploadPanel(props: UploadPanelProps) {
           ...company,
           logoUrl: res.data.logo_url,
         });
+
+        if (state.currentUser.companies) {
+          const index = state.currentUser.companies.findIndex(a => a.id === company.id);
+          const newCompanies = state.currentUser.companies;
+
+          newCompanies[index].logoUrl = res.data.logo_url
+          dispatch({
+            type: 'SET_CURRENT_USER', 
+            user: {
+              ...state.currentUser, 
+              companies: newCompanies
+            }
+          });
+        }
       });
   };
 

@@ -16,6 +16,7 @@ import CompanyForm from './components/CompanyForm';
 import SwitchForm from './components/SwitchForm';
 import StyledTableCell from './components/StyledTableCell';
 
+import {useGlobalState} from '../../../../store';
 import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -80,6 +81,8 @@ export default function FormPanel(props: FormPanelProps) {
   } = props;
   const classes = useStyles();
 
+  const {state, dispatch} = useGlobalState();
+
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCompany({
       ...company,
@@ -89,6 +92,20 @@ export default function FormPanel(props: FormPanelProps) {
 
   const handleUpdateName = () => {
     handleUpdate();
+
+    if (state.currentUser.companies) {
+      const index = state.currentUser.companies.findIndex(a => a.id === company.id);
+      const newCompanies = state.currentUser.companies;
+
+      newCompanies[index].name = company.name
+      dispatch({
+        type: 'SET_CURRENT_USER', 
+        user: {
+          ...state.currentUser, 
+          companies: newCompanies
+        }
+      });
+    }
   };
 
   const handleUpdateParent = async (newValue: string) => {
