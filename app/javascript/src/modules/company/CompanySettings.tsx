@@ -1,12 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, SyntheticEvent} from 'react';
 import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import {Snackbar} from '@material-ui/core';
 
 import {useGlobalState} from '../../store';
+import * as cs from '../../constants/types';
 import {useCompanySettings} from '../../graphql/queries/CompanySettings';
 import {useUpdateCompany} from '../../graphql/mutations/UpdateCompany';
 import {CompanySettings_company} from '../../graphql/queries/__generated__/CompanySettings';
 
+import FlashMessage from '../common/FlashMessage'
 import FormPanel from './components/FormPanel';
 import UploadPanel from './components/UploadPanel';
 
@@ -37,6 +40,8 @@ export default function CompanySettings(props: {path?: string}) {
   const [addedBroker, setAddedBroker] = useState<string>('');
   const [deletedParent, setDeletedParent] = useState<string>('');
   const [deletedBroker, setDeletedBroker] = useState<string>('');
+  const [notification, setNotification] = useState<cs.NotificationType | null>(null);
+  const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [company, setCompany] = useState<CompanySettings_company>({
     __typename: 'Company',
     id: '',
@@ -95,6 +100,10 @@ export default function CompanySettings(props: {path?: string}) {
     setCompany({
       ...companyData,
     });
+    setNotification({
+      variant: 'success', 
+      message: 'Update company data successfully'
+    })
     setAddedParent('');
     setAddedBroker('');
     setDeletedParent('');
@@ -107,8 +116,49 @@ export default function CompanySettings(props: {path?: string}) {
     ),
   ]);
 
+  useEffect(() => {
+    const errors = idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.errors);
+
+    if (!errors || !errors.length) return;
+    setNotification({
+      variant: 'warning', 
+      message: errors[0].message
+    })
+  }, [idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.errors)]);
+
+  useEffect(() => {
+    if (notification) {
+      setNotificationOpen(true);
+    }
+  }, [notification]);
+
+  const handleCloseNotification = (event?: SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setNotificationOpen(false);
+  };
+
   return (
     <div className={classes.root}>
+      {notification && (
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          open={notificationOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseNotification}
+        >
+          <FlashMessage
+            variant={notification.variant}
+            message={notification.message}
+            onClose={handleCloseNotification}
+          />
+        </Snackbar>
+      )}
       <div className={classes.settingsPanel}>
         <FormPanel
           company={company}
@@ -121,7 +171,11 @@ export default function CompanySettings(props: {path?: string}) {
         />
       </div>
       <div className={classes.uploadPanel}>
-        <UploadPanel company={company} setCompany={setCompany} />
+        <UploadPanel 
+          company={company} 
+          setCompany={setCompany} 
+          setNotification={setNotification}
+        />
       </div>
     </div>
   );

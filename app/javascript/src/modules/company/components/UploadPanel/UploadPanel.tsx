@@ -5,6 +5,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import ReactDropzone from 'react-dropzone';
 
 import {useGlobalState} from '../../../../store';
+import * as cs from '../../../../constants/types';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings';
 
@@ -63,10 +64,11 @@ const useStyles = makeStyles((theme: Theme) =>
 interface UploadPanelProps {
   company: CompanySettings_company;
   setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
+  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
 }
 
 export default function UploadPanel(props: UploadPanelProps) {
-  const {company, setCompany} = props;
+  const {company, setCompany, setNotification} = props;
   const classes = useStyles();
   const [showUpload, setShowUpload] = useState(false);
 
@@ -88,6 +90,10 @@ export default function UploadPanel(props: UploadPanelProps) {
           ...company,
           logoUrl: res.data.logo_url,
         });
+        setNotification({
+          variant: 'success', 
+          message: 'Upload logo successfully'
+        })
 
         if (state.currentUser.companies) {
           const index = state.currentUser.companies.findIndex(a => a.id === company.id);
@@ -102,10 +108,14 @@ export default function UploadPanel(props: UploadPanelProps) {
             }
           });
         }
+      })
+      .catch(error => {
+        setNotification({
+          variant: 'warning', 
+          message: 'Upload logo failed'
+        })
       });
   };
-
-  console.log("Company: ", company)
 
   return (
     <ReactDropzone accept="image/*" onDrop={handleDrop}>
