@@ -130,7 +130,7 @@ type Query {
   """
   Find companies by user email OR Name
   """
-  searchUserCompanies(text: String!): [User!]!
+  searchCompanies(text: String!): SearchCompanies!
 
   """
   Find a team by id
@@ -197,6 +197,15 @@ type RolesUser {
   companyId: ID!
   id: ID!
   name: String!
+}
+
+"""
+Search companies by company name or user name & email
+"""
+type SearchCompanies {
+  companies: [Company!]
+  id: String!
+  users: [User!]
 }
 
 """
