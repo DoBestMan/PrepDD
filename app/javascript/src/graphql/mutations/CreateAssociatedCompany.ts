@@ -9,17 +9,17 @@ export const useCreateAssociatedCompany = createMutationHook<
   CreateAssociatedCompanyVariables
 >(gql`
   mutation CreateAssociatedCompany(
-    $companyId: ID!, 
-    $ownerEmail: String!, 
-    $newCompanyName: String!, 
-    $isParent: Boolean, 
-    $isBroker: Boolean, 
+    $companyId: ID!
+    $ownerEmail: String!
+    $newCompanyName: String!
+    $isParent: Boolean
+    $isBroker: Boolean
   ) {
     createAssociatedCompany(
-      companyId: $companyId, 
-      ownerEmail: $ownerEmail, 
-      newCompanyName: $newCompanyName, 
-      isParent: $isParent, 
+      companyId: $companyId
+      ownerEmail: $ownerEmail
+      newCompanyName: $newCompanyName
+      isParent: $isParent
       isBroker: $isBroker
     ) {
       company {

@@ -206,10 +206,10 @@ export default function CompanyForm(props: CompanyFormProps) {
     newCompany: '',
   });
   const [result, setResult] = useState<SearchCompanies_searchCompanies>({
-    __typename: "SearchCompanies",
-    users: null, 
-    companies: null, 
-  })
+    __typename: 'SearchCompanies',
+    users: null,
+    companies: null,
+  });
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(
     SEARCH_COMPANIES
@@ -234,7 +234,7 @@ export default function CompanyForm(props: CompanyFormProps) {
 
     if (loading || !searchResult) return;
     setResult(searchResult);
-  }, [loading, idx(data, data => data.searchCompanies)])
+  }, [loading, idx(data, data => data.searchCompanies)]);
 
   useEffect(() => {
     const createdCompany = idx(
@@ -288,14 +288,44 @@ export default function CompanyForm(props: CompanyFormProps) {
 
   const handleClickCompany = (newValue: string, index: number) => {
     if (result.companies) {
-      const newCompanies = result.companies.slice(0, index).concat(result.companies.slice(index + 1));
+      const newCompanies = result.companies
+        .slice(0, index)
+        .concat(result.companies.slice(index + 1));
       setResult({
-        ...result, 
-        companies: newCompanies
-      })
+        ...result,
+        companies: newCompanies,
+      });
     }
     onUpdate(newValue);
-  }
+  };
+
+  const handleClickAssignedCompany = (userId: string, companyId: string) => {
+    if (result.users) {
+      const userIndex = result.users.findIndex(user => user.id === userId);
+      if (userIndex < 0) return;
+
+      const selectedCompanies = idx(
+        result,
+        result => result.users[userIndex].companies
+      );
+      if (!selectedCompanies) return;
+      const companyIndex = selectedCompanies.findIndex(
+        company => company.name === companyId
+      );
+      if (companyIndex < 0) return;
+
+      let newUsers: SearchCompanies_searchCompanies_users[] = result.users;
+      const newCompanies = selectedCompanies
+        .slice(0, companyIndex)
+        .concat(selectedCompanies.slice(companyIndex + 1));
+      newUsers[userIndex].companies = newCompanies;
+      setResult({
+        ...result,
+        users: newUsers,
+      });
+    }
+    onUpdate(companyId);
+  };
 
   const renderUserList = () => {
     return (
@@ -307,13 +337,15 @@ export default function CompanyForm(props: CompanyFormProps) {
         {data &&
           result &&
           result.users &&
-          result.users.map(
-            (user: SearchCompanies_searchCompanies_users) => {
-              return (
-                <NestedList key={user.id} data={user} handleClick={onUpdate} />
-              );
-            }
-          )}
+          result.users.map((user: SearchCompanies_searchCompanies_users) => {
+            return (
+              <NestedList
+                key={user.id}
+                data={user}
+                handleClick={handleClickAssignedCompany}
+              />
+            );
+          })}
       </List>
     );
   };
@@ -380,29 +412,39 @@ export default function CompanyForm(props: CompanyFormProps) {
               onChange={handleChange}
               onKeyUp={handleKeyUp}
             />
-            {result && result.companies &&
-              result.companies.slice(0, 5).map((company: SearchCompanies_searchCompanies_companies, index: number) => {
-                return (
-                  <Typography
-                    key={company.id}
-                    className={classes.companyItem}
-                    variant="inherit"
-                    onClick={() => handleClickCompany(company.name, index)}
-                  >
-                    {company.logoUrl && (
-                      <img
-                        src={company.logoUrl}
-                        className={classes.companyLogo}
-                        alt={company.name}
-                      />
-                    )}
-                    <span>{company.name} </span>
-                  </Typography>
-                );
-            })}
-            {result && result.companies && !result.companies.length && result.users &&
-              renderUserList()
-            }
+            {result &&
+              result.companies &&
+              result.companies
+                .slice(0, 5)
+                .map(
+                  (
+                    company: SearchCompanies_searchCompanies_companies,
+                    index: number
+                  ) => {
+                    return (
+                      <Typography
+                        key={company.id}
+                        className={classes.companyItem}
+                        variant="inherit"
+                        onClick={() => handleClickCompany(company.name, index)}
+                      >
+                        {company.logoUrl && (
+                          <img
+                            src={company.logoUrl}
+                            className={classes.companyLogo}
+                            alt={company.name}
+                          />
+                        )}
+                        <span>{company.name} </span>
+                      </Typography>
+                    );
+                  }
+                )}
+            {result &&
+              result.companies &&
+              !result.companies.length &&
+              result.users &&
+              renderUserList()}
             {openForm ? (
               <form onSubmit={handleSubmit}>
                 <Typography className={classes.formTitle} variant="h6">

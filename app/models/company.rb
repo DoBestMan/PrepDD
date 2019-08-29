@@ -46,6 +46,6 @@ class Company < ApplicationRecord
   end
 
   def self.search(query)
-    Company.where("lower(name) LIKE ?", "%#{query.downcase}%")
+    Company.where('lower(name) LIKE ?', "%#{query.downcase}%")
   end
 end

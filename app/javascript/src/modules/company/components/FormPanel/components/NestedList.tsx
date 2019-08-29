@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface NestedListProps {
   data: SearchCompanies_searchCompanies_users;
-  handleClick: (newValue: string) => void;
+  handleClick: (userId: string, companyId: string) => void;
 }
 
 export default function NestedList(props: NestedListProps) {
@@ -66,7 +66,7 @@ export default function NestedList(props: NestedListProps) {
                 <ListItem
                   key={company.id}
                   className={classes.nested}
-                  onClick={() => handleClick(company.name)}
+                  onClick={() => handleClick(data.id, company.name)}
                   disableGutters
                 >
                   {company.logoUrl && (
