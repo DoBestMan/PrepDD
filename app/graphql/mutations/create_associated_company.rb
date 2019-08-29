@@ -1,13 +1,15 @@
 class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
-  argument :companyName, String, required: true
-  argument :userName, String, required: true
-  argument :userEmail, String, required: true
+  argument :companyId, ID, required: true
+  argument :ownerEmail, String, required: true
+  argument :newCompanyName, String, required: true
+  argument :isParent, Boolean, required: false
+  argument :isBroker, Boolean, required: false
 
   field :company, Types::CompanyType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(company_name: nil, user_name: nil, user_email: nil)
+  def resolve(company_id: nil, owner_email: nil, new_company_name: nil, is_parent: nil, is_broker: nil)
     response = { errors: [] }
 
     password = Devise.friendly_token[0, 20]
@@ -15,8 +17,7 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     user =
       User.create(
         {
-          full_name: user_name,
-          email: user_email,
+          email: owner_email,
           password: password,
           password_confirmation: password
         }
@@ -32,14 +33,16 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     end
 
     if user
-      company = user.companies.create(name: company_name)
-      user_company =
-        UsersCompany.create(user_id: user.id, company_id: company.id)
+      company = Company.create(name: company_name)
+      UsersCompany.create(user_id: user.id, company_id: company.id)
       owner_id = Role.find_by_name('Owner').id
-      user_role =
-        RolesUser.create(
-          user_id: user.id, role_id: owner_id, company_id: company.id
-        )
+      RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)
+    end
+
+    if is_broker
+      BrokerCompany.create(child_broker_id: company_id, parent_broker_id: company.id)
+    elsif is_parent
+      ParentCompany.create(child_company_id: company_id, parent_company_id: company.id)
     end
 
     company.errors.messages.each do |path, messages|
@@ -52,8 +55,8 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     end
 
     if user&.persisted? && company&.persisted?
+      response[:company] = company
       response[:success] = true
-      response
     end
 
     response

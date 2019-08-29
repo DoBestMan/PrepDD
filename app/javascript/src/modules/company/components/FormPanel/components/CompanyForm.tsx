@@ -13,6 +13,7 @@ import {
 
 import StyledItem from './StyledItem';
 import NestedList from './NestedList';
+import {useCreateAssociatedCompany} from '../../../../../graphql/mutations/CreateAssociatedCompany';
 import {
   CompanySettings_company_parents,
   CompanySettings_company_brokers,
@@ -20,7 +21,7 @@ import {
 import {
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_companies,
-} from '../../../../../graphql/queries/__generated__/SearchCompanies';
+} from './__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -187,6 +188,13 @@ export default function CompanyForm(props: CompanyFormProps) {
   });
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES)
+  // const [createAssociatedCompany, {
+  //   loading: createCompanyLoading, 
+  //   data: createCompanyRes, 
+  //   error: createCompanyError, 
+  // }] = useCreateAssociatedCompany({
+  //   companyId: state.
+  // })
 
   useEffect(() => {
     if (loading) return;

@@ -12,7 +12,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import {
   SearchCompanies_searchCompanies_users,
-} from '../../../../../graphql/queries/__generated__/SearchCompanies';
+  SearchCompanies_searchCompanies_users_companies
+} from './__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -59,7 +60,7 @@ export default function NestedList(props: NestedListProps) {
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {data.companies && data.companies.map(company => (
+          {data.companies && data.companies.map((company: SearchCompanies_searchCompanies_users_companies) => (
             <ListItem 
               key={company.id} 
               className={classes.nested}
