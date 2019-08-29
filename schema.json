@@ -167,7 +167,7 @@
               "deprecationReason": null
             },
             {
-              "name": "searchUserCompanies",
+              "name": "searchCompanies",
               "description": "Find companies by user email OR Name",
               "args": [
                 {
@@ -189,17 +189,9 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "User",
-                      "ofType": null
-                    }
-                  }
+                  "kind": "OBJECT",
+                  "name": "SearchCompanies",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -1439,6 +1431,59 @@
         },
         {
           "kind": "OBJECT",
+          "name": "SearchCompanies",
+          "description": "Search companies by company name or user name & email",
+          "fields": [
+            {
+              "name": "companies",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Company",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "id",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "inputFields": null,
+          "interfaces": [
+
+          ],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "OBJECT",
           "name": "Mutation",
           "description": null,
           "fields": [
@@ -1530,7 +1575,21 @@
               "description": null,
               "args": [
                 {
-                  "name": "companyName",
+                  "name": "companyId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "ownerEmail",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1544,7 +1603,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "userName",
+                  "name": "newCompanyName",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1558,16 +1617,22 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "userEmail",
+                  "name": "isParent",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "isBroker",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
                   },
                   "defaultValue": null
                 }
