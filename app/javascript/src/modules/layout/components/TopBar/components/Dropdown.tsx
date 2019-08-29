@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     title: {
       display: 'none',
-      width: '180px',
+      width: '200px',
       height: '64px',
       boxSizing: 'border-box',
       padding: '0px 24px 0px 24px',
