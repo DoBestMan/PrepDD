@@ -56,7 +56,7 @@ module Types
       argument :offset, Integer, required: false
     end
 
-    field :search_user_companies, [UserType], null: false do
+    field :search_companies, SearchCompaniesType, null: false do
       description 'Find companies by user email OR Name'
       argument :text, String, required: true
     end
@@ -102,8 +102,17 @@ module Types
       User.find(id)
     end
 
-    def search_user_companies(text:)
-      User.search(text)
+    def search_companies(text:)
+      companies = Company.search(text)
+      if companies.present?
+        companies
+      else
+        User.search(text).each do | user |
+          companies += user.companies
+        end
+      end
+
+      { companies: companies.uniq }
     end
   end
 end
