@@ -37,7 +37,34 @@ const defaultTheme = createMuiTheme({
       fontWeight: 'bold',
       lineHeight: '21px',
     },
+    body1: {
+      fontFamily: 'Montserrat',
+      fontSize: '12px',
+      fontWeight: 'bold',
+      lineHeight: '21px',      
+    }
   },
+  overrides: {
+    MuiListItem: {
+      root: {
+        display: 'flex',
+        textTransform: 'none',
+        width: '100%',
+        '&$selected, &$selected:hover': {
+          color: '#FFFFFF',
+          background: '#3A84FF',
+        },
+        '&:hover': {
+          background: '#EBF2FF',
+        },
+      }
+    },
+    MuiListItemText: {
+      root: {
+        color: '#2C2C2C',
+      }
+    }
+  }
 });
 
 export default defaultTheme;

@@ -8,14 +8,19 @@ import {
   TextField,
   Typography,
   Paper,
+  List,
 } from '@material-ui/core';
 
-import {useSearchCompanies} from '../../../../../graphql/queries/SearchCompanies';
+import StyledItem from './StyledItem';
+import NestedList from './NestedList';
 import {
   CompanySettings_company_parents,
   CompanySettings_company_brokers,
 } from '../../../../../graphql/queries/__generated__/CompanySettings';
-import StyledItem from './StyledItem';
+import {
+  SearchCompanies_searchCompanies_users,
+  SearchCompanies_searchCompanies_companies,
+} from '../../../../../graphql/queries/__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,6 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxSizing: 'border-box',
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
+      zIndex: 1, 
     },
     input: {
       display: 'block',
@@ -124,6 +130,10 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: '24px', 
       height: '24px',
       marginRight: '12px',
+    },
+    nestedList: {
+      width: '100%', 
+      background: '#FFFFFF', 
     },
   })
 );
@@ -203,7 +213,21 @@ export default function CompanyForm(props: CompanyFormProps) {
   };
 
   const renderUserList = () => {
-
+    return (
+      <List
+        component="div"
+        aria-labelledby="nested-list"
+        className={classes.nestedList}
+      >
+        {data && data.searchCompanies && data.searchCompanies.users &&
+          data.searchCompanies.users.map((user: SearchCompanies_searchCompanies_users) => {
+            return (
+              <NestedList data={user} key={user.id} />
+            )
+          })
+        }
+      </List>
+    )
   }
 
   return (
@@ -268,8 +292,8 @@ export default function CompanyForm(props: CompanyFormProps) {
               onChange={handleChange}
               onKeyUp={handleKeyUp}
             />
-            {(data && data.searchCompanies && data.searchCompanies.companies)
-              ? data.searchCompanies.companies.slice(0, 5).map((company: any) => {
+            {(data && data.searchCompanies && data.searchCompanies.companies) &&
+              data.searchCompanies.companies.slice(0, 5).map((company: SearchCompanies_searchCompanies_companies) => {
                   return (
                     <Typography
                       key={company.id}
@@ -287,7 +311,10 @@ export default function CompanyForm(props: CompanyFormProps) {
                     </Typography>
                   )
                 })
-              : renderUserList()
+            }
+            {(data && data.searchCompanies && data.searchCompanies.companies && !data.searchCompanies.companies.length && 
+              data.searchCompanies.users) &&
+              renderUserList()
             }
             <form onSubmit={handleSubmit}>
               <Typography className={classes.formTitle} variant="h6">
