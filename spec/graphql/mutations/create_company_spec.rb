@@ -7,6 +7,7 @@ module Mutations
         expect do
           res =  post '/graphql', params: { query: query(name: company.name) }
           to change { Company.count }.by(1)
+          it { expect Company.first.name.eql? company.name  }
         end
       end
 

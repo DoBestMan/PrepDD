@@ -39,4 +39,5 @@
 yarn-debug.log*
 .yarn-integrity
 
-.DS_Storecoverage
+.DS_Store
+coverage
