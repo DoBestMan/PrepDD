@@ -52,5 +52,5 @@ RSpec.configure do |config|
       with.library :rails
     end
   end
-  SimpleCov.start
+  SimpleCov.start 'rails'
 end
