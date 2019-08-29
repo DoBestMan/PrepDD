@@ -90,7 +90,7 @@ type FormError {
 
 type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
-  createAssociatedCompany(companyName: String!, userEmail: String!, userName: String!): CreateAssociatedCompanyPayload
+  createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
   createCompany(name: String!): CreateCompanyPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   removeCompanyMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveCompanyMemberPayload

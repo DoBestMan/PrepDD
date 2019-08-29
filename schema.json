@@ -1575,7 +1575,21 @@
               "description": null,
               "args": [
                 {
-                  "name": "companyName",
+                  "name": "companyId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "ownerEmail",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1589,7 +1603,7 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "userName",
+                  "name": "newCompanyName",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
@@ -1603,16 +1617,22 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "userEmail",
+                  "name": "isParent",
                   "description": null,
                   "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
-                      "ofType": null
-                    }
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "isBroker",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
                   },
                   "defaultValue": null
                 }
