@@ -34,8 +34,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export default function NestedList(props: {data: SearchCompanies_searchCompanies_users}) {
-  const {data} = props;
+interface NestedListProps {
+  data: SearchCompanies_searchCompanies_users;
+  handleClick: (newValue: string) => void;
+}
+
+export default function NestedList(props: NestedListProps) {
+  const {data, handleClick} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -58,6 +63,7 @@ export default function NestedList(props: {data: SearchCompanies_searchCompanies
             <ListItem 
               key={company.id} 
               className={classes.nested}
+              onClick={() => handleClick(company.name)}
               disableGutters
             >
               {company.logoUrl && 

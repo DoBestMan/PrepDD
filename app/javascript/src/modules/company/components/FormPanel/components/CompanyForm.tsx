@@ -85,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formTitle: {
       color: 'black',
-      marginTop: '24px',
+      marginTop: '12px',
     },
     morePaper: {
       display: 'flex',
@@ -222,7 +222,11 @@ export default function CompanyForm(props: CompanyFormProps) {
         {data && data.searchCompanies && data.searchCompanies.users &&
           data.searchCompanies.users.map((user: SearchCompanies_searchCompanies_users) => {
             return (
-              <NestedList data={user} key={user.id} />
+              <NestedList 
+                key={user.id} 
+                data={user} 
+                handleClick={onUpdate}
+              />
             )
           })
         }
@@ -294,23 +298,24 @@ export default function CompanyForm(props: CompanyFormProps) {
             />
             {(data && data.searchCompanies && data.searchCompanies.companies) &&
               data.searchCompanies.companies.slice(0, 5).map((company: SearchCompanies_searchCompanies_companies) => {
-                  return (
-                    <Typography
-                      key={company.id}
-                      className={classes.companyItem}
-                      variant="inherit"
-                    >
-                      {company.logoUrl && (
-                        <img
-                          src={company.logoUrl}
-                          className={classes.companyLogo}
-                          alt={company.name}
-                        />
-                      )}
-                      <span>{company.name} </span>                    
-                    </Typography>
-                  )
-                })
+                return (
+                  <Typography
+                    key={company.id}
+                    className={classes.companyItem}
+                    variant="inherit"
+                    onClick={() => onUpdate(company.name)}
+                  >
+                    {company.logoUrl && (
+                      <img
+                        src={company.logoUrl}
+                        className={classes.companyLogo}
+                        alt={company.name}
+                      />
+                    )}
+                    <span>{company.name} </span>                    
+                  </Typography>
+                )
+              })
             }
             {(data && data.searchCompanies && data.searchCompanies.companies && !data.searchCompanies.companies.length && 
               data.searchCompanies.users) &&
