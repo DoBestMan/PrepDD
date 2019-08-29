@@ -40,7 +40,7 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     end
 
     if is_broker
-      BrokerCompany(child_broker_id: company_id, parent_broker_id: company.id)
+      BrokerCompany.create(child_broker_id: company_id, parent_broker_id: company.id)
     elsif is_parent
       ParentCompany.create(child_company_id: company_id, parent_company_id: company.id)
     end
