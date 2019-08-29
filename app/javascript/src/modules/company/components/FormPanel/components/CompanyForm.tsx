@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxSizing: 'border-box',
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
-      zIndex: 1, 
+      zIndex: 1,
     },
     input: {
       display: 'block',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: 'Montserrat',
       fontWeight: 600,
       fontSize: '12px',
-      textTransform: 'none', 
+      textTransform: 'none',
       '& label': {
         color: '#606060',
         fontFamily: 'Montserrat',
@@ -131,13 +131,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     companyLogo: {
       width: '24px',
-      minWidth: '24px', 
+      minWidth: '24px',
       height: '24px',
       marginRight: '12px',
     },
     nestedList: {
-      width: '100%', 
-      background: '#FFFFFF', 
+      width: '100%',
+      background: '#FFFFFF',
     },
   })
 );
@@ -181,15 +181,15 @@ const SEARCH_COMPANIES = gql`
 
 export default function CompanyForm(props: CompanyFormProps) {
   const {
-    label, 
-    placeholder, 
-    companyData, 
-    companies, 
-    currentCompanyId, 
-    parent, 
+    label,
+    placeholder,
+    companyData,
+    companies,
+    currentCompanyId,
+    parent,
     setCompany,
-    onUpdate, 
-    onDelete
+    onUpdate,
+    onDelete,
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
@@ -205,47 +205,55 @@ export default function CompanyForm(props: CompanyFormProps) {
     newCompany: '',
   });
 
-  const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES)
-  const [createAssociatedCompany, {
-    loading: createCompanyLoading, 
-    data: createCompanyRes, 
-    error: createCompanyError, 
-  }] = useCreateAssociatedCompany({
+  const [searchCompanies, {loading, data, error}] = useLazyQuery(
+    SEARCH_COMPANIES
+  );
+  const [
+    createAssociatedCompany,
+    {
+      loading: createCompanyLoading,
+      data: createCompanyRes,
+      error: createCompanyError,
+    },
+  ] = useCreateAssociatedCompany({
     companyId: currentCompanyId,
-    ownerEmail: state.userEmail, 
-    newCompanyName: state.newCompany, 
-    isParent: parent, 
-    isBroker: !parent
-  })
+    ownerEmail: state.userEmail,
+    newCompanyName: state.newCompany,
+    isParent: parent,
+    isBroker: !parent,
+  });
 
   useEffect(() => {
-    const createdCompany = idx(createCompanyRes, createCompanyRes => createCompanyRes.createAssociatedCompany.company);
+    const createdCompany = idx(
+      createCompanyRes,
+      createCompanyRes => createCompanyRes.createAssociatedCompany.company
+    );
 
     if (loading || !createdCompany) return;
     if (parent) {
       setCompany({
-        ...companyData, 
-        parents: [
-          ...companyData.parents, 
-          createdCompany
-        ]
-      })
+        ...companyData,
+        parents: [...companyData.parents, createdCompany],
+      });
     } else {
       setCompany({
-        ...companyData, 
-        brokers: [
-          ...companyData.brokers, 
-          createdCompany
-        ]
-      })      
+        ...companyData,
+        brokers: [...companyData.brokers, createdCompany],
+      });
     }
     setState({
       companyName: '',
       userEmail: '',
       newCompany: '',
-    })
+    });
     setOpen(false);
-  }, [createCompanyLoading, idx(createCompanyRes, createCompanyRes => createCompanyRes.createAssociatedCompany.company)]);
+  }, [
+    createCompanyLoading,
+    idx(
+      createCompanyRes,
+      createCompanyRes => createCompanyRes.createAssociatedCompany.company
+    ),
+  ]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -256,7 +264,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       // Search companies...
-      searchCompanies({ variables: {text: state.companyName} });
+      searchCompanies({variables: {text: state.companyName}});
     }
   };
 
@@ -272,20 +280,19 @@ export default function CompanyForm(props: CompanyFormProps) {
         aria-labelledby="nested-list"
         className={classes.nestedList}
       >
-        {data && data.searchCompanies && data.searchCompanies.users &&
-          data.searchCompanies.users.map((user: SearchCompanies_searchCompanies_users) => {
-            return (
-              <NestedList 
-                key={user.id} 
-                data={user} 
-                handleClick={onUpdate}
-              />
-            )
-          })
-        }
+        {data &&
+          data.searchCompanies &&
+          data.searchCompanies.users &&
+          data.searchCompanies.users.map(
+            (user: SearchCompanies_searchCompanies_users) => {
+              return (
+                <NestedList key={user.id} data={user} handleClick={onUpdate} />
+              );
+            }
+          )}
       </List>
-    )
-  }
+    );
+  };
 
   return (
     <div className={classes.root}>
@@ -349,31 +356,36 @@ export default function CompanyForm(props: CompanyFormProps) {
               onChange={handleChange}
               onKeyUp={handleKeyUp}
             />
-            {(data && data.searchCompanies && data.searchCompanies.companies) &&
-              data.searchCompanies.companies.slice(0, 5).map((company: SearchCompanies_searchCompanies_companies) => {
-                return (
-                  <Typography
-                    key={company.id}
-                    className={classes.companyItem}
-                    variant="inherit"
-                    onClick={() => onUpdate(company.name)}
-                  >
-                    {company.logoUrl && (
-                      <img
-                        src={company.logoUrl}
-                        className={classes.companyLogo}
-                        alt={company.name}
-                      />
-                    )}
-                    <span>{company.name} </span>                    
-                  </Typography>
-                )
-              })
-            }
-            {(data && data.searchCompanies && data.searchCompanies.companies && !data.searchCompanies.companies.length && 
-              data.searchCompanies.users) &&
-              renderUserList()
-            }
+            {data &&
+              data.searchCompanies &&
+              data.searchCompanies.companies &&
+              data.searchCompanies.companies
+                .slice(0, 5)
+                .map((company: SearchCompanies_searchCompanies_companies) => {
+                  return (
+                    <Typography
+                      key={company.id}
+                      className={classes.companyItem}
+                      variant="inherit"
+                      onClick={() => onUpdate(company.name)}
+                    >
+                      {company.logoUrl && (
+                        <img
+                          src={company.logoUrl}
+                          className={classes.companyLogo}
+                          alt={company.name}
+                        />
+                      )}
+                      <span>{company.name} </span>
+                    </Typography>
+                  );
+                })}
+            {data &&
+              data.searchCompanies &&
+              data.searchCompanies.companies &&
+              !data.searchCompanies.companies.length &&
+              data.searchCompanies.users &&
+              renderUserList()}
             {openForm ? (
               <form onSubmit={handleSubmit}>
                 <Typography className={classes.formTitle} variant="h6">
@@ -403,12 +415,13 @@ export default function CompanyForm(props: CompanyFormProps) {
                 </Button>
               </form>
             ) : (
-              <Button className={classes.addLink} onClick={() => setOpenForm(true)}>
+              <Button
+                className={classes.addLink}
+                onClick={() => setOpenForm(true)}
+              >
                 Invite new company
               </Button>
-            )
-            }
-            
+            )}
           </div>
         </ClickAwayListener>
       )}

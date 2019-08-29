@@ -40,7 +40,9 @@ export default function CompanySettings(props: {path?: string}) {
   const [addedBroker, setAddedBroker] = useState<string>('');
   const [deletedParent, setDeletedParent] = useState<string>('');
   const [deletedBroker, setDeletedBroker] = useState<string>('');
-  const [notification, setNotification] = useState<cs.NotificationType | null>(null);
+  const [notification, setNotification] = useState<cs.NotificationType | null>(
+    null
+  );
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [company, setCompany] = useState<CompanySettings_company>({
     __typename: 'Company',

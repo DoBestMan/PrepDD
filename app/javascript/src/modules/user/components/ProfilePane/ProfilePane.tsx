@@ -186,7 +186,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   });
   const [show, setShow] = useState<boolean>(false);
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
-  const [notification, setNotification] = useState<cs.NotificationType | null>(null);
+  const [notification, setNotification] = useState<cs.NotificationType | null>(
+    null
+  );
 
   const [
     updateUserPassword,

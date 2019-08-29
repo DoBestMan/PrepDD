@@ -41,8 +41,8 @@ const defaultTheme = createMuiTheme({
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 'bold',
-      lineHeight: '21px',      
-    }
+      lineHeight: '21px',
+    },
   },
   overrides: {
     MuiListItem: {
@@ -57,14 +57,14 @@ const defaultTheme = createMuiTheme({
         '&:hover': {
           background: '#EBF2FF',
         },
-      }
+      },
     },
     MuiListItemText: {
       root: {
         color: '#2C2C2C',
-      }
-    }
-  }
+      },
+    },
+  },
 });
 
 export default defaultTheme;

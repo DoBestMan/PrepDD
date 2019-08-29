@@ -102,7 +102,9 @@ export default function TeamManagement(props: {path?: string}) {
     CompanyUsers_companyUsers_users[]
   >([]);
   const [filteredName, setFilteredName] = useState<string>('');
-  const [notification, setNotification] = useState<cs.NotificationType | null>(null);
+  const [notification, setNotification] = useState<cs.NotificationType | null>(
+    null
+  );
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
 
   const {state} = useGlobalState();
