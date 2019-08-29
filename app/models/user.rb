@@ -16,7 +16,7 @@ class User < ApplicationRecord
   has_one_attached :profile_picture
 
   def self.search(query)
-    User.where("lower(email) LIKE :text OR lower(full_name) LIKE :text", text: "%#{query.downcase}%")
+    User.where("lower(email) LIKE :email_search OR lower(full_name) LIKE :search", email_search: "#{query.downcase}", search: "%#{query.downcase}%",)
   end
 
   def email_or_uuid

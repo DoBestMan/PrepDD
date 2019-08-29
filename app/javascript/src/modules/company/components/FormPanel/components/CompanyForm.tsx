@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import {gql} from 'apollo-boost';
+import {useLazyQuery} from '@apollo/react-hooks';
 import {
   ClickAwayListener,
   Button,
@@ -8,6 +10,7 @@ import {
   Paper,
 } from '@material-ui/core';
 
+import {useSearchCompanies} from '../../../../../graphql/queries/SearchCompanies';
 import {
   CompanySettings_company_parents,
   CompanySettings_company_brokers,
@@ -102,6 +105,26 @@ const useStyles = makeStyles((theme: Theme) =>
         background: 'none',
       },
     },
+    companyItem: {
+      display: 'flex',
+      width: '100%',
+      padding: '12px',
+      alignItems: 'center',
+      color: '#2C2C2C',
+      fontFamily: 'Montserrat',
+      fontSize: '15px',
+      fontWeight: 'bold',
+      '&:hover': {
+        cursor: 'pointer',
+        background: '#EBF2FF',
+      },
+    },
+    companyLogo: {
+      width: '24px',
+      minWidth: '24px', 
+      height: '24px',
+      marginRight: '12px',
+    },
   })
 );
 
@@ -115,6 +138,28 @@ interface CompanyFormProps {
   onUpdate: (newValue: string) => void;
   onDelete: (newValue: string) => void;
 }
+
+const SEARCH_COMPANIES = gql`
+  query SearchCompanies($text: String!) {
+    searchCompanies(text: $text) {
+      users {
+        id
+        fullName
+        profileUrl
+        companies {
+          id
+          name
+          logoUrl
+        }
+      }
+      companies {
+        id
+        name
+        logoUrl
+      }
+    }
+  }
+`;
 
 export default function CompanyForm(props: CompanyFormProps) {
   const {label, placeholder, companies, onUpdate, onDelete} = props;
@@ -131,6 +176,13 @@ export default function CompanyForm(props: CompanyFormProps) {
     newCompany: '',
   });
 
+  const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES)
+
+  useEffect(() => {
+    if (loading) return;
+    console.log("Fetching data", data);
+  }, [loading, data]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
@@ -140,8 +192,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       // Search companies...
-      alert('Pressed Enter');
-      // onUpdate(state.companyName);
+      searchCompanies({ variables: {text: state.companyName} });
     }
   };
 
@@ -150,6 +201,10 @@ export default function CompanyForm(props: CompanyFormProps) {
     alert('Pressed Submit');
     setOpen(false);
   };
+
+  const renderUserList = () => {
+
+  }
 
   return (
     <div className={classes.root}>
@@ -213,6 +268,27 @@ export default function CompanyForm(props: CompanyFormProps) {
               onChange={handleChange}
               onKeyUp={handleKeyUp}
             />
+            {(data && data.searchCompanies && data.searchCompanies.companies)
+              ? data.searchCompanies.companies.slice(0, 5).map((company: any) => {
+                  return (
+                    <Typography
+                      key={company.id}
+                      className={classes.companyItem}
+                      variant="inherit"
+                    >
+                      {company.logoUrl && (
+                        <img
+                          src={company.logoUrl}
+                          className={classes.companyLogo}
+                          alt={company.name}
+                        />
+                      )}
+                      <span>{company.name} </span>                    
+                    </Typography>
+                  )
+                })
+              : renderUserList()
+            }
             <form onSubmit={handleSubmit}>
               <Typography className={classes.formTitle} variant="h6">
                 New user and company

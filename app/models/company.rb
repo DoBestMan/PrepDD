@@ -44,4 +44,8 @@ class Company < ApplicationRecord
   def generate_encryption_key
     self.encryption_key = SecureRandom.urlsafe_base64(256)
   end
+
+  def self.search(query)
+    Company.where("lower(name) LIKE ?", "%#{query.downcase}%")
+  end
 end
