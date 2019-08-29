@@ -193,6 +193,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
+  const [openForm, setOpenForm] = useState<boolean>(false);
   const [moreHover, setMoreHover] = useState<boolean>(false);
   const [state, setState] = useState<{
     companyName: string;
@@ -373,33 +374,41 @@ export default function CompanyForm(props: CompanyFormProps) {
               data.searchCompanies.users) &&
               renderUserList()
             }
-            <form onSubmit={handleSubmit}>
-              <Typography className={classes.formTitle} variant="h6">
-                New user and company
-              </Typography>
-              <TextField
-                id="userEmail"
-                name="userEmail"
-                type="email"
-                label="Email"
-                className={classes.input}
-                value={state.userEmail}
-                onChange={handleChange}
-                required
-              />
-              <TextField
-                id="newCompany"
-                name="newCompany"
-                label="Company"
-                className={classes.input}
-                onChange={handleChange}
-                value={state.newCompany}
-                required
-              />
-              <Button type="submit" className={classes.addLink}>
+            {openForm ? (
+              <form onSubmit={handleSubmit}>
+                <Typography className={classes.formTitle} variant="h6">
+                  New company
+                </Typography>
+                <TextField
+                  id="userEmail"
+                  name="userEmail"
+                  type="email"
+                  label="Email"
+                  className={classes.input}
+                  value={state.userEmail}
+                  onChange={handleChange}
+                  required
+                />
+                <TextField
+                  id="newCompany"
+                  name="newCompany"
+                  label="Company"
+                  className={classes.input}
+                  onChange={handleChange}
+                  value={state.newCompany}
+                  required
+                />
+                <Button type="submit" className={classes.addLink}>
+                  Invite new company
+                </Button>
+              </form>
+            ) : (
+              <Button className={classes.addLink} onClick={() => setOpenForm(true)}>
                 Invite new company
               </Button>
-            </form>
+            )
+            }
+            
           </div>
         </ClickAwayListener>
       )}
