@@ -78,7 +78,7 @@ class Mutations::AddTeamMember < GraphQL::Schema::Mutation
 
     companies = user.companies
     teams = user.teams.where(company_id: company_id)
-    role = RolesUser.where(user_id: user.id, company_id: company_id).first.role
+    role = RolesUser.where(user_id: user.id, company_id: company_id).first&.role
 
     if user&.persisted?
       response[:success] = true
