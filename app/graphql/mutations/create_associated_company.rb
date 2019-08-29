@@ -33,7 +33,7 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     end
 
     if user
-      company = Company.create(name: company_name)
+      company = Company.create(name: new_company_name)
       UsersCompany.create(user_id: user.id, company_id: company.id)
       owner_id = Role.find_by_name('Owner').id
       RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)

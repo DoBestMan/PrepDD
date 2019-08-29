@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {gql} from 'apollo-boost';
 import {useLazyQuery} from '@apollo/react-hooks';
+import idx from 'idx';
+import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   ClickAwayListener,
   Button,
@@ -18,6 +19,7 @@ import {
   CompanySettings_company_parents,
   CompanySettings_company_brokers,
 } from '../../../../../graphql/queries/__generated__/CompanySettings';
+import {CompanySettings_company} from '../../../../../graphql/queries/__generated__/CompanySettings';
 import {
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_companies,
@@ -68,6 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontFamily: 'Montserrat',
       fontWeight: 600,
       fontSize: '12px',
+      textTransform: 'none', 
       '& label': {
         color: '#606060',
         fontFamily: 'Montserrat',
@@ -142,10 +145,14 @@ const useStyles = makeStyles((theme: Theme) =>
 interface CompanyFormProps {
   label: string;
   placeholder: string;
+  companyData: CompanySettings_company;
   companies:
     | CompanySettings_company_parents[]
     | CompanySettings_company_brokers[]
     | null;
+  currentCompanyId: string;
+  parent?: boolean;
+  setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
   onUpdate: (newValue: string) => void;
   onDelete: (newValue: string) => void;
 }
@@ -173,7 +180,17 @@ const SEARCH_COMPANIES = gql`
 `;
 
 export default function CompanyForm(props: CompanyFormProps) {
-  const {label, placeholder, companies, onUpdate, onDelete} = props;
+  const {
+    label, 
+    placeholder, 
+    companyData, 
+    companies, 
+    currentCompanyId, 
+    parent, 
+    setCompany,
+    onUpdate, 
+    onDelete
+  } = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [moreHover, setMoreHover] = useState<boolean>(false);
@@ -188,18 +205,46 @@ export default function CompanyForm(props: CompanyFormProps) {
   });
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES)
-  // const [createAssociatedCompany, {
-  //   loading: createCompanyLoading, 
-  //   data: createCompanyRes, 
-  //   error: createCompanyError, 
-  // }] = useCreateAssociatedCompany({
-  //   companyId: state.
-  // })
+  const [createAssociatedCompany, {
+    loading: createCompanyLoading, 
+    data: createCompanyRes, 
+    error: createCompanyError, 
+  }] = useCreateAssociatedCompany({
+    companyId: currentCompanyId,
+    ownerEmail: state.userEmail, 
+    newCompanyName: state.newCompany, 
+    isParent: parent, 
+    isBroker: !parent
+  })
 
   useEffect(() => {
-    if (loading) return;
-    console.log("Fetching data", data);
-  }, [loading, data]);
+    const createdCompany = idx(createCompanyRes, createCompanyRes => createCompanyRes.createAssociatedCompany.company);
+
+    if (loading || !createdCompany) return;
+    if (parent) {
+      setCompany({
+        ...companyData, 
+        parents: [
+          ...companyData.parents, 
+          createdCompany
+        ]
+      })
+    } else {
+      setCompany({
+        ...companyData, 
+        brokers: [
+          ...companyData.brokers, 
+          createdCompany
+        ]
+      })      
+    }
+    setState({
+      companyName: '',
+      userEmail: '',
+      newCompany: '',
+    })
+    setOpen(false);
+  }, [createCompanyLoading, idx(createCompanyRes, createCompanyRes => createCompanyRes.createAssociatedCompany.company)]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -216,8 +261,7 @@ export default function CompanyForm(props: CompanyFormProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert('Pressed Submit');
-    setOpen(false);
+    createAssociatedCompany();
   };
 
   const renderUserList = () => {

@@ -163,18 +163,25 @@ export default function FormPanel(props: FormPanelProps) {
           <CompanyForm
             label="Parent company"
             placeholder="Search parent company..."
+            companyData={company}
             companies={company.parents}
+            currentCompanyId={state.selectedCompany}
             onUpdate={handleUpdateParent}
             onDelete={handleUpdateDeletedParent}
+            setCompany={setCompany}
+            parent
           />
         </Grid>
         <Grid item md={6}>
           <CompanyForm
             label="Broker"
             placeholder="Search broker..."
+            companyData={company}
             companies={company.brokers}
+            currentCompanyId={state.selectedCompany}
             onUpdate={handleUpdateBroker}
             onDelete={handleUpdateDeletedBroker}
+            setCompany={setCompany}
           />
         </Grid>
         <Grid item md={12}>
