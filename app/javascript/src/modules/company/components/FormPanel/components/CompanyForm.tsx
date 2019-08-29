@@ -142,7 +142,9 @@ export default function CompanyForm(props: CompanyFormProps) {
       <p>{label}</p>
       <div className={classes.companyList}>
         {companies &&
-          companies.map(company => (
+          companies
+          .slice(0, 2)
+          .map(company => (
             <StyledItem
               key={company.id}
               logo={company.logoUrl}
@@ -150,6 +152,11 @@ export default function CompanyForm(props: CompanyFormProps) {
               onClose={() => onDelete(company.id)}
             />
           ))}
+          {companies && companies.length > 2 && (
+            <StyledItem 
+              label={`+${companies.length - 2}`}
+            />
+          )}
         <div
           className={classes.clickableArea}
           onClick={() => setOpen(true)}
