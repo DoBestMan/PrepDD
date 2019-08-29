@@ -5,6 +5,7 @@ import {
   Button,
   TextField,
   Typography,
+  Paper,
 } from '@material-ui/core';
 
 import {
@@ -77,6 +78,18 @@ const useStyles = makeStyles((theme: Theme) =>
       color: 'black',
       marginTop: '24px',
     },
+    morePaper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      width: '250px',
+      position: 'absolute',
+      top: '28px',
+      right: '6px',
+      padding: '9px',
+      boxSizing: 'border-box',
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
     addLink: {
       marginTop: '24px',
       padding: '0px',
@@ -107,6 +120,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   const {label, placeholder, companies, onUpdate, onDelete} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
+  const [moreHover, setMoreHover] = useState<boolean>(false);
   const [state, setState] = useState<{
     companyName: string;
     userEmail: string;
@@ -127,13 +141,13 @@ export default function CompanyForm(props: CompanyFormProps) {
     if (event.keyCode === 13) {
       // Search companies...
       alert('Pressed Enter');
+      // onUpdate(state.companyName);
     }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     alert('Pressed Submit');
-    // onUpdate(parent);
     setOpen(false);
   };
 
@@ -143,20 +157,41 @@ export default function CompanyForm(props: CompanyFormProps) {
       <div className={classes.companyList}>
         {companies &&
           companies
-          .slice(0, 2)
-          .map(company => (
-            <StyledItem
-              key={company.id}
-              logo={company.logoUrl}
-              label={company.name}
-              onClose={() => onDelete(company.id)}
-            />
-          ))}
-          {companies && companies.length > 2 && (
-            <StyledItem 
-              label={`+${companies.length - 2}`}
-            />
-          )}
+            .slice(0, 2)
+            .map(company => (
+              <StyledItem
+                key={company.id}
+                logo={company.logoUrl}
+                label={company.name}
+                onClose={() => onDelete(company.id)}
+              />
+            ))}
+        {companies && companies.length > 2 && (
+          <div
+            onMouseOver={() => setMoreHover(true)}
+            onMouseLeave={() => setMoreHover(false)}
+            style={{position: 'relative'}}
+          >
+            <StyledItem label={`+${companies.length - 2}`} />
+            {moreHover && (
+              <Paper
+                className={classes.morePaper}
+                elevation={0}
+                onMouseOver={() => setMoreHover(true)}
+                onMouseLeave={() => setMoreHover(false)}
+              >
+                {companies.slice(2).map(company => (
+                  <StyledItem
+                    key={company.id}
+                    logo={company.logoUrl}
+                    label={company.name}
+                    onClose={() => onDelete(company.id)}
+                  />
+                ))}
+              </Paper>
+            )}
+          </div>
+        )}
         <div
           className={classes.clickableArea}
           onClick={() => setOpen(true)}
@@ -202,7 +237,7 @@ export default function CompanyForm(props: CompanyFormProps) {
                 required
               />
               <Button type="submit" className={classes.addLink}>
-                Invite new user and company
+                Invite new company
               </Button>
             </form>
           </div>

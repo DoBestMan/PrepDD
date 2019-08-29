@@ -57,7 +57,9 @@ const StyledItem = React.forwardRef(
           />
         )}
         <div className={classes.label}>{label}</div>
-        <CloseIcon className={classes.close} onClick={handleClick} />
+        {onClose && (
+          <CloseIcon className={classes.close} onClick={handleClick} />
+        )}
       </div>
     );
   }
