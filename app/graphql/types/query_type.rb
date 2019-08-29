@@ -103,7 +103,16 @@ module Types
     end
 
     def search_companies(text:)
-      { companies: Company.search(text), users: User.search(text) }
+      companies = Company.search(text)
+      if companies.present?
+        companies
+      else
+        User.search(text).each do | user |
+          companies += user.companies
+        end
+      end
+
+      { companies: companies.uniq }
     end
   end
 end

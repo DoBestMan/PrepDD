@@ -205,7 +205,6 @@ Search companies by company name or user name & email
 type SearchCompanies {
   companies: [Company!]
   id: String!
-  users: [User!]
 }
 
 """
