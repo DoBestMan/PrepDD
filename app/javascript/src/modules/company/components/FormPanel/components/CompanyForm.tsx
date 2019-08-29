@@ -21,6 +21,7 @@ import {
 } from '../../../../../graphql/queries/__generated__/CompanySettings';
 import {CompanySettings_company} from '../../../../../graphql/queries/__generated__/CompanySettings';
 import {
+  SearchCompanies_searchCompanies,
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_companies,
 } from './__generated__/SearchCompanies';
@@ -204,6 +205,11 @@ export default function CompanyForm(props: CompanyFormProps) {
     userEmail: '',
     newCompany: '',
   });
+  const [result, setResult] = useState<SearchCompanies_searchCompanies>({
+    __typename: "SearchCompanies",
+    users: null, 
+    companies: null, 
+  })
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(
     SEARCH_COMPANIES
@@ -224,12 +230,19 @@ export default function CompanyForm(props: CompanyFormProps) {
   });
 
   useEffect(() => {
+    const searchResult = idx(data, data => data.searchCompanies);
+
+    if (loading || !searchResult) return;
+    setResult(searchResult);
+  }, [loading, idx(data, data => data.searchCompanies)])
+
+  useEffect(() => {
     const createdCompany = idx(
       createCompanyRes,
       createCompanyRes => createCompanyRes.createAssociatedCompany.company
     );
 
-    if (loading || !createdCompany) return;
+    if (createCompanyLoading || !createdCompany) return;
     if (parent) {
       setCompany({
         ...companyData,
@@ -273,6 +286,17 @@ export default function CompanyForm(props: CompanyFormProps) {
     createAssociatedCompany();
   };
 
+  const handleClickCompany = (newValue: string, index: number) => {
+    if (result.companies) {
+      const newCompanies = result.companies.slice(0, index).concat(result.companies.slice(index + 1));
+      setResult({
+        ...result, 
+        companies: newCompanies
+      })
+    }
+    onUpdate(newValue);
+  }
+
   const renderUserList = () => {
     return (
       <List
@@ -281,9 +305,9 @@ export default function CompanyForm(props: CompanyFormProps) {
         className={classes.nestedList}
       >
         {data &&
-          data.searchCompanies &&
-          data.searchCompanies.users &&
-          data.searchCompanies.users.map(
+          result &&
+          result.users &&
+          result.users.map(
             (user: SearchCompanies_searchCompanies_users) => {
               return (
                 <NestedList key={user.id} data={user} handleClick={onUpdate} />
@@ -356,36 +380,29 @@ export default function CompanyForm(props: CompanyFormProps) {
               onChange={handleChange}
               onKeyUp={handleKeyUp}
             />
-            {data &&
-              data.searchCompanies &&
-              data.searchCompanies.companies &&
-              data.searchCompanies.companies
-                .slice(0, 5)
-                .map((company: SearchCompanies_searchCompanies_companies) => {
-                  return (
-                    <Typography
-                      key={company.id}
-                      className={classes.companyItem}
-                      variant="inherit"
-                      onClick={() => onUpdate(company.name)}
-                    >
-                      {company.logoUrl && (
-                        <img
-                          src={company.logoUrl}
-                          className={classes.companyLogo}
-                          alt={company.name}
-                        />
-                      )}
-                      <span>{company.name} </span>
-                    </Typography>
-                  );
-                })}
-            {data &&
-              data.searchCompanies &&
-              data.searchCompanies.companies &&
-              !data.searchCompanies.companies.length &&
-              data.searchCompanies.users &&
-              renderUserList()}
+            {result && result.companies &&
+              result.companies.slice(0, 5).map((company: SearchCompanies_searchCompanies_companies, index: number) => {
+                return (
+                  <Typography
+                    key={company.id}
+                    className={classes.companyItem}
+                    variant="inherit"
+                    onClick={() => handleClickCompany(company.name, index)}
+                  >
+                    {company.logoUrl && (
+                      <img
+                        src={company.logoUrl}
+                        className={classes.companyLogo}
+                        alt={company.name}
+                      />
+                    )}
+                    <span>{company.name} </span>
+                  </Typography>
+                );
+            })}
+            {result && result.companies && !result.companies.length && result.users &&
+              renderUserList()
+            }
             {openForm ? (
               <form onSubmit={handleSubmit}>
                 <Typography className={classes.formTitle} variant="h6">
