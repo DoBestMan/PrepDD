@@ -465,28 +465,30 @@ export default function TeamManagement(props: {path?: string}) {
                         <StyledTableCell>
                           <div className={classes.flex}>
                             {user.companies &&
-                              user.companies
-                                .slice(0, 2)
-                                .map(company => {
-                                  let logoUrl: string = company.logoUrl as string;
+                              user.companies.slice(0, 2).map(company => {
+                                let logoUrl: string = company.logoUrl as string;
 
-                                  if (state.currentUser.companies) {
-                                    const findIndex = state.currentUser.companies.findIndex(a => a.id === company.id);
-  
-                                    if (findIndex >= 0) {
-                                      logoUrl = state.currentUser.companies[findIndex].logoUrl as string;
-                                    }
+                                if (state.currentUser.companies) {
+                                  const findIndex = state.currentUser.companies.findIndex(
+                                    a => a.id === company.id
+                                  );
+
+                                  if (findIndex >= 0) {
+                                    logoUrl = state.currentUser.companies[
+                                      findIndex
+                                    ].logoUrl as string;
                                   }
+                                }
 
-                                  return (
-                                    <StyledItem
-                                      key={`${user.fullName}-${company.id}`}
-                                      logo={logoUrl}
-                                      label={company.name}
-                                      selected={isItemSelected}
-                                    />
-                                  )
-                                })}
+                                return (
+                                  <StyledItem
+                                    key={`${user.fullName}-${company.id}`}
+                                    logo={logoUrl}
+                                    label={company.name}
+                                    selected={isItemSelected}
+                                  />
+                                );
+                              })}
                             {user.companies && user.companies.length > 2 && (
                               <ArrowTooltip
                                 title={renderTooltipTitle(

@@ -162,7 +162,13 @@ interface TableToolbarProps {
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const {selected, company, setNotification, handleDelete, updateMemberList} = props;
+  const {
+    selected,
+    company,
+    setNotification,
+    handleDelete,
+    updateMemberList,
+  } = props;
   const classes = useToolbarStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<StateProps>({

@@ -91,29 +91,31 @@ export default function UploadPanel(props: UploadPanelProps) {
           logoUrl: res.data.logo_url,
         });
         setNotification({
-          variant: 'success', 
-          message: 'Upload logo successfully'
-        })
+          variant: 'success',
+          message: 'Upload logo successfully',
+        });
 
         if (state.currentUser.companies) {
-          const index = state.currentUser.companies.findIndex(a => a.id === company.id);
+          const index = state.currentUser.companies.findIndex(
+            a => a.id === company.id
+          );
           const newCompanies = state.currentUser.companies;
 
-          newCompanies[index].logoUrl = res.data.logo_url
+          newCompanies[index].logoUrl = res.data.logo_url;
           dispatch({
-            type: 'SET_CURRENT_USER', 
+            type: 'SET_CURRENT_USER',
             user: {
-              ...state.currentUser, 
-              companies: newCompanies
-            }
+              ...state.currentUser,
+              companies: newCompanies,
+            },
           });
         }
       })
       .catch(error => {
         setNotification({
-          variant: 'warning', 
-          message: 'Upload logo failed'
-        })
+          variant: 'warning',
+          message: 'Upload logo failed',
+        });
       });
   };
 

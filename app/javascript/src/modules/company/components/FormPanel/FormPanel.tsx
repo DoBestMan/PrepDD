@@ -94,16 +94,18 @@ export default function FormPanel(props: FormPanelProps) {
     handleUpdate();
 
     if (state.currentUser.companies) {
-      const index = state.currentUser.companies.findIndex(a => a.id === company.id);
+      const index = state.currentUser.companies.findIndex(
+        a => a.id === company.id
+      );
       const newCompanies = state.currentUser.companies;
 
-      newCompanies[index].name = company.name
+      newCompanies[index].name = company.name;
       dispatch({
-        type: 'SET_CURRENT_USER', 
+        type: 'SET_CURRENT_USER',
         user: {
-          ...state.currentUser, 
-          companies: newCompanies
-        }
+          ...state.currentUser,
+          companies: newCompanies,
+        },
       });
     }
   };
@@ -160,7 +162,7 @@ export default function FormPanel(props: FormPanelProps) {
         <Grid item md={6}>
           <CompanyForm
             label="Parent company"
-            placeholder="Assign parent company..."
+            placeholder="Search parent company..."
             companies={company.parents}
             onUpdate={handleUpdateParent}
             onDelete={handleUpdateDeletedParent}
@@ -169,7 +171,7 @@ export default function FormPanel(props: FormPanelProps) {
         <Grid item md={6}>
           <CompanyForm
             label="Broker"
-            placeholder="Assign broker...."
+            placeholder="Search broker..."
             companies={company.brokers}
             onUpdate={handleUpdateBroker}
             onDelete={handleUpdateDeletedBroker}

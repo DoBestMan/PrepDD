@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Button from '@material-ui/core/Button';
+import {
+  ClickAwayListener,
+  Button,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 
 import {
   CompanySettings_company_parents,
   CompanySettings_company_brokers,
 } from '../../../../../graphql/queries/__generated__/CompanySettings';
 import StyledItem from './StyledItem';
-import AutoSuggest from './AutoSuggest';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,13 +49,45 @@ const useStyles = makeStyles((theme: Theme) =>
       border: '2px solid #D8D8D8',
       borderRadius: '3px',
     },
+    input: {
+      display: 'block',
+      width: '100%',
+      marginTop: '6px',
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      '& label': {
+        color: '#606060',
+        fontFamily: 'Montserrat',
+        fontWeight: 600,
+        fontSize: '12px',
+      },
+      '&:selected': {
+        color: '#3A84FF',
+      },
+      '& input::placeholder': {
+        fontSize: '12px',
+      },
+      '& div': {
+        width: '100%',
+      },
+    },
+    formTitle: {
+      color: 'black',
+      marginTop: '24px',
+    },
     addLink: {
       marginTop: '24px',
+      padding: '0px',
       color: '#3A84FF',
       fontFamily: 'Montserrat',
       fontWeight: 600,
       fontSize: '12px',
       textTransform: 'capitalize',
+      '&:hover, &:focus': {
+        background: 'none',
+      },
     },
   })
 );
@@ -72,13 +107,36 @@ export default function CompanyForm(props: CompanyFormProps) {
   const {label, placeholder, companies, onUpdate, onDelete} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
-  const [parent, setParent] = useState<string>('');
+  const [state, setState] = useState<{
+    companyName: string;
+    userEmail: string;
+    newCompany: string;
+  }>({
+    companyName: '',
+    userEmail: '',
+    newCompany: '',
+  });
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+
+    setState(state => ({...state, [name]: value}));
+  };
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13) {
+      // Search companies...
+      alert('Pressed Enter');
+    }
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onUpdate(parent);
+    alert('Pressed Submit');
+    // onUpdate(parent);
     setOpen(false);
   };
+
   return (
     <div className={classes.root}>
       <p>{label}</p>
@@ -103,15 +161,44 @@ export default function CompanyForm(props: CompanyFormProps) {
 
       {open && (
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <form className={classes.addPaper} onSubmit={handleSubmit}>
-            <AutoSuggest
-              value={parent}
-              handleChange={(newParent: string) => setParent(newParent)}
+          <div className={classes.addPaper}>
+            <TextField
+              id="company"
+              name="companyName"
+              placeholder={placeholder}
+              className={classes.input}
+              value={state.companyName}
+              onChange={handleChange}
+              onKeyUp={handleKeyUp}
             />
-            <Button type="submit" className={classes.addLink}>
-              Invite new company
-            </Button>
-          </form>
+            <form onSubmit={handleSubmit}>
+              <Typography className={classes.formTitle} variant="h6">
+                New user and company
+              </Typography>
+              <TextField
+                id="userEmail"
+                name="userEmail"
+                type="email"
+                label="Email"
+                className={classes.input}
+                value={state.userEmail}
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                id="newCompany"
+                name="newCompany"
+                label="Company"
+                className={classes.input}
+                onChange={handleChange}
+                value={state.newCompany}
+                required
+              />
+              <Button type="submit" className={classes.addLink}>
+                Invite new user and company
+              </Button>
+            </form>
+          </div>
         </ClickAwayListener>
       )}
     </div>

@@ -33,7 +33,7 @@ const defaultTheme = createMuiTheme({
     },
     h6: {
       fontFamily: 'Montserrat',
-      fontSize: '30px',
+      fontSize: '12px',
       fontWeight: 'bold',
       lineHeight: '21px',
     },

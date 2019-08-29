@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme: Theme) =>
       left: 0,
     },
     companyLogo: {
-      width: '24px', 
-      height: '24px', 
-      marginRight: '12px'
-    }
+      width: '24px',
+      height: '24px',
+      marginRight: '12px',
+    },
   })
 );
 
@@ -88,7 +88,9 @@ export default function Dropdown() {
   };
 
   if (state.currentUser.companies) {
-    selectedCompanyIndex = state.currentUser.companies.findIndex(company => company.id === state.selectedCompany);
+    selectedCompanyIndex = state.currentUser.companies.findIndex(
+      company => company.id === state.selectedCompany
+    );
   }
 
   return (
@@ -100,7 +102,7 @@ export default function Dropdown() {
             variant="inherit"
             onClick={toggleMenu}
           >
-            {(state.currentUser.companies && selectedCompanyIndex >= 0) && (
+            {state.currentUser.companies && selectedCompanyIndex >= 0 && (
               <img
                 src={state.currentUser.companies[selectedCompanyIndex].logoUrl as string}
                 className={classes.companyLogo}
@@ -108,9 +110,9 @@ export default function Dropdown() {
               />
             )}
             <span>
-              {(state.currentUser.companies && selectedCompanyIndex >= 0) ?
-                state.currentUser.companies[selectedCompanyIndex].name : ''
-              }
+              {state.currentUser.companies && selectedCompanyIndex >= 0
+                ? state.currentUser.companies[selectedCompanyIndex].name
+                : ''}
             </span>
             <div className={classes.grow} />
             <i className="fa fa-caret-down"></i>
@@ -127,10 +129,10 @@ export default function Dropdown() {
                       onClick={() => handleClick(company.id)}
                     >
                       {company.logoUrl && (
-                        <img 
+                        <img
                           src={company.logoUrl}
                           className={classes.companyLogo}
-                          alt={company.name} 
+                          alt={company.name}
                         />
                       )}
                       <span>{company.name} </span>

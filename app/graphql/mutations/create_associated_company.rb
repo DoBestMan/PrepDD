@@ -10,7 +10,7 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
   def resolve(company_name: nil, user_name: nil, user_email: nil)
     response = { errors: [] }
 
-    password = Devise.friendly_token[0,20]
+    password = Devise.friendly_token[0, 20]
 
     user =
       User.create(
@@ -33,11 +33,14 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
 
     if user
       company = user.companies.create(name: company_name)
-      user_company = UsersCompany.create(user_id: user.id, company_id: company.id)
+      user_company =
+        UsersCompany.create(user_id: user.id, company_id: company.id)
       owner_id = Role.find_by_name('Owner').id
-      user_role = RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)
+      user_role =
+        RolesUser.create(
+          user_id: user.id, role_id: owner_id, company_id: company.id
+        )
     end
-
 
     company.errors.messages.each do |path, messages|
       messages.each do |message|

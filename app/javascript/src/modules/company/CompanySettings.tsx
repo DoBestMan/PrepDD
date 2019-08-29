@@ -9,7 +9,7 @@ import {useCompanySettings} from '../../graphql/queries/CompanySettings';
 import {useUpdateCompany} from '../../graphql/mutations/UpdateCompany';
 import {CompanySettings_company} from '../../graphql/queries/__generated__/CompanySettings';
 
-import FlashMessage from '../common/FlashMessage'
+import FlashMessage from '../common/FlashMessage';
 import FormPanel from './components/FormPanel';
 import UploadPanel from './components/UploadPanel';
 
@@ -101,9 +101,9 @@ export default function CompanySettings(props: {path?: string}) {
       ...companyData,
     });
     setNotification({
-      variant: 'success', 
-      message: 'Update company data successfully'
-    })
+      variant: 'success',
+      message: 'Update company data successfully',
+    });
     setAddedParent('');
     setAddedBroker('');
     setDeletedParent('');
@@ -117,14 +117,22 @@ export default function CompanySettings(props: {path?: string}) {
   ]);
 
   useEffect(() => {
-    const errors = idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.errors);
+    const errors = idx(
+      updateCompanyRes,
+      updateCompanyRes => updateCompanyRes.updateCompanySettings.errors
+    );
 
     if (!errors || !errors.length) return;
     setNotification({
-      variant: 'warning', 
-      message: errors[0].message
-    })
-  }, [idx(updateCompanyRes, updateCompanyRes => updateCompanyRes.updateCompanySettings.errors)]);
+      variant: 'warning',
+      message: errors[0].message,
+    });
+  }, [
+    idx(
+      updateCompanyRes,
+      updateCompanyRes => updateCompanyRes.updateCompanySettings.errors
+    ),
+  ]);
 
   useEffect(() => {
     if (notification) {
@@ -171,9 +179,9 @@ export default function CompanySettings(props: {path?: string}) {
         />
       </div>
       <div className={classes.uploadPanel}>
-        <UploadPanel 
-          company={company} 
-          setCompany={setCompany} 
+        <UploadPanel
+          company={company}
+          setCompany={setCompany}
           setNotification={setNotification}
         />
       </div>

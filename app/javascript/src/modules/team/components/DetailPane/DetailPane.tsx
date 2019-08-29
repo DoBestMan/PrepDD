@@ -200,7 +200,14 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {id, open, company, setNotification, handleClose, updateMemberList} = props;
+  const {
+    id,
+    open,
+    company,
+    setNotification,
+    handleClose,
+    updateMemberList,
+  } = props;
   const classes = useStyles();
   const [user, setUser] = useState<UserProps>({
     __typename: 'User',
