@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     companyLogo: {
       width: '24px',
+      minWidth: '24px', 
       height: '24px',
       marginRight: '12px',
     },
