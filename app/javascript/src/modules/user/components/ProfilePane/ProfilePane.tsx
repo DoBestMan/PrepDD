@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     uploadArea: {
       position: 'absolute',
       width: '120px',
-      height: '60px',
+      height: '58px',
       backgroundColor: 'rgba(48, 48, 48, 0.5)',
       borderBottomLeftRadius: '120px',
       borderBottomRightRadius: '120px',
