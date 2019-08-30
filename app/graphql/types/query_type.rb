@@ -109,16 +109,10 @@ module Types
       associates_company_ids += company.broker_parents.pluck(:id)
       associates_company_ids += [company_id]
 
-      companies = Company.search(text)
-      if companies.present?
-        companies = companies.where.not(id: associates_company_ids)
-      else
-        User.search(text).each do | user |
-          companies += user.companies.where.not(id: associates_company_ids)
-        end
-      end
+      companies = Company.search(text).where.not(id: associates_company_ids)
+      users = User.search(text).where.not(id: context[:controller].current_user&.id)
 
-      { companies: companies.uniq }
+      { companies: companies.uniq, users: users }
     end
   end
 end
