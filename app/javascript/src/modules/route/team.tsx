@@ -1,11 +1,11 @@
 import React from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {Switch, Route} from 'react-router-dom';
 import ManagementPage from '../team';
 
-export default function Router(props: {path: string}) {
+export default function Router() {
   return (
-    <ReachRouter>
-      <ManagementPage path="/" />
-    </ReachRouter>
+    <Switch>
+      <Route exact path="/app/team/" component={ManagementPage} />
+    </Switch>
   );
 }

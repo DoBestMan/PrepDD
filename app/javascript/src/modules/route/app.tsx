@@ -1,6 +1,9 @@
 import LoadingFallback from '../../components/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {
+  Switch, 
+  Route,
+} from 'react-router-dom';
 
 const Layout = lazy(() => import('../layout'));
 const CompanyRoutes = lazy(() => import('./company'));
@@ -8,18 +11,18 @@ const TeamRoutes = lazy(() => import('./team'));
 const UserRoutes = lazy(() => import('./user'));
 const ListRoutes = lazy(() => import('./list'));
 
-export default function Router() {
+export default function AppRoute() {
   console.log("I'm in app route");
 
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Layout>
-        <ReachRouter>
-          <CompanyRoutes path="/company/*" />
-          <TeamRoutes path="/team/*" />
-          <UserRoutes path="/user/*" />
-          <ListRoutes path="/lists/*" />
-        </ReachRouter>
+        <Switch>
+          <Route exact path="/app/company" component={CompanyRoutes} />
+          <Route exact path="/app/team" component={TeamRoutes} />
+          <Route exact path="/app/user" component={UserRoutes} />
+          <Route exact path="/app/lists" component={ListRoutes} />
+        </Switch>
       </Layout>
     </Suspense>
   );
