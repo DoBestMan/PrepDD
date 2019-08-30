@@ -55,7 +55,10 @@ group :development do
 end
 
 group :test do
+  gem 'database_cleaner', '~> 1.7'
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
+  gem 'simplecov'
+  gem 'rails-controller-testing'
 end

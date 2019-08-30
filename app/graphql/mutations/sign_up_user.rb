@@ -2,11 +2,11 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
   argument :fullName, String, required: true
   argument :email, String, required: true
   argument :password, String, required: true
-  argument :companyName, String, required: true
-  argument :socialLogin, Boolean, required: true
-  argument :tokenID, String, required: true
-  argument :provider, String, required: true
-  argument :uuID, String, required: true
+  argument :companyName, String, required: false
+  argument :socialLogin, Boolean, required: false
+  argument :tokenID, String, required: false
+  argument :provider, String, required: false
+  argument :uuID, String, required: false
 
   field :user, Types::UserType, null: true
   field :errors, [Types::FormErrorType], null: false
