@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
-import {navigate} from '@reach/router';
+import {withRouter} from 'react-router';
 import {
   Theme,
   makeStyles,
@@ -150,8 +150,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TopBar(props: {open: boolean}) {
-  const {open} = props;
+const TopBar = (props: any) => {
+  const {open, history} = props;
   const classes = useStyles();
   const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false);
 
@@ -166,12 +166,12 @@ export default function TopBar(props: {open: boolean}) {
   useEffect(() => {
     if (loading || !data) return;
 
-    navigate('../');
+    history.push('/signin');
     setOpenProfileMenu(false);
   }, [loading, data]);
 
   const handleClickProfile = () => {
-    navigate('../app/user');
+    history.push('/app/user');
     setOpenProfileMenu(false);
   };
 
@@ -259,3 +259,5 @@ export default function TopBar(props: {open: boolean}) {
     </AppBar>
   );
 }
+
+export default withRouter(TopBar);
