@@ -8,18 +8,18 @@ import {
   useTheme,
 } from '@material-ui/core/styles';
 import {
-  useMediaQuery, 
-  AppBar, 
-  Toolbar, 
-  InputBase, 
-  Button, 
-  IconButton, 
-  ClickAwayListener, 
-  Paper, 
-  List, 
-  ListItem, 
-  ListItemText, 
-  ListItemIcon, 
+  useMediaQuery,
+  AppBar,
+  Toolbar,
+  InputBase,
+  Button,
+  IconButton,
+  ClickAwayListener,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
@@ -129,9 +129,14 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '30px',
       borderRadius: '50%',
     },
+    menuRoot: {
+      display: 'flex', 
+      alignItems: 'center', 
+      position: 'relative', 
+    },
     profileMenu: {
-      width: '180px', 
-      position: 'absolute', 
+      width: '180px',
+      position: 'absolute',
       top: '59px',
       right: '40px',
       border: '2px solid #D8D8D8',
@@ -163,16 +168,16 @@ export default function TopBar(props: {open: boolean}) {
 
     navigate('../');
     setOpenProfileMenu(false);
-  }, [loading, data])
+  }, [loading, data]);
 
   const handleClickProfile = () => {
     navigate('../app/user');
     setOpenProfileMenu(false);
-  }
+  };
 
   const handleClickSignout = () => {
     signOutUser();
-  }
+  };
 
   return (
     <AppBar
@@ -201,7 +206,7 @@ export default function TopBar(props: {open: boolean}) {
           <div className={classes.grow} />
         )}
 
-        <div style={{display: 'flex', alignItems: 'center', position: 'relative'}}>
+        <div className={classes.menuRoot}>
           <Button className={classes.inviteButton}>Invite</Button>
           <IconButton
             aria-label="show 4 new notifications"
@@ -231,10 +236,7 @@ export default function TopBar(props: {open: boolean}) {
               </IconButton>
               {openProfileMenu && (
                 <Paper className={classes.profileMenu} elevation={0} square>
-                  <List
-                    component="div"
-                    aria-labelledby="profile menu"
-                  >
+                  <List component="div" aria-labelledby="profile menu">
                     <ListItem onClick={handleClickProfile}>
                       <ListItemIcon>
                         <ProfileIcon />
