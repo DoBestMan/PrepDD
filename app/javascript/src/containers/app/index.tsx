@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import idx from 'idx';
 
 import Router from '../../modules/route';
@@ -10,11 +10,15 @@ import {useGlobalState} from '../../store';
 export default function App() {
   const {data, loading, error} = useCurrentUser({});
   const {state, dispatch} = useGlobalState();
+  const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user);
 
-    if (loading || !currentUser) return;
+    if (loading) return;
+    setLoaded(true);
+    if (!currentUser) return;
+    
     dispatch({
       type: 'SET_CURRENT_USER',
       user: currentUser,
@@ -38,5 +42,5 @@ export default function App() {
     }
   }, [loading]);
 
-  return loading ? <LoadingFallback /> : <Router />;
+  return !loaded ? <LoadingFallback /> : <Router />;
 }
