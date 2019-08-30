@@ -6,7 +6,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
+import {navigate} from '@reach/router';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -105,7 +106,7 @@ export default function SignInPage(_props: {path?: string}) {
     uuID: '',
   });
 
-  const [signInUser, {data}] = useSignInUser({
+  const [signInUser, {loading, data, error}] = useSignInUser({
     email: state.email,
     password: state.password,
     socialLogin: state.socialLogin,
@@ -117,6 +118,12 @@ export default function SignInPage(_props: {path?: string}) {
   interface linkedInResponse {
     code: string;
   }
+
+  useEffect(() => {
+    const signInUser = idx(data, data => data.signInUser);
+    if (loading || !signInUser) return;
+    navigate('app/');
+  }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
 
