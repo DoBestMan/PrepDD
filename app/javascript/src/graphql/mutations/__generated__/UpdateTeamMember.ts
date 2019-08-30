@@ -36,6 +36,7 @@ export interface UpdateTeamMember_updateTeamMember_user_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface UpdateTeamMember_updateTeamMember_user {

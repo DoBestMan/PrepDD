@@ -36,6 +36,7 @@ export interface AddTeamMember_addTeamMember_user_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface AddTeamMember_addTeamMember_user {

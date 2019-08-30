@@ -44,6 +44,7 @@ export const useAddTeamMember = createMutationHook<
         companies {
           id
           name
+          logoUrl
         }
       }
     }

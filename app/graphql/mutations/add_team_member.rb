@@ -30,7 +30,9 @@ class Mutations::AddTeamMember < GraphQL::Schema::Mutation
         )
 
       user_role =
-        RolesUser.create(user_id: user.id, role_id: role, company_id: company_id)
+        RolesUser.create(
+          user_id: user.id, role_id: role, company_id: company_id
+        )
 
       user_role.errors.messages&.each do |path, messages|
         messages.each do |message|
@@ -76,7 +78,7 @@ class Mutations::AddTeamMember < GraphQL::Schema::Mutation
 
     companies = user.companies
     teams = user.teams.where(company_id: company_id)
-    role = RolesUser.where(user_id: user.id, company_id: company_id).first.role
+    role = RolesUser.where(user_id: user.id, company_id: company_id).first&.role
 
     if user&.persisted?
       response[:success] = true

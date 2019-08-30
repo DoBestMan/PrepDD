@@ -9,10 +9,16 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(company_id: nil, owner_email: nil, new_company_name: nil, is_parent: nil, is_broker: nil)
+  def resolve(
+    company_id: nil,
+    owner_email: nil,
+    new_company_name: nil,
+    is_parent: nil,
+    is_broker: nil
+  )
     response = { errors: [] }
 
-    password = Devise.friendly_token[0,20]
+    password = Devise.friendly_token[0, 20]
 
     user =
       User.create(
@@ -33,18 +39,23 @@ class Mutations::CreateAssociatedCompany < GraphQL::Schema::Mutation
     end
 
     if user
-      company = Company.create(name: company_name)
+      company = Company.create(name: new_company_name)
       UsersCompany.create(user_id: user.id, company_id: company.id)
       owner_id = Role.find_by_name('Owner').id
-      RolesUser.create(user_id: user.id, role_id: owner_id, company_id: company.id)
+      RolesUser.create(
+        user_id: user.id, role_id: owner_id, company_id: company.id
+      )
     end
 
     if is_broker
-      BrokerCompany.create(child_broker_id: company_id, parent_broker_id: company.id)
+      BrokerCompany.create(
+        child_broker_id: company_id, parent_broker_id: company.id
+      )
     elsif is_parent
-      ParentCompany.create(child_company_id: company_id, parent_company_id: company.id)
+      ParentCompany.create(
+        child_company_id: company_id, parent_company_id: company.id
+      )
     end
-
 
     company.errors.messages.each do |path, messages|
       messages.each do |message|
