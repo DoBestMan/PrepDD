@@ -8,7 +8,9 @@ const TeamRoutes = lazy(() => import('./team'));
 const UserRoutes = lazy(() => import('./user'));
 const ListRoutes = lazy(() => import('./list'));
 
-export default function Router(props: {path: string}) {
+export default function Router() {
+  console.log("I'm in app route");
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Layout>
