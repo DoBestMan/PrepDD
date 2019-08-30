@@ -88,6 +88,20 @@ type FormError {
   path: String
 }
 
+"""
+Lists
+"""
+type List {
+  description: String
+  id: String!
+  isActive: Boolean
+  isPublicTemplate: Boolean
+  isTemplate: Boolean
+  name: String
+  requesterCompany: Company
+  responderCompany: Company
+}
+
 type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
@@ -121,6 +135,11 @@ type Query {
   The currently logged in user
   """
   currentUser: CurrentUser
+
+  """
+  Find a team by id
+  """
+  lists: [List!]!
 
   """
   Return All available roles
