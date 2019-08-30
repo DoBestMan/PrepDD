@@ -59,6 +59,7 @@ module Types
     field :search_companies, SearchCompaniesType, null: false do
       description 'Find companies by user email OR Name'
       argument :text, String, required: true
+      argument :companyId, ID, required: true
     end
 
     def company_users(company_id:, team_id: nil, limit:, offset:)
@@ -102,17 +103,16 @@ module Types
       User.find(id)
     end
 
-    def search_companies(text:)
-      companies = Company.search(text)
-      if companies.present?
-        companies
-      else
-        User.search(text).each do | user |
-          companies += user.companies
-        end
-      end
+    def search_companies(text:, company_id:)
+      company = Company.find(company_id)
+      associates_company_ids = company.company_parents.pluck(:id)
+      associates_company_ids += company.broker_parents.pluck(:id)
+      associates_company_ids += [company_id]
 
-      { companies: companies.uniq }
+      companies = Company.search(text).where.not(id: associates_company_ids)
+      users = User.search(text).where.not(id: context[:controller].current_user&.id)
+
+      { companies: companies.uniq, users: users }
     end
   end
 end

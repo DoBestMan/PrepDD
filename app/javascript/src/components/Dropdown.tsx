@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       top: 42,
       left: 0,
-      zIndex: 1,
+      zIndex: 2,
     },
     smallPaper: {
       top: 30,
