@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
 import React, {useCallback, useState, useEffect} from 'react';
-import {navigate} from '@reach/router';
+import {withRouter} from 'react-router';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -83,8 +83,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignInPage(_props: {path?: string}) {
-  useRequireGuest();
+const SignInPage = (props: any) => {
+  // useRequireGuest();
+  const {history} = props;
 
   const classes = useStyles({});
 
@@ -122,7 +123,7 @@ export default function SignInPage(_props: {path?: string}) {
   useEffect(() => {
     const signInUser = idx(data, data => data.signInUser);
     if (loading || !signInUser) return;
-    navigate('app/');
+    history.push('/app');
   }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
@@ -298,3 +299,5 @@ export default function SignInPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default withRouter(SignInPage);

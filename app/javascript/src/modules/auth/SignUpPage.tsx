@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
+import {withRouter} from 'react-router';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -12,7 +13,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import {Link as RouterLink, navigate} from '@reach/router';
+import {Link as RouterLink} from '@reach/router';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
@@ -86,8 +87,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignUpPage(_props: {path?: string}) {
-  useRequireGuest();
+const SignUpPage = (props: any) => {
+  // useRequireGuest();
+  const {match, history} = props;
 
   const classes = useStyles({});
 
@@ -134,13 +136,12 @@ export default function SignUpPage(_props: {path?: string}) {
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
-      navigate('/app/dashboard');
+      history.push('/app/dashboard');
     }
   }, [data]);
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    const companyName = url.searchParams.get('companyName');
+    const companyName = match.params.companyName;
     if (companyName !== null) {
       setState(state => ({...state, companyName: companyName}));
     }
@@ -404,3 +405,5 @@ export default function SignUpPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default withRouter(SignUpPage)
