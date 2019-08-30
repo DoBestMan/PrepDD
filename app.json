@@ -9,7 +9,13 @@
     }
   ],
   "env": {
-    "HEROKU_DEBUG_RAILS_RUNNER": "1"
+    "HEROKU_DEBUG_RAILS_RUNNER": "1",
+		"AWS_ACCESS_KEY_ID": {
+			"required": true
+		},
+		"AWS_SECRET_ACCESS_KEY": {
+			"required": true
+		}
   },
   "formation": {
     "web": {
@@ -18,7 +24,7 @@
   },
   "name": "prepdd",
   "scripts": {
-    "postdeploy": "bundle exec rake db:migrate db:seed"
+    "postdeploy": "bundle exec rake db:migrate data:migrate db:seed"
   },
   "stack": "heroku-18",
   "environments": {
