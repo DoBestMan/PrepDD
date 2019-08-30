@@ -53,4 +53,10 @@ RSpec.configure do |config|
     end
   end
   SimpleCov.start 'rails'
+
+  def set_graphql_type
+    self.let(:subject) do
+      self.described_class
+    end
+  end
 end
