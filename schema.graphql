@@ -88,6 +88,21 @@ type FormError {
   path: String
 }
 
+"""
+Lists
+"""
+type List {
+  description: String
+  id: String!
+  isActive: Boolean
+  isPublicTemplate: Boolean
+  isTemplate: Boolean
+  name: String
+  requesterCompany: Company
+  responderCompany: Company
+  tasks: [Task!]
+}
+
 type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
@@ -123,6 +138,11 @@ type Query {
   currentUser: CurrentUser
 
   """
+  Find a team by id
+  """
+  lists: [List!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!
@@ -131,6 +151,11 @@ type Query {
   Find companies by user email OR Name
   """
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
+
+  """
+  Find a team by id
+  """
+  tasks: [Task!]!
 
   """
   Find a team by id
@@ -252,6 +277,20 @@ type Subscription {
   maxStorage: String
   maxUsers: String
   name: String!
+}
+
+"""
+Task
+"""
+type Task {
+  description: String
+  dueDate: String
+  id: String!
+  isActive: Boolean
+  list: List
+  name: String
+  priority: String
+  status: String
 }
 
 """

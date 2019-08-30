@@ -62,6 +62,22 @@ module Types
       argument :companyId, ID, required: true
     end
 
+    field :lists, [ListType], null: false do
+      description 'Find a team by id'
+    end
+
+    field :tasks, [TaskType], null: false do
+      description 'Find a team by id'
+    end
+
+    def tasks
+      Task.all
+    end
+
+    def lists
+      List.all
+    end
+
     def company_users(company_id:, team_id: nil, limit:, offset:)
       company = Company.find(company_id)
       users = company.users.limit(limit).offset(offset)
