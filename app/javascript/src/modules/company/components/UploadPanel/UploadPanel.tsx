@@ -5,6 +5,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import ReactDropzone from 'react-dropzone';
 
 import {useGlobalState} from '../../../../store';
+import * as cs from '../../../../constants/types';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import {CompanySettings_company} from '../../../../graphql/queries/__generated__/CompanySettings';
 
@@ -63,19 +64,20 @@ const useStyles = makeStyles((theme: Theme) =>
 interface UploadPanelProps {
   company: CompanySettings_company;
   setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
+  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
 }
 
 export default function UploadPanel(props: UploadPanelProps) {
-  const {company, setCompany} = props;
+  const {company, setCompany, setNotification} = props;
   const classes = useStyles();
   const [showUpload, setShowUpload] = useState(false);
 
-  const {state} = useGlobalState();
+  const {state, dispatch} = useGlobalState();
 
   const handleDrop = (acceptedFiles: File[]) => {
     const user_data = new FormData();
     user_data.append('logo', acceptedFiles[0]);
-    user_data.append('id', state.currentUser.id);
+    user_data.append('id', company.id);
 
     axios
       .post('/api/update_company_logo', user_data, {
@@ -87,6 +89,32 @@ export default function UploadPanel(props: UploadPanelProps) {
         setCompany({
           ...company,
           logoUrl: res.data.logo_url,
+        });
+        setNotification({
+          variant: 'success',
+          message: 'Upload logo successfully',
+        });
+
+        if (state.currentUser.companies) {
+          const index = state.currentUser.companies.findIndex(
+            a => a.id === company.id
+          );
+          const newCompanies = state.currentUser.companies;
+
+          newCompanies[index].logoUrl = res.data.logo_url;
+          dispatch({
+            type: 'SET_CURRENT_USER',
+            user: {
+              ...state.currentUser,
+              companies: newCompanies,
+            },
+          });
+        }
+      })
+      .catch(error => {
+        setNotification({
+          variant: 'warning',
+          message: 'Upload logo failed',
         });
       });
   };
@@ -106,8 +134,8 @@ export default function UploadPanel(props: UploadPanelProps) {
             >
               <img
                 src={company.logoUrl}
-                width="226"
-                height="226"
+                width="222"
+                height="222"
                 alt="Microsoft"
               />
               <div

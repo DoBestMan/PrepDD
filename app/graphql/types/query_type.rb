@@ -62,6 +62,22 @@ module Types
       argument :companyId, ID, required: true
     end
 
+    field :lists, [ListType], null: false do
+      description 'Find a team by id'
+    end
+
+    field :tasks, [TaskType], null: false do
+      description 'Find a team by id'
+    end
+
+    def tasks
+      Task.all
+    end
+
+    def lists
+      List.all
+    end
+
     def company_users(company_id:, team_id: nil, limit:, offset:)
       company = Company.find(company_id)
       users = company.users.limit(limit).offset(offset)
@@ -104,16 +120,18 @@ module Types
     end
 
     def search_companies(text:, company_id:)
+      return { companies: [], users: [] } unless !text.empty?
+
       company = Company.find(company_id)
-      
+
       associates_company_ids = company.company_parents.pluck(:id)
       associates_company_ids += company.broker_parents.pluck(:id)
       associates_company_ids += [company_id]
 
       companies = Company.search(text).where.not(id: associates_company_ids)
-      users = User.search(text).where.not(id: context[:controller].current_user&.id)
+      users = User.search(text)
 
-      users.each do | user |
+      users.each do |user|
         user_companies = user.companies.where.not(id: associates_company_ids)
         user.companies = user_companies
       end

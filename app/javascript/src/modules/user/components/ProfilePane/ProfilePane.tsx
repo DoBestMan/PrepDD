@@ -24,6 +24,7 @@ import InputForm from '../../../../components/InputForm';
 import CheckBox from './components/CheckBox';
 
 import {useGlobalState} from '../../../../store';
+import * as cs from '../../../../constants/types';
 import {useUpdateUserPassword} from '../../../../graphql/mutations/UpdateUserPassword';
 import {useUpdateUserData} from '../../../../graphql/mutations/UpdateUserData';
 import {CurrentUser_currentUser_user_teams} from '../../../../graphql/queries/__generated__/CurrentUser';
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     uploadArea: {
       position: 'absolute',
       width: '120px',
-      height: '60px',
+      height: '58px',
       backgroundColor: 'rgba(48, 48, 48, 0.5)',
       borderBottomLeftRadius: '120px',
       borderBottomRightRadius: '120px',
@@ -167,11 +168,6 @@ interface UserType {
   hasEightChar: boolean;
 }
 
-interface ErrorType {
-  variant: 'success' | 'warning' | 'error' | 'info';
-  message: string;
-}
-
 export default function ProfilePane(props: {value?: number; index?: number}) {
   const {value, index} = props;
   const classes = useStyles();
@@ -190,7 +186,9 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   });
   const [show, setShow] = useState<boolean>(false);
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
-  const [errors, setErrors] = useState<ErrorType | null>(null);
+  const [notification, setNotification] = useState<cs.NotificationType | null>(
+    null
+  );
 
   const [
     updateUserPassword,
@@ -224,12 +222,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     );
 
     if (updateErrors && !updateErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'success',
         message: 'Update user successfully',
       });
     } else if (updateErrors && updateErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'warning',
         message: updateErrors[0].message,
       });
@@ -248,12 +246,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     );
 
     if (updateErrors && !updateErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'success',
         message: 'Update password successfully',
       });
     } else if (updateErrors && updateErrors.length) {
-      setErrors({
+      setNotification({
         variant: 'warning',
         message: updateErrors[0].message,
       });
@@ -266,10 +264,10 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   ]);
 
   useEffect(() => {
-    if (errors) {
+    if (notification) {
       setMessageOpen(true);
     }
-  }, [errors]);
+  }, [notification]);
 
   const handleChange = React.useCallback(
     event => {
@@ -301,7 +299,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   const handleChangePassword = () => {
     if (user.password !== user.confirmPassword) {
-      setErrors({
+      setNotification({
         variant: 'warning',
         message: 'Password is not matched',
       });
@@ -312,7 +310,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       return;
     }
     if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
-      setErrors({
+      setNotification({
         variant: 'warning',
         message: 'Password is not valid',
       });
@@ -362,7 +360,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           ...user,
           profile_url: res.data.profile_url,
         });
-        setErrors({
+        setNotification({
           variant: 'success',
           message: 'Upload photo successfully',
         });
@@ -376,7 +374,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         });
       })
       .catch(error => {
-        setErrors({
+        setNotification({
           variant: 'warning',
           message: 'Upload photo failed',
         });
@@ -439,7 +437,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   return (
     <>
-      {errors && (
+      {notification && (
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
@@ -450,8 +448,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           onClose={handleCloseMessage}
         >
           <FlashMessage
-            variant={errors.variant}
-            message={errors.message}
+            variant={notification.variant}
+            message={notification.message}
             onClose={handleCloseMessage}
           />
         </Snackbar>

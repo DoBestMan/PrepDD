@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface StyledItemProps {
   logo?: string | null;
   label: string;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const StyledItem = React.forwardRef(
@@ -40,7 +40,7 @@ const StyledItem = React.forwardRef(
     const classes = useStyles();
 
     const handleClick = () => {
-      if (confirm('Are you going to delete this company?')) {
+      if (confirm('Are you going to delete this company?') && onClose) {
         onClose();
       }
     };
@@ -57,7 +57,9 @@ const StyledItem = React.forwardRef(
           />
         )}
         <div className={classes.label}>{label}</div>
-        <CloseIcon className={classes.close} onClick={handleClick} />
+        {onClose && (
+          <CloseIcon className={classes.close} onClick={handleClick} />
+        )}
       </div>
     );
   }

@@ -34,6 +34,7 @@ export const useCompanyUsers = createQueryHook<CompanyUsers, {}>(gql`
         companies {
           id
           name
+          logoUrl
         }
       }
     }

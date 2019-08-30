@@ -5,8 +5,11 @@ import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {Toolbar, Typography, Button, TextField} from '@material-ui/core';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
+
 import AutoSuggest from '../AutoSuggest';
 import Dropdown from './components/Dropdown';
+
+import * as cs from '../../../../constants/types';
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember';
 import {useAllRoles} from '../../../../graphql/queries/AllRoles';
 import {
@@ -144,16 +147,11 @@ interface StateProps {
   team: string;
 }
 
-interface ErrorType {
-  variant: 'success' | 'warning' | 'error' | 'info';
-  message: string;
-}
-
 interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
-  setErrors: React.Dispatch<React.SetStateAction<ErrorType | null>>;
+  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
   updateMemberList: (params: {
     id: string;
     fullName: string;
@@ -164,7 +162,13 @@ interface TableToolbarProps {
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const {selected, company, setErrors, handleDelete, updateMemberList} = props;
+  const {
+    selected,
+    company,
+    setNotification,
+    handleDelete,
+    updateMemberList,
+  } = props;
   const classes = useToolbarStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<StateProps>({
@@ -212,7 +216,7 @@ const TableToolbar = (props: TableToolbarProps) => {
     );
 
     if (!addMemberErrors || !addMemberErrors.length) return;
-    setErrors({
+    setNotification({
       variant: 'warning',
       message: addMemberErrors[0].message,
     });
@@ -237,7 +241,7 @@ const TableToolbar = (props: TableToolbarProps) => {
       teams: addedUser.teams,
       roles: addedUser.roles,
     });
-    setErrors({
+    setNotification({
       variant: 'success',
       message: 'Add team member successfully',
     });

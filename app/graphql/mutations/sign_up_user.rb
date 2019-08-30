@@ -34,7 +34,8 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
       if provider == 'linkedIn'
         profile = User.linkedin_auth(token_id)
         if profile
-          full_name = profile["localizedFirstName"] + " " + profile["localizedLastName"]
+          full_name =
+            profile['localizedFirstName'] + ' ' + profile['localizedLastName']
           uu_id = profile['id']
           email = uu_id + '@linkedin.com'
         else

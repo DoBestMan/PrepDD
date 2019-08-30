@@ -37,6 +37,7 @@ export interface CompanyUsers_companyUsers_users_companies {
   __typename: "Company";
   id: string;
   name: string;
+  logoUrl: string | null;
 }
 
 export interface CompanyUsers_companyUsers_users {

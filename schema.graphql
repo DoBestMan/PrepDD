@@ -88,6 +88,21 @@ type FormError {
   path: String
 }
 
+"""
+Lists
+"""
+type List {
+  description: String
+  id: String!
+  isActive: Boolean
+  isPublicTemplate: Boolean
+  isTemplate: Boolean
+  name: String
+  requesterCompany: Company
+  responderCompany: Company
+  tasks: [Task!]
+}
+
 type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
@@ -98,8 +113,8 @@ type Mutation {
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
   signInUser(email: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
-  signUpUser(companyName: String, email: String!, fullName: String!, password: String!, provider: String, socialLogin: Boolean, tokenID: String, uuID: String): SignUpUserPayload
-  updateCompanySettings(automaticPdf: Boolean, brokerName: String, deleteBrokerId: ID, deleteParentId: ID, dynamicWatermarking: Boolean, id: ID!, name: String, parentName: String, previewOnly: Boolean): UpdateCompanySettingsPayload
+  signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
+  updateCompanySettings(automaticPdf: Boolean, brokerId: ID, deleteBrokerId: ID, deleteParentId: ID, dynamicWatermarking: Boolean, id: ID!, name: String, parentId: ID, previewOnly: Boolean): UpdateCompanySettingsPayload
   updateTeamMember(companyId: ID!, fullName: String!, id: ID!, role: ID!): UpdateTeamMemberPayload
   updateUserData(displayName: String!, email: String!, fullName: String!, lastViewedCompanyId: ID): UpdateUserDataPayload
   updateUserPassword(oldPassword: String!, password: String!): UpdateUserPasswordPayload
@@ -122,6 +137,11 @@ type Query {
   currentUser: CurrentUser
 
   """
+  Find a team by id
+  """
+  lists: [List!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!
@@ -130,6 +150,11 @@ type Query {
   Find companies by user email OR Name
   """
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
+
+  """
+  Find a team by id
+  """
+  tasks: [Task!]!
 
   """
   Find a team by id
@@ -251,6 +276,20 @@ type Subscription {
   maxStorage: String
   maxUsers: String
   name: String!
+}
+
+"""
+Task
+"""
+type Task {
+  description: String
+  dueDate: String
+  id: String!
+  isActive: Boolean
+  list: List
+  name: String
+  priority: String
+  status: String
 }
 
 """

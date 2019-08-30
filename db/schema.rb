@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_24_162739) do
+ActiveRecord::Schema.define(version: 2019_08_30_185711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,23 @@ ActiveRecord::Schema.define(version: 2019_08_24_162739) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
+  create_table "lists", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.boolean "is_active", default: true
+    t.boolean "is_template"
+    t.boolean "is_public_template"
+    t.bigint "requester_id"
+    t.bigint "responder_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["requester_id"], name: "index_lists_on_requester_id"
+    t.index ["responder_id"], name: "index_lists_on_responder_id"
+  end
+
   create_table "parent_companies", force: :cascade do |t|
     t.bigint "child_company_id"
     t.bigint "parent_company_id"
@@ -110,6 +127,19 @@ ActiveRecord::Schema.define(version: 2019_08_24_162739) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "priority", default: 0
+    t.integer "status", default: 0
+    t.datetime "due_date"
+    t.boolean "is_active"
+    t.bigint "list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["list_id"], name: "index_tasks_on_list_id"
   end
 
   create_table "teams", force: :cascade do |t|

@@ -11,8 +11,8 @@ export const useUpdateCompany = createMutationHook<
   mutation UpdateCompany(
     $id: ID!
     $name: String!
-    $parentName: String
-    $brokerName: String
+    $parentId: ID
+    $brokerId: ID
     $deleteParentId: ID
     $deleteBrokerId: ID
     $autoPdf: Boolean!
@@ -22,8 +22,8 @@ export const useUpdateCompany = createMutationHook<
     updateCompanySettings(
       id: $id
       name: $name
-      parentName: $parentName
-      brokerName: $brokerName
+      parentId: $parentId
+      brokerId: $brokerId
       automaticPdf: $autoPdf
       dynamicWatermarking: $autoWatermark
       previewOnly: $previewOnly
