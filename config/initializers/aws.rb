@@ -2,8 +2,8 @@ require 'aws-sdk'
 Aws.config.update(
   credentials:
     Aws::Credentials.new(
-      'AKIA25AMRR5KS3VLSXCW',
-      'ya58E87jLx3LwXttWutt462T/7/iBfnHLUVfRguC'
+      ENV['AWS_ACCESS_KEY_ID'],
+      ENV['AWS_SECRET_ACCESS_KEY']
     ),
   region: 'us-east-1'
 )
