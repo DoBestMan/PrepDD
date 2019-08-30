@@ -233,7 +233,6 @@ export default function CompanyForm(props: CompanyFormProps) {
     const searchResult = idx(data, data => data.searchCompanies);
 
     if (loading || !searchResult) return;
-    console.log("Search Result: ", searchResult);
     setResult(searchResult);
   }, [loading, idx(data, data => data.searchCompanies)]);
 
@@ -278,7 +277,9 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       // Search companies...
-      searchCompanies({variables: {text: state.companyName, companyId: currentCompanyId}});
+      searchCompanies({
+        variables: {text: state.companyName, companyId: currentCompanyId},
+      });
     }
   };
 
@@ -329,26 +330,36 @@ export default function CompanyForm(props: CompanyFormProps) {
   };
 
   const renderUserList = () => {
-    return (
-      <List
-        component="div"
-        aria-labelledby="nested-list"
-        className={classes.nestedList}
-      >
-        {data &&
-          result &&
-          result.users &&
-          result.users.map((user: SearchCompanies_searchCompanies_users) => {
-            return (
-              <NestedList
-                key={user.id}
-                data={user}
-                handleClick={handleClickAssignedCompany}
-              />
-            );
-          })}
-      </List>
-    );
+    if (result && result.users && result.users.length) {
+      return (
+        <List
+          component="div"
+          aria-labelledby="nested-list"
+          className={classes.nestedList}
+        >
+          {data &&
+            result &&
+            result.users &&
+            result.users.map((user: SearchCompanies_searchCompanies_users) => {
+              return (
+                <NestedList
+                  key={user.id}
+                  data={user}
+                  handleClick={handleClickAssignedCompany}
+                />
+              );
+            })}
+        </List>
+      );
+    } else if (result.companies || result.users) {
+      return (
+        <Typography variant="h4" style={{marginTop: '12px'}}>
+          No match result
+        </Typography>
+      );
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -441,11 +452,8 @@ export default function CompanyForm(props: CompanyFormProps) {
                     );
                   }
                 )}
-            {result &&
-              result.companies &&
-              !result.companies.length &&
-              result.users &&
-              renderUserList()}
+            {renderUserList()}
+
             {openForm ? (
               <form onSubmit={handleSubmit}>
                 <Typography className={classes.formTitle} variant="h6">

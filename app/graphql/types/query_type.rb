@@ -104,10 +104,10 @@ module Types
     end
 
     def search_companies(text:, company_id:)
-      return{ companies: [], users: [] } unless !text.empty?
-      
+      return { companies: [], users: [] } unless !text.empty?
+
       company = Company.find(company_id)
-      
+
       associates_company_ids = company.company_parents.pluck(:id)
       associates_company_ids += company.broker_parents.pluck(:id)
       associates_company_ids += [company_id]
@@ -115,7 +115,7 @@ module Types
       companies = Company.search(text).where.not(id: associates_company_ids)
       users = User.search(text)
 
-      users.each do | user |
+      users.each do |user|
         user_companies = user.companies.where.not(id: associates_company_ids)
         user.companies = user_companies
       end
