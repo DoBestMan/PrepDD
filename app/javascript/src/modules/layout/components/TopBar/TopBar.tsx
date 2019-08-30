@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import {navigate} from '@reach/router';
 import {
@@ -12,7 +12,6 @@ import {
   AppBar, 
   Toolbar, 
   InputBase, 
-  Typography, 
   Button, 
   IconButton, 
   ClickAwayListener, 
@@ -28,6 +27,8 @@ import ProfileIcon from '@material-ui/icons/Person';
 import SignoutIcon from '@material-ui/icons/Input';
 
 import {useGlobalState} from '../../../../store';
+import {useSignOutUser} from '../../../../graphql/mutations/SignOutUser';
+
 import DefaultUserImage from '../../../../components/DefaultUserImage';
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
@@ -153,7 +154,16 @@ export default function TopBar(props: {open: boolean}) {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true,
   });
+
   const {state, dispatch} = useGlobalState();
+  const [signOutUser, {loading, data, error}] = useSignOutUser({});
+
+  useEffect(() => {
+    if (loading || !data) return;
+
+    navigate('../');
+    setOpenProfileMenu(false);
+  }, [loading, data])
 
   const handleClickProfile = () => {
     navigate('../app/user');
@@ -161,8 +171,7 @@ export default function TopBar(props: {open: boolean}) {
   }
 
   const handleClickSignout = () => {
-    
-    setOpenProfileMenu(false);
+    signOutUser();
   }
 
   return (
