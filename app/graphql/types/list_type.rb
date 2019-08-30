@@ -10,6 +10,7 @@ module Types
     field :isPublicTemplate, Boolean, null: true
     field :requesterCompany, CompanyType, null: true
     field :responderCompany, CompanyType, null: true
+    field :tasks, [TaskType], null: true
 
     def requester_company
       object.requester

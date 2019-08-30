@@ -66,6 +66,14 @@ module Types
       description 'Find a team by id'
     end
 
+    field :tasks, [TaskType], null: false do
+      description 'Find a team by id'
+    end
+
+    def tasks
+      Task.all
+    end
+
     def lists
       List.all
     end
