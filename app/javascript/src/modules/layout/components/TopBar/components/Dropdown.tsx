@@ -103,7 +103,8 @@ export default function Dropdown() {
             variant="inherit"
             onClick={toggleMenu}
           >
-            {state.currentUser.companies && selectedCompanyIndex >= 0 && (
+            {state.currentUser.companies && selectedCompanyIndex >= 0 && 
+              state.currentUser.companies[selectedCompanyIndex].logoUrl && (
               <img
                 src={state.currentUser.companies[selectedCompanyIndex].logoUrl as string}
                 className={classes.companyLogo}
