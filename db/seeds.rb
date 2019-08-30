@@ -75,12 +75,17 @@ ekta_users.each do |u|
   company_user_association(u, ekta, 5)
 end
 
+
 ## Create a second Company to mock Company-to-Company functionality ##
+=begin
 microsoft = Company.create({
   name: 'Microsoft'
 })
+=end
+
 
 ## Create 10 companies, each with 10 users.
+=begin
 10.times do
   owner_user = User.create({
     full_name: Faker::Name.name,
@@ -127,4 +132,4 @@ microsoft = Company.create({
   end
 
 end
-
+=end
