@@ -130,7 +130,7 @@ type Query {
   """
   Find companies by user email OR Name
   """
-  searchCompanies(text: String!): SearchCompanies!
+  searchCompanies(companyId: ID!, text: String!): SearchCompanies!
 
   """
   Find a team by id

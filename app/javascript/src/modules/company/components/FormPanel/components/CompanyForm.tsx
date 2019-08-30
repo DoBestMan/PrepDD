@@ -159,8 +159,8 @@ interface CompanyFormProps {
 }
 
 const SEARCH_COMPANIES = gql`
-  query SearchCompanies($text: String!) {
-    searchCompanies(text: $text) {
+  query SearchCompanies($text: String!, $companyId: ID!) {
+    searchCompanies(text: $text, companyId: $companyId) {
       users {
         id
         fullName
@@ -233,6 +233,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     const searchResult = idx(data, data => data.searchCompanies);
 
     if (loading || !searchResult) return;
+    console.log("Search Result: ", searchResult);
     setResult(searchResult);
   }, [loading, idx(data, data => data.searchCompanies)]);
 
@@ -277,7 +278,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       // Search companies...
-      searchCompanies({variables: {text: state.companyName}});
+      searchCompanies({variables: {text: state.companyName, companyId: currentCompanyId}});
     }
   };
 
