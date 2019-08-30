@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {Link} from '@reach/router';
+import {Link} from 'react-router-dom';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import AccessTime from '@material-ui/icons/AccessTime';
@@ -118,13 +118,6 @@ const CustomerLink = React.forwardRef((props: any, ref: any) => (
     ref={ref}
     style={{flexGrow: 1}}
     {...props}
-    getProps={({isCurrent}) => {
-      return {
-        className: isCurrent
-          ? `${props.className} ${props.activeclassname}`
-          : props.className,
-      };
-    }}
   />
 ));
 

@@ -5,7 +5,7 @@ import ListPage from '../list';
 export default function ListRoute() {
   return (
     <Switch>
-      <Route exact path="/app/list/" component={ListPage} />
+      <Route exact path="/app/lists/" component={ListPage} />
     </Switch>
   );
 }
