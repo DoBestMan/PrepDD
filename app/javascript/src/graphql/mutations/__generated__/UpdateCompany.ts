@@ -68,8 +68,8 @@ export interface UpdateCompany {
 export interface UpdateCompanyVariables {
   id: string;
   name: string;
-  parentName?: string | null;
-  brokerName?: string | null;
+  parentId?: string | null;
+  brokerId?: string | null;
   deleteParentId?: string | null;
   deleteBrokerId?: string | null;
   autoPdf: boolean;

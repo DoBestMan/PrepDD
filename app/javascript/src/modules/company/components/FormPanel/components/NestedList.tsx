@@ -66,7 +66,7 @@ export default function NestedList(props: NestedListProps) {
                 <ListItem
                   key={company.id}
                   className={classes.nested}
-                  onClick={() => handleClick(data.id, company.name)}
+                  onClick={() => handleClick(data.id, company.id)}
                   disableGutters
                 >
                   {company.logoUrl && (

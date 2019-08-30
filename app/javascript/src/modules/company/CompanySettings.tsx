@@ -72,8 +72,8 @@ export default function CompanySettings(props: {path?: string}) {
   ] = useUpdateCompany({
     id: company.id,
     name: company.name,
-    parentName: addedParent,
-    brokerName: addedBroker,
+    parentId: addedParent,
+    brokerId: addedBroker,
     autoPdf: company.autoPdf as boolean,
     autoWatermark: company.autoWatermark as boolean,
     previewOnly: company.previewOnly as boolean,

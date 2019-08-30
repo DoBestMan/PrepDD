@@ -287,7 +287,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     createAssociatedCompany();
   };
 
-  const handleClickCompany = (newValue: string, index: number) => {
+  const handleClickCompany = (companyId: string, index: number) => {
     if (result.companies) {
       const newCompanies = result.companies
         .slice(0, index)
@@ -297,7 +297,7 @@ export default function CompanyForm(props: CompanyFormProps) {
         companies: newCompanies,
       });
     }
-    onUpdate(newValue);
+    onUpdate(companyId);
   };
 
   const handleClickAssignedCompany = (userId: string, companyId: string) => {
@@ -311,7 +311,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       );
       if (!selectedCompanies) return;
       const companyIndex = selectedCompanies.findIndex(
-        company => company.name === companyId
+        company => company.id === companyId
       );
       if (companyIndex < 0) return;
 
@@ -427,7 +427,7 @@ export default function CompanyForm(props: CompanyFormProps) {
                         key={company.id}
                         className={classes.companyItem}
                         variant="inherit"
-                        onClick={() => handleClickCompany(company.name, index)}
+                        onClick={() => handleClickCompany(company.id, index)}
                       >
                         {company.logoUrl && (
                           <img

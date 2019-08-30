@@ -1,8 +1,8 @@
 class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
   argument :id, ID, required: true
   argument :name, String, required: false
-  argument :parentName, String, required: false
-  argument :brokerName, String, required: false
+  argument :parentId, ID, required: false
+  argument :brokerId, ID, required: false
   argument :automaticPdf, Boolean, required: false
   argument :dynamicWatermarking, Boolean, required: false
   argument :previewOnly, Boolean, required: false
@@ -19,8 +19,8 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
   def resolve(
     id: nil,
     name: nil,
-    parent_name: nil,
-    broker_name: nil,
+    parent_id: nil,
+    broker_id: nil,
     automatic_pdf: nil,
     dynamic_watermarking: nil,
     preview_only: nil,
@@ -37,26 +37,16 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
       auto_watermark: dynamic_watermarking
     )
 
-    if parent_name.present?
-      parent = Company.find_by_name(parent_name)
-      if parent
-        ParentCompany.create(
-          child_company_id: company&.id, parent_company_id: parent.id
-        )
-      else
-        #ToDo Create Parent Company & User
-      end
+    if parent_id.present?
+      ParentCompany.create(
+        child_company_id: company&.id, parent_company_id: parent_id
+      )
     end
 
-    if broker_name.present?
-      broker = Company.find_by_name(broker_name)
-      if broker
-        BrokerCompany.create(
-          child_broker_id: company&.id, parent_broker_id: broker.id
-        )
-      else
-        #ToDo Create Broker Company & User
-      end
+    if broker_id.present?
+      BrokerCompany.create(
+        child_broker_id: company&.id, parent_broker_id: broker_id
+      )
     end
 
     if delete_parent_id.present?
