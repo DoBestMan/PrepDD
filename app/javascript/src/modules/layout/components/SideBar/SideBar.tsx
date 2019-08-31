@@ -94,7 +94,7 @@ export default function SideBar(props: SideBarProps) {
           <ListItemIcon>
             <img src={PrepddLogo} alt="PrepDD" />
           </ListItemIcon>
-          <ListItemText>
+          <ListItemText style={{marginLeft: '12px'}}>
             <span className={classes.mark}>
               PREP<span className={classes.primaryColor}>DD</span>
             </span>
