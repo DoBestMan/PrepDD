@@ -8,7 +8,6 @@ module Types
     field :addTeamMember, mutation: Mutations::AddTeamMember
     field :createTeam, mutation: Mutations::CreateTeam
     field :createCompany, mutation: Mutations::CreateCompany
-    field :updateUserNotificatiosn, mutation: Mutations::UpdateUserNotificatiosn
     field :updateUserPassword, mutation: Mutations::UpdateUserPassword
     field :updateUserData, mutation: Mutations::UpdateUserData
     field :sign_in_user, mutation: Mutations::SignInUser

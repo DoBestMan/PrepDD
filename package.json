@@ -2,7 +2,7 @@
   "name": "prepdd",
   "private": true,
   "scripts": {
-    "test": "./node_modules/.bin/jest"
+    "test": "./node_modules/.bin/jest --collectCoverage"
   },
   "dependencies": {
     "@babel/core": "^7.5.5",

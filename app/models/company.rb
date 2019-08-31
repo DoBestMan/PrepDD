@@ -28,6 +28,9 @@ class Company < ApplicationRecord
   has_many :roles_users
   has_many :roles, through: :roles_users
 
+  has_many :lists, foreign_key: 'requester_id'
+  has_many :responded_lists, class_name: 'List', foreign_key: 'responder_id'
+
   has_one_attached :logo
 
   validates :name, presence: true
