@@ -98,6 +98,27 @@ const defaultTheme = createMuiTheme({
           backgroundColor: cs.COLORS.primaryHover
         }
       }
+    }, 
+    MuiTableRow: {
+      root: {
+        color: '#606060', 
+        '&:hover': {
+          color: '#D8D8D8', 
+          backgroundColor: '#EBF2FF', 
+        }, 
+      },
+      head: {
+        '&:hover': {
+          backgroundColor: '#FFFFFF'
+        }
+      }
+    },
+    MuiTableCell: {
+      root: {
+        fontFamily: cs.FONT.family,
+        fontWeight: cs.FONT.weight.regular,
+        fontSize: cs.FONT.size.xs,
+      }
     }
   },
 });
