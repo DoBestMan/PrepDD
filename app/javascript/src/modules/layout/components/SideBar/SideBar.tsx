@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
+import {
+  Drawer, 
+  Button,
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText, 
+  Divider, 
+  Paper, 
+  ClickAwayListener
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import ListIcon from '@material-ui/icons/PlaylistAdd';
+import TaskIcon from '@material-ui/icons/AddBox';
+import TemplateIcon from '@material-ui/icons/LineWeight';
 
 import {MainListItems, AdminListItems} from './components/NavItems';
-import StyledButton from './components/StyledButton';
 
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
 
@@ -50,6 +57,14 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(9) + 1,
       },
     },
+    createMenu: {
+      width: '250px', 
+      position: 'fixed', 
+      top: '81px', 
+      left: '184px', 
+      border: '2px solid #D8D8D8', 
+      zIndex: 1, 
+    },
     paddingOpen: {
       paddingLeft: 24,
       paddingRight: 24,
@@ -75,6 +90,7 @@ interface SideBarProps {
 export default function SideBar(props: SideBarProps) {
   const {open, setShowNarrow} = props;
   const classes = useStyles();
+  const [openCreateMenu, setOpenCreateMenu] = useState<boolean>(false);
 
   return (
     <Drawer
@@ -104,14 +120,32 @@ export default function SideBar(props: SideBarProps) {
           className={clsx(classes.paddingOpen, !open && classes.paddingClose)}
           disableGutters
         >
-          {open ? (
-            <StyledButton variant="outlined" color="primary">
-              Create
-            </StyledButton>
-          ) : (
-            <StyledButton variant="outlined" color="primary">
-              <AddIcon />
-            </StyledButton>
+          <Button variant="outlined" onClick={() => setOpenCreateMenu(!openCreateMenu)}>
+            {open ? 'Create' : <AddIcon /> }
+          </Button>
+          {openCreateMenu && (
+            <Paper className={classes.createMenu} elevation={0} square>
+              <List component="div" aria-labelledby="Create Menu">
+                <ListItem>
+                  <ListItemIcon>
+                    <ListIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New List" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <TaskIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New task" />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <TemplateIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New template" />
+                </ListItem>
+              </List>
+            </Paper>
           )}
         </ListItem>
         <MainListItems open={open} />

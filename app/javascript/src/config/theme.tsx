@@ -1,52 +1,53 @@
 import {createMuiTheme} from '@material-ui/core';
+import * as cs from '../constants/theme';
 
 const defaultTheme = createMuiTheme({
   palette: {
     background: {
-      default: '#FFFFFF',
+      default: cs.COLORS.background
     },
   },
   typography: {
     h1: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '30px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.xl, 
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '40px',
     },
     h2: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '24px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.lg,
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '32px',
     },
     h3: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '18px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.md,
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '24px',
     },
     h4: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '15px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.sm,
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '24px',
     },
     h6: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '12px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.xs,
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '21px',
     },
     body1: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '12px',
-      fontWeight: 'bold',
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.xs,
+      fontWeight: cs.FONT.weight.bold,
       lineHeight: '21px',
     },
   },
@@ -58,36 +59,44 @@ const defaultTheme = createMuiTheme({
         width: '100%',
         '&$selected, &$selected:hover': {
           color: '#FFFFFF',
-          background: '#3A84FF',
+          backgroundColor: cs.COLORS.primary,
         },
         '&:hover': {
-          background: '#EBF2FF',
+          backgroundColor: cs.COLORS.primaryHover,
         },
       },
     },
     MuiListItemText: {
       root: {
-        color: '#2C2C2C',
+        color: cs.FONT.color,
       },
     },
     MuiButton: {
       root: {
-        background: '#3A84FF',
+        width: '100%', 
+        minWidth: '36px',
+        height: '36px', 
+        background: cs.COLORS.primary,
         borderRadius: '3px',
-        fontFamily: 'Montserrat',
-        fontWeight: 'bold',
-        fontSize: '12px',
+        fontFamily: cs.FONT.family,
+        fontWeight: cs.FONT.weight.regular,
+        fontSize: cs.FONT.size.xs,
         color: '#FFFFFF',
         textAlign: 'center',
         textTransform: 'capitalize',
         '&:hover': {
           opacity: 0.7,
-          backgroundColor: '#3A84FF',
+          backgroundColor: cs.COLORS.primaryHover,
         },
       },
       outlined: {
         background: '#FFFFFF', 
-        border: '2px solid #3A84FF',
+        color: '#3A84FF', 
+        border: `2px solid ${cs.COLORS.primary}`,
+        fontSize: cs.FONT.size.sm, 
+        '&:hover': {
+          backgroundColor: cs.COLORS.primaryHover
+        }
       }
     }
   },
