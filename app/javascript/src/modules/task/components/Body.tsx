@@ -8,9 +8,11 @@ import {
   TableBody, 
   TableRow, 
   TableCell, 
+  Button, 
 } from '@material-ui/core';
 
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -23,7 +25,25 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center', 
     },
     content: {
+      display: 'flex', 
       marginTop: '48px', 
+    }, 
+    rightPane: {
+      minWidth: '270px', 
+      marginLeft: '72px', 
+    }, 
+    uploadArea: {
+      width: '100%', 
+      height: '100%', 
+      border: '2px dashed #D8D8D8', 
+      borderRadius: '3px', 
+      marginTop: '30px', 
+      paddingTop: '50px', 
+      color: '#D8D8D8', 
+      textAlign: 'center', 
+    }, 
+    secondary: {
+      color: '#D8D8D8', 
     }
   })
 );
@@ -98,6 +118,20 @@ export default function Body() {
               })}
             </TableBody>
           </Table>
+          <div className={classes.rightPane}>
+            <Button variant="outlined">
+              Download Import Template
+            </Button>
+            <div className={classes.uploadArea}>
+              <UploadIcon style={{fontSize: '120px'}} />
+              <br />
+              <Typography variant="h4" className={classes.secondary}>
+                Drag and Drop/
+                <br />
+                Import Tasks
+              </Typography>           
+            </div>
+          </div>
         </div>
       </Container>
     </div>
