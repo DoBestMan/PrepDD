@@ -76,17 +76,23 @@ const defaultTheme = createMuiTheme({
         width: '100%',
         minWidth: '36px',
         height: '36px',
-        background: cs.COLORS.primary,
         borderRadius: '3px',
         fontFamily: cs.FONT.family,
         fontWeight: cs.FONT.weight.regular,
         fontSize: cs.FONT.size.xs,
-        color: '#FFFFFF',
+        color: cs.COLORS.primary,
         textAlign: 'center',
         textTransform: 'capitalize',
         '&:hover': {
-          opacity: 0.7,
           backgroundColor: cs.COLORS.primaryHover,
+        },
+      },
+      contained: {
+        color: '#FFFFFF', 
+        background: cs.COLORS.primary,
+        '&:hover': {
+          opacity: 0.7,
+          color: cs.COLORS.primaryHover,
         },
       },
       outlined: {
@@ -94,9 +100,6 @@ const defaultTheme = createMuiTheme({
         color: '#3A84FF',
         border: `2px solid ${cs.COLORS.primary}`,
         fontSize: cs.FONT.size.sm,
-        '&:hover': {
-          backgroundColor: cs.COLORS.primaryHover,
-        },
       },
     },
     MuiTableRow: {
