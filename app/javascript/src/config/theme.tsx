@@ -70,6 +70,26 @@ const defaultTheme = createMuiTheme({
         color: '#2C2C2C',
       },
     },
+    MuiButton: {
+      root: {
+        background: '#3A84FF',
+        borderRadius: '3px',
+        fontFamily: 'Montserrat',
+        fontWeight: 'bold',
+        fontSize: '12px',
+        color: '#FFFFFF',
+        textAlign: 'center',
+        textTransform: 'capitalize',
+        '&:hover': {
+          opacity: 0.7,
+          backgroundColor: '#3A84FF',
+        },
+      },
+      outlined: {
+        background: '#FFFFFF', 
+        border: '2px solid #3A84FF',
+      }
+    }
   },
 });
 

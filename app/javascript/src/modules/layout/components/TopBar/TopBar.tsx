@@ -95,18 +95,6 @@ const useStyles = makeStyles((theme: Theme) =>
     inviteButton: {
       width: '72px',
       height: '36px',
-      background: '#3A84FF',
-      borderRadius: '3px',
-      fontFamily: 'Montserrat',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      color: '#FFFFFF',
-      textAlign: 'center',
-      textTransform: 'capitalize',
-      '&:hover': {
-        opacity: 0.7,
-        background: '#3A84FF',
-      },
     },
     appBarItemSize: {
       width: '32px',
