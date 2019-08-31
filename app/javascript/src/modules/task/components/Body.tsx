@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Container, 
@@ -20,9 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 'calc(100vh - 162px)', 
       borderBottom: '1px solid #D8D8D8'
     }, 
-    title: {
-      display: 'flex', 
-      alignItems: 'center', 
+    flex: {
+      display: 'flex',
+      alignItems: 'center'
     },
     content: {
       display: 'flex', 
@@ -42,8 +43,26 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#D8D8D8', 
       textAlign: 'center', 
     }, 
-    secondary: {
+    uploadLabelColor: {
       color: '#D8D8D8', 
+    }, 
+    statusLabelColor: {
+      color: '#606060',
+    },
+    status: {
+      width: '8px', 
+      height: '8px', 
+      borderRadius: '50%', 
+      marginRight: '6px', 
+    },
+    high: {
+      backgroundColor: '#2792A2', 
+    },
+    medium: {
+      backgroundColor: '#1969A5', 
+    }, 
+    low: {
+      backgroundColor: '#81AFFF'
     }
   })
 );
@@ -84,10 +103,26 @@ const data = [
 export default function Body() {
   const classes = useStyles();
 
+  const renderPriority = (priority: string) => {
+    return (
+      <div className={classes.flex}>
+        <div className={clsx(
+          classes.status, 
+          priority === 'High' ? classes.high : 
+          priority === 'Medium' ? classes.medium :
+          classes.low, 
+        )} />
+        <Typography variant="h6">
+          {priority}
+        </Typography>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.root}>
       <Container>
-        <div className={classes.title}>
+        <div className={classes.flex}>
           <Typography variant="h2">
             Select List
           </Typography>
@@ -110,7 +145,7 @@ export default function Body() {
                   <TableRow key={index}>
                     <TableCell>{item.task}</TableCell>
                     <TableCell>{item.section}</TableCell>
-                    <TableCell>{item.priority}</TableCell>
+                    <TableCell>{renderPriority(item.priority)}</TableCell>
                     <TableCell>{item.description}</TableCell>
                     <TableCell />
                   </TableRow>
@@ -125,7 +160,7 @@ export default function Body() {
             <div className={classes.uploadArea}>
               <UploadIcon style={{fontSize: '120px'}} />
               <br />
-              <Typography variant="h4" className={classes.secondary}>
+              <Typography variant="h4" className={classes.uploadLabelColor}>
                 Drag and Drop/
                 <br />
                 Import Tasks
