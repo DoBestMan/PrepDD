@@ -61,9 +61,12 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '250px', 
       position: 'fixed', 
       top: '81px', 
-      left: '184px', 
+      left: '185px', 
       border: '2px solid #D8D8D8', 
       zIndex: 1, 
+    },
+    createMenuClose: {
+      left: '55px'
     },
     paddingOpen: {
       paddingLeft: 24,
@@ -87,10 +90,26 @@ interface SideBarProps {
   setShowNarrow(showNarrow: boolean): void;
 }
 
-export default function SideBar(props: SideBarProps) {
+const SideBar = (props: SideBarProps) => {
   const {open, setShowNarrow} = props;
   const classes = useStyles();
   const [openCreateMenu, setOpenCreateMenu] = useState<boolean>(false);
+
+  const handleClickListCreate = () => {
+    // history.push('/create/list');
+    setOpenCreateMenu(false);
+  }
+
+  const handleClickTaskCreate = () => {
+    // history.push('/create/task');
+    setOpenCreateMenu(false);
+  }
+
+  const handleClickTemplateCreate = () => {
+    // history.push('/create/template');
+    setOpenCreateMenu(false);
+
+  }
 
   return (
     <Drawer
@@ -124,21 +143,28 @@ export default function SideBar(props: SideBarProps) {
             {open ? 'Create' : <AddIcon /> }
           </Button>
           {openCreateMenu && (
-            <Paper className={classes.createMenu} elevation={0} square>
+            <Paper 
+              className={clsx(
+                classes.createMenu,
+                !open && classes.createMenuClose
+              )} 
+              elevation={0} 
+              square
+            >
               <List component="div" aria-labelledby="Create Menu">
-                <ListItem>
+                <ListItem onClick={handleClickListCreate}>
                   <ListItemIcon>
                     <ListIcon />
                   </ListItemIcon>
                   <ListItemText primary="New List" />
                 </ListItem>
-                <ListItem>
+                <ListItem onClick={handleClickTaskCreate}>
                   <ListItemIcon>
                     <TaskIcon />
                   </ListItemIcon>
                   <ListItemText primary="New task" />
                 </ListItem>
-                <ListItem>
+                <ListItem onClick={handleClickTemplateCreate}>
                   <ListItemIcon>
                     <TemplateIcon />
                   </ListItemIcon>
@@ -159,3 +185,6 @@ export default function SideBar(props: SideBarProps) {
     </Drawer>
   );
 }
+
+export default SideBar;
+// export default withRouter(SideBar);
