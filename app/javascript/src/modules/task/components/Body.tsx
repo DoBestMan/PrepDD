@@ -10,10 +10,16 @@ import {
   TableRow, 
   TableCell, 
   Button, 
+  Badge,
 } from '@material-ui/core';
+
+import DefaultUserImage from '../../../components/DefaultUserImage';
+import StyledBadge from './StyledBadge';
 
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 import UploadIcon from '@material-ui/icons/CloudUpload';
+import SmsIcon from '@material-ui/icons/SmsOutlined';
+import ListIcon from '@material-ui/icons/ListAlt';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -45,7 +51,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }, 
     uploadLabelColor: {
       color: '#D8D8D8', 
-    }, 
+    },
+    image: {
+      width: '24px', 
+      height: '24px', 
+      marginRight: '12px', 
+      backgroundColor: '#2792A2', 
+    },
+    badge: {
+      width: '8px', 
+      height: '8px', 
+      backgroundColor: '#6EB81D',
+    },
     statusLabelColor: {
       color: '#606060',
     },
@@ -119,6 +136,20 @@ export default function Body() {
     )
   }
 
+  const renderOthers = () => {
+    return (
+      <div className={classes.flex}>
+        <DefaultUserImage userName="F" className={classes.image} />
+        <StyledBadge variant="dot" color="primary" style={{marginRight: '12px'}}>
+          <SmsIcon />
+        </StyledBadge>
+        <StyledBadge variant="dot" color="primary">
+          <ListIcon />
+        </StyledBadge>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.root}>
       <Container>
@@ -147,7 +178,7 @@ export default function Body() {
                     <TableCell>{item.section}</TableCell>
                     <TableCell>{renderPriority(item.priority)}</TableCell>
                     <TableCell>{item.description}</TableCell>
-                    <TableCell />
+                    <TableCell align="right">{renderOthers()}</TableCell>
                   </TableRow>
                 )
               })}

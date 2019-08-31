@@ -454,8 +454,6 @@ export default function TeamManagement(props: {path?: string}) {
                               />
                             ) : (
                               <DefaultUserImage
-                                width={30}
-                                height={30}
                                 userName={user.fullName}
                               />
                             )}
