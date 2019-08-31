@@ -89,14 +89,14 @@ const defaultTheme = createMuiTheme({
       },
       contained: {
         color: '#FFFFFF', 
-        background: cs.COLORS.primary,
+        backgroundColor: cs.COLORS.primary,
         '&:hover': {
           opacity: 0.7,
-          color: cs.COLORS.primaryHover,
+          backgroundColor: cs.COLORS.primary,
         },
       },
       outlined: {
-        background: '#FFFFFF',
+        backgroundColor: '#FFFFFF',
         color: '#3A84FF',
         border: `2px solid ${cs.COLORS.primary}`,
         fontSize: cs.FONT.size.sm,

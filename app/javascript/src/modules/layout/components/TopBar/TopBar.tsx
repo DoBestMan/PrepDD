@@ -151,7 +151,7 @@ export default function TopBar(props: {open: boolean}) {
         )}
 
         <Typography variant="inherit">
-          <Button className={classes.inviteButton}>Invite</Button>
+          <Button className={classes.inviteButton} variant="contained">Invite</Button>
           <IconButton
             aria-label="show 4 new notifications"
             color="inherit"
