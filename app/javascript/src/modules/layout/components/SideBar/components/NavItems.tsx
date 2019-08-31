@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {Link} from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import AccessTime from '@material-ui/icons/AccessTime';
@@ -22,15 +22,15 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     item: {
       display: 'flex',
-      padding: '9px 24px 9px 24px',
-      color: '#2C2C2C',
-      justifyContent: 'flex-start',
-      textTransform: 'none',
-      letterSpacing: 0,
       width: '100%',
+      padding: '9px 24px 9px 24px',
+      alignItems: 'center', 
+      color: '#2C2C2C',
       fontFamily: 'Montserrat',
       fontWeight: 600,
       fontSize: '12px',
+      textTransform: 'none',
+      textDecoration: 'none', 
       '&$selected, &$selected:hover': {
         color: '#FFFFFF',
         background: '#3A84FF',
@@ -113,14 +113,6 @@ const adminPages = [
   },
 ];
 
-const CustomerLink = React.forwardRef((props: any, ref: any) => (
-  <Link
-    ref={ref}
-    style={{flexGrow: 1}}
-    {...props}
-  />
-));
-
 export const MainListItems = (props: {open: boolean}) => {
   const {open} = props;
   const classes = useStyles({});
@@ -128,19 +120,18 @@ export const MainListItems = (props: {open: boolean}) => {
   return (
     <React.Fragment>
       {mainPages.map(item => (
-        <ListItem
+        <NavLink
           key={item.title}
           className={classes.item}
-          activeclassname={classes.active}
-          component={CustomerLink}
+          activeClassName={classes.active}
           to={item.href}
-          disableGutters
+          exact={true}
         >
           <div className={classes.icon}>{item.icon}</div>
           <div className={clsx(classes.textFlow, !open && classes.invisible)}>
             {item.title}
           </div>
-        </ListItem>
+        </NavLink>
       ))}
     </React.Fragment>
   );
@@ -153,19 +144,18 @@ export const AdminListItems = (props: {open: boolean}) => {
   return (
     <React.Fragment>
       {adminPages.map(item => (
-        <ListItem
+        <NavLink
           key={item.title}
           className={classes.item}
-          activeclassname={classes.active}
-          component={CustomerLink}
+          activeClassName={classes.active}
           to={item.href}
-          disableGutters
+          exact={true}
         >
           <div className={classes.icon}>{item.icon}</div>
           <div className={clsx(classes.textFlow, !open && classes.invisible)}>
             {item.title}
           </div>
-        </ListItem>
+        </NavLink>
       ))}
     </React.Fragment>
   );

@@ -12,8 +12,6 @@ const UserRoutes = lazy(() => import('./user'));
 const ListRoutes = lazy(() => import('./list'));
 
 export default function AppRoute() {
-  console.log("I'm in app route");
-
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Layout>
