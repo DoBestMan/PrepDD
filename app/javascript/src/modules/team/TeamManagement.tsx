@@ -453,9 +453,7 @@ export default function TeamManagement(props: {path?: string}) {
                                 alt="Alana"
                               />
                             ) : (
-                              <DefaultUserImage
-                                userName={user.fullName}
-                              />
+                              <DefaultUserImage userName={user.fullName} />
                             )}
                             <span style={{marginLeft: '18px'}}>
                               {user.fullName}

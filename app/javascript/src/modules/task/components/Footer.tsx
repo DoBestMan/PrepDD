@@ -5,7 +5,7 @@ import Container from '@material-ui/core/Container';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      height: '72px', 
+      height: '72px',
     },
   })
 );
@@ -15,8 +15,7 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <Container>
-      </Container>
+      <Container></Container>
     </div>
-  )  
+  );
 }

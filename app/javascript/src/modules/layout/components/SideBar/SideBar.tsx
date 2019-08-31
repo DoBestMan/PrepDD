@@ -2,15 +2,15 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  Drawer, 
+  Drawer,
   Button,
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
-  Divider, 
-  Paper, 
-  ClickAwayListener
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Paper,
+  ClickAwayListener,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import ListIcon from '@material-ui/icons/PlaylistAdd';
@@ -58,15 +58,15 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     createMenu: {
-      width: '250px', 
-      position: 'fixed', 
-      top: '81px', 
-      left: '185px', 
-      border: '2px solid #D8D8D8', 
-      zIndex: 1, 
+      width: '250px',
+      position: 'fixed',
+      top: '81px',
+      left: '185px',
+      border: '2px solid #D8D8D8',
+      zIndex: 1,
     },
     createMenuClose: {
-      left: '55px'
+      left: '55px',
     },
     paddingOpen: {
       paddingLeft: 24,
@@ -98,18 +98,17 @@ const SideBar = (props: SideBarProps) => {
   const handleClickListCreate = () => {
     // history.push('/create/list');
     setOpenCreateMenu(false);
-  }
+  };
 
   const handleClickTaskCreate = () => {
     // history.push('/create/task');
     setOpenCreateMenu(false);
-  }
+  };
 
   const handleClickTemplateCreate = () => {
     // history.push('/create/template');
     setOpenCreateMenu(false);
-
-  }
+  };
 
   return (
     <Drawer
@@ -139,16 +138,19 @@ const SideBar = (props: SideBarProps) => {
           className={clsx(classes.paddingOpen, !open && classes.paddingClose)}
           disableGutters
         >
-          <Button variant="outlined" onClick={() => setOpenCreateMenu(!openCreateMenu)}>
-            {open ? 'Create' : <AddIcon /> }
+          <Button
+            variant="outlined"
+            onClick={() => setOpenCreateMenu(!openCreateMenu)}
+          >
+            {open ? 'Create' : <AddIcon />}
           </Button>
           {openCreateMenu && (
-            <Paper 
+            <Paper
               className={clsx(
                 classes.createMenu,
                 !open && classes.createMenuClose
-              )} 
-              elevation={0} 
+              )}
+              elevation={0}
               square
             >
               <List component="div" aria-labelledby="Create Menu">
@@ -184,7 +186,7 @@ const SideBar = (props: SideBarProps) => {
       </List>
     </Drawer>
   );
-}
+};
 
 export default SideBar;
 // export default withRouter(SideBar);

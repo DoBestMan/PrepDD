@@ -1,14 +1,17 @@
 require 'rails_helper'
 
 module Mutations
-
   RSpec.describe UpdateCompanySettings, type: :request do
     describe '.resolve' do
       it 'update a company details' do
         company = create(:company)
         expect do
           post '/graphql', params: { query: query(name: company.name) }
-          post '/graphql', params: { query: query_update_company(id: company.id, name: 'PrepDD-Test') }
+          post '/graphql',
+               params: {
+                 query:
+                   query_update_company(id: company.id, name: 'PrepDD-Test')
+               }
           it { expect(Company.first.full_name).to eq 'PrepDD-Test' }
         end
       end
@@ -18,7 +21,9 @@ module Mutations
       <<~GQL
        mutation{
     CreateCompany(
-      name: #{name}, 
+      name: #{
+        name
+      }, 
     ) {
       errors {
         path
@@ -35,7 +40,9 @@ module Mutations
        mutation{
       updateCompany(
       id: #{id}, 
-      name: #{name}
+      name: #{
+        name
+      }
     ) {
       errors {
         path
@@ -46,6 +53,5 @@ module Mutations
   }
       GQL
     end
-
   end
 end

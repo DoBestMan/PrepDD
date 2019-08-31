@@ -4,14 +4,14 @@ import * as cs from '../constants/theme';
 const defaultTheme = createMuiTheme({
   palette: {
     background: {
-      default: cs.COLORS.background
+      default: cs.COLORS.background,
     },
   },
   typography: {
     h1: {
       color: cs.FONT.color,
       fontFamily: cs.FONT.family,
-      fontSize: cs.FONT.size.xl, 
+      fontSize: cs.FONT.size.xl,
       fontWeight: cs.FONT.weight.bold,
       lineHeight: '40px',
     },
@@ -73,9 +73,9 @@ const defaultTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        width: '100%', 
+        width: '100%',
         minWidth: '36px',
-        height: '36px', 
+        height: '36px',
         background: cs.COLORS.primary,
         borderRadius: '3px',
         fontFamily: cs.FONT.family,
@@ -90,36 +90,36 @@ const defaultTheme = createMuiTheme({
         },
       },
       outlined: {
-        background: '#FFFFFF', 
-        color: '#3A84FF', 
+        background: '#FFFFFF',
+        color: '#3A84FF',
         border: `2px solid ${cs.COLORS.primary}`,
-        fontSize: cs.FONT.size.sm, 
+        fontSize: cs.FONT.size.sm,
         '&:hover': {
-          backgroundColor: cs.COLORS.primaryHover
-        }
-      }
-    }, 
+          backgroundColor: cs.COLORS.primaryHover,
+        },
+      },
+    },
     MuiTableRow: {
       root: {
-        color: '#606060', 
+        color: '#606060',
         '&:hover': {
-          color: '#D8D8D8', 
-          backgroundColor: '#EBF2FF', 
-        }, 
+          color: '#D8D8D8',
+          backgroundColor: '#EBF2FF',
+        },
       },
       head: {
         '&:hover': {
-          backgroundColor: '#FFFFFF'
-        }
-      }
+          backgroundColor: '#FFFFFF',
+        },
+      },
     },
     MuiTableCell: {
       root: {
         fontFamily: cs.FONT.family,
         fontWeight: cs.FONT.weight.regular,
         fontSize: cs.FONT.size.xs,
-      }
-    }
+      },
+    },
   },
 });
 

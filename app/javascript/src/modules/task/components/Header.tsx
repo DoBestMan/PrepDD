@@ -7,13 +7,13 @@ import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      display: 'flex', 
-      alignItems: 'center', 
-      height: '90px', 
-      padding: '36px'
+      display: 'flex',
+      alignItems: 'center',
+      height: '90px',
+      padding: '36px',
     },
     grow: {
-      flexGrow: 1, 
+      flexGrow: 1,
     },
   })
 );
@@ -24,11 +24,9 @@ export default function Header() {
   return (
     <div className={classes.root}>
       <ArrowLeftIcon color="secondary" />
-      <Typography variant="h4">
-        Back
-      </Typography>
+      <Typography variant="h4">Back</Typography>
       <div className={classes.grow} />
       <CloseIcon color="secondary" />
-  </div>
-  )  
+    </div>
+  );
 }

@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {}, 
+    root: {},
   })
 );
 
@@ -20,5 +20,5 @@ export default function CreateTaskPage() {
       <Body />
       <Footer />
     </div>
-  )
+  );
 }
