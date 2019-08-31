@@ -123,7 +123,7 @@ const SignInPage = (props: any) => {
   useEffect(() => {
     const signInUser = idx(data, data => data.signInUser);
     if (loading || !signInUser) return;
-    history.push('/app');
+    window.location.href = "/app"
   }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
