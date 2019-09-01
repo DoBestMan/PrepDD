@@ -18,6 +18,7 @@ module Types
     field :teams, [TeamType], null: false
     field :roles, [RoleType], null: false
     field :logo_url, String, null: true
+    field :lists, [ListType], null: true
 
     def parents
       object.company_parents

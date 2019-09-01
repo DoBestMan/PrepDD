@@ -16,6 +16,7 @@ type Company {
   brokers: [Company!]
   id: ID!
   isActive: Boolean
+  lists: [List!]
   logoUrl: String
   name: String!
   owner: User!
@@ -113,7 +114,7 @@ type Mutation {
   sendResetPasswordInstructions(email: String!): SendResetPasswordInstructionsPayload
   signInUser(email: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignInUserPayload
   signOutUser: SignOutUserPayload
-  signUpUser(companyName: String!, email: String!, fullName: String!, password: String!, provider: String!, socialLogin: Boolean!, tokenID: String!, uuID: String!): SignUpUserPayload
+  signUpUser(companyName: String, email: String!, fullName: String!, password: String!, provider: String, socialLogin: Boolean, tokenID: String, uuID: String): SignUpUserPayload
   updateCompanySettings(automaticPdf: Boolean, brokerId: ID, deleteBrokerId: ID, deleteParentId: ID, dynamicWatermarking: Boolean, id: ID!, name: String, parentId: ID, previewOnly: Boolean): UpdateCompanySettingsPayload
   updateTeamMember(companyId: ID!, fullName: String!, id: ID!, role: ID!): UpdateTeamMemberPayload
   updateUserData(displayName: String!, email: String!, fullName: String!, lastViewedCompanyId: ID): UpdateUserDataPayload
