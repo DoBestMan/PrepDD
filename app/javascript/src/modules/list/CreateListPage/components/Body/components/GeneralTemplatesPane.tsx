@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -13,7 +13,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginTop: '12px', 
+      marginTop: '36px', 
     }, 
     invisible: {
       display: 'none', 
@@ -53,6 +53,7 @@ interface GeneralTemplatesPaneProps {
 export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
   const {value, index} = props;
   const classes = useStyles();
+  const [selected, setSelected] = useState<number>(-1);
 
   return (
     <Paper
@@ -63,13 +64,15 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
       <Table>
         <TableBody>
           {data.map((item: any, index: number) => {
+            const isSelected = selected === index;
+
             return (
-              <TableRow key={index}>
+              <TableRow key={index} onClick={() => setSelected(index)}>
                 <TableCell className={classes.flex}>
                   <div className={classes.grayRect} />
                   <span>{item.name}</span>
                   <div className={classes.grow} />
-                  <ArrowRightIcon />
+                  <ArrowRightIcon className={clsx(!isSelected && classes.invisible)}/>
                 </TableCell>
               </TableRow>
             )
