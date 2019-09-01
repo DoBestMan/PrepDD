@@ -1,6 +1,6 @@
 import React from 'react';
 import {Router as ReachRouter} from '@reach/router';
-import ListPage from '../list';
+import ListPage from '../list/ListPage';
 
 export default function Router(props: {path: string}) {
   return (
