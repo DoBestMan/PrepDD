@@ -6,6 +6,12 @@ import {
   Button, 
 } from '@material-ui/core';
 
+import Panel from '../../../../../components/Panel';
+import GeneralTemplatesPane from './components/GeneralTemplatesPane';
+import FinancePane from './components/FinancePane';
+import LegalPane from './components/LegalPane';
+import MAPane from './components/MAPane';
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {}, 
@@ -22,6 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const labels = [
+  "General Templates", 
+  "Finance", 
+  "Legal", 
+  "M&A"
+]
+
 export default function Body() {
   const classes = useStyles();
 
@@ -36,6 +49,12 @@ export default function Body() {
           Create blank project
         </Button>
       </div>
+      <Panel title="Create List" labels={labels}>
+        <GeneralTemplatesPane />
+        <FinancePane />
+        <LegalPane />
+        <MAPane />
+      </Panel>
     </Container>
   )
 }
