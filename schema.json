@@ -141,26 +141,31 @@
               "deprecationReason": null
             },
             {
-              "name": "lists",
-              "description": "Find a team by id",
+              "name": "list",
+              "description": "Find a list by id",
               "args": [
-
+                {
+                  "name": "id",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
               ],
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "List",
-                      "ofType": null
-                    }
-                  }
+                  "kind": "OBJECT",
+                  "name": "List",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -232,32 +237,6 @@
                   "kind": "OBJECT",
                   "name": "SearchCompanies",
                   "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "tasks",
-              "description": "Find a team by id",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Task",
-                      "ofType": null
-                    }
-                  }
                 }
               },
               "isDeprecated": false,
