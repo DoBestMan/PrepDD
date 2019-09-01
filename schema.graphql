@@ -16,12 +16,13 @@ type Company {
   brokers: [Company!]
   id: ID!
   isActive: Boolean
-  lists: [List!]
   logoUrl: String
   name: String!
   owner: User!
   parents: [Company!]
   previewOnly: Boolean
+  requestedLists: [List!]
+  respondedLists: [List!]
   roles: [Role!]!
   subscription: Subscription
   teams: [Team!]!

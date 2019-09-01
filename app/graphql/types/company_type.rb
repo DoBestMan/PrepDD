@@ -18,7 +18,12 @@ module Types
     field :teams, [TeamType], null: false
     field :roles, [RoleType], null: false
     field :logo_url, String, null: true
-    field :lists, [ListType], null: true
+    field :requestedLists, [ListType], null: true
+    field :respondedLists, [ListType], null: true
+
+    def requested_lists
+      object.lists
+    end
 
     def parents
       object.company_parents
