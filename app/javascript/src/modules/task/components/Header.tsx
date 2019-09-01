@@ -15,6 +15,9 @@ const useStyles = makeStyles((theme: Theme) =>
     grow: {
       flexGrow: 1,
     },
+    secondary: {
+      color: '#D8D8D8',
+    }
   })
 );
 
@@ -23,10 +26,10 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <ArrowLeftIcon color="secondary" />
+      <ArrowLeftIcon className={classes.secondary} />
       <Typography variant="h4">Back</Typography>
       <div className={classes.grow} />
-      <CloseIcon color="secondary" />
+      <CloseIcon className={classes.secondary} />
     </div>
   );
 }

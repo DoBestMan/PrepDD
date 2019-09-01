@@ -11,12 +11,12 @@ const AppRoutes = lazy(() => import('./app'));
 export default function Router() {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ReachRouter>
+      {/* <ReachRouter>
         <AuthRoutes path="/*" />
         {isAuthenticated && <AppRoutes path="/app/*" />}
         <NotFoundPage default />
-      </ReachRouter>
-      {/* <CreateTaskPage /> */}
+      </ReachRouter> */}
+      <CreateTaskPage />
     </Suspense>
   );
 }
