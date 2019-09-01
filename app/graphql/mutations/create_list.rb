@@ -1,8 +1,8 @@
 class Mutations::CreateList < GraphQL::Schema::Mutation
   argument :name, String, required: true
   argument :description, String, required: false
-  argument :requesterId, Id, required: true
-  argument :responderId, Id, required: false
+  argument :requesterId, ID, required: true
+  argument :responderId, ID, required: false
   argument :isTemplate, Boolean, required: true
   argument :isPublicTemplate, Boolean, required: true
 
