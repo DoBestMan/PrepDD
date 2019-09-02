@@ -112,7 +112,11 @@ const defaultTheme = createMuiTheme({
     },
     MuiTableRow: {
       root: {
+        height: '48px', 
         color: '#606060',
+        fontFamily: cs.FONT.family,
+        fontWeight: cs.FONT.weight.regular,
+        fontSize: cs.FONT.size.xs,
         '&:hover': {
           color: '#D8D8D8',
           backgroundColor: '#EBF2FF',
@@ -129,6 +133,8 @@ const defaultTheme = createMuiTheme({
         fontFamily: cs.FONT.family,
         fontWeight: cs.FONT.weight.regular,
         fontSize: cs.FONT.size.xs,
+        paddingTop: '0px', 
+        paddingBottom: '0px', 
       },
     },
   },

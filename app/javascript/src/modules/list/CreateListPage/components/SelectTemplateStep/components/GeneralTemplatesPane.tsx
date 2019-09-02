@@ -35,6 +35,10 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       marginRight: '12px', 
     },
+    tableCell: {
+      paddingTop: '12px', 
+      paddingBottom: '12px', 
+    },
     selectedCell: {
       fontWeight: cs.FONT.weight.bold, 
     }
@@ -79,7 +83,7 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
                 onMouseOver={() => setSelected(index)}
                 onMouseOut={() => setSelected(-1)}
               >
-                <TableCell className={clsx(classes.flex, isSelected && classes.selectedCell)}>
+                <TableCell className={clsx(classes.flex, classes.tableCell, isSelected && classes.selectedCell)}>
                   <div className={classes.grayRect} />
                   <span>{item.name}</span>
                   <div className={classes.grow} />
