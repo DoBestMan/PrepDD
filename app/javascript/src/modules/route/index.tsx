@@ -9,6 +9,9 @@ import {
 
 import LoadingFallback from '../../components/LoadingFallback';
 import NotFoundPage from '../../components/NotFoundPage';
+import CreateListPage from '../list/CreateListPage';
+import CreateTaskPage from '../task/CreateTaskPage';
+
 import {useGlobalState} from '../../store';
 
 const AuthRoutes = lazy(() => import('./auth'));
@@ -44,7 +47,8 @@ export default function Router() {
       <BrowserRouter>
         <Switch>
           <PrivateRoute path="/app" component={AppRoutes} />
-          {/* <PrivateRoute path="/create" component={CreateRoutes} /> */}
+          <PrivateRoute path="/create/list" component={CreateListPage} />
+          <PrivateRoute path="/create/task" component={CreateTaskPage} />
           <Route path="/" component={AuthRoutes} />
         </Switch>
       </BrowserRouter>
