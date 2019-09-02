@@ -56,6 +56,7 @@ const defaultTheme = createMuiTheme({
         display: 'flex',
         textTransform: 'none',
         width: '100%',
+        cursor: 'pointer', 
         '&$selected, &$selected:hover': {
           color: '#FFFFFF',
           background: '#3A84FF',
