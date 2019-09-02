@@ -136,7 +136,7 @@ const SignUpPage = (props: any) => {
 
   useEffect(() => {
     if (idx(data, data => data.signUpUser.success)) {
-      history.push('/app/dashboard');
+      history.push('/signin');
     }
   }, [data]);
 
