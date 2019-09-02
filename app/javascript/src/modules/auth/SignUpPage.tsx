@@ -376,6 +376,7 @@ const SignUpPage = (props: any) => {
                 />
               }
               label="At least 1 uppercase letter"
+              style={{display: 'block'}}
             />
             <FormControlLabel
               disabled
@@ -390,6 +391,7 @@ const SignUpPage = (props: any) => {
                 />
               }
               label="At least 1 special character"
+              style={{display: 'block'}}
             />
             <FormControlLabel
               disabled
@@ -404,6 +406,7 @@ const SignUpPage = (props: any) => {
                 />
               }
               label="More than 8 total characters"
+              style={{display: 'block'}}
             />
           </Grid>
         </Grid>
