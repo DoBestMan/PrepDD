@@ -80,7 +80,7 @@ const defaultTheme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        width: '100%',
+        width: 'fit-content',
         minWidth: '36px',
         height: '36px',
         borderRadius: '3px',
@@ -97,6 +97,7 @@ const defaultTheme = createMuiTheme({
       contained: {
         color: '#FFFFFF', 
         backgroundColor: cs.COLORS.primary,
+        boxShadow: 'none', 
         '&:hover': {
           opacity: 0.7,
           backgroundColor: cs.COLORS.primary,

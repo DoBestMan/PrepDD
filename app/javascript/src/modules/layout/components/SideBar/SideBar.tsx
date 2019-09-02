@@ -128,7 +128,11 @@ const SideBar = (props: any) => {
         </span>
       </div>
       <div className={clsx(classes.paddingOpen, !open && classes.paddingClose)}>
-        <Button variant="outlined" onClick={() => setOpenCreateMenu(!openCreateMenu)}>
+        <Button 
+          variant="outlined" 
+          onClick={() => setOpenCreateMenu(!openCreateMenu)}
+          style={{width: '100%'}}
+        >
           {open ? "Create" : <AddIcon />}
         </Button>
         {openCreateMenu && (

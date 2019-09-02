@@ -195,7 +195,7 @@ const TopBar = (props: any) => {
         )}
 
         <div className={classes.menuRoot}>
-          <Button className={classes.inviteButton}>Invite</Button>
+          <Button variant="contained" className={classes.inviteButton}>Invite</Button>
           <IconButton
             aria-label="show 4 new notifications"
             color="inherit"

@@ -44,6 +44,7 @@ export default function Router() {
       <BrowserRouter>
         <Switch>
           <PrivateRoute path="/app" component={AppRoutes} />
+          {/* <PrivateRoute path="/create" component={CreateRoutes} /> */}
           <Route path="/" component={AuthRoutes} />
         </Switch>
       </BrowserRouter>
