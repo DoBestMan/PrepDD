@@ -162,6 +162,11 @@ type Query {
   team(id: ID!): Team!
 
   """
+  All Available lists
+  """
+  templateLists: [List!]!
+
+  """
   Return details of a user
   """
   user(id: ID!): User!
