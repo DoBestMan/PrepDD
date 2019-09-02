@@ -17,13 +17,21 @@ import StyledCheckBox from '../../../../../components/StyledCheckBox';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      height: 'calc(100vh - 162px)',
+    body: {
+      height: 'calc(100vh - 168px)',
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
+    },
+    footer: {
+      height: '72px', 
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
     },
     flex: {
       display: 'flex',
       alignItems: 'center',
+    },
+    grow: {
+      flexGrow: 1, 
     },
     content: {
       display: 'flex',
@@ -138,8 +146,8 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   };
 
   return stepNumber === currentStep ? (
-    <div className={classes.root}>
-      <Container>
+    <div>
+      <div className={classes.body}>
         <Typography variant="h2">Template name</Typography>
         <div className={classes.content}>
           <Table>
@@ -185,7 +193,16 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </div>
           </div>
         </div>
-      </Container>
+      </div>
+      <div className={classes.footer}>
+        <div className={classes.flex} style={{paddingTop: '18px', paddingRight: '328px'}}>
+          <Button>+ Add task</Button>
+          <div className={classes.grow} />
+          <Button variant="contained" onClick={() => setStep(2)}>
+            Create List
+          </Button>
+        </div>
+      </div>
     </div>
   ) : null;
 }

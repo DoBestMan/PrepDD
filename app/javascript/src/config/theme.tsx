@@ -33,14 +33,14 @@ const defaultTheme = createMuiTheme({
       color: cs.FONT.color,
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.sm,
-      fontWeight: cs.FONT.weight.bold,
+      fontWeight: cs.FONT.weight.regular,
       lineHeight: '24px',
     },
     h6: {
       color: cs.FONT.color,
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.xs,
-      fontWeight: cs.FONT.weight.bold,
+      fontWeight: cs.FONT.weight.regular,
       lineHeight: '21px',
     },
     body1: {
@@ -52,6 +52,11 @@ const defaultTheme = createMuiTheme({
     },
   },
   overrides: {
+    MuiContainer: {
+      root: {
+        maxWidth: '1380px', 
+      }
+    },
     MuiListItem: {
       root: {
         display: 'flex',

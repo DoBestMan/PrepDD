@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function CreateListPage() {
   const classes = useStyles();
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(1);
   
   return (
     <div className={classes.root}>

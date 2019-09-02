@@ -14,7 +14,10 @@ import MAPane from './components/MAPane';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    root: {}, 
+    root: {
+      display: 'block', 
+      margin: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+    }, 
     flex: {
       display: 'flex', 
       alignItems: 'center', 
@@ -46,7 +49,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
   const classes = useStyles();
 
   return stepNumber === currentStep ? (
-    <Container>
+    <div className={classes.root}>
       <div className={classes.flex}>
         <Typography variant="h2">
           New List
@@ -62,6 +65,6 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
         <LegalPane />
         <MAPane />
       </Panel>
-    </Container>
+    </div>
   ) : null;
 }
