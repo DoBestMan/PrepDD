@@ -1,6 +1,6 @@
 import LoadingFallback from '../../components/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {Switch, Route} from 'react-router-dom';
 import {LinkedInPopUp} from 'react-linkedin-login-oauth2';
 
 const CreateCompanyPage = lazy(() => import('../auth/CreateCompanyPage'));
@@ -12,14 +12,14 @@ const ResetPasswordPage = lazy(() => import('../auth/ResetPasswordPage'));
 export default function Router(props: {path: string}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
-      <ReachRouter>
-        <CreateCompanyPage path="/" />
-        <SignUpPage path="/signup" />
-        <SignInPage path="/signin" />
-        <ForgotPasswordPage path="/forgot" />
-        <ResetPasswordPage path="/reset_password/:token" />
-        <LinkedInPopUp path="/linkedin" />
-      </ReachRouter>
+      <Switch>
+        <Route exact path="/signup/:companyName" component={SignUpPage} /> 
+        <Route exact path="/signin" component={SignInPage} />
+        <Route exact path="/forgot" component={ForgotPasswordPage} />
+        <Route exact path="/reset_password/:token" component={ResetPasswordPage} />
+        <Route exact path="/linked" component={LinkedInPopUp} />
+        <Route exact path="/" component={CreateCompanyPage} />
+      </Switch>
     </Suspense>
   );
 }

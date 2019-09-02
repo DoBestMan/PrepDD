@@ -1,11 +1,11 @@
 import React from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {Switch, Route} from 'react-router-dom';
 import ProfilePage from '../user';
 
-export default function Router(props: {path: string}) {
+export default function UserRoute() {
   return (
-    <ReachRouter>
-      <ProfilePage path="/" />
-    </ReachRouter>
+    <Switch>
+      <Route exact path="/app/user/" component={ProfilePage} />
+    </Switch>
   );
 }

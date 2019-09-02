@@ -1,12 +1,12 @@
 import React from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {Switch, Route} from 'react-router-dom';
 import SubscriptionPage from '../company/CompanySubscription';
 import SettingsPage from '../company';
 
-export default function Router(props: {path: string}) {
+export default function CompanyRoute() {
   return (
-    <ReachRouter>
-      <SettingsPage path="/" />
-    </ReachRouter>
+    <Switch>
+      <Route exact path="/app/company/" component={SettingsPage} />
+    </Switch>
   );
 }

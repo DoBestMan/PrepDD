@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
-import {Link as RouterLink, navigate} from '@reach/router';
+import {withRouter} from 'react-router';
 
 import {useCompanyCreate} from '../../graphql/mutations/CreateCompany';
 
@@ -38,7 +38,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function CreateCompanyPage(_props: {path?: string}) {
+const CreateCompanyPage = (props: any) => {
+  const {history} = props;
   const classes = useStyles({});
 
   const [state, setState] = useState<{
@@ -54,7 +55,7 @@ export default function CreateCompanyPage(_props: {path?: string}) {
   useEffect(() => {
     if (idx(data, data => data.createCompany.success)) {
       console.log(data);
-      navigate('/signup?companyName=' + state.name);
+      history.push(`/signup/${state.name}`);
     }
   }, [data]);
 
@@ -136,3 +137,5 @@ export default function CreateCompanyPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default withRouter(CreateCompanyPage);

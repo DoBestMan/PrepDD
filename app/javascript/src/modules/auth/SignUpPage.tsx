@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
 import React, {useCallback, useEffect, useState} from 'react';
+import {withRouter} from 'react-router';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -12,10 +13,10 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import {Link as RouterLink, navigate} from '@reach/router';
+import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../../hooks/auth';
+import {useGlobalState} from '../../store';
 import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -86,9 +87,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignUpPage(_props: {path?: string}) {
-  useRequireGuest();
-
+const SignUpPage = (props: any) => {
+  // useRequireGuest();
+  const {match, history} = props;
+  const {dispatch} = useGlobalState();
   const classes = useStyles({});
 
   const [state, setState] = useState<{
@@ -117,7 +119,7 @@ export default function SignUpPage(_props: {path?: string}) {
     hasEightChar: false,
   });
 
-  const [signUpUser, {data}] = useSignUpUser({
+  const [signUpUser, {loading, data}] = useSignUpUser({
     fullName: state.fullName,
     email: state.email,
     password: state.password,
@@ -133,14 +135,18 @@ export default function SignUpPage(_props: {path?: string}) {
   }
 
   useEffect(() => {
-    if (idx(data, data => data.signUpUser.success)) {
-      navigate('/app/dashboard');
-    }
-  }, [data]);
+    const signedUpUser = idx(data, data => data.signUpUser.user);
+    if (loading || !signedUpUser) return;
+
+    dispatch({
+      type: 'SET_CURRENT_USER', 
+      user: signedUpUser
+    });
+    history.push('/app/');
+  }, [loading, data]);
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    const companyName = url.searchParams.get('companyName');
+    const companyName = match.params.companyName;
     if (companyName !== null) {
       setState(state => ({...state, companyName: companyName}));
     }
@@ -346,7 +352,8 @@ export default function SignUpPage(_props: {path?: string}) {
 
             <Grid container justify="center">
               <Grid item>
-                <Link component={RouterLink} variant="body2" to="/signin">
+                <Link component={RouterLink} variant="body2" to="/
+                ">
                   {'Already have an account? Sign In'}
                 </Link>
               </Grid>
@@ -369,6 +376,7 @@ export default function SignUpPage(_props: {path?: string}) {
                 />
               }
               label="At least 1 uppercase letter"
+              style={{display: 'block'}}
             />
             <FormControlLabel
               disabled
@@ -383,6 +391,7 @@ export default function SignUpPage(_props: {path?: string}) {
                 />
               }
               label="At least 1 special character"
+              style={{display: 'block'}}
             />
             <FormControlLabel
               disabled
@@ -397,6 +406,7 @@ export default function SignUpPage(_props: {path?: string}) {
                 />
               }
               label="More than 8 total characters"
+              style={{display: 'block'}}
             />
           </Grid>
         </Grid>
@@ -404,3 +414,5 @@ export default function SignUpPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default withRouter(SignUpPage)

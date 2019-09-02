@@ -1,22 +1,34 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
+import {withRouter} from 'react-router';
 import {
   Theme,
   makeStyles,
   createStyles,
   useTheme,
 } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import InputBase from '@material-ui/core/InputBase';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import {useMediaQuery} from '@material-ui/core';
+import {
+  useMediaQuery,
+  AppBar,
+  Toolbar,
+  InputBase,
+  Button,
+  IconButton,
+  ClickAwayListener,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import ProfileIcon from '@material-ui/icons/Person';
+import SignoutIcon from '@material-ui/icons/Input';
 
 import {useGlobalState} from '../../../../store';
+import {useSignOutUser} from '../../../../graphql/mutations/SignOutUser';
+
 import DefaultUserImage from '../../../../components/DefaultUserImage';
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
@@ -117,6 +129,18 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '30px',
       borderRadius: '50%',
     },
+    menuRoot: {
+      display: 'flex', 
+      alignItems: 'center', 
+      position: 'relative', 
+    },
+    profileMenu: {
+      width: '180px',
+      position: 'absolute',
+      top: '59px',
+      right: '40px',
+      border: '1px solid #D8D8D8',
+    },
     grow: {
       flexGrow: 1,
     },
@@ -126,14 +150,34 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function TopBar(props: {open: boolean}) {
-  const {open} = props;
+const TopBar = (props: any) => {
+  const {open, history} = props;
   const classes = useStyles();
+  const [openProfileMenu, setOpenProfileMenu] = useState<boolean>(false);
+
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true,
   });
+
   const {state, dispatch} = useGlobalState();
+  const [signOutUser, {loading, data, error}] = useSignOutUser({});
+
+  useEffect(() => {
+    if (loading || !data) return;
+
+    history.push('/signin');
+    setOpenProfileMenu(false);
+  }, [loading, data]);
+
+  const handleClickProfile = () => {
+    history.push('/app/user');
+    setOpenProfileMenu(false);
+  };
+
+  const handleClickSignout = () => {
+    signOutUser();
+  };
 
   return (
     <AppBar
@@ -162,7 +206,7 @@ export default function TopBar(props: {open: boolean}) {
           <div className={classes.grow} />
         )}
 
-        <Typography variant="inherit">
+        <div className={classes.menuRoot}>
           <Button className={classes.inviteButton}>Invite</Button>
           <IconButton
             aria-label="show 4 new notifications"
@@ -173,22 +217,47 @@ export default function TopBar(props: {open: boolean}) {
               <NotificationsIcon className={classes.appBarItemSize} />
             </StyledBadge>
           </IconButton>
-          <IconButton
-            className={classes.mr39}
-            aria-label="account of current user"
-            color="inherit"
-          >
-            {state.currentUser.profileUrl ? (
-              <img
-                src={state.currentUser.profileUrl}
-                className={classes.roundImage}
-              />
-            ) : (
-              <DefaultUserImage userName={state.currentUser.fullName} />
-            )}
-          </IconButton>
-        </Typography>
+          <ClickAwayListener onClickAway={() => setOpenProfileMenu(false)}>
+            <div>
+              <IconButton
+                className={classes.mr39}
+                aria-label="account of current user"
+                color="inherit"
+                onClick={() => setOpenProfileMenu(!openProfileMenu)}
+              >
+                {state.currentUser.profileUrl ? (
+                  <img
+                    src={state.currentUser.profileUrl}
+                    className={classes.roundImage}
+                  />
+                ) : (
+                  <DefaultUserImage userName={state.currentUser.fullName} />
+                )}
+              </IconButton>
+              {openProfileMenu && (
+                <Paper className={classes.profileMenu} elevation={0} square>
+                  <List component="div" aria-labelledby="profile menu">
+                    <ListItem onClick={handleClickProfile}>
+                      <ListItemIcon>
+                        <ProfileIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Profile" />
+                    </ListItem>
+                    <ListItem onClick={handleClickSignout}>
+                      <ListItemIcon>
+                        <SignoutIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Sign out" />
+                    </ListItem>
+                  </List>
+                </Paper>
+              )}
+            </div>
+          </ClickAwayListener>
+        </div>
       </Toolbar>
     </AppBar>
   );
 }
+
+export default withRouter(TopBar);
