@@ -139,7 +139,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'absolute',
       top: '59px',
       right: '40px',
-      border: '2px solid #D8D8D8',
+      border: '1px solid #D8D8D8',
     },
     grow: {
       flexGrow: 1,
