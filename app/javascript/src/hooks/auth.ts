@@ -1,6 +1,5 @@
 import idx from 'idx';
 import {useEffect} from 'react';
-import {navigate} from '@reach/router';
 import {useCurrentUser, User} from '../graphql/queries/CurrentUser';
 import {useGlobalState} from '../store';
 
@@ -23,13 +22,13 @@ function createCurrentUserLoadedHook(
 export const useRequireSignIn = createCurrentUserLoadedHook(currentUser => {
   if (!currentUser) {
     console.log('must be signed in... redirecting to /signin');
-    navigate('/signin');
+    // navigate('/signin');
   }
 });
 
 export const useRequireGuest = createCurrentUserLoadedHook(currentUser => {
   if (currentUser) {
     console.log('already signed in... redirecting to /dashboard');
-    navigate('/app');
+    // navigate('/app');
   }
 });

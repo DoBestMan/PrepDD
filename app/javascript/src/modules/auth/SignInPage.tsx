@@ -15,7 +15,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import {Link as RouterLink} from '@reach/router';
+import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
