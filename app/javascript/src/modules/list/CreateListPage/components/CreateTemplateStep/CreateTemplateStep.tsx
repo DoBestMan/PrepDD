@@ -15,6 +15,7 @@ import {
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import StyledCheckBox from '../../../../../components/StyledCheckBox';
 import InputForm from './components/InputForm';
+import PriorityForm from './components/PriorityForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,24 +64,6 @@ const useStyles = makeStyles((theme: Theme) =>
     uploadLabelColor: {
       color: '#D8D8D8',
     },
-    statusLabelColor: {
-      color: '#606060',
-    },
-    status: {
-      width: '8px',
-      height: '8px',
-      borderRadius: '50%',
-      marginRight: '6px',
-    },
-    high: {
-      backgroundColor: '#2792A2',
-    },
-    medium: {
-      backgroundColor: '#1969A5',
-    },
-    low: {
-      backgroundColor: '#81AFFF',
-    },
   })
 );
 
@@ -126,26 +109,6 @@ interface CreateTemplateStepProps {
 export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const {stepNumber, currentStep, setStep} = props;
   const classes = useStyles();
-  const [hovered, setHovered] = useState<number>(-1);
-  const [editable, setEditable] = useState<boolean>(false);
-
-  const renderPriority = (priority: string) => {
-    return (
-      <div className={classes.flex}>
-        <div
-          className={clsx(
-            classes.status,
-            priority === 'High'
-              ? classes.high
-              : priority === 'Medium'
-              ? classes.medium
-              : classes.low
-          )}
-        />
-        <Typography variant="h6">{priority}</Typography>
-      </div>
-    );
-  };
 
   return stepNumber === currentStep ? (
     <div>
@@ -167,13 +130,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
-                const hoverable = index === hovered;
 
                 return (
                   <TableRow 
                     key={index}
-                    onMouseOver={() => setHovered(index)}
-                    onMouseLeave={() => setHovered(-1)}
                   >
                     <TableCell padding="checkbox">
                       <StyledCheckBox/>
@@ -184,7 +144,9 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                     <TableCell>
                       <InputForm value={item.section} />
                     </TableCell>
-                    <TableCell>{renderPriority(item.priority)}</TableCell>
+                    <TableCell>
+                      <PriorityForm value={item.priority} />
+                    </TableCell>
                     <TableCell>{item. description}</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
