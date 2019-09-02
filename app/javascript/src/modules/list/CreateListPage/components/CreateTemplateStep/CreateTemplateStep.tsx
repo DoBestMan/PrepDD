@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -14,6 +14,7 @@ import {
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import StyledCheckBox from '../../../../../components/StyledCheckBox';
+import InputForm from './components/InputForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     styledTableCell: {
       paddingLeft: '0px', 
-      alignItems: 'center', 
     },
     rightPane: {
       minWidth: '250px',
@@ -126,6 +126,8 @@ interface CreateTemplateStepProps {
 export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const {stepNumber, currentStep, setStep} = props;
   const classes = useStyles();
+  const [hovered, setHovered] = useState<number>(-1);
+  const [editable, setEditable] = useState<boolean>(false);
 
   const renderPriority = (priority: string) => {
     return (
@@ -150,13 +152,13 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       <div className={classes.body}>
         <Typography variant="h2">Template name</Typography>
         <div className={classes.content}>
-          <Table>
+          <Table style={{tableLayout: 'fixed'}}>
             <TableHead>
               <TableRow>
-                <TableCell className={classes.styledTableCell}>
-                  <StyledCheckBox style={{marginRight: '24px'}}/>
-                  Task
+                <TableCell padding="checkbox">
+                  <StyledCheckBox/>
                 </TableCell>
+                <TableCell>Task</TableCell>
                 <TableCell>Section</TableCell>
                 <TableCell>Priority</TableCell>
                 <TableCell>Description</TableCell>
@@ -165,15 +167,25 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
+                const hoverable = index === hovered;
+
                 return (
-                  <TableRow key={index}>
-                    <TableCell className={classes.styledTableCell}>
-                      <StyledCheckBox style={{marginRight: '24px'}}/>
-                      {item.task}
+                  <TableRow 
+                    key={index}
+                    onMouseOver={() => setHovered(index)}
+                    onMouseLeave={() => setHovered(-1)}
+                  >
+                    <TableCell padding="checkbox">
+                      <StyledCheckBox/>
                     </TableCell>
-                    <TableCell>{item.section}</TableCell>
+                    <TableCell>
+                      <InputForm value={item.task} />
+                    </TableCell>
+                    <TableCell>
+                      <InputForm value={item.section} />
+                    </TableCell>
                     <TableCell>{renderPriority(item.priority)}</TableCell>
-                    <TableCell>{item.description}</TableCell>
+                    <TableCell>{item. description}</TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 );

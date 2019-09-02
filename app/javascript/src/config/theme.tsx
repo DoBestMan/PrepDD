@@ -142,6 +142,32 @@ const defaultTheme = createMuiTheme({
         paddingBottom: '0px', 
       },
     },
+    MuiInput: {
+      root: {
+        display: 'block',
+        width: '100%',
+        color: cs.FONT.color,
+        fontFamily: cs.FONT.family,
+        fontWeight: cs.FONT.weight.regular,
+        fontSize: cs.FONT.size.xs,
+        textTransform: 'none',
+        '& label': {
+          color: cs.FONT.color,
+          fontFamily: cs.FONT.family,
+          fontWeight: cs.FONT.weight.regular,
+          fontSize: cs.FONT.size.xs,
+        },
+        '&:selected': {
+          color: '#3A84FF',
+        },
+        '& input::placeholder': {
+          fontSize: cs.FONT.size.xs,
+        },
+        '& div': {
+          width: '100%',
+        },
+      }
+    }
   },
 });
 
