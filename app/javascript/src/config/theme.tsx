@@ -56,6 +56,7 @@ const defaultTheme = createMuiTheme({
         display: 'flex',
         textTransform: 'none',
         width: '100%',
+        cursor: 'pointer', 
         '&$selected, &$selected:hover': {
           color: '#FFFFFF',
           background: '#3A84FF',
@@ -63,6 +64,12 @@ const defaultTheme = createMuiTheme({
         '&:hover': {
           background: '#EBF2FF',
         },
+      },
+    },
+    MuiListItemIcon: {
+      root: {
+        color: '#000000',
+        minWidth: '40px',
       },
     },
     MuiListItemText: {

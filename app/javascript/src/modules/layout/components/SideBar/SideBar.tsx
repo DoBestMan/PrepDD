@@ -50,6 +50,11 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(9) + 1,
       },
     },
+    logo: {
+      display: 'flex', 
+      marginTop: '24px', 
+      marginBottom: '12px', 
+    },
     paddingOpen: {
       paddingLeft: 24,
       paddingRight: 24,
@@ -86,39 +91,27 @@ export default function SideBar(props: SideBarProps) {
       onMouseOver={() => setShowNarrow(true)}
       onMouseOut={() => setShowNarrow(false)}
     >
+      <div className={clsx(classes.logo, classes.paddingOpen, !open && classes.paddingClose)}>
+        <img src={PrepddLogo} alt="PrepDD" style={{marginRight: '12px'}}/>
+        <span className={classes.mark}>
+          PREP<span className={classes.primaryColor}>DD</span>
+        </span>
+      </div>
+      <div className={clsx(classes.paddingOpen, !open && classes.paddingClose)}>
+        {open ? (
+          <StyledButton variant="outlined" color="primary">
+            Create
+          </StyledButton>
+        ) : (
+          <StyledButton variant="outlined" color="primary">
+            <AddIcon />
+          </StyledButton>
+        )}
+      </div>
       <List disablePadding>
-        <ListItem
-          className={clsx(classes.paddingOpen, !open && classes.paddingClose)}
-          disableGutters
-        >
-          <ListItemIcon>
-            <img src={PrepddLogo} alt="PrepDD" />
-          </ListItemIcon>
-          <ListItemText>
-            <span className={classes.mark}>
-              PREP<span className={classes.primaryColor}>DD</span>
-            </span>
-          </ListItemText>
-        </ListItem>
-        <ListItem
-          className={clsx(classes.paddingOpen, !open && classes.paddingClose)}
-          disableGutters
-        >
-          {open ? (
-            <StyledButton variant="outlined" color="primary">
-              Create
-            </StyledButton>
-          ) : (
-            <StyledButton variant="outlined" color="primary">
-              <AddIcon />
-            </StyledButton>
-          )}
-        </ListItem>
         <MainListItems open={open} />
       </List>
-      <Divider
-        className={clsx(classes.marginOpen, !open && classes.marginClose)}
-      />
+      <Divider className={clsx(classes.marginOpen, !open && classes.marginClose)} />
       <List disablePadding>
         <AdminListItems open={open} />
       </List>

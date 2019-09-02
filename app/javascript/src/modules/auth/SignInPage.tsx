@@ -6,7 +6,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import idx from 'idx';
 import Link from '@material-ui/core/Link';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
+import {withRouter} from 'react-router';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {
@@ -14,7 +15,7 @@ import {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login';
-import {Link as RouterLink} from '@reach/router';
+import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {useRequireGuest} from '../../hooks/auth';
@@ -82,8 +83,9 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function SignInPage(_props: {path?: string}) {
-  useRequireGuest();
+const SignInPage = (props: any) => {
+  // useRequireGuest();
+  const {history} = props;
 
   const classes = useStyles({});
 
@@ -105,7 +107,7 @@ export default function SignInPage(_props: {path?: string}) {
     uuID: '',
   });
 
-  const [signInUser, {data}] = useSignInUser({
+  const [signInUser, {loading, data, error}] = useSignInUser({
     email: state.email,
     password: state.password,
     socialLogin: state.socialLogin,
@@ -117,6 +119,12 @@ export default function SignInPage(_props: {path?: string}) {
   interface linkedInResponse {
     code: string;
   }
+
+  useEffect(() => {
+    const signInUser = idx(data, data => data.signInUser);
+    if (loading || !signInUser) return;
+    window.location.href = "/app"
+  }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
 
@@ -291,3 +299,5 @@ export default function SignInPage(_props: {path?: string}) {
     </Container>
   );
 }
+
+export default withRouter(SignInPage);

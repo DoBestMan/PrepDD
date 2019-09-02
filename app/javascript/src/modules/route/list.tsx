@@ -1,11 +1,11 @@
 import React from 'react';
-import {Router as ReachRouter} from '@reach/router';
+import {Switch, Route} from 'react-router-dom';
 import ListPage from '../list';
 
-export default function Router(props: {path: string}) {
+export default function ListRoute() {
   return (
-    <ReachRouter>
-      <ListPage path="/" />
-    </ReachRouter>
+    <Switch>
+      <Route exact path="/app/lists/" component={ListPage} />
+    </Switch>
   );
 }
