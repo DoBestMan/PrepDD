@@ -4,6 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import CloseIcon from '@material-ui/icons/Close';
 
+import * as cs from '../../../constants/theme';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -14,6 +16,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     grow: {
       flexGrow: 1,
+    },
+    primary: {
+      color: cs.COLORS.primary, 
     },
     secondary: {
       color: '#D8D8D8',
@@ -27,7 +32,7 @@ export default function Header() {
   return (
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
-      <Typography variant="h4">Back</Typography>
+      <Typography variant="h4" className={classes.primary}>Back</Typography>
       <div className={classes.grow} />
       <CloseIcon className={classes.secondary} />
     </div>
