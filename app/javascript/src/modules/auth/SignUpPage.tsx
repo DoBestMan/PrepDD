@@ -16,7 +16,7 @@ import {
 import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../../hooks/auth';
+import {useGlobalState} from '../../store';
 import {useSignUpUser} from '../../graphql/mutations/SignUpUser';
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -90,7 +90,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const SignUpPage = (props: any) => {
   // useRequireGuest();
   const {match, history} = props;
-
+  const {dispatch} = useGlobalState();
   const classes = useStyles({});
 
   const [state, setState] = useState<{
@@ -119,7 +119,7 @@ const SignUpPage = (props: any) => {
     hasEightChar: false,
   });
 
-  const [signUpUser, {data}] = useSignUpUser({
+  const [signUpUser, {loading, data}] = useSignUpUser({
     fullName: state.fullName,
     email: state.email,
     password: state.password,
@@ -135,10 +135,15 @@ const SignUpPage = (props: any) => {
   }
 
   useEffect(() => {
-    if (idx(data, data => data.signUpUser.success)) {
-      history.push('/app/');
-    }
-  }, [data]);
+    const signedUpUser = idx(data, data => data.signUpUser.user);
+    if (loading || !signedUpUser) return;
+
+    dispatch({
+      type: 'SET_CURRENT_USER', 
+      user: signedUpUser
+    });
+    history.push('/app/');
+  }, [loading, data]);
 
   useEffect(() => {
     const companyName = match.params.companyName;
@@ -347,7 +352,8 @@ const SignUpPage = (props: any) => {
 
             <Grid container justify="center">
               <Grid item>
-                <Link component={RouterLink} variant="body2" to="/signin">
+                <Link component={RouterLink} variant="body2" to="/
+                ">
                   {'Already have an account? Sign In'}
                 </Link>
               </Grid>

@@ -6,9 +6,44 @@
 // GraphQL mutation operation: SignUpUser
 // ====================================================
 
+export interface SignUpUser_signUpUser_user_ownedCompanies {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
+export interface SignUpUser_signUpUser_user_companies {
+  __typename: "Company";
+  id: string;
+  name: string;
+  logoUrl: string | null;
+}
+
+export interface SignUpUser_signUpUser_user_teams {
+  __typename: "Team";
+  id: string;
+  companyId: string;
+  name: string;
+}
+
+export interface SignUpUser_signUpUser_user_roles {
+  __typename: "RolesUser";
+  id: string;
+  companyId: string;
+}
+
 export interface SignUpUser_signUpUser_user {
   __typename: "User";
+  id: string;
   email: string;
+  fullName: string;
+  displayName: string | null;
+  profileUrl: string | null;
+  lastViewedCompanyId: string | null;
+  ownedCompanies: SignUpUser_signUpUser_user_ownedCompanies[] | null;
+  companies: SignUpUser_signUpUser_user_companies[] | null;
+  teams: SignUpUser_signUpUser_user_teams[] | null;
+  roles: SignUpUser_signUpUser_user_roles[] | null;
 }
 
 export interface SignUpUser_signUpUser_errors {
