@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       alignItems: 'center',
-      marginBottom: '36px', 
+      padding: '36px', 
     },
     back: {
       color: cs.COLORS.primary, 
@@ -33,11 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Header = (props: any) => {
-  const {history} = props;
+  const {step, setStep, history} = props;
   const classes = useStyles();
 
   const handleClickBack = () => {
-    history.goBack();
+    if (step > 0) {
+      setStep(step - 1);
+    } else {
+      history.goBack();
+    }
   }
 
   return (
@@ -51,7 +55,7 @@ const Header = (props: any) => {
         Back
       </Typography>
       <div className={classes.grow} />
-      <CloseIcon className={classes.close} onClick={handleClickBack} />
+      <CloseIcon className={classes.close} onClick={() => history.goBack()} />
     </div>
   );
 }

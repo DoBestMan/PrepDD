@@ -53,10 +53,11 @@ const data = [
 interface GeneralTemplatesPaneProps {
   value?: number; 
   index?: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
-  const {value, index} = props;
+  const {value, index, setStep} = props;
   const classes = useStyles();
   const [selected, setSelected] = useState<number>(-1);
 
@@ -74,6 +75,7 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
             return (
               <TableRow 
                 key={index} 
+                onClick={() => setStep(1)}
                 onMouseOver={() => setSelected(index)}
                 onMouseOut={() => setSelected(-1)}
               >

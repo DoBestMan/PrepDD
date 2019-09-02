@@ -35,10 +35,17 @@ const labels = [
   "M&A"
 ]
 
-export default function Body() {
+interface SelectTemplateStepProps {
+  stepNumber: number;
+  currentStep: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+}
+
+export default function SelectTemplateStep(props: SelectTemplateStepProps) {
+  const {stepNumber, currentStep, setStep} = props;
   const classes = useStyles();
 
-  return (
+  return stepNumber === currentStep ? (
     <Container>
       <div className={classes.flex}>
         <Typography variant="h2">
@@ -50,11 +57,11 @@ export default function Body() {
         </Button>
       </div>
       <Panel title="Create List" labels={labels}>
-        <GeneralTemplatesPane />
+        <GeneralTemplatesPane setStep={setStep} />
         <FinancePane />
         <LegalPane />
         <MAPane />
       </Panel>
     </Container>
-  )
+  ) : null;
 }
