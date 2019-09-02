@@ -1,16 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {withRouter} from 'react-router-dom';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  Drawer, 
-  List, 
-  Divider, 
+  Drawer,
   Button,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Paper,
+  ClickAwayListener,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import ListIcon from '@material-ui/icons/PlaylistAdd';
+import TaskIcon from '@material-ui/icons/AddBox';
+import TemplateIcon from '@material-ui/icons/LineWeight';
 
 import {MainListItems, AdminListItems} from './components/NavItems';
-import StyledButton from './components/StyledButton';
 
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
 
@@ -55,6 +63,17 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '24px', 
       marginBottom: '12px', 
     },
+    createMenu: {
+      width: '250px',
+      position: 'fixed',
+      top: '85px',
+      left: '185px',
+      border: '2px solid #D8D8D8',
+      zIndex: 1,
+    },
+    createMenuClose: {
+      left: '55px',
+    },
     paddingOpen: {
       paddingLeft: 24,
       paddingRight: 24,
@@ -72,14 +91,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface SideBarProps {
-  open: boolean;
-  setShowNarrow(showNarrow: boolean): void;
-}
-
-export default function SideBar(props: SideBarProps) {
-  const {open, setShowNarrow} = props;
+const SideBar = (props: any) => {
+  const {open, setShowNarrow, history} = props;
   const classes = useStyles();
+  const [openCreateMenu, setOpenCreateMenu] = useState<boolean>(false);
+
+  const handleClickListCreate = () => {
+    history.push('/create/list');
+    setOpenCreateMenu(false);
+  };
+
+  const handleClickTaskCreate = () => {
+    history.push('/create/task');
+    setOpenCreateMenu(false);
+  };
+
+  const handleClickTemplateCreate = () => {
+    history.push('/create/template');
+    setOpenCreateMenu(false);
+  };
 
   return (
     <Drawer
@@ -98,9 +128,43 @@ export default function SideBar(props: SideBarProps) {
         </span>
       </div>
       <div className={clsx(classes.paddingOpen, !open && classes.paddingClose)}>
-        <Button variant="outlined">
+        <Button variant="outlined" onClick={() => setOpenCreateMenu(!openCreateMenu)}>
           {open ? "Create" : <AddIcon />}
         </Button>
+        {openCreateMenu && (
+          <ClickAwayListener onClickAway={() => setOpenCreateMenu(false)}>
+            <Paper
+              className={clsx(
+                classes.createMenu,
+                !open && classes.createMenuClose
+              )}
+              elevation={0}
+              square
+            >
+              <List component="div" aria-labelledby="Create Menu">
+                <ListItem onClick={handleClickListCreate}>
+                  <ListItemIcon>
+                    <ListIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New List" />
+                </ListItem>
+                <ListItem onClick={handleClickTaskCreate}>
+                  <ListItemIcon>
+                    <TaskIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New task" />
+                </ListItem>
+                <ListItem onClick={handleClickTemplateCreate}>
+                  <ListItemIcon>
+                    <TemplateIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="New template" />
+                </ListItem>
+              </List>
+            </Paper>
+          </ClickAwayListener>
+          
+        )}
       </div>
       <List disablePadding style={{marginTop: '12px'}}>
         <MainListItems open={open} />
@@ -111,4 +175,6 @@ export default function SideBar(props: SideBarProps) {
       </List>
     </Drawer>
   );
-}
+};
+
+export default withRouter(SideBar);

@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,17 +24,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface DefaultUserImageProps {
-  width?: number;
-  height?: number;
+  className?: string;
   userName: string;
 }
 
 export default function DefaultUserImage(props: DefaultUserImageProps) {
-  const {width, height, userName} = props;
+  const {className, userName} = props;
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, className)}>
       <p className={classes.label}>
         {userName
           .split(' ')

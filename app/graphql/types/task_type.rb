@@ -10,6 +10,5 @@ module Types
     field :due_date, String, null: true
     field :isActive, Boolean, null: true
     field :list, ListType, null: true
-
   end
 end

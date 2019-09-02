@@ -1,15 +1,16 @@
 require 'rails_helper'
 
 module Mutations
-
   RSpec.describe UpdateUserData, type: :request do
     describe '.resolve' do
       it 'updates a user details' do
         user = create(:user)
 
         expect do
-          post '/graphql', params: { query: query(email: user.email, name: user.full_name) }
-          post '/graphql', params: { query: query_update_user(name: 'Aijaz Khan') }
+          post '/graphql',
+               params: { query: query(email: user.email, name: user.full_name) }
+          post '/graphql',
+               params: { query: query_update_user(name: 'Aijaz Khan') }
           it { expect(User.first.full_name).to eq 'Aijaz Khan' }
         end
       end
@@ -20,7 +21,9 @@ module Mutations
        mutation{
     signUpUser(
       email: #{email}, 
-      fullName: #{name}
+      fullName: #{
+        name
+      }
     ) {
       user {
         email
@@ -39,7 +42,9 @@ module Mutations
       <<~GQL
        mutation{
     updateUserData(
-      fullName: #{name}
+      fullName: #{
+        name
+      }
     ) {
       errors {
         path
@@ -50,6 +55,5 @@ module Mutations
   }
       GQL
     end
-
   end
 end
