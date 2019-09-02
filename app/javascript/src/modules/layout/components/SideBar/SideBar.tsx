@@ -1,12 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
+import {
+  Drawer, 
+  List, 
+  Divider, 
+  Button,
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 import {MainListItems, AdminListItems} from './components/NavItems';
@@ -98,17 +98,11 @@ export default function SideBar(props: SideBarProps) {
         </span>
       </div>
       <div className={clsx(classes.paddingOpen, !open && classes.paddingClose)}>
-        {open ? (
-          <StyledButton variant="outlined" color="primary">
-            Create
-          </StyledButton>
-        ) : (
-          <StyledButton variant="outlined" color="primary">
-            <AddIcon />
-          </StyledButton>
-        )}
+        <Button variant="outlined">
+          {open ? "Create" : <AddIcon />}
+        </Button>
       </div>
-      <List disablePadding>
+      <List disablePadding style={{marginTop: '12px'}}>
         <MainListItems open={open} />
       </List>
       <Divider className={clsx(classes.marginOpen, !open && classes.marginClose)} />
