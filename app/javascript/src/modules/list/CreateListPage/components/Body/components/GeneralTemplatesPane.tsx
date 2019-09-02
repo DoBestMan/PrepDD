@@ -10,6 +10,8 @@ import {
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
+import * as cs from '../../../../../../constants/theme';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -33,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       marginRight: '12px', 
     },
+    selectedCell: {
+      fontWeight: cs.FONT.weight.bold, 
+    }
   })
 );
 
@@ -67,8 +72,12 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
             const isSelected = selected === index;
 
             return (
-              <TableRow key={index} onClick={() => setSelected(index)}>
-                <TableCell className={classes.flex}>
+              <TableRow 
+                key={index} 
+                onMouseOver={() => setSelected(index)}
+                onMouseOut={() => setSelected(-1)}
+              >
+                <TableCell className={clsx(classes.flex, isSelected && classes.selectedCell)}>
                   <div className={classes.grayRect} />
                   <span>{item.name}</span>
                   <div className={classes.grow} />
