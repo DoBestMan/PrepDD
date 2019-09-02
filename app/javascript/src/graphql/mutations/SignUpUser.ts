@@ -26,7 +26,30 @@ export const useSignUpUser = createMutationHook<
       uuID: $uuID
     ) {
       user {
+        id
         email
+        fullName
+        displayName
+        profileUrl
+        lastViewedCompanyId
+        ownedCompanies {
+          id
+          name
+        }
+        companies {
+          id
+          name
+          logoUrl
+        }
+        teams {
+          id
+          companyId
+          name
+        }
+        roles {
+          id
+          companyId
+        }
       }
       errors {
         path
