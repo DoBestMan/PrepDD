@@ -10,6 +10,7 @@ export interface AllTemplates_templateLists_tasks {
   __typename: "Task";
   id: string;
   name: string | null;
+  section: string | null;
   description: string | null;
   priority: string | null;
   status: string | null;

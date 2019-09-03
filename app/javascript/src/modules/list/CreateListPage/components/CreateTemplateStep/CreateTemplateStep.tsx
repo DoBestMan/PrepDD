@@ -153,7 +153,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                         <InputForm value={item.name as string} />
                       </TableCell>
                       <TableCell>
-                        <InputForm value={item.section} />
+                        <InputForm value={item.section as string} />
                       </TableCell>
                       <TableCell>
                         <PriorityForm value={item.priority as string} />
