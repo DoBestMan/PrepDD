@@ -8,18 +8,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       height: '72px',
     },
-    addButton: {
-      marginTop: '24px',
-      padding: '0px',
-      color: '#3A84FF',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-      textTransform: 'capitalize',
-      '&:hover, &:focus': {
-        background: 'none',
-      },
-    },
   })
 );
 
@@ -29,7 +17,7 @@ export default function Header() {
   return (
     <div className={classes.root}>
       <Container>
-        <Button style={{width: '90px'}}>
+        <Button style={{marginTop: '18px'}}>
           + Add Task
         </Button>
       </Container>

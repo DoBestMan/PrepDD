@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '48px',
     },
     rightPane: {
-      minWidth: '250px',
+      minWidth: '200px',
       marginLeft: '72px',
     },
     uploadArea: {
@@ -48,6 +48,11 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '50px',
       color: '#D8D8D8',
       textAlign: 'center',
+    },
+    uploadButton: {
+      width: '100%', 
+      height: '42px', 
+      padding: '0px',       
     },
     uploadLabelColor: {
       color: '#D8D8D8',
@@ -189,7 +194,7 @@ export default function Body() {
             </TableBody>
           </Table>
           <div className={classes.rightPane}>
-            <Button variant="outlined" style={{padding: '0px', height: '42px'}}>Download Import Template</Button>
+            <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
             <div className={classes.uploadArea}>
               <UploadIcon style={{fontSize: '120px'}} />
               <br />
