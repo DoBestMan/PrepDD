@@ -25,9 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
     grow: {
       flexGrow: 1, 
     }, 
-    createButton: {
-      width: '210px'
-    }
   })
 );
 
@@ -55,7 +52,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
           New List
         </Typography>
         <div className={classes.grow} />
-        <Button variant="contained" className={classes.createButton}>
+        <Button variant="contained">
           Create blank project
         </Button>
       </div>
