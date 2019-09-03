@@ -101,9 +101,9 @@ export default function PriorityForm(props: PriorityFormProps) {
       <div
         className={clsx(
           classes.status,
-          value === 'High'
+          value === 'high'
             ? classes.high
-            : value === 'Medium'
+            : value === 'medium'
             ? classes.medium
             : classes.low
         )}

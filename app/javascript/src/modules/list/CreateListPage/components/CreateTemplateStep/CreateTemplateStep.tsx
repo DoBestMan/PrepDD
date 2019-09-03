@@ -25,7 +25,7 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
-      height: 'calc(100vh - 204px)',
+      height: 'calc(100vh - 156px)',
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
     },
@@ -71,39 +71,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const data = [
-  {
-    task: 'Task Title',
-    section: 'Section Name',
-    priority: 'High',
-    description: 'Description text',
-  },
-  {
-    task: 'Task Title',
-    section: 'Section Name',
-    priority: 'High',
-    description: 'Add...',
-  },
-  {
-    task: 'Task Title',
-    section: 'Section Name',
-    priority: 'High',
-    description: 'Add...',
-  },
-  {
-    task: 'Task Title',
-    section: 'Section Name',
-    priority: 'High',
-    description: 'Add...',
-  },
-  {
-    task: 'Task Title',
-    section: 'Section Name',
-    priority: 'High',
-    description: 'Add...',
-  },
-];
 
 interface CreateTemplateStepProps {
   selectedTemplate: AllTemplates_templateLists;

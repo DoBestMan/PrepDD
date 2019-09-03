@@ -13,6 +13,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.xl,
       fontWeight: cs.FONT.weight.bold,
+      textTransform: 'capitalize',
       lineHeight: '40px',
     },
     h2: {
@@ -20,6 +21,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.lg,
       fontWeight: cs.FONT.weight.bold,
+      textTransform: 'capitalize',
       lineHeight: '32px',
     },
     h3: {
@@ -27,6 +29,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.md,
       fontWeight: cs.FONT.weight.bold,
+      textTransform: 'capitalize',
       lineHeight: '24px',
     },
     h4: {
@@ -34,6 +37,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.sm,
       fontWeight: cs.FONT.weight.regular,
+      textTransform: 'capitalize',
       lineHeight: '24px',
     },
     h6: {
@@ -41,6 +45,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.xs,
       fontWeight: cs.FONT.weight.regular,
+      textTransform: 'capitalize',
       lineHeight: '21px',
     },
     body1: {
@@ -48,6 +53,7 @@ const defaultTheme = createMuiTheme({
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.xs,
       fontWeight: cs.FONT.weight.bold,
+      textTransform: 'capitalize',
       lineHeight: '21px',
     },
   },
