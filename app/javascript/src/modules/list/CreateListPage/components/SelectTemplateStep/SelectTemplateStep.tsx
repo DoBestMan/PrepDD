@@ -42,7 +42,7 @@ const labels = [
 
 interface SelectTemplateStepProps {
   data: AllTemplates_templateLists[];
-  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists | null>>;
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
   stepNumber: number;
   currentStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
@@ -65,7 +65,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
           New List
         </Typography>
         <div className={classes.grow} />
-        <Button variant="contained">
+        <Button variant="contained" onClick={() => setStep(1)}>
           Create blank project
         </Button>
       </div>

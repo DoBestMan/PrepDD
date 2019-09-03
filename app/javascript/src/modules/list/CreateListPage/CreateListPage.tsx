@@ -18,7 +18,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function CreateListPage() {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
+    __typename: "List",
+    id: '',
+    name: '',
+    tasks: null, 
+  });
 
   const {loading, data, error} = useAllTemplates({});
 
@@ -39,6 +44,8 @@ export default function CreateListPage() {
         setStep={setStep}
       />
       <CreateTemplateStep
+        selectedTemplate={selectedTemplate}
+        setSelectedTemplate={setSelectedTemplate}
         stepNumber={1}
         currentStep={step}
         setStep={setStep}

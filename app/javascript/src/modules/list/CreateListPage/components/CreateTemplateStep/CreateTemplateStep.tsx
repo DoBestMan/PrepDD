@@ -17,6 +17,11 @@ import StyledCheckBox from '../../../../../components/StyledCheckBox';
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
 
+import {
+  AllTemplates_templateLists,
+  AllTemplates_templateLists_tasks,
+} from '../../../../../graphql/queries/__generated__/AllTemplates';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
@@ -101,19 +106,27 @@ const data = [
 ];
 
 interface CreateTemplateStepProps {
+  selectedTemplate: AllTemplates_templateLists;
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
   stepNumber: number;
   currentStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;  
 }
 
 export default function CreateTemplateStep(props: CreateTemplateStepProps) {
-  const {stepNumber, currentStep, setStep} = props;
+  const {
+    selectedTemplate, 
+    setSelectedTemplate, 
+    stepNumber, 
+    currentStep, 
+    setStep
+  } = props;
   const classes = useStyles();
 
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
-        <Typography variant="h2">Template name</Typography>
+        <Typography variant="h2">{selectedTemplate.name}</Typography>
         <div className={classes.content}>
           <Table style={{tableLayout: 'fixed'}}>
             <TableHead>
@@ -129,30 +142,30 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((item, index) => {
-                return (
-                  <TableRow 
-                    key={index}
-                  >
-                    <TableCell padding="checkbox">
-                      <StyledCheckBox/>
-                    </TableCell>
-                    <TableCell>
-                      <InputForm value={item.task} />
-                    </TableCell>
-                    <TableCell>
-                      <InputForm value={item.section} />
-                    </TableCell>
-                    <TableCell>
-                      <PriorityForm value={item.priority} />
-                    </TableCell>
-                    <TableCell>
-                      <InputForm value={item.description} />
-                    </TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                );
-              })}
+              {selectedTemplate.tasks && 
+                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks) => {
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell padding="checkbox">
+                        <StyledCheckBox/>
+                      </TableCell>
+                      <TableCell>
+                        <InputForm value={item.name as string} />
+                      </TableCell>
+                      <TableCell>
+                        <InputForm value={item.section} />
+                      </TableCell>
+                      <TableCell>
+                        <PriorityForm value={item.priority as string} />
+                      </TableCell>
+                      <TableCell>
+                        <InputForm value={item.description as string} />
+                      </TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  );
+                })
+              }
             </TableBody>
           </Table>
           <div className={classes.rightPane}>

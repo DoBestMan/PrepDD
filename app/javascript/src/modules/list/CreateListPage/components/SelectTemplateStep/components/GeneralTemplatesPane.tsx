@@ -54,7 +54,7 @@ interface GeneralTemplatesPaneProps {
   value?: number; 
   index?: number;
   data: AllTemplates_templateLists[];
-  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists | null>>;
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
@@ -82,7 +82,7 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
     >
       <Table>
         <TableBody>
-          {data.map((item: AllTemplates_templateLists, index: number) => {
+          {data && data.map((item: AllTemplates_templateLists, index: number) => {
             const isSelected = selected === index;
 
             return (
