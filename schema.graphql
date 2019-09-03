@@ -21,6 +21,8 @@ type Company {
   owner: User!
   parents: [Company!]
   previewOnly: Boolean
+  requestedLists: [List!]
+  respondedLists: [List!]
   roles: [Role!]!
   subscription: Subscription
   teams: [Team!]!
@@ -157,9 +159,9 @@ type Query {
   currentUser: CurrentUser
 
   """
-  Find a team by id
+  Find a list by id
   """
-  lists: [List!]!
+  list(id: ID!): List!
 
   """
   Return All available roles
@@ -170,11 +172,6 @@ type Query {
   Find companies by user email OR Name
   """
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
-
-  """
-  Find a team by id
-  """
-  tasks: [Task!]!
 
   """
   Find a team by id
