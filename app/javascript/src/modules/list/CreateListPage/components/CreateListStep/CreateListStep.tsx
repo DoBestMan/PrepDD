@@ -16,6 +16,8 @@ import ShareIcon from '@material-ui/icons/People';
 import RequestIcon from '@material-ui/icons/Input';
 
 import * as cs from '../../../../../constants/theme';
+import {canBeAdmin} from '../../../../../helpers/roleHelpers';
+import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
@@ -88,6 +90,16 @@ interface CreateListStepProps {
 export default function CreateListStep(props: CreateListStepProps) {
   const {stepNumber, currentStep} = props;
   const classes = useStyles();
+  const {state} = useGlobalState();
+
+  const role = () => {
+    if (state && state.currentUser && state.currentUser.roles) {
+      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
+
+      return findRole ? findRole.name : 'User';
+    }
+    return 'User';
+  };
 
   const InternalLabel = (
     <Typography variant="h6" className={classes.flex}>
@@ -126,14 +138,22 @@ export default function CreateListStep(props: CreateListStepProps) {
                 <Typography variant="h6" className={classes.explanation}>
                   Collaborate within your company. Use this setting when sharing information with your colleagues
                 </Typography>
-                <FormControlLabel value="share" control={<Radio color="primary" />} label={ShareLabel} />
-                <Typography variant="h6" className={classes.explanation}>
-                  Send information to an external company. Use this setting when your company has the primary responsibility for providing the information in the task list.
-                </Typography>
-                <FormControlLabel value="issue" control={<Radio color="primary" />} label={RequestLabel} />
-                <Typography variant="h6" className={classes.explanation}>
-                  Issue a request for information from an external company. Use this setting when the other company is responsible for providing most of the information in the task list.
-                </Typography>
+                {canBeAdmin(role()) && (
+                  <>
+                    <FormControlLabel value="share" control={<Radio color="primary" />} label={ShareLabel} />
+                    <Typography variant="h6" className={classes.explanation}>
+                      Send information to an external company. Use this setting when your company has the primary responsibility for providing the information in the task list.
+                    </Typography>
+                  </>
+                )}
+                {canBeAdmin(role()) && (
+                  <>
+                    <FormControlLabel value="issue" control={<Radio color="primary" />} label={RequestLabel} />
+                    <Typography variant="h6" className={classes.explanation}>
+                      Issue a request for information from an external company. Use this setting when the other company is responsible for providing most of the information in the task list.
+                    </Typography>
+                  </>
+                )}
               </RadioGroup>
             </FormControl>
             <Alert />
