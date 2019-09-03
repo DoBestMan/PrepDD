@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme: Theme) =>
       background: '#AFAFAF',
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    label: {
-      color: '#FFFFFF',
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 'bold',
+    },
+    label: {
+      color: '#FFFFFF',
     },
   })
 );

@@ -17,6 +17,7 @@ import RequestIcon from '@material-ui/icons/Input';
 
 import * as cs from '../../../../../constants/theme';
 import InputForm from './components/InputForm';
+import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -147,16 +148,15 @@ export default function CreateListStep(props: CreateListStepProps) {
             <div>
               <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
               <div className={classes.flex}>
-                <div className={classes.grayRect} />
-                <Typography variant="h6">Series B Diligence</Typography>
+                <StyledItem label="Tommy Boy" type="user" />
+                <Button variant="outlined">+</Button>
               </div>
             </div>
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
               <div className={classes.flex}>
-                <div className={classes.grayRect} />
-                <Typography variant="h6">Series B Diligence</Typography>
+                <StyledItem label="G2 Crowd" />
               </div>
             </div>
 
