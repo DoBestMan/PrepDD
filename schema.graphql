@@ -164,6 +164,11 @@ type Query {
   list(id: ID!): List!
 
   """
+  Find a team by id
+  """
+  lists: [List!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!
@@ -172,6 +177,11 @@ type Query {
   Find companies by user email OR Name
   """
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
+
+  """
+  Find a team by id
+  """
+  tasks: [Task!]!
 
   """
   Find a team by id
@@ -311,6 +321,7 @@ type Task {
   list: List
   name: String
   priority: String
+  section: String
   status: String
 }
 
