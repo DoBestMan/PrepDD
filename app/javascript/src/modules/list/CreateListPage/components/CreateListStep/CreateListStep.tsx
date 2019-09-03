@@ -14,7 +14,9 @@ import {
 import InternalIcon from '@material-ui/icons/Lock';
 import ShareIcon from '@material-ui/icons/People';
 import IssueIcon from '@material-ui/icons/Input';
+
 import * as cs from '../../../../../constants/theme';
+import InputForm from './components/InputForm';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -98,7 +100,8 @@ export default function CreateListStep(props: CreateListStepProps) {
           </FormControl>
         </Grid>
         <Grid item md={6}>
-          <Typography variant="h2">List Details</Typography>          
+          <Typography variant="h2">List Details</Typography>
+          <InputForm label="Title" value="PrepDD Series B" />
         </Grid>
       </Grid>
     </div>
