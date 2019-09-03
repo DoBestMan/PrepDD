@@ -156,7 +156,9 @@ export default function CreateListStep(props: CreateListStepProps) {
                 )}
               </RadioGroup>
             </FormControl>
-            <Alert />
+            {canBeAdmin(role()) && (
+              <Alert />
+            )}
           </Grid>
           <Grid item md={6}>
             <Typography variant="h2">List Details</Typography>

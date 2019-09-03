@@ -102,8 +102,8 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                   <StyledCheckBox/>
                 </TableCell>
                 <TableCell>Task</TableCell>
-                <TableCell>Section</TableCell>
-                <TableCell>Priority</TableCell>
+                <TableCell style={{width: '200px'}}>Section</TableCell>
+                <TableCell style={{width: '150px'}}>Priority</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell style={{width: '125px'}}>Example Files</TableCell>
               </TableRow>
