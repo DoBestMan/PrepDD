@@ -142,6 +142,19 @@ const defaultTheme = createMuiTheme({
         paddingBottom: '0px', 
       },
     },
+    MuiRadio: {
+      root: {
+        padding: '12px', 
+        '& .MuiSvgIcon-root': {
+          fontSize: '18px', 
+        }
+      }, 
+      colorPrimary: {
+        '&.Mui-checked': {
+          color: cs.COLORS.primary, 
+        }
+      }
+    }
   },
 });
 

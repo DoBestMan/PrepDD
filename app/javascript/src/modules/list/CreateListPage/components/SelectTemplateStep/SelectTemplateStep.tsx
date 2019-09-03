@@ -1,7 +1,6 @@
 import React from 'react';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  Container, 
   Typography, 
   Button, 
 } from '@material-ui/core';
@@ -14,7 +13,6 @@ import MAPane from './components/MAPane';
 
 import {
   AllTemplates_templateLists,
-  AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) => 

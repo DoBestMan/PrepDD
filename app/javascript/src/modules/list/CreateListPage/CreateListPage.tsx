@@ -5,6 +5,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import Header from './components/Header';
 import SelectTemplateStep from './components/SelectTemplateStep';
 import CreateTemplateStep from './components/CreateTemplateStep';
+import CreateListStep from './components/CreateListStep';
 
 import {useAllTemplates} from '../../../graphql/queries/AllTemplates';
 import {AllTemplates_templateLists} from '../../../graphql/queries/__generated__/AllTemplates';
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function CreateListPage() {
   const classes = useStyles();
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
     __typename: "List",
     id: '',
@@ -49,6 +50,10 @@ export default function CreateListPage() {
         stepNumber={1}
         currentStep={step}
         setStep={setStep}
+      />
+      <CreateListStep 
+        stepNumber={2}
+        currentStep={step}
       />
     </div>
   );
