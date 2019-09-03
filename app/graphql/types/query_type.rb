@@ -62,9 +62,29 @@ module Types
       argument :companyId, ID, required: true
     end
 
+    field :lists, [ListType], null: false do
+      description 'Find a team by id'
+    end
+
+    field :tasks, [TaskType], null: false do
+      description 'Find a team by id'
+    end
+
+    field :templateLists, [ListType], null: false do
+      description 'All Available lists'
+    end
+
     field :list, ListType, null: false do
       description 'Find a list by id'
       argument :id, ID, required: true
+    end
+
+    def template_lists
+      List.where(is_template: true, is_public_template: true)
+    end
+
+    def tasks
+      Task.all
     end
 
     def list(id:)
