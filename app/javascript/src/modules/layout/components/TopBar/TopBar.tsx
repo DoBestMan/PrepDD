@@ -29,7 +29,7 @@ import SignoutIcon from '@material-ui/icons/Input';
 import {useGlobalState} from '../../../../store';
 import {useSignOutUser} from '../../../../graphql/mutations/SignOutUser';
 
-import DefaultUserImage from '../../../../components/DefaultUserImage';
+import DefaultUserImage from '../../../common/DefaultUserImage';
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 

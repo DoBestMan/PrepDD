@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import idx from 'idx';
 
 import Router from '../../modules/route';
-import LoadingFallback from '../../components/LoadingFallback';
+import LoadingFallback from '../../modules/common/LoadingFallback';
 
 import {useCurrentUser} from '../../graphql/queries/CurrentUser';
 import {useGlobalState} from '../../store';

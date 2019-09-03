@@ -5,8 +5,8 @@ import _ from 'lodash';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {Paper, Table, TableBody, Snackbar} from '@material-ui/core';
 
-import LoadingFallback from '../../components/LoadingFallback';
-import DefaultUserImage from '../../components/DefaultUserImage';
+import LoadingFallback from '../common/LoadingFallback';
+import DefaultUserImage from '../common/DefaultUserImage';
 import TableToolbar from './components/TableToolbar';
 import Searchbar from './components/Searchbar';
 import TableHeader from './components/TableHeader';

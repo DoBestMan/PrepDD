@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import StyledCheckBox from '../../../../../components/StyledCheckBox';
+import StyledCheckBox from '../../../../common/StyledCheckBox';
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
 

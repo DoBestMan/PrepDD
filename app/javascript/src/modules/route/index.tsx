@@ -7,8 +7,8 @@ import {
   Redirect, 
 } from 'react-router-dom';
 
-import LoadingFallback from '../../components/LoadingFallback';
-import NotFoundPage from '../../components/NotFoundPage';
+import LoadingFallback from '../common/LoadingFallback';
+import NotFoundPage from '../common/NotFoundPage';
 import CreateListPage from '../list/CreateListPage';
 import CreateTaskPage from '../task/CreateTaskPage';
 

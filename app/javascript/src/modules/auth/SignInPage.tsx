@@ -18,7 +18,6 @@ import {
 import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../../hooks/auth';
 import {useSignInUser} from '../../graphql/mutations/SignInUser';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,7 +83,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SignInPage = (props: any) => {
-  // useRequireGuest();
   const {history} = props;
 
   const classes = useStyles({});

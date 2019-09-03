@@ -88,7 +88,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SignUpPage = (props: any) => {
-  // useRequireGuest();
   const {match, history} = props;
   const {dispatch} = useGlobalState();
   const classes = useStyles({});

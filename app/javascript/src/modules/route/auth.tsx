@@ -1,4 +1,4 @@
-import LoadingFallback from '../../components/LoadingFallback';
+import LoadingFallback from '../common/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
 import {Switch, Route} from 'react-router-dom';
 import {LinkedInPopUp} from 'react-linkedin-login-oauth2';

@@ -5,12 +5,14 @@ import {
   Button, 
 } from '@material-ui/core';
 
-import Panel from '../../../../../components/Panel';
+import Panel from '../../../../common/Panel';
 import GeneralTemplatesPane from './components/GeneralTemplatesPane';
 import FinancePane from './components/FinancePane';
 import LegalPane from './components/LegalPane';
 import MAPane from './components/MAPane';
 
+import {isSuperAdmin} from '../../../../../helpers/roleHelpers';
+import {useGlobalState} from '../../../../../store';
 import {
   AllTemplates_templateLists,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
@@ -55,6 +57,15 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
     setStep
   } = props;
   const classes = useStyles();
+  const {state} = useGlobalState();
+  const role = () => {
+    if (state && state.currentUser && state.currentUser.roles) {
+      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
+
+      return findRole ? findRole.name : 'User';
+    }
+    return 'User';
+  };
 
   return stepNumber === currentStep ? (
     <div className={classes.root}>
@@ -63,9 +74,11 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
           New List
         </Typography>
         <div className={classes.grow} />
-        <Button variant="contained" onClick={() => setStep(1)}>
-          Create blank project
-        </Button>
+        {isSuperAdmin(role()) && (
+          <Button variant="contained" onClick={() => setStep(1)}>
+            Create blank project
+          </Button>
+        )}
       </div>
       <Panel title="Create List" labels={labels}>
         <GeneralTemplatesPane 

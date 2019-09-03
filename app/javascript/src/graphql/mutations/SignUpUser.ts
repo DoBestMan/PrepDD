@@ -48,6 +48,7 @@ export const useSignUpUser = createMutationHook<
         }
         roles {
           id
+          name
           companyId
         }
       }

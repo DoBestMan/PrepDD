@@ -20,7 +20,7 @@ import {
 import CameraIcon from '@material-ui/icons/CameraAlt';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 
-import InputForm from '../../../../components/InputForm';
+import InputForm from '../../../common/InputForm';
 import CheckBox from './components/CheckBox';
 
 import {useGlobalState} from '../../../../store';

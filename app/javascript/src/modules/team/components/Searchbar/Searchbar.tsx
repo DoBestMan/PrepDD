@@ -3,7 +3,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import Dropdown from '../../../../components/Dropdown';
+import Dropdown from '../../../common/Dropdown';
 import {CompanyUsers_companyUsers_company_teams} from '../../../../graphql/queries/__generated__/CompanyUsers';
 
 const useSearchbarStyles = makeStyles((theme: Theme) =>

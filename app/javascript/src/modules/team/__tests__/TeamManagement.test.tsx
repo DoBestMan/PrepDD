@@ -6,7 +6,7 @@ import {createHttpLink} from 'apollo-link-http';
 import fetch from 'unfetch';
 import {mount} from 'enzyme';
 import TeamManagementPage from '../TeamManagement';
-import LoadingFallback from '../../../components/LoadingFallback';
+import LoadingFallback from '../../common/LoadingFallback';
 
 function getCSRFToken(): string {
   const el = document.querySelector('meta[name="csrf-token"]');

@@ -13,7 +13,7 @@ import {
   Badge,
 } from '@material-ui/core';
 
-import DefaultUserImage from '../../../components/DefaultUserImage';
+import DefaultUserImage from '../../common/DefaultUserImage';
 import StyledBadge from './StyledBadge';
 
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
