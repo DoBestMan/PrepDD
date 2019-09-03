@@ -17,6 +17,7 @@ import RequestIcon from '@material-ui/icons/Input';
 
 import * as cs from '../../../../../constants/theme';
 import InputForm from './components/InputForm';
+import Alert from './components/Alert';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -128,6 +129,7 @@ export default function CreateListStep(props: CreateListStepProps) {
                 </Typography>
               </RadioGroup>
             </FormControl>
+            <Alert />
           </Grid>
           <Grid item md={6}>
             <Typography variant="h2">List Details</Typography>
