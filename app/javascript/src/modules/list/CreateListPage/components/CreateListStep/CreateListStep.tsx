@@ -70,6 +70,12 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '180px', 
       borderRadius: '3px',
       resize: 'none', 
+      border: '1px solid #D8D8D8',
+    },
+    addButton: {
+      border: '1px solid #D8D8D8',
+      borderRadius: '3px', 
+      fontSize: '15px', 
     }
   })
 );
@@ -149,7 +155,7 @@ export default function CreateListStep(props: CreateListStepProps) {
               <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
               <div className={classes.flex}>
                 <StyledItem label="Tommy Boy" type="user" />
-                <Button variant="outlined">+</Button>
+                <Button className={classes.addButton}>+</Button>
               </div>
             </div>
 
