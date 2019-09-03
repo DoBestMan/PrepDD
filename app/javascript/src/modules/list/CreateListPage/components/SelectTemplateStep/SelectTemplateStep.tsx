@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'block', 
-      margin: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+      margin: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
     }, 
     flex: {
       display: 'flex', 
