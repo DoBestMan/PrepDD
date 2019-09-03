@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -8,7 +8,10 @@ import {
   FormControlLabel,
   RadioGroup, 
   Radio, 
-  Button
+  Button,
+  ClickAwayListener,
+  Paper, 
+  TextField, 
 } from '@material-ui/core';
 
 import InternalIcon from '@material-ui/icons/Lock';
@@ -78,6 +81,46 @@ const useStyles = makeStyles((theme: Theme) =>
       border: '1px solid #D8D8D8',
       borderRadius: '3px', 
       fontSize: '15px', 
+    },
+    addPanel: {
+      position: 'absolute', 
+      width: '280px', 
+      top: '35px', 
+      left: '0px',
+      padding: '12px 24px 18px', 
+      backgroundColor: '#FFFFFF',
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px', 
+    }, 
+    input: {
+      display: 'block',
+      width: '100%',
+      marginTop: '6px',
+      color: '#606060',
+      fontFamily: 'Montserrat',
+      fontWeight: 600,
+      fontSize: '12px',
+      textTransform: 'none',
+      '& label': {
+        color: '#606060',
+        fontFamily: 'Montserrat',
+        fontWeight: 600,
+        fontSize: '12px',
+      },
+      '&:selected': {
+        color: '#3A84FF',
+      },
+      '& input::placeholder': {
+        fontSize: '12px',
+      },
+      '& div': {
+        width: '100%',
+      },
+    }, 
+    addLink: {
+      marginTop: '6px', 
+      paddingLeft: '0px',
+      paddingRight: '0px', 
     }
   })
 );
@@ -90,6 +133,8 @@ interface CreateListStepProps {
 export default function CreateListStep(props: CreateListStepProps) {
   const {stepNumber, currentStep} = props;
   const classes = useStyles();
+  const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
+  const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
   const {state} = useGlobalState();
 
   const role = () => {
@@ -119,6 +164,11 @@ export default function CreateListStep(props: CreateListStepProps) {
       Request
     </Typography>
   )
+
+  const handleCloseAll = () => {
+    setOpenAddPanel(false);
+    setOpenInvitePanel(false);
+  }
 
   return stepNumber == currentStep ? (
     <div>
@@ -177,7 +227,52 @@ export default function CreateListStep(props: CreateListStepProps) {
               <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
               <div className={classes.flex}>
                 <StyledItem label="Tommy Boy" type="user" />
-                <Button className={classes.addButton}>+</Button>
+                <div 
+                  style={{position: 'relative'}}
+                  onMouseOver={() => setOpenAddPanel(true)}
+                  onMouseLeave={handleCloseAll}
+                >
+                  <Button 
+                    className={classes.addButton} 
+                  >+</Button>
+                  {openAddPanel ? (
+                    <ClickAwayListener onClickAway={() => setOpenAddPanel(false)}>
+                      <Paper
+                        className={classes.addPanel}
+                        elevation={0}
+                        onMouseOver={() => setOpenAddPanel(true)}
+                        onMouseLeave={handleCloseAll}
+                      >
+                        <TextField 
+                          className={classes.input}
+                          placeholder="Search by name or email"
+                        />
+                        {openInvitePanel ? (
+                          <form>
+                            <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>
+                            <TextField 
+                              className={classes.input}
+                              label="Name"
+                            />
+                            <TextField 
+                              className={classes.input}
+                              label="Email"
+                              required
+                            />
+                            <Button type="submit" className={classes.addLink}>
+                              Invite new owner
+                            </Button>
+                          </form>
+                        ): (
+                          <Button 
+                            className={classes.addLink}
+                            onClick={() => setOpenInvitePanel(true)}
+                          >+ Add owner</Button>
+                        )}
+                      </Paper>
+                    </ClickAwayListener>
+                  ) : null}
+                </div>                
               </div>
             </div>
 

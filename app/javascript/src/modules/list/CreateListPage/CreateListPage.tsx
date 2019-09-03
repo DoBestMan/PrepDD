@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function CreateListPage() {
   const classes = useStyles();
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(2);
   const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
     __typename: "List",
     id: '',

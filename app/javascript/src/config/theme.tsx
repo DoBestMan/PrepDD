@@ -160,7 +160,7 @@ const defaultTheme = createMuiTheme({
           color: cs.COLORS.primary, 
         }
       }
-    }
+    }, 
   },
 });
 
