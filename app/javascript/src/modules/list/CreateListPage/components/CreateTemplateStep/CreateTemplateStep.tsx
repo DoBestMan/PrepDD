@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: '0px', 
     },
     rightPane: {
-      minWidth: '250px',
+      minWidth: '200px',
       marginLeft: '72px',
     },
     uploadButton: {
@@ -157,7 +157,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableBody>
           </Table>
           <div className={classes.rightPane}>
-            <Button variant="outlined" className={classes.uploadButton}>Download Import Template</Button>
+            <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
             <div className={classes.uploadArea}>
               <UploadIcon style={{fontSize: '120px'}} />
               <br />
@@ -171,11 +171,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         </div>
       </div>
       <div className={classes.footer}>
-        <div className={classes.flex} style={{paddingTop: '18px', paddingRight: '328px'}}>
+        <div className={classes.flex} style={{paddingTop: '18px', paddingRight: '270px'}}>
           <Button>+ Add task</Button>
           <div className={classes.grow} />
           <Button variant="contained" onClick={() => setStep(2)}>
-            Create List
+            Continue
           </Button>
         </div>
       </div>
