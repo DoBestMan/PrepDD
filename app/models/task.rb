@@ -4,6 +4,33 @@ class Task < ApplicationRecord
   belongs_to :list
 
   def self.import(file, list_id)
-    binding.pry
+    require 'roo'
+
+    list = List.find(list_id)
+    spreadsheet = Roo::Spreadsheet.open(file.path)
+    header = spreadsheet.row(1).map(&:downcase!)
+    (2..spreadsheet.last_row).each do |i|
+      row = Hash[[header, spreadsheet.row(i)].transpose]
+      row['name'] = row.delete('task')
+
+      priority = row["priority"]&.downcase!
+
+      if priority
+
+        case priority[0]
+        when 'h'
+          row["priority"] = 'high'
+        when 'm'
+          row["priority"] = 'medium'
+        when 'l'
+          row["priority"] = 'low'
+        else
+          row["priority"] = 'medium'
+        end
+
+      end
+
+      list.tasks.create(row.to_hash)
+    end
   end
 end
