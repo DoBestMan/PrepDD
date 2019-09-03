@@ -11,6 +11,7 @@ import {
   TableCell,
   Button,
 } from '@material-ui/core';
+import ReactDropzone from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import StyledCheckBox from '../../../../common/StyledCheckBox';
@@ -65,9 +66,16 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: '50px',
       color: '#D8D8D8',
       textAlign: 'center',
+      '&:hover': {
+        cursor: 'pointer',
+      },
     },
     uploadLabelColor: {
       color: '#D8D8D8',
+    },
+    uploadActive: {
+      background: '#EBF2FF',
+      borderColor: '#3A84FF',
     },
   })
 );
@@ -90,6 +98,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   } = props;
   const classes = useStyles();
 
+  const handleDrop = (acceptedFiles: File[]) => {
+    // Handle importing templates
+  };
+
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
@@ -103,7 +115,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                 </TableCell>
                 <TableCell>Task</TableCell>
                 <TableCell style={{width: '200px'}}>Section</TableCell>
-                <TableCell style={{width: '150px'}}>Priority</TableCell>
+                <TableCell style={{width: '130px'}}>Priority</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell style={{width: '125px'}}>Example Files</TableCell>
               </TableRow>
@@ -137,15 +149,29 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           </Table>
           <div className={classes.rightPane}>
             <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
-            <div className={classes.uploadArea}>
-              <UploadIcon style={{fontSize: '120px'}} />
-              <br />
-              <Typography variant="h4" className={classes.uploadLabelColor}>
-                Drag and Drop/
-                <br />
-                Import Tasks
-              </Typography>
-            </div>
+            <ReactDropzone 
+              multiple
+              accept="application/*" 
+              onDrop={handleDrop}
+            >
+              {({getRootProps, getInputProps, isDragActive}) => (
+                <div
+                  {...getRootProps()}
+                  className={clsx(classes.uploadArea, isDragActive && classes.uploadActive)}
+                >
+                  <input {...getInputProps()} />
+                  <div>
+                    <UploadIcon style={{fontSize: '120px'}} />
+                    <br />
+                    <Typography variant="h4" className={classes.uploadLabelColor}>
+                      Drag and Drop/
+                      <br />
+                      Import Tasks
+                    </Typography>
+                  </div>
+                </div>
+              )}
+            </ReactDropzone>
           </div>
         </div>
       </div>
