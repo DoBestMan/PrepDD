@@ -130,7 +130,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableHead>
             <TableBody>
               {data.map((item, index) => {
-
                 return (
                   <TableRow 
                     key={index}

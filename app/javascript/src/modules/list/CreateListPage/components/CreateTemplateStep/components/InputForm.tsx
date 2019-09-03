@@ -49,11 +49,18 @@ export default function InputForm(props: InputFormProps) {
   const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
 
+  const handleClick = () => {
+    if (hover) {
+      setEditable(true);
+    }
+  }
+
   return (
     <div 
       className={classes.flex}
       onMouseOver={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
+      onClick={handleClick}
     >
       {editable ? (
         <ClickAwayListener onClickAway={() => setEditable(false)}>
@@ -65,10 +72,7 @@ export default function InputForm(props: InputFormProps) {
       ): (
         <>
           {value}
-          <UpdateIcon 
-            className={clsx(classes.update, hover && classes.visible)} 
-            onClick={() => setEditable(true)}
-          />
+          <UpdateIcon className={clsx(classes.update, hover && classes.visible)} />
         </>
       )}
     </div>
