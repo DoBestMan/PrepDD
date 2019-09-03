@@ -105,7 +105,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                 <TableCell>Section</TableCell>
                 <TableCell>Priority</TableCell>
                 <TableCell>Description</TableCell>
-                <TableCell>Example Files</TableCell>
+                <TableCell style={{width: '125px'}}>Example Files</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
