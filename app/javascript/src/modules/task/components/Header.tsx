@@ -1,4 +1,5 @@
 import React from 'react';
+import {withRouter} from 'react-router-dom';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -12,13 +13,18 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       height: '90px',
-      padding: '36px',
+      padding: '36px 36px 24px 36px',
     },
     grow: {
       flexGrow: 1,
     },
-    primary: {
+    back: {
       color: cs.COLORS.primary, 
+      cursor: 'pointer', 
+    },
+    close: {
+      color: '#D8D8D8',
+      cursor: 'pointer', 
     },
     secondary: {
       color: '#D8D8D8',
@@ -26,15 +32,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Header() {
+const Header = (props: any) => {
+  const {history} = props;
   const classes = useStyles();
+
+  const handleClose = () => {
+    history.goBack();
+  }
 
   return (
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
-      <Typography variant="h4" className={classes.primary}>Back</Typography>
+      <Typography variant="h4" className={classes.back}>Back</Typography>
       <div className={classes.grow} />
-      <CloseIcon className={classes.secondary} />
+      <CloseIcon className={classes.close} onClick={handleClose}/>
     </div>
   );
 }
+
+export default withRouter(Header);
