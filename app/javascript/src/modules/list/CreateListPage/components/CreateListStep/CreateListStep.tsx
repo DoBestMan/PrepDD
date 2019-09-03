@@ -12,6 +12,9 @@ import {
   ClickAwayListener,
   Paper, 
   TextField, 
+  List, 
+  ListItem, 
+  ListItemText,
 } from '@material-ui/core';
 
 import InternalIcon from '@material-ui/icons/Lock';
@@ -24,6 +27,7 @@ import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
+import DefaultUserImage from '../../../../common/DefaultUserImage';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -247,6 +251,12 @@ export default function CreateListStep(props: CreateListStepProps) {
                           className={classes.input}
                           placeholder="Search by name or email"
                         />
+                        <List component="div" aria-labelledby="Invite Owner Panel">
+                          <ListItem disableGutters>
+                            <DefaultUserImage userName="Tom Kirby"/>
+                            <ListItemText primary="Tom Kirby" style={{marginLeft: '12px'}} />
+                          </ListItem>
+                        </List>
                         {openInvitePanel ? (
                           <form>
                             <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>

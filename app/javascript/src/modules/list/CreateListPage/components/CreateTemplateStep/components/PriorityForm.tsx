@@ -108,7 +108,7 @@ export default function PriorityForm(props: PriorityFormProps) {
             : classes.low
         )}
       />
-      <Typography variant="h6">{value}</Typography>
+      <Typography variant="h6" style={{textTransform: 'capitalize'}}>{value}</Typography>
       {editable ? (
         <ArrowDownIcon className={classes.arrowDown} />
       ) : (
