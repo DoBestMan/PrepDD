@@ -3,7 +3,7 @@ class Api::TasksController < ApplicationController
   before_action :set_list, only: %i[import_task]
 
   def import_task
-     # Task.import(params[:file], @list.id)
+    Task.import(params[:file], @list.id)
     render json: {status: true, list: @list, tasks: @list.tasks}
   end
 
