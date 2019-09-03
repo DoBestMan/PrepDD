@@ -128,7 +128,7 @@ type Mutation {
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
   createCompany(name: String!): CreateCompanyPayload
   createList(description: String, isPublicTemplate: Boolean!, isTemplate: Boolean!, name: String!, requesterId: ID!, responderId: ID): CreateListPayload
-  createTask(description: String, listId: ID!, name: String!, priority: String!, status: String!): CreateTaskPayload
+  createTask(description: String, listId: ID!, name: String!, priority: String!, section: String, status: String!): CreateTaskPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   removeCompanyMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveCompanyMemberPayload
   removeTeamMember(teamId: ID!, userId: ID, userIds: [ID!]): RemoveTeamMemberPayload
@@ -164,6 +164,11 @@ type Query {
   list(id: ID!): List!
 
   """
+  Find a team by id
+  """
+  lists: [List!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!
@@ -172,6 +177,11 @@ type Query {
   Find companies by user email OR Name
   """
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
+
+  """
+  Find a team by id
+  """
+  tasks: [Task!]!
 
   """
   Find a team by id
@@ -311,6 +321,7 @@ type Task {
   list: List
   name: String
   priority: String
+  section: String
   status: String
 }
 
