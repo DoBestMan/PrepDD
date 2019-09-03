@@ -12,6 +12,11 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 import * as cs from '../../../../../../constants/theme';
 
+import {
+  AllTemplates_templateLists,
+  AllTemplates_templateLists_tasks,
+} from '../../../../../../graphql/queries/__generated__/AllTemplates';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -45,25 +50,29 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const data = [
-  { name: 'Series B Diligence' }, 
-  { name: 'Series B Diligence' }, 
-  { name: 'Series B Diligence' }, 
-  { name: 'Series B Diligence' }, 
-  { name: 'Series B Diligence' }, 
-  { name: 'Series B Diligence' }, 
-]
-
 interface GeneralTemplatesPaneProps {
   value?: number; 
   index?: number;
+  data: AllTemplates_templateLists[];
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists | null>>;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
-  const {value, index, setStep} = props;
+  const {
+    value, 
+    index, 
+    data, 
+    setSelectedTemplate, 
+    setStep
+  } = props;
   const classes = useStyles();
   const [selected, setSelected] = useState<number>(-1);
+
+  const handleClick = (template: AllTemplates_templateLists) => {
+    setStep(1);
+    setSelectedTemplate(template);
+  }
 
   return (
     <Paper
@@ -73,13 +82,13 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
     >
       <Table>
         <TableBody>
-          {data.map((item: any, index: number) => {
+          {data.map((item: AllTemplates_templateLists, index: number) => {
             const isSelected = selected === index;
 
             return (
               <TableRow 
-                key={index} 
-                onClick={() => setStep(1)}
+                key={item.id} 
+                onClick={() => handleClick(item)}
                 onMouseOver={() => setSelected(index)}
                 onMouseOut={() => setSelected(-1)}
               >

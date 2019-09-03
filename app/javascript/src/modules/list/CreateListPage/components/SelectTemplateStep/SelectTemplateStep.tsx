@@ -12,6 +12,11 @@ import FinancePane from './components/FinancePane';
 import LegalPane from './components/LegalPane';
 import MAPane from './components/MAPane';
 
+import {
+  AllTemplates_templateLists,
+  AllTemplates_templateLists_tasks,
+} from '../../../../../graphql/queries/__generated__/AllTemplates';
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -36,13 +41,21 @@ const labels = [
 ]
 
 interface SelectTemplateStepProps {
+  data: AllTemplates_templateLists[];
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists | null>>;
   stepNumber: number;
   currentStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function SelectTemplateStep(props: SelectTemplateStepProps) {
-  const {stepNumber, currentStep, setStep} = props;
+  const {
+    data, 
+    setSelectedTemplate,
+    stepNumber, 
+    currentStep, 
+    setStep
+  } = props;
   const classes = useStyles();
 
   return stepNumber === currentStep ? (
@@ -57,7 +70,11 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
         </Button>
       </div>
       <Panel title="Create List" labels={labels}>
-        <GeneralTemplatesPane setStep={setStep} />
+        <GeneralTemplatesPane 
+          data={data}
+          setSelectedTemplate={setSelectedTemplate}
+          setStep={setStep} 
+        />
         <FinancePane />
         <LegalPane />
         <MAPane />
