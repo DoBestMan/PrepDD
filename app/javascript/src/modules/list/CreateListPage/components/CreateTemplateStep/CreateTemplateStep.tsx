@@ -25,7 +25,7 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
-      height: 'calc(100vh - 168px)',
+      height: 'calc(100vh - 204px)',
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
     },

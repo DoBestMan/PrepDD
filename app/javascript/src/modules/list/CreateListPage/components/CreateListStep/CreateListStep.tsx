@@ -13,7 +13,7 @@ import {
 
 import InternalIcon from '@material-ui/icons/Lock';
 import ShareIcon from '@material-ui/icons/People';
-import IssueIcon from '@material-ui/icons/Input';
+import RequestIcon from '@material-ui/icons/Input';
 
 import * as cs from '../../../../../constants/theme';
 import InputForm from './components/InputForm';
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     body: {
-      height: 'calc(100vh - 168px)',
+      height: 'calc(100vh - 156px)',
       padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto', 
@@ -93,10 +93,10 @@ export default function CreateListStep(props: CreateListStepProps) {
       Share
     </Typography>
   )
-  const IssueLabel = (
+  const RequestLabel = (
     <Typography variant="h6" className={classes.flex}>
-      <IssueIcon className={classes.icon} />
-      Issue
+      <RequestIcon className={classes.icon} />
+      Request
     </Typography>
   )
 
@@ -116,15 +116,15 @@ export default function CreateListStep(props: CreateListStepProps) {
               >
                 <FormControlLabel value="internal" control={<Radio color="primary" />} label={InternalLabel} />
                 <Typography variant="h6" className={classes.explanation}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Collaborate within your company. Use this setting when sharing information with your colleagues
                 </Typography>
                 <FormControlLabel value="share" control={<Radio color="primary" />} label={ShareLabel} />
                 <Typography variant="h6" className={classes.explanation}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Send information to an external company. Use this setting when your company has the primary responsibility for providing the information in the task list.
                 </Typography>
-                <FormControlLabel value="issue" control={<Radio color="primary" />} label={IssueLabel} />
+                <FormControlLabel value="issue" control={<Radio color="primary" />} label={RequestLabel} />
                 <Typography variant="h6" className={classes.explanation}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Issue a request for information from an external company. Use this setting when the other company is responsible for providing most of the information in the task list.
                 </Typography>
               </RadioGroup>
             </FormControl>
