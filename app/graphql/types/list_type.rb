@@ -11,6 +11,7 @@ module Types
     field :requesterCompany, CompanyType, null: true
     field :responderCompany, CompanyType, null: true
     field :tasks, [TaskType], null: true
+    field :owners, [UserType], null: true
 
     def requester_company
       object.requester

@@ -13,6 +13,9 @@ class User < ApplicationRecord
   has_many :owned_companies,
            class_name: 'Company', foreign_key: 'owner_id', dependent: :destroy
 
+  has_many :lists_users
+  has_many :lists, through: :lists_users
+
   has_one_attached :profile_picture
 
   def self.search(query)

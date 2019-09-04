@@ -81,6 +81,15 @@ ActiveRecord::Schema.define(version: 2019_09_03_194357) do
     t.index ["responder_id"], name: "index_lists_on_responder_id"
   end
 
+  create_table "lists_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["list_id"], name: "index_lists_users_on_list_id"
+    t.index ["user_id"], name: "index_lists_users_on_user_id"
+  end
+
   create_table "parent_companies", force: :cascade do |t|
     t.bigint "child_company_id"
     t.bigint "parent_company_id"
@@ -145,7 +154,6 @@ ActiveRecord::Schema.define(version: 2019_09_03_194357) do
     t.bigint "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "section"
     t.index ["list_id"], name: "index_tasks_on_list_id"
   end
 
