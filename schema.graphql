@@ -179,6 +179,11 @@ type Query {
   searchCompanies(companyId: ID!, text: String!): SearchCompanies!
 
   """
+  Search users by company id
+  """
+  searchCompanyUsers(companyId: ID!, text: String!): [User!]!
+
+  """
   Find a team by id
   """
   tasks: [Task!]!
