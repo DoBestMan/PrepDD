@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#FFFFFF',
       border: '2px solid #D8D8D8',
       borderRadius: '3px', 
+      zIndex: 1, 
     }, 
     input: {
       display: 'block',
@@ -110,7 +111,6 @@ export default function OwnerForm(props: OwnerFormProps) {
     const users = idx(data, data => data.searchCompanyUsers);
 
     if (loading || !users) return;
-    console.log("Users: ", users);
     setSearchedUsers(users);
   }, [loading, idx(data, data => data.searchCompanyUsers)])
 

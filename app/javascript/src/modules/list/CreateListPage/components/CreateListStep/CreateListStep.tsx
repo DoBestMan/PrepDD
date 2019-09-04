@@ -20,7 +20,7 @@ import {canBeAdmin} from '../../../../../helpers/roleHelpers';
 import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
 import OwnerForm from './components/OwnerForm';
-// import CompanyForm from './components/CompanyForm';
+import CompanyForm from './components/CompanyForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
 
@@ -246,12 +246,8 @@ export default function CreateListStep(props: CreateListStepProps) {
               owners={owners}
               setOwners={setOwners}
             />
-{/* 
             <CompanyForm
-              label="Issue to"
-              placeholder="Search company..."
-              company={selectedTemplate.responder}
-            /> */}
+            />
             {sharing !== 'internal' && (
               <div>
                 <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
