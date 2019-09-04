@@ -27,7 +27,13 @@ class Mutations::CreateList < GraphQL::Schema::Mutation
 
     if list && tasks
       tasks.each do |task|
-        list.tasks.create(name: task.name, description: task.description, priority: task.priority)
+        if task.section.present?
+          task_section = TaskSection.where(name: task.section).first_or_create
+          list.tasks.create(name: task.name, description: task.description, priority: task.priority,
+                            task_section_id: task_section&.id )
+        else
+          list.tasks.create(name: task.name, description: task.description, priority: task.priority)
+        end
       end
     end
 

@@ -336,7 +336,7 @@ type Task {
   list: List
   name: String
   priority: String
-  section: String
+  section: TaskSection
   status: String
 }
 
@@ -351,6 +351,15 @@ input TaskAttributes {
   priority: String!
   section: String!
   status: String!
+}
+
+"""
+TaskSection
+"""
+type TaskSection {
+  id: ID!
+  name: String
+  tasks: [Task!]
 }
 
 """
