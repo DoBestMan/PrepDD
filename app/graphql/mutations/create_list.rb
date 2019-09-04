@@ -1,7 +1,6 @@
 class Mutations::CreateList < GraphQL::Schema::Mutation
   argument :name, String, required: true
   argument :description, String, required: false
-  argument :ownerId, ID, required: true
   argument :requesterId, ID, required: true
   argument :responderId, ID, required: false
   argument :isTemplate, Boolean, required: true
@@ -13,17 +12,13 @@ class Mutations::CreateList < GraphQL::Schema::Mutation
   field :success, Boolean, null: false
 
   def resolve(name: nil, description: nil, requester_id: nil, responder_id: nil, is_template: nil,
-              is_public_template: nil, owner_id: nil, tasks: nil)
+              is_public_template: nil, tasks: nil)
     response = { errors: [] }
 
     list = List.create(name: name, description: description, requester_id: requester_id,
                        responder_id: responder_id, is_template: is_template,
                        is_public_template: is_template
     )
-
-    if list
-      ListsUser.create(list_id: list.id, user_id: owner_id)
-    end
 
     if list && tasks
       tasks.each do |task|

@@ -137,7 +137,7 @@ type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
   createCompany(name: String!): CreateCompanyPayload
-  createList(description: String, isPublicTemplate: Boolean!, isTemplate: Boolean!, name: String!, ownerId: ID!, requesterId: ID!, responderId: ID, tasks: [TaskAttributes!]): CreateListPayload
+  createList(description: String, isPublicTemplate: Boolean!, isTemplate: Boolean!, name: String!, requesterId: ID!, responderId: ID, tasks: [TaskAttributes!]): CreateListPayload
   createTask(description: String, listId: ID!, name: String!, priority: String!, section: String, status: String!): CreateTaskPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   removeCompanyMember(companyId: ID!, userId: ID, userIds: [ID!]): RemoveCompanyMemberPayload
