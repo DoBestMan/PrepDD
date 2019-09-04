@@ -118,6 +118,7 @@ type List {
   isPublicTemplate: Boolean
   isTemplate: Boolean
   name: String
+  owners: [User!]
   requesterCompany: Company
   responderCompany: Company
   tasks: [Task!]
