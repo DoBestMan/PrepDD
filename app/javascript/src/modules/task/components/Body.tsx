@@ -24,10 +24,14 @@ import {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    body: {
       height: 'calc(100vh - 156px)',
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
+    },
+    footer: {
+      height: '72px', 
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
     },
     flex: {
       display: 'flex',
@@ -92,6 +96,7 @@ export default function Body() {
   const {loading, data, error} = useAllTemplates({});
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
   const [selected, setSelected] = useState<AllTemplates_templateLists | null>(null);
+  const [editable, setEditable] = useState<boolean>(false);
 
   useEffect(() => {
     const templateLists = idx(data, data => data.templateLists);
@@ -122,67 +127,79 @@ export default function Body() {
     // Handle importing templates
   };
 
+  const handleAddTask = () => {
+    setEditable(true);
+  }
+
   return (
-    <div className={classes.root}>
-      <Dropdown 
-        data={lists} 
-        selected={selected}
-        setSelected={setSelected}
-      />
-      <div className={classes.content}>
-        <Table style={{tableLayout: 'fixed'}}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Task</TableCell>
-              <TableCell style={{width: '200px'}}>Section</TableCell>
-              <TableCell style={{width: '150px'}}>Priority</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell style={{width: '125px'}}>Example Files</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {selected && selected.tasks && 
-              selected.tasks.map((item: AllTemplates_templateLists_tasks) => {
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.section}</TableCell>
-                    <TableCell>{renderPriority(item.priority as string)}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                );
-              })
-            }
-          </TableBody>
-        </Table>
-        <div className={classes.rightPane}>
-          <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
-          <ReactDropzone 
-            multiple
-            accept="application/*" 
-            onDrop={handleDrop}
-          >
-            {({getRootProps, getInputProps, isDragActive}) => (
-              <div
-                {...getRootProps()}
-                className={clsx(classes.uploadArea, isDragActive && classes.uploadActive)}
-              >
-                <input {...getInputProps()} />
-                <div>
-                  <UploadIcon style={{fontSize: '120px'}} />
-                  <br />
-                  <Typography variant="h4" className={classes.uploadLabelColor}>
-                    Drag and Drop/
+    <div>
+      <div className={classes.body}>
+        <Dropdown 
+          data={lists} 
+          selected={selected}
+          setSelected={setSelected}
+        />
+        <div className={classes.content}>
+          <Table style={{tableLayout: 'fixed'}}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Task</TableCell>
+                <TableCell style={{width: '200px'}}>Section</TableCell>
+                <TableCell style={{width: '150px'}}>Priority</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell style={{width: '125px'}}>Example Files</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {selected && selected.tasks && 
+                selected.tasks.map((item: AllTemplates_templateLists_tasks) => {
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.section}</TableCell>
+                      <TableCell>{renderPriority(item.priority as string)}</TableCell>
+                      <TableCell>{item.description}</TableCell>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  );
+                })
+              }
+            </TableBody>
+          </Table>
+          <div className={classes.rightPane}>
+            <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
+            <ReactDropzone 
+              multiple
+              accept="application/*" 
+              onDrop={handleDrop}
+            >
+              {({getRootProps, getInputProps, isDragActive}) => (
+                <div
+                  {...getRootProps()}
+                  className={clsx(classes.uploadArea, isDragActive && classes.uploadActive)}
+                >
+                  <input {...getInputProps()} />
+                  <div>
+                    <UploadIcon style={{fontSize: '120px'}} />
                     <br />
-                    Import Tasks
-                  </Typography>
+                    <Typography variant="h4" className={classes.uploadLabelColor}>
+                      Drag and Drop/
+                      <br />
+                      Import Tasks
+                    </Typography>
+                  </div>
                 </div>
-              </div>
-            )}
-          </ReactDropzone>
+              )}
+            </ReactDropzone>
+          </div>
+        </div>
+      </div>
+      <div className={classes.footer}>
+        <div className={classes.flex} style={{paddingTop: '18px'}}>
+          <Button onClick={handleAddTask}>+ Add task</Button>
         </div>
       </div>
     </div>
+    
   );
 }

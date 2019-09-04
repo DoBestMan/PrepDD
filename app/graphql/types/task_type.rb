@@ -11,5 +11,12 @@ module Types
     field :section, String, null: true
     field :isActive, Boolean, null: true
     field :list, ListType, null: true
+
+    def section
+      if object.task_section.present?
+        object.task_section.name
+      end
+      ""
+    end
   end
 end
