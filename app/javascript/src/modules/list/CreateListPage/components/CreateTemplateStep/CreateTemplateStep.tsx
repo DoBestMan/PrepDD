@@ -11,6 +11,7 @@ import {
   Button,
   Checkbox, 
 } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/DeleteForever';
 import ReactDropzone from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
@@ -39,6 +40,16 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     grow: {
       flexGrow: 1, 
+    },
+    selection: {
+      padding: '6px 12px',
+      color: '#3A84FF',
+      border: '2px solid #3A84FF',
+      borderRadius: '3px', 
+      marginRight: '12px', 
+    },
+    deleteIcon: {
+      cursor: 'pointer', 
     },
     content: {
       display: 'flex',
@@ -180,6 +191,19 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
   }
 
+  const handleDelete = () => {
+    if (selectedTemplate && selectedTemplate.tasks) {
+      const newTasks = selectedTemplate.tasks.filter((task: AllTemplates_templateLists_tasks, index: number) => {
+        return selected.indexOf(index) === -1;
+      })
+
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }
+  }
+
   const renderCheckbox = () => {
     const rowCount = selectedTemplate && selectedTemplate.tasks ?
       selectedTemplate.tasks.length : 0;
@@ -197,7 +221,21 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
-        <Typography variant="h2">{selectedTemplate.name}</Typography>
+        <div className={classes.flex} style={{marginRight: '270px'}}>
+          <Typography variant="h2">{selectedTemplate.name}</Typography>
+          <div className={classes.grow} />
+          {selected.length > 0 && (
+            <Typography variant="h4" className={classes.selection}>
+              {selected.length} task(s)
+            </Typography>
+          )}
+          {selected.length > 0 && (
+            <DeleteIcon 
+              className={classes.deleteIcon} 
+              onClick={handleDelete}
+            />
+          )}
+        </div>
         <div className={classes.content}>
           <Table style={{tableLayout: 'fixed'}}>
             <TableHead>
