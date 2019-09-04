@@ -79,7 +79,7 @@ module Types
       argument :id, ID, required: true
     end
 
-    field :search_company_users, [UserType], null: false do
+    field :search_company_users, SearchCompanyUsersType, null: false do
       description 'Search users by company id'
       argument :companyId, ID, required: true
       argument :text, String, required: true
@@ -87,8 +87,12 @@ module Types
 
     def search_company_users(company_id:, text:)
       company = Company.find(company_id)
-      company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
-                          text: "%#{text.downcase}%")
+      users = company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
+                                  text: "%#{text.downcase}%")
+
+      teams = company.teams.where('lower(name) LIKE :text', text: "%#{text.downcase}%")
+
+      {users: users, teams: teams}
     end
 
     def template_lists
