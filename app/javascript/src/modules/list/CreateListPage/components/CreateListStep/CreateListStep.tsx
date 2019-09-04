@@ -28,7 +28,7 @@ import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
-import {SearchCompanyUsers_searchCompanyUsers} from './components/__generated__/SearchCompanyUsers';
+import {SearchCompanyUsers_searchCompanyUsers_users} from './components/__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -121,7 +121,7 @@ export default function CreateListStep(props: CreateListStepProps) {
     isPublicTemplate: false,
   });
   const [sharing, setSharing] = useState<string>("internal");
-  const [owners, setOwners] = useState<SearchCompanyUsers_searchCompanyUsers[]>([]);
+  const [owners, setOwners] = useState<SearchCompanyUsers_searchCompanyUsers_users[]>([]);
 
   const role = () => {
     if (state && state.currentUser && state.currentUser.roles) {

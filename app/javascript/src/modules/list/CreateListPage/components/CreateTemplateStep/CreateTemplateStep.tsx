@@ -228,7 +228,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         __typename: "Task",
         id: '',
         name: '',
-        section: '',
+        section: {
+          __typename: "TaskSection",
+          id: '', 
+          name: '', 
+        },
         description: '',
         priority: 'medium',
         status: '',
@@ -324,7 +328,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                       <TableCell>
                         <InputForm 
                           name="section"
-                          value={item.section as string} 
+                          value={item.section ? item.section.name as string : ""} 
                           className={classes.textFlow}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />

@@ -8,15 +8,12 @@ module Types
     field :priority, String, null: true
     field :status, String, null: true
     field :due_date, String, null: true
-    field :section, String, null: true
+    field :section, TaskSectionType, null: true
     field :isActive, Boolean, null: true
     field :list, ListType, null: true
 
     def section
-      if object.task_section.present?
-        object.task_section.name
-      end
-      ""
+      object.task_section
     end
   end
 end

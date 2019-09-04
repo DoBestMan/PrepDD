@@ -9,7 +9,10 @@ export const useAllTemplates = createQueryHook<AllTemplates, {}>(gql`
       tasks {
         id
         name
-        section
+        section {
+          id
+          name
+        }
         description
         priority
         status        

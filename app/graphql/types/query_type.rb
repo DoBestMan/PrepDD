@@ -59,7 +59,7 @@ module Types
     field :search_companies, SearchCompaniesType, null: false do
       description 'Find companies by user email OR Name'
       argument :text, String, required: true
-      argument :companyId, ID, required: true
+      argument :companyId, ID, required: false
     end
 
     field :lists, [ListType], null: false do
@@ -79,7 +79,7 @@ module Types
       argument :id, ID, required: true
     end
 
-    field :search_company_users, [UserType], null: false do
+    field :search_company_users, SearchCompanyUsersType, null: false do
       description 'Search users by company id'
       argument :companyId, ID, required: true
       argument :text, String, required: true
@@ -87,8 +87,12 @@ module Types
 
     def search_company_users(company_id:, text:)
       company = Company.find(company_id)
-      company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
-                          text: "%#{text.downcase}%")
+      users = company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
+                                  text: "%#{text.downcase}%")
+
+      teams = company.teams.where('lower(name) LIKE :text', text: "%#{text.downcase}%")
+
+      {users: users, teams: teams}
     end
 
     def template_lists
@@ -144,14 +148,17 @@ module Types
       User.find(id)
     end
 
-    def search_companies(text:, company_id:)
+    def search_companies(text:, company_id: nil)
       return { companies: [], users: [] } unless !text.empty?
 
-      company = Company.find(company_id)
+      if company_id
+        company = Company.find(company_id)
 
-      associates_company_ids = company.company_parents.pluck(:id)
-      associates_company_ids += company.broker_parents.pluck(:id)
-      associates_company_ids += [company_id]
+        associates_company_ids = company.company_parents.pluck(:id)
+        associates_company_ids += company.broker_parents.pluck(:id)
+        associates_company_ids += [company_id]
+
+      end
 
       companies = Company.search(text).where.not(id: associates_company_ids)
       users = User.search(text)

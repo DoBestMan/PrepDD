@@ -6,11 +6,17 @@
 // GraphQL query operation: AllTemplates
 // ====================================================
 
+export interface AllTemplates_templateLists_tasks_section {
+  __typename: "TaskSection";
+  id: string;
+  name: string | null;
+}
+
 export interface AllTemplates_templateLists_tasks {
   __typename: "Task";
   id: string;
   name: string | null;
-  section: string | null;
+  section: AllTemplates_templateLists_tasks_section | null;
   description: string | null;
   priority: string | null;
   status: string | null;

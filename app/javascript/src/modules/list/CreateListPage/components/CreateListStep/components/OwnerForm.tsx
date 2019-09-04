@@ -19,7 +19,7 @@ import {useGlobalState} from '../../../../../../store';
 import StyledItem from './StyledItem';
 import DefaultUserImage from '../../../../../common/DefaultUserImage';
 
-import {SearchCompanyUsers_searchCompanyUsers} from './__generated__/SearchCompanyUsers';
+import {SearchCompanyUsers_searchCompanyUsers_users} from './__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,16 +84,18 @@ const useStyles = makeStyles((theme: Theme) =>
 const SEARCH_COMPANY_USERS = gql`
   query SearchCompanyUsers($text: String!, $companyId: ID!) {
     searchCompanyUsers(text: $text, companyId: $companyId) {
-      id
-      fullName
-      profileUrl
+      users {
+        id
+        fullName
+        profileUrl
+      }
     }
   }
 `;
 
 interface OwnerFormProps {
-  owners: SearchCompanyUsers_searchCompanyUsers[];
-  setOwners: React.Dispatch<React.SetStateAction<SearchCompanyUsers_searchCompanyUsers[]>>;
+  owners: SearchCompanyUsers_searchCompanyUsers_users[];
+  setOwners: React.Dispatch<React.SetStateAction<SearchCompanyUsers_searchCompanyUsers_users[]>>;
 }
 
 export default function OwnerForm(props: OwnerFormProps) {
@@ -102,17 +104,17 @@ export default function OwnerForm(props: OwnerFormProps) {
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
   const [searchUsername, setSearchUsername] = useState<string>("");
-  const [searchedUsers, setSearchedUsers] = useState<SearchCompanyUsers_searchCompanyUsers[]>([]);
+  const [searchedUsers, setSearchedUsers] = useState<SearchCompanyUsers_searchCompanyUsers_users[]>([]);
   
   const {state} = useGlobalState();
   const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
 
   useEffect(() => {
-    const users = idx(data, data => data.searchCompanyUsers);
+    const users = idx(data, data => data.searchCompanyUsers.users);
 
     if (loading || !users) return;
     setSearchedUsers(users);
-  }, [loading, idx(data, data => data.searchCompanyUsers)])
+  }, [loading, idx(data, data => data.searchCompanyUsers.users)])
 
   const handleCloseAll = () => {
     setOpenAddPanel(false);
@@ -174,7 +176,7 @@ export default function OwnerForm(props: OwnerFormProps) {
                   onKeyUp={handleKeyUp}
                 />
                 <List component="div" aria-labelledby="Invite Owner Panel">
-                  {searchedUsers && searchedUsers.map((user: SearchCompanyUsers_searchCompanyUsers, index: number) => {
+                  {searchedUsers && searchedUsers.map((user: SearchCompanyUsers_searchCompanyUsers_users, index: number) => {
                     return (
                       <ListItem 
                         key={user.id} 
