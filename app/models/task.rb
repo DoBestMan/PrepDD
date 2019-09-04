@@ -4,13 +4,13 @@ class Task < ApplicationRecord
   belongs_to :list
   belongs_to :task_section, optional: true
 
-  def self.import(file, list_id)
+  def self.import(file)
     require 'roo'
 
-    list = List.find(list_id)
     spreadsheet = Roo::Spreadsheet.open(file.path)
     header = spreadsheet.row(1).map(&:downcase!)
-    (2..spreadsheet.last_row).each do |i|
+
+    tasks  = (2..spreadsheet.last_row).each_with_object({}) do |i, tasks|
       row = Hash[[header, spreadsheet.row(i)].transpose]
       row['name'] = row.delete('task')
 
@@ -30,8 +30,8 @@ class Task < ApplicationRecord
         end
 
       end
-
-      list.tasks.create(row.to_hash)
+      tasks[i-1] = row
     end
+    tasks
   end
 end
