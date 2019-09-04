@@ -43,11 +43,12 @@ const useStyles = makeStyles((theme: Theme) =>
 interface InputFormProps {
   value: string;
   name?: string;
+  className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputForm(props: InputFormProps) {
-  const {value, name, onChange} = props;
+  const {value, name, className, onChange} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
@@ -85,7 +86,7 @@ export default function InputForm(props: InputFormProps) {
         </ClickAwayListener>
       ): (
         <>
-          {value}
+          <div className={className}>{value}</div>
           <UpdateIcon className={clsx(classes.update, hover && classes.visible)} />
         </>
       )}

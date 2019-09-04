@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 'calc(100vh - 156px)',
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
+      overflow: 'auto',
     },
     footer: {
       height: '72px', 
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     uploadArea: {
       width: '100%',
-      height: '100%',
+      height: '350px',
       border: '2px dashed #D8D8D8',
       borderRadius: '3px',
       marginTop: '30px',
@@ -92,6 +93,13 @@ const useStyles = makeStyles((theme: Theme) =>
     uploadActive: {
       background: '#EBF2FF',
       borderColor: '#3A84FF',
+    },
+    textFlow: {
+      display: 'inline-block',
+      width: 'calc(80%)',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
   })
 );
@@ -309,6 +317,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                         <InputForm 
                           name="name"
                           value={item.name as string} 
+                          className={classes.textFlow}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
@@ -316,6 +325,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                         <InputForm 
                           name="section"
                           value={item.section as string} 
+                          className={classes.textFlow}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
@@ -327,6 +337,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                         <InputForm 
                           name="description"
                           value={item.description as string} 
+                          className={classes.textFlow}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
