@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Grid,
@@ -9,12 +10,6 @@ import {
   RadioGroup, 
   Radio, 
   Button,
-  ClickAwayListener,
-  Paper, 
-  TextField, 
-  List, 
-  ListItem, 
-  ListItemText,
 } from '@material-ui/core';
 
 import InternalIcon from '@material-ui/icons/Lock';
@@ -24,15 +19,16 @@ import RequestIcon from '@material-ui/icons/Input';
 import {canBeAdmin} from '../../../../../helpers/roleHelpers';
 import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
+import OwnerForm from './components/OwnerForm';
 // import CompanyForm from './components/CompanyForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
-import DefaultUserImage from '../../../../common/DefaultUserImage';
 
 import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
+import {SearchCompanyUsers_searchCompanyUsers} from './components/__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -46,11 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
     footer: {
       height: '72px', 
       padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
-    },
-    flex: {
-      display: 'flex', 
-      alignItems: 'center', 
-    },
+      },
+      flex: {
+        display: 'flex', 
+        alignItems: 'center', 
+      },
     grow: {
       flexGrow: 1, 
     },
@@ -86,51 +82,6 @@ const useStyles = makeStyles((theme: Theme) =>
       resize: 'none', 
       border: '1px solid #D8D8D8',
     },
-    addButton: {
-      border: '1px solid #D8D8D8',
-      borderRadius: '3px', 
-      fontSize: '15px', 
-    },
-    addPanel: {
-      position: 'absolute', 
-      width: '280px', 
-      top: '35px', 
-      left: '0px',
-      padding: '12px 24px 18px', 
-      backgroundColor: '#FFFFFF',
-      border: '2px solid #D8D8D8',
-      borderRadius: '3px', 
-    }, 
-    input: {
-      display: 'block',
-      width: '100%',
-      marginTop: '6px',
-      color: '#606060',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-      textTransform: 'none',
-      '& label': {
-        color: '#606060',
-        fontFamily: 'Montserrat',
-        fontWeight: 600,
-        fontSize: '12px',
-      },
-      '&:selected': {
-        color: '#3A84FF',
-      },
-      '& input::placeholder': {
-        fontSize: '12px',
-      },
-      '& div': {
-        width: '100%',
-      },
-    }, 
-    addLink: {
-      marginTop: '6px', 
-      paddingLeft: '0px',
-      paddingRight: '0px', 
-    }
   })
 );
 
@@ -166,8 +117,7 @@ export default function CreateListStep(props: CreateListStepProps) {
     isPublicTemplate: false,
   });
   const [sharing, setSharing] = useState<string>("internal");
-  const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
-  const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
+  const [owners, setOwners] = useState<SearchCompanyUsers_searchCompanyUsers[]>([]);
 
   const role = () => {
     if (state && state.currentUser && state.currentUser.roles) {
@@ -196,11 +146,6 @@ export default function CreateListStep(props: CreateListStepProps) {
       Request
     </Typography>
   )
-
-  const handleCloseAll = () => {
-    setOpenAddPanel(false);
-    setOpenInvitePanel(false);
-  }
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTemplate({
@@ -268,10 +213,6 @@ export default function CreateListStep(props: CreateListStepProps) {
                     <Typography variant="h6" className={classes.explanation}>
                       Send information to an external company. Use this setting when your company has the primary responsibility for providing the information in the task list.
                     </Typography>
-                  </>
-                )}
-                {canBeAdmin(role()) && (
-                  <>
                     <FormControlLabel 
                       value="issue" 
                       label={RequestLabel} 
@@ -301,62 +242,10 @@ export default function CreateListStep(props: CreateListStepProps) {
               </div>
             </div>
 
-            <div>
-              <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
-              <div className={classes.flex}>
-                <StyledItem label="Tommy Boy" type="user" />
-                <div 
-                  style={{position: 'relative'}}
-                  onMouseOver={() => setOpenAddPanel(true)}
-                  onMouseLeave={handleCloseAll}
-                >
-                  <Button className={classes.addButton}>+</Button>
-                  {openAddPanel ? (
-                    <ClickAwayListener onClickAway={() => setOpenAddPanel(false)}>
-                      <Paper
-                        className={classes.addPanel}
-                        elevation={0}
-                        onMouseOver={() => setOpenAddPanel(true)}
-                        onMouseLeave={handleCloseAll}
-                      >
-                        <TextField 
-                          className={classes.input}
-                          placeholder="Search by name or email"
-                        />
-                        <List component="div" aria-labelledby="Invite Owner Panel">
-                          <ListItem disableGutters>
-                            <DefaultUserImage userName="Tom Kirby"/>
-                            <ListItemText primary="Tom Kirby" style={{marginLeft: '12px'}} />
-                          </ListItem>
-                        </List>
-                        {openInvitePanel ? (
-                          <form>
-                            <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>
-                            <TextField 
-                              className={classes.input}
-                              label="Name"
-                            />
-                            <TextField 
-                              className={classes.input}
-                              label="Email"
-                              required
-                            />
-                            <Button type="submit" className={classes.addLink}>
-                              Invite new owner
-                            </Button>
-                          </form>
-                        ): (
-                          <Button 
-                            className={classes.addLink}
-                            onClick={() => setOpenInvitePanel(true)}
-                          >+ Add owner</Button>
-                        )}
-                      </Paper>
-                    </ClickAwayListener>
-                  ) : null}
-                </div>
-              </div>
-            </div>
+            <OwnerForm 
+              owners={owners}
+              setOwners={setOwners}
+            />
 {/* 
             <CompanyForm
               label="Issue to"

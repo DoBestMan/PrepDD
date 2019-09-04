@@ -96,7 +96,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textFlow: {
       display: 'inline-block',
-      width: 'calc(80%)',
+      width: 'fit-content', 
+      maxWidth: 'calc(80%)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
@@ -164,7 +165,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         },
       })
       .then(res => {
-        console.log(res);
         const tempTasks = idx(res, res => res.data.tasks);
         if (tempTasks) {
           const tasks = Object.values(tempTasks);
