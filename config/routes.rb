@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     post '/update_user_profile', to: 'users#update'
     post '/update_company_logo', to: 'companies#update_log'
+    post '/import_task', to: 'tasks#import_task'
   end
 
   require 'sidekiq/web'

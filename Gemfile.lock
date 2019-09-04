@@ -982,6 +982,9 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
+    roo (2.8.2)
+      nokogiri (~> 1)
+      rubyzip (>= 1.2.1, < 2.0.0)
     rspec-core (3.8.2)
       rspec-support (~> 3.8.0)
     rspec-expectations (3.8.4)
@@ -1093,6 +1096,7 @@ DEPENDENCIES
   pundit
   rails (~> 5.2.3)
   rails-controller-testing
+  roo (~> 2.8.0)
   rspec-rails (~> 3.8)
   selenium-webdriver
   shoulda (~> 3.6)
