@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  Container,
   Typography,
   Table,
   TableHead,
@@ -10,11 +9,11 @@ import {
   TableRow,
   TableCell,
   Button,
+  Checkbox, 
 } from '@material-ui/core';
 import ReactDropzone from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import StyledCheckBox from '../../../../common/StyledCheckBox';
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
 
@@ -97,6 +96,36 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     setStep
   } = props;
   const classes = useStyles();
+  const [selected, setSelected] = useState<number[]>([]);
+
+  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
+    if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {
+      const newSelecteds = selectedTemplate.tasks.map((tasks: AllTemplates_templateLists_tasks, index: number) => index);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  }
+
+  function handleClick(event: React.MouseEvent<unknown>, id: number) {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected: number[] = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  }
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
@@ -151,6 +180,20 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
   }
 
+  const renderCheckbox = () => {
+    const rowCount = selectedTemplate && selectedTemplate.tasks ?
+      selectedTemplate.tasks.length : 0;
+
+    return (
+      <Checkbox 
+        indeterminate={selected.length > 0 && selected.length < rowCount}
+        checked={selected.length === rowCount}
+        onChange={handleSelectAllClick}
+        color="primary" 
+      />
+    )
+  }
+
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
@@ -160,7 +203,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             <TableHead>
               <TableRow>
                 <TableCell padding="checkbox">
-                  <StyledCheckBox/>
+                  {renderCheckbox()}
                 </TableCell>
                 <TableCell>Task</TableCell>
                 <TableCell style={{width: '200px'}}>Section</TableCell>
@@ -171,11 +214,13 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableHead>
             <TableBody>
               {selectedTemplate.tasks && 
-                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index : number) => {
+                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index: number) => {
+                  const isSelected = selected.indexOf(index) !== -1;
+
                   return (
-                    <TableRow key={item.id}>
+                    <TableRow key={item.id} onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}>
                       <TableCell padding="checkbox">
-                        <StyledCheckBox/>
+                        <Checkbox checked={isSelected} color="primary" />
                       </TableCell>
                       <TableCell>
                         <InputForm 

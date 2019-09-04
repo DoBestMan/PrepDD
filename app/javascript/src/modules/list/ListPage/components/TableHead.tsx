@@ -2,9 +2,10 @@ import React from 'react';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+import Checkbox from '@material-ui/core/Checkbox'
 import useStyles from '../style';
 
-import {StyledTableCell, StyledCheckBox} from './styled';
+import {StyledTableCell} from './styled';
 
 const Drag = require('images/dummy/logos/drag.svg');
 
@@ -69,11 +70,12 @@ const EnhancedTableHead = (props: EnhancedTableHeadProps) => {
         <StyledTableCell padding="checkbox">
           <div className={classes.flex}>
             <img src={Drag} alt="Drag" className={classes.invisibleButton} />
-            <StyledCheckBox
+            <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{'aria-label': 'select all companies'}}
+              color="primary"
             />
           </div>
         </StyledTableCell>

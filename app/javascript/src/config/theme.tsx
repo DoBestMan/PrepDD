@@ -155,6 +155,13 @@ const defaultTheme = createMuiTheme({
         }
       }
     }, 
+    MuiCheckbox: {
+      colorPrimary: {
+        '&.Mui-checked': {
+          color: cs.COLORS.primary, 
+        }
+      }
+    }, 
   },
 });
 

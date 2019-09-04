@@ -4,6 +4,7 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import DetailPage from './components/DetailPage';
 import EnhancedTableToolbar from './components/TableToolbar';
@@ -12,7 +13,6 @@ import {
   StyledButton,
   StyledTableRow,
   StyledTableCell,
-  StyledCheckBox,
 } from './components/styled';
 import useStyles from './style';
 
@@ -252,9 +252,10 @@ export default function List(props: {path?: string}) {
                           ) : (
                             <img src={Drag} alt="Drag" />
                           )}
-                          <StyledCheckBox
+                          <Checkbox
                             checked={isItemSelected}
                             inputProps={{'aria-labelledby': labelId}}
+                            color="primary"
                           />
                         </div>
                       </StyledTableCell>

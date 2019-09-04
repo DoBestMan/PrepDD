@@ -23,10 +23,6 @@ export default function CreateListPage() {
     __typename: "List",
     id: '',
     name: '',
-    isTemplate: false, 
-    isPublicTemplate: false, 
-    requesterCompany: null,
-    responderCompany: null,
     tasks: null, 
   });
 
