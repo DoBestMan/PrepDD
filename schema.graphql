@@ -186,7 +186,7 @@ type Query {
   """
   Find companies by user email OR Name
   """
-  searchCompanies(companyId: ID!, text: String!): SearchCompanies!
+  searchCompanies(companyId: ID, text: String!): SearchCompanies!
 
   """
   Search users by company id
