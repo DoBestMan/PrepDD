@@ -34,6 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '72px', 
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
     },
+    title: {
+      marginRight: '270px', 
+      height: '42px', 
+    },
     flex: {
       display: 'flex',
       alignItems: 'center',
@@ -221,7 +225,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
-        <div className={classes.flex} style={{marginRight: '270px'}}>
+        <div className={clsx(classes.flex, classes.title)}>
           <Typography variant="h2">{selectedTemplate.name}</Typography>
           <div className={classes.grow} />
           {selected.length > 0 && (
@@ -256,9 +260,13 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                   const isSelected = selected.indexOf(index) !== -1;
 
                   return (
-                    <TableRow key={item.id} onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}>
+                    <TableRow key={item.id}>
                       <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} color="primary" />
+                        <Checkbox 
+                          checked={isSelected} 
+                          color="primary" 
+                          onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}
+                        />
                       </TableCell>
                       <TableCell>
                         <InputForm 
