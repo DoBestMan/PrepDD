@@ -156,7 +156,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
     const form_data = new FormData();
-    form_data.append('file', acceptedFiles[0]);
+    form_data.append('files', acceptedFiles[0]);
 
     axios
       .post('/api/import_task', form_data, {
