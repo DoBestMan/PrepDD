@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       alignItems: 'center',
-      height: '90px',
       padding: '36px 36px 24px 36px',
     },
     grow: {
