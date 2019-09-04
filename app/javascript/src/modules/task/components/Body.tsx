@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
+import axios from 'axios';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Typography,
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     uploadArea: {
       width: '100%',
-      height: '100%',
+      height: '350px',
       border: '2px dashed #D8D8D8',
       borderRadius: '3px',
       marginTop: '30px',
@@ -83,10 +84,20 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#2792A2',
     },
     medium: {
-      backgroundColor: '#1969A5',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #2792A2',
     },
     low: {
-      backgroundColor: '#81AFFF',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #2792A2',
+    },
+    textFlow: {
+      display: 'inline-block',
+      width: 'fit-content', 
+      maxWidth: 'calc(80%)',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
   })
 );
@@ -107,13 +118,13 @@ export default function Body() {
 
   const renderPriority = (priority: string) => {
     return (
-      <div className={classes.flex}>
+      <div className={classes.flex} style={{textTransform: 'capitalize'}}>
         <div
           className={clsx(
             classes.status,
-            priority === 'High'
+            priority === 'high'
               ? classes.high
-              : priority === 'Medium'
+              : priority === 'medium'
               ? classes.medium
               : classes.low
           )}
@@ -125,6 +136,42 @@ export default function Body() {
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
+    const form_data = new FormData();
+    form_data.append('file', acceptedFiles[0]);
+
+    axios
+      .post('/api/import_task', form_data, {
+        headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
+        },
+      })
+      .then(res => {
+        const tempTasks = idx(res, res => res.data.tasks);
+        if (tempTasks) {
+          const tasks = Object.values(tempTasks);
+          const newTasks = tasks.map((task: any) => {
+            return {
+              __typename: "Task",
+              id: '',
+              name: task.name, 
+              section: task.section, 
+              description: task.description, 
+              priority: task.priority, 
+              status: 'Todo'  
+            } as AllTemplates_templateLists_tasks;
+          });
+
+          if (selected) {
+            setSelected({
+              ...selected, 
+              tasks: [
+                ...selected.tasks, 
+                ...newTasks, 
+              ]
+            });
+          }
+        }
+      })
   };
 
   const handleAddTask = () => {
@@ -152,13 +199,19 @@ export default function Body() {
             </TableHead>
             <TableBody>
               {selected && selected.tasks && 
-                selected.tasks.map((item: AllTemplates_templateLists_tasks) => {
+                selected.tasks.map((item: AllTemplates_templateLists_tasks, index: number) => {
                   return (
-                    <TableRow key={item.id}>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>{item.section}</TableCell>
+                    <TableRow key={index}>
+                      <TableCell>
+                        <div className={classes.textFlow}>{item.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className={classes.textFlow}>{item.section}</div>
+                      </TableCell>
                       <TableCell>{renderPriority(item.priority as string)}</TableCell>
-                      <TableCell>{item.description}</TableCell>
+                      <TableCell>
+                        <div className={classes.textFlow}>{item.description}</div>
+                      </TableCell>
                       <TableCell></TableCell>
                     </TableRow>
                   );

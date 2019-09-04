@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative', 
+      width: 'fit-content', 
     },
     flex: {
       display: 'flex', 
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: '33px', 
       left: '0px', 
       border: '1px solid #D8D8D8',
-      minWidth: '155px', 
+      minWidth: '100%', 
     }
   })
 );
@@ -67,7 +68,7 @@ export default function Dropdown(props: DropdownProps) {
             <List>
               {data && data.map((item: AllTemplates_templateLists) => {
                 return (
-                  <ListItem onClick={() => handleClick(item)}>
+                  <ListItem key={item.id} onClick={() => handleClick(item)}>
                     <ListItemText primary={item.name} />
                   </ListItem>
                 )

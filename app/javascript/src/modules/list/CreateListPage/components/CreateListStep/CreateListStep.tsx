@@ -81,6 +81,10 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       resize: 'none', 
       border: '1px solid #D8D8D8',
+      color: '#2C2C2C', 
+      fontFamily: 'Montserrat', 
+      fontSize: '12px', 
+      fontWeight: 600, 
     },
   })
 );
@@ -179,6 +183,10 @@ export default function CreateListStep(props: CreateListStepProps) {
     }
   }
 
+  const handleCreate = () => {
+    // Create List
+  }
+
   return stepNumber == currentStep ? (
     <div>
       <div className={classes.body}>
@@ -273,7 +281,7 @@ export default function CreateListStep(props: CreateListStepProps) {
       <div className={classes.footer}>
         <div className={classes.flex} style={{paddingTop: '18px'}}>
           <div className={classes.grow} />
-          <Button variant="contained">
+          <Button variant="contained" onClick={handleCreate}>
             Create List
           </Button>
         </div>
