@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_04_104719) do
+ActiveRecord::Schema.define(version: 2019_09_04_191854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,9 +64,6 @@ ActiveRecord::Schema.define(version: 2019_09_04_104719) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "lists", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -86,7 +83,9 @@ ActiveRecord::Schema.define(version: 2019_09_04_104719) do
     t.bigint "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "team_id"
     t.index ["list_id"], name: "index_lists_users_on_list_id"
+    t.index ["team_id"], name: "index_lists_users_on_team_id"
     t.index ["user_id"], name: "index_lists_users_on_user_id"
   end
 
@@ -154,7 +153,9 @@ ActiveRecord::Schema.define(version: 2019_09_04_104719) do
     t.bigint "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "task_section_id"
     t.index ["list_id"], name: "index_tasks_on_list_id"
+    t.index ["task_section_id"], name: "index_tasks_on_task_section_id"
   end
 
   create_table "teams", force: :cascade do |t|
@@ -198,12 +199,10 @@ ActiveRecord::Schema.define(version: 2019_09_04_104719) do
     t.string "user_token"
     t.string "bio"
     t.bigint "last_viewed_company_id"
-    t.bigint "task_list_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["notification_id"], name: "index_users_on_notification_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["task_list_id"], name: "index_users_on_task_list_id"
   end
 
   create_table "users_companies", force: :cascade do |t|
