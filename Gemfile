@@ -22,7 +22,6 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-linkedin-oauth2'
 
-
 #Performance
 gem 'data_migrate'
 gem 'activerecord-session_store'
@@ -32,6 +31,9 @@ gem 'sidekiq'
 gem 'aws-sdk', '~> 3'
 gem 'aws-sdk-s3', '~> 1'
 gem 'aws-sdk-kms'
+
+#Other
+gem "roo", "~> 2.8.0"
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

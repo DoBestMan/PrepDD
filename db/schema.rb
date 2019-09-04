@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_03_100322) do
+ActiveRecord::Schema.define(version: 2019_09_04_104719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -81,6 +81,15 @@ ActiveRecord::Schema.define(version: 2019_09_03_100322) do
     t.index ["responder_id"], name: "index_lists_on_responder_id"
   end
 
+  create_table "lists_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "list_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["list_id"], name: "index_lists_users_on_list_id"
+    t.index ["user_id"], name: "index_lists_users_on_user_id"
+  end
+
   create_table "parent_companies", force: :cascade do |t|
     t.bigint "child_company_id"
     t.bigint "parent_company_id"
@@ -129,6 +138,12 @@ ActiveRecord::Schema.define(version: 2019_09_03_100322) do
     t.string "name"
   end
 
+  create_table "task_sections", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -139,7 +154,6 @@ ActiveRecord::Schema.define(version: 2019_09_03_100322) do
     t.bigint "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "section"
     t.index ["list_id"], name: "index_tasks_on_list_id"
   end
 
@@ -184,10 +198,12 @@ ActiveRecord::Schema.define(version: 2019_09_03_100322) do
     t.string "user_token"
     t.string "bio"
     t.bigint "last_viewed_company_id"
+    t.bigint "task_list_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["notification_id"], name: "index_users_on_notification_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["task_list_id"], name: "index_users_on_task_list_id"
   end
 
   create_table "users_companies", force: :cascade do |t|

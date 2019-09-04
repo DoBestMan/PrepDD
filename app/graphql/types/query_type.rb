@@ -79,6 +79,18 @@ module Types
       argument :id, ID, required: true
     end
 
+    field :search_company_users, [UserType], null: false do
+      description 'Search users by company id'
+      argument :companyId, ID, required: true
+      argument :text, String, required: true
+    end
+
+    def search_company_users(company_id:, text:)
+      company = Company.find(company_id)
+      company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
+                          text: "%#{text.downcase}%")
+    end
+
     def template_lists
       List.where(is_template: true, is_public_template: true)
     end
