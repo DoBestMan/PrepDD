@@ -6,6 +6,17 @@ export const useAllTemplates = createQueryHook<AllTemplates, {}>(gql`
     templateLists {
       id
       name
+      requesterCompany {
+        id
+        name
+        owner {
+          fullName
+        }
+      }
+      responderCompany {
+        id
+        name
+      }
       tasks {
         id
         name

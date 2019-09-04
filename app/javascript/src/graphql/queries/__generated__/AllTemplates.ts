@@ -6,6 +6,24 @@
 // GraphQL query operation: AllTemplates
 // ====================================================
 
+export interface AllTemplates_templateLists_requesterCompany_owner {
+  __typename: "User";
+  fullName: string;
+}
+
+export interface AllTemplates_templateLists_requesterCompany {
+  __typename: "Company";
+  id: string;
+  name: string;
+  owner: AllTemplates_templateLists_requesterCompany_owner;
+}
+
+export interface AllTemplates_templateLists_responderCompany {
+  __typename: "Company";
+  id: string;
+  name: string;
+}
+
 export interface AllTemplates_templateLists_tasks {
   __typename: "Task";
   id: string;
@@ -20,6 +38,8 @@ export interface AllTemplates_templateLists {
   __typename: "List";
   id: string;
   name: string | null;
+  requesterCompany: AllTemplates_templateLists_requesterCompany | null;
+  responderCompany: AllTemplates_templateLists_responderCompany | null;
   tasks: AllTemplates_templateLists_tasks[] | null;
 }
 

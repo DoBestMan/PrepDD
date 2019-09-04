@@ -21,13 +21,18 @@ import InternalIcon from '@material-ui/icons/Lock';
 import ShareIcon from '@material-ui/icons/People';
 import RequestIcon from '@material-ui/icons/Input';
 
-import * as cs from '../../../../../constants/theme';
 import {canBeAdmin} from '../../../../../helpers/roleHelpers';
 import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
+// import CompanyForm from './components/CompanyForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
 import DefaultUserImage from '../../../../common/DefaultUserImage';
+
+import {
+  AllTemplates_templateLists,
+  AllTemplates_templateLists_tasks,
+} from '../../../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -130,12 +135,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface CreateListStepProps {
+  selectedTemplate: AllTemplates_templateLists;
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
   stepNumber: number;
   currentStep: number;
 };
 
 export default function CreateListStep(props: CreateListStepProps) {
-  const {stepNumber, currentStep} = props;
+  const {
+    selectedTemplate, 
+    setSelectedTemplate, 
+    stepNumber, 
+    currentStep
+  } = props;
   const classes = useStyles();
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
@@ -217,13 +229,13 @@ export default function CreateListStep(props: CreateListStepProps) {
           <Grid item md={6}>
             <Typography variant="h2">List Details</Typography>
 
-            <InputForm label="Title" value="PrepDD Series B" />
+            <InputForm label="Title" value="Series B Diligence" />
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Template</Typography>
               <div className={classes.flex}>
                 <div className={classes.grayRect} />
-                <Typography variant="h6">Series B Diligence</Typography>
+                <Typography variant="h6">{selectedTemplate.name}</Typography>
               </div>
             </div>
 
@@ -282,16 +294,15 @@ export default function CreateListStep(props: CreateListStepProps) {
                       </Paper>
                     </ClickAwayListener>
                   ) : null}
-                </div>                
+                </div>
               </div>
             </div>
-
-            <div>
-              <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
-              <div className={classes.flex}>
-                <StyledItem label="G2 Crowd" />
-              </div>
-            </div>
+{/* 
+            <CompanyForm
+              label="Issue to"
+              placeholder="Search company..."
+              company={selectedTemplate.responder}
+            /> */}
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Description</Typography>

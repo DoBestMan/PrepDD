@@ -102,6 +102,22 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     // Handle importing templates
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+    const {name, value} = event.target;
+
+    if (newTasks) {
+      newTasks[index] = Object.assign({}, newTasks[index], {
+        [name]: value, 
+      });
+
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }
+  }
+
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
@@ -122,23 +138,35 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableHead>
             <TableBody>
               {selectedTemplate.tasks && 
-                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks) => {
+                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index : number) => {
                   return (
                     <TableRow key={item.id}>
                       <TableCell padding="checkbox">
                         <StyledCheckBox/>
                       </TableCell>
                       <TableCell>
-                        <InputForm value={item.name as string} />
+                        <InputForm 
+                          name="name"
+                          value={item.name as string} 
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                        />
                       </TableCell>
                       <TableCell>
-                        <InputForm value={item.section as string} />
+                        <InputForm 
+                          name="section"
+                          value={item.section as string} 
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                        />
                       </TableCell>
                       <TableCell>
                         <PriorityForm value={item.priority as string} />
                       </TableCell>
                       <TableCell>
-                        <InputForm value={item.description as string} />
+                        <InputForm 
+                          name="description"
+                          value={item.description as string} 
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                        />
                       </TableCell>
                       <TableCell></TableCell>
                     </TableRow>

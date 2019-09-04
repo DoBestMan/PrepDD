@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       visibility: 'visible', 
     },
     input: {
+      width: '100%', 
       border: 'none', 
       background: 'none', 
       fontFamily: cs.FONT.family, 
@@ -41,10 +42,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface InputFormProps {
   value: string;
+  name?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputForm(props: InputFormProps) {
-  const {value} = props;
+  const {value, name, onChange} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
@@ -54,6 +57,13 @@ export default function InputForm(props: InputFormProps) {
       setEditable(true);
     }
   }
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    event.persist();
+    if (event.keyCode === 13) {
+      setEditable(false);
+    }
+  };
 
   return (
     <div 
@@ -65,8 +75,12 @@ export default function InputForm(props: InputFormProps) {
       {editable ? (
         <ClickAwayListener onClickAway={() => setEditable(false)}>
           <input
+            type="text"
+            name={name}
             className={classes.input}
             value={value}
+            onChange={onChange}
+            onKeyUp={handleKeyUp}
           />
         </ClickAwayListener>
       ): (

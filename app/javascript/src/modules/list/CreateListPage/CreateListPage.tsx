@@ -23,6 +23,8 @@ export default function CreateListPage() {
     __typename: "List",
     id: '',
     name: '',
+    requesterCompany: null,
+    responderCompany: null,
     tasks: null, 
   });
 
@@ -33,6 +35,8 @@ export default function CreateListPage() {
 
     if (loading || !lists) return;
   }, [loading, idx(data, data => data.templateLists)])
+
+  console.log("Fetching data", data);
   
   return data && (
     <div className={classes.root}>
@@ -52,6 +56,8 @@ export default function CreateListPage() {
         setStep={setStep}
       />
       <CreateListStep 
+        selectedTemplate={selectedTemplate}
+        setSelectedTemplate={setSelectedTemplate}
         stepNumber={2}
         currentStep={step}
       />
