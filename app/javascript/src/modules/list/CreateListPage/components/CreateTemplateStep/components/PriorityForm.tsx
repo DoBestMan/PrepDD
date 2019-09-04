@@ -102,7 +102,6 @@ export default function PriorityForm(props: PriorityFormProps) {
     setHover(false);    
   }
 
-  console.log("Priority: ", value);
   return (
     <TableCell
       onMouseOver={() => setHover(true)}

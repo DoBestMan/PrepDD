@@ -59,23 +59,20 @@ interface InputFormProps {
   label: string;
   value: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onUpdate?: () => void;
 }
 
 export default function InputForm(props: InputFormProps) {
-  const {label, value, onChange, onUpdate} = props;
+  const {label, value, onChange} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
 
   const handleClickAway = () => {
-    if (onUpdate && editable) onUpdate();
     setEditable(false);
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.persist();
     if (event.keyCode === 13) {
-      if (onUpdate) onUpdate();
       setEditable(false);
     }
   };

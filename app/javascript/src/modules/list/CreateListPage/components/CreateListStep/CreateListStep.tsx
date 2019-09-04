@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     secondary: {
       color: '#606060', 
-      marginTop: '48px', 
+      marginTop: '24px', 
       marginBottom: '12px', 
     },
     sharingTitle: {
@@ -136,7 +136,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface CreateListStepProps {
   selectedTemplate: AllTemplates_templateLists;
-  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
   stepNumber: number;
   currentStep: number;
 };
@@ -144,11 +143,11 @@ interface CreateListStepProps {
 export default function CreateListStep(props: CreateListStepProps) {
   const {
     selectedTemplate, 
-    setSelectedTemplate, 
     stepNumber, 
     currentStep
   } = props;
   const classes = useStyles();
+  const [newTemplate, setNewTemplate] = useState<AllTemplates_templateLists>(selectedTemplate);
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
   const {state} = useGlobalState();
@@ -185,6 +184,15 @@ export default function CreateListStep(props: CreateListStepProps) {
     setOpenAddPanel(false);
     setOpenInvitePanel(false);
   }
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTemplate({
+      ...newTemplate, 
+      name: event.target.value, 
+    })
+  }
+
+  console.log("New Template", setNewTemplate);
 
   return stepNumber == currentStep ? (
     <div>
@@ -227,9 +235,9 @@ export default function CreateListStep(props: CreateListStepProps) {
             )}
           </Grid>
           <Grid item md={6}>
-            <Typography variant="h2">List Details</Typography>
+            <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm label="Title" value="Series B Diligence" />
+            <InputForm label="Title" value={newTemplate.name as string} onChange={handleChangeName} />
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Template</Typography>
@@ -303,6 +311,13 @@ export default function CreateListStep(props: CreateListStepProps) {
               placeholder="Search company..."
               company={selectedTemplate.responder}
             /> */}
+            <div>
+              <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
+              <div className={classes.flex}>
+                <StyledItem label="G2 Crowd" />
+              </div>
+            </div>
+
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Description</Typography>

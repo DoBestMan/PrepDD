@@ -128,7 +128,27 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         ...selectedTemplate, 
         tasks: newTasks, 
       })
-    }    
+    }
+  }
+
+  const handleAddTask = () => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+
+    if (newTasks) {
+      newTasks.push({
+        __typename: "Task",
+        id: '',
+        name: '',
+        section: '',
+        description: '',
+        priority: 'medium',
+        status: '',
+      })
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }
   }
 
   return stepNumber === currentStep ? (
@@ -219,7 +239,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       </div>
       <div className={classes.footer}>
         <div className={classes.flex} style={{paddingTop: '18px', paddingRight: '270px'}}>
-          <Button>+ Add task</Button>
+          <Button onClick={handleAddTask}>+ Add task</Button>
           <div className={classes.grow} />
           <Button variant="contained" onClick={() => setStep(2)}>
             Continue
