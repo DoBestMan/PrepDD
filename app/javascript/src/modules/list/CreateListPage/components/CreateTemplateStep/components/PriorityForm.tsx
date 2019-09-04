@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
+  TableCell, 
   ClickAwayListener, 
   Typography, 
   Paper, 
@@ -31,10 +32,12 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#2792A2',
     },
     medium: {
-      backgroundColor: '#1969A5',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #2792A2',
     },
     low: {
-      backgroundColor: '#81AFFF',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #2792A2',
     },
     update: {
       marginLeft: '12px', 
@@ -62,12 +65,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const options = [
+  { label: 'High', value: 'high' },
+  { label: 'Medium', value: 'medium' },
+  { label: 'Low', value: 'low' },
+]
+
 interface PriorityFormProps {
   value: string;
+  onChange: (newValue: string) => void;
 }
 
 export default function PriorityForm(props: PriorityFormProps) {
-  const {value} = props;
+  const {value, onChange} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
@@ -79,7 +89,8 @@ export default function PriorityForm(props: PriorityFormProps) {
     setOpen(!open);
   }
 
-  const handleSelect = () => {
+  const handleSelect = (newValue: string) => {
+    onChange(newValue);
     setOpen(false);
     setEditable(false);
     setHover(false);
@@ -91,43 +102,56 @@ export default function PriorityForm(props: PriorityFormProps) {
     setHover(false);    
   }
 
+  console.log("Priority: ", value);
   return (
-    <div 
-      className={classes.root}
+    <TableCell
       onMouseOver={() => setHover(true)}
       onMouseLeave={handleClose}
-      onClick={handleClick}
     >
-      <div
-        className={clsx(
-          classes.status,
-          value === 'high'
-            ? classes.high
-            : value === 'medium'
-            ? classes.medium
-            : classes.low
-        )}
-      />
-      <Typography variant="h6" style={{textTransform: 'capitalize'}}>{value}</Typography>
-      {editable ? (
-        <ArrowDownIcon className={classes.arrowDown} />
-      ) : (
-        <UpdateIcon 
-          className={clsx(classes.update, hover && classes.visible)} 
-          onClick={() => setEditable(true)}
+      <div className={classes.root} onClick={handleClick}>
+        <div
+          className={clsx(
+            classes.status,
+            value === 'high'
+              ? classes.high
+              : value === 'medium'
+              ? classes.medium
+              : classes.low
+          )}
         />
-      )}
-      {open ? (
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Paper className={classes.dropdown} elevation={0} square>
-            <List component="div" aria-labelledby="Priority Menu">
-              <ListItem onClick={handleSelect}>High</ListItem>
-              <ListItem onClick={handleSelect}>Medium</ListItem>
-              <ListItem onClick={handleSelect}>Low</ListItem>
-            </List>
-          </Paper>
-        </ClickAwayListener>
-      ): null}
-    </div>
+        <Typography variant="h6" style={{textTransform: 'capitalize'}}>{value}</Typography>
+        {editable ? (
+          <ArrowDownIcon className={classes.arrowDown} />
+        ) : (
+          <UpdateIcon 
+            className={clsx(classes.update, hover && classes.visible)} 
+            onClick={() => setEditable(true)}
+          />
+        )}
+        {open ? (
+          <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <Paper 
+              className={classes.dropdown} 
+              elevation={0}
+              onMouseOver={() => setHover(true)}
+              onMouseLeave={handleClose}
+              square
+            >
+              <List component="div" aria-labelledby="Priority Menu">
+                {options.map(option => {
+                  return (
+                    <ListItem 
+                      key={option.value}
+                      onClick={() => handleSelect(option.value)}
+                    >{option.label}</ListItem>
+                  )
+                })}
+              </List>
+            </Paper>
+          </ClickAwayListener>
+        ): null}
+      </div>
+    </TableCell>
+    
   )
 }

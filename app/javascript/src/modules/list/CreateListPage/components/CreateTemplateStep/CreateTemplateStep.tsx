@@ -118,6 +118,19 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
   }
 
+  const handleChangePriority = (newValue: string, index: number) => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+
+    if (newTasks) {
+      newTasks[index].priority = newValue;
+
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }    
+  }
+
   return stepNumber === currentStep ? (
     <div>
       <div className={classes.body}>
@@ -131,7 +144,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                 </TableCell>
                 <TableCell>Task</TableCell>
                 <TableCell style={{width: '200px'}}>Section</TableCell>
-                <TableCell style={{width: '130px'}}>Priority</TableCell>
+                <TableCell style={{width: '150px'}}>Priority</TableCell>
                 <TableCell>Description</TableCell>
                 <TableCell style={{width: '125px'}}>Example Files</TableCell>
               </TableRow>
@@ -158,9 +171,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
-                      <TableCell>
-                        <PriorityForm value={item.priority as string} />
-                      </TableCell>
+                      <PriorityForm 
+                        value={item.priority as string} 
+                        onChange={(newValue: string) => handleChangePriority(newValue, index)}
+                      />
                       <TableCell>
                         <InputForm 
                           name="description"
