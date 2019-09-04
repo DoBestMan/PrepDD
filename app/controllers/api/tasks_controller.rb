@@ -2,13 +2,18 @@ class Api::TasksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def import_task
-    tasks  = Task.import(params[:file])
-    render json: {status: true, tasks: tasks}
+    status = true
+    begin
+      tasks  = Task.import(params[:files])
+    rescue
+      status =  false
+    end
+    render json: {status: status, tasks: tasks}
   end
 
   private
 
   def task_params
-    params.permit(:list_id, file: [])
+    params.permit(:list_id, files: [])
   end
 end
