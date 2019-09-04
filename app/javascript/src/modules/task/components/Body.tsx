@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 import ReactDropzone from 'react-dropzone';
 
-import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 import UploadIcon from '@material-ui/icons/CloudUpload';
+import Dropdown from './Dropdown';
 
 import {useAllTemplates} from '../../../graphql/queries/AllTemplates';
 import {
@@ -91,7 +91,7 @@ export default function Body() {
   const classes = useStyles();
   const {loading, data, error} = useAllTemplates({});
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
-  const [selected, setSelected] = useState<number>(-1);
+  const [selected, setSelected] = useState<AllTemplates_templateLists | null>(null);
 
   useEffect(() => {
     const templateLists = idx(data, data => data.templateLists);
@@ -124,10 +124,11 @@ export default function Body() {
 
   return (
     <div className={classes.root}>
-      <div className={classes.flex}>
-        <Typography variant="h2">Select List</Typography>
-        <ArrowDownIcon fontSize="large" />
-      </div>
+      <Dropdown 
+        data={lists} 
+        selected={selected}
+        setSelected={setSelected}
+      />
       <div className={classes.content}>
         <Table style={{tableLayout: 'fixed'}}>
           <TableHead>
@@ -140,8 +141,8 @@ export default function Body() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {selected >= 0 && lists && lists[selected] && lists[selected].tasks && 
-              lists[selected].tasks.map((item: AllTemplates_templateLists_tasks) => {
+            {selected && selected.tasks && 
+              selected.tasks.map((item: AllTemplates_templateLists_tasks) => {
                 return (
                   <TableRow key={item.id}>
                     <TableCell>{item.name}</TableCell>
@@ -152,7 +153,7 @@ export default function Body() {
                   </TableRow>
                 );
               })
-            } */}
+            }
           </TableBody>
         </Table>
         <div className={classes.rightPane}>
