@@ -1,14 +1,15 @@
 class Mutations::AddListOwner < GraphQL::Schema::Mutation
   argument :listId, ID, required: true
-  argument :ownerId, ID, required: true
+  argument :ownerId, ID, required: false
+  argument :teamId, ID, required: false
 
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(list_id: nil, owner_id: nil)
+  def resolve(list_id: nil, owner_id: nil, team_id: nil)
     response = { errors: [] }
 
-    list_owner = ListsUser.create(list_id: list_id, user_id: owner_id)
+    list_owner = ListsUser.create(list_id: list_id, user_id: owner_id, team_id: team_id)
 
     list_owner.errors.messages&.each do |path, messages|
       messages.each do |message|
