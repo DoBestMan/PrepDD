@@ -151,9 +151,9 @@ ActiveRecord::Schema.define(version: 2019_09_04_160018) do
     t.bigint "list_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "task_sections_id"
+    t.bigint "task_section_id"
     t.index ["list_id"], name: "index_tasks_on_list_id"
-    t.index ["task_sections_id"], name: "index_tasks_on_task_sections_id"
+    t.index ["task_section_id"], name: "index_tasks_on_task_section_id"
   end
 
   create_table "teams", force: :cascade do |t|
