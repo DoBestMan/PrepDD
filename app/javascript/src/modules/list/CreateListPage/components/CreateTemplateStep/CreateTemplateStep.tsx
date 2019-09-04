@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import clsx from 'clsx';
+import idx from 'idx';
+import axios from 'axios';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Typography,
@@ -144,6 +146,41 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
+    const form_data = new FormData();
+    form_data.append('file', acceptedFiles[0]);
+
+    axios
+      .post('/api/import_task', form_data, {
+        headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
+        },
+      })
+      .then(res => {
+        console.log(res);
+        const tempTasks = idx(res, res => res.data.tasks);
+        if (tempTasks) {
+          const tasks = Object.values(tempTasks);
+          const newTasks = tasks.map((task: any) => {
+            return {
+              __typename: "Task",
+              id: '',
+              name: task.name, 
+              section: task.section, 
+              description: task.description, 
+              priority: task.priority, 
+              status: 'Todo'  
+            } as AllTemplates_templateLists_tasks;
+          });
+  
+          setSelectedTemplate({
+            ...selectedTemplate, 
+            tasks: [
+              ...selectedTemplate.tasks, 
+              ...newTasks, 
+            ]
+          })          
+        }
+      })
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -260,7 +297,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                   const isSelected = selected.indexOf(index) !== -1;
 
                   return (
-                    <TableRow key={item.id}>
+                    <TableRow key={index}>
                       <TableCell padding="checkbox">
                         <Checkbox 
                           checked={isSelected} 

@@ -310,9 +310,7 @@ export default function CreateListStep(props: CreateListStepProps) {
                   onMouseOver={() => setOpenAddPanel(true)}
                   onMouseLeave={handleCloseAll}
                 >
-                  <Button 
-                    className={classes.addButton} 
-                  >+</Button>
+                  <Button className={classes.addButton}>+</Button>
                   {openAddPanel ? (
                     <ClickAwayListener onClickAway={() => setOpenAddPanel(false)}>
                       <Paper
