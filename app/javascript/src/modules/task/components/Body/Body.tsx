@@ -14,7 +14,7 @@ import {
   TextField,
   ClickAwayListener, 
 } from '@material-ui/core';
-import ReactDropzone from 'react-dropzone';
+import ReactDropzone, {DropzoneRef} from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
@@ -155,6 +155,7 @@ export default function Body() {
   });
   const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
+  const dropzone = React.createRef<DropzoneRef>();
 
   const [createTask, {
     loading: createTaskLoading, 
@@ -264,6 +265,12 @@ export default function Body() {
     });    
   }
 
+  const handleClickDownload = () => {
+    if (dropzone && dropzone.current) {
+      dropzone.current.open();
+    }
+  }
+
   const renderPriority = (priority: string) => {
     return (
       <div className={classes.flex} style={{textTransform: 'capitalize'}}>
@@ -364,10 +371,17 @@ export default function Body() {
             </TableBody>
           </Table>
           <div className={classes.rightPane}>
-            <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
+            <Button 
+              variant="outlined" 
+              className={classes.uploadButton}
+              onClick={handleClickDownload}
+            >
+              Download Template
+            </Button>
             <ReactDropzone 
+              accept="application/*"
               multiple
-              accept="application/*" 
+              ref={dropzone} 
               onDrop={handleDrop}
             >
               {({getRootProps, getInputProps, isDragActive}) => (
