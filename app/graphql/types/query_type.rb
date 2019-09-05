@@ -87,8 +87,8 @@ module Types
 
     def search_company_users(company_id:, text:)
       company = Company.find(company_id)
-      users = company.users.where('lower(email) LIKE :text OR lower(full_name) LIKE :text',
-                                  text: "%#{text.downcase}%")
+      users = company.users.where('lower(email) LIKE :email_text OR lower(full_name) LIKE :text',
+                                  email_text: text.downcase, text: "%#{text.downcase}%")
 
       teams = company.teams.where('lower(name) LIKE :text', text: "%#{text.downcase}%")
 
