@@ -292,7 +292,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     return (
       <Checkbox 
         indeterminate={selected.length > 0 && selected.length < rowCount}
-        checked={selected.length === rowCount}
+        checked={selected.length > 0 && selected.length === rowCount}
         onChange={handleSelectAllClick}
         color="primary" 
       />
