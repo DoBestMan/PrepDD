@@ -152,7 +152,8 @@ export default function Body() {
     dueDate: Date(), 
     section: '', 
     isActive: true
-  })
+  });
+  const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
 
   const [createTask, {
@@ -161,7 +162,7 @@ export default function Body() {
     error: createTaskError
   }] = useCreateTask({
     listId, 
-    tasks: [newTask], 
+    tasks: creatingTasks, 
   })
 
   useEffect(() => {
@@ -172,8 +173,8 @@ export default function Body() {
   }, [loading, idx(data, data => data.templateLists)])
 
   const handleCreate = () => {
-    console.log("Will create")
     setEditable(false);
+    setCreatingTasks([newTask]);
     newTasks.push(newTask);
     createTask();
   }
@@ -197,7 +198,35 @@ export default function Body() {
           'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
         },
       })
-      .then(res => {
+      .then(async res => {
+        const taskGroups = idx(res, res => res.data.tasks);
+        if (taskGroups) {
+          const groups = Object.values(taskGroups);
+          let addingTasks: TaskAttributes[] = [];
+          await groups.map(async (group: any) => {
+            const tasks = Object.values(group);
+            const tempTasks = await tasks.map((task: any) => {
+              return {
+                name: task.name ? task.name : '',
+                description: task.description ? task.description : '',
+                priority: task.priority ? task.priority : 'medium', 
+                status: 'To do',
+                dueDate: Date(), 
+                section: task.section ? task.section : '', 
+                isActive: true
+              } as TaskAttributes;
+            });
+
+            addingTasks = addingTasks.concat(tempTasks);
+          });
+
+          setCreatingTasks(addingTasks);
+          setNewTasks([
+            ...newTasks, 
+            ...addingTasks, 
+          ]);
+          createTask();
+        }
       })
   };
 
