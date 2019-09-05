@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import CloseIcon from '@material-ui/icons/Close';
 
-import * as cs from '../../../constants/theme';
+import * as cs from '../../../../constants/theme';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

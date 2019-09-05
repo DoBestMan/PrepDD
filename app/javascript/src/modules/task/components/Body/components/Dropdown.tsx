@@ -12,7 +12,7 @@ import {
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 import {
   AllTemplates_templateLists, 
-} from '../../../graphql/queries/__generated__/AllTemplates'
+} from '../../../../../graphql/queries/__generated__/AllTemplates'
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -36,25 +36,32 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface DropdownProps {
   data: AllTemplates_templateLists[];
-  selected: AllTemplates_templateLists | null;
-  setSelected: React.Dispatch<React.SetStateAction<AllTemplates_templateLists | null>>;
+  listId: string;
+  setListId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const {data, selected, setSelected} = props;
+  const {data, listId, setListId} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
 
-  const handleClick = (newValue: AllTemplates_templateLists) => {
-    setSelected(newValue);
+  const handleClick = (newId: string) => {
+    setListId(newId);
     setOpen(false);
+  }
+
+  const renderListName = () => {
+    const selectList = data.find(item => item.id === listId);
+    
+    if (selectList) return selectList.name;
+    return 'Select List'; 
   }
 
   return (
     <div className={classes.root}>
       <div className={classes.flex} onClick={() => setOpen(!open)}>
         <Typography variant="h2">
-          {selected ? selected.name : "Select List"}
+          {renderListName()}
         </Typography>
         <ArrowDownIcon fontSize="large" />
       </div>
@@ -68,7 +75,7 @@ export default function Dropdown(props: DropdownProps) {
             <List>
               {data && data.map((item: AllTemplates_templateLists) => {
                 return (
-                  <ListItem key={item.id} onClick={() => handleClick(item)}>
+                  <ListItem key={item.id} onClick={() => handleClick(item.id)}>
                     <ListItemText primary={item.name} />
                   </ListItem>
                 )
