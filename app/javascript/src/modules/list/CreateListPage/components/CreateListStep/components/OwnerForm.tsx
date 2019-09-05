@@ -122,9 +122,25 @@ export default function OwnerForm(props: OwnerFormProps) {
   const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
 
   useEffect(() => {
-    const result = idx(data, data => data.searchCompanyUsers);
+    let result = idx(data, data => data.searchCompanyUsers);
 
     if (loading || !result) return;
+    result.teams = result.teams.filter((team: SearchCompanyUsers_searchCompanyUsers_teams) => {
+      const bFound = owners.find((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams) => {
+        if (owner.__typename === 'Team' && owner.id === team.id)
+          return true;
+        return false;
+      })
+      return bFound ? false : true;
+    })
+    result.users = result.users.filter((user: SearchCompanyUsers_searchCompanyUsers_users) => {
+      const bFound = owners.find((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams) => {
+        if (owner.__typename === 'User' && owner.id === user.id)
+          return true;
+        return false;
+      })
+      return bFound ? false : true;
+    })
     setSearchResult(result);
   }, [loading, idx(data, data => data.searchCompanyUsers)])
 
@@ -147,6 +163,13 @@ export default function OwnerForm(props: OwnerFormProps) {
 
   const handleClickUser = (event: React.MouseEvent<unknown>, index: number) => {
     if (searchResult.users && searchResult.users[index]) {
+      setSearchResult({
+        ...searchResult, 
+        users: [
+          ...searchResult.users.slice(0, index), 
+          ...searchResult.users.slice(index + 1), 
+        ]
+      });
       setOwners([
         ...owners, 
         searchResult.users[index]
@@ -156,6 +179,13 @@ export default function OwnerForm(props: OwnerFormProps) {
 
   const handleClickTeam = (event: React.MouseEvent<unknown>, index: number) => {
     if (searchResult.teams && searchResult.teams[index]) {
+      setSearchResult({
+        ...searchResult, 
+        teams: [
+          ...searchResult.teams.slice(0, index), 
+          ...searchResult.teams.slice(index + 1), 
+        ]
+      });
       setOwners([
         ...owners, 
         searchResult.teams[index]
@@ -178,7 +208,9 @@ export default function OwnerForm(props: OwnerFormProps) {
           ) : (
             <StyledItem 
               key={owner.id}
+              type="user"
               label={owner.name} 
+              logo=""
             />            
           )
         })}
@@ -226,12 +258,20 @@ export default function OwnerForm(props: OwnerFormProps) {
                           onClick={(event: React.MouseEvent<unknown>) => handleClickTeam(event, index)}
                           disableGutters
                         >
-                          <ListItemText primary={team.name}/>
+                          <DefaultUserImage userName={team.name} />
+                          <ListItemText primary={team.name} style={{marginLeft: '12px'}} />
                         </ListItem>
                       )
                     })
                   }
                 </List>
+                {searchResult && searchResult.users && !searchResult.users.length && 
+                  searchResult.teams && !searchResult.teams.length && (
+                    <Typography variant="h4">
+                      No match result
+                    </Typography>
+                  )
+                }                
                 {openInvitePanel ? (
                   <form>
                     <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>
@@ -245,14 +285,16 @@ export default function OwnerForm(props: OwnerFormProps) {
                       required
                     />
                     <Button type="submit" className={classes.addLink}>
-                      Invite new owner
+                      Invite new member
                     </Button>
                   </form>
                 ): (
                   <Button 
                     className={classes.addLink}
                     onClick={() => setOpenInvitePanel(true)}
-                  >+ Add owner</Button>
+                  >
+                    + Add Member
+                  </Button>
                 )}
               </Paper>
             </ClickAwayListener>

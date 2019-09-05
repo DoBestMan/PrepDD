@@ -76,8 +76,7 @@ export default function InputForm(props: InputFormProps) {
       setEditable(false);
     }
   };
-
-  console.log("Label, Value: ", label, value);
+  
   return (
     <div className={classes.root}>
       <p style={{marginBottom: '3px'}}>{label}</p>
