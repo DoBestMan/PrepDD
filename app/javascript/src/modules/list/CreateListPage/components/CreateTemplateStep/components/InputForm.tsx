@@ -36,19 +36,23 @@ const useStyles = makeStyles((theme: Theme) =>
         border: 'none',
         outline: 'none',
       },
+    }, 
+    secondary: {
+      color: 'rgba(0, 0, 0, 0.54)'
     }
   })
 );
 
 interface InputFormProps {
   value: string;
+  placeholder?: string;
   name?: string;
   className?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function InputForm(props: InputFormProps) {
-  const {value, name, className, onChange} = props;
+  const {value, placeholder, name, className, onChange} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
@@ -80,6 +84,7 @@ export default function InputForm(props: InputFormProps) {
             name={name}
             className={classes.input}
             value={value}
+            placeholder={placeholder}
             onChange={onChange}
             onKeyUp={handleKeyUp}
             autoFocus
@@ -87,7 +92,11 @@ export default function InputForm(props: InputFormProps) {
         </ClickAwayListener>
       ): (
         <>
-          <div className={className}>{value}</div>
+          {value ? (
+            <div className={className}>{value}</div>
+          ) : (
+            <div className={clsx(className, classes.secondary)}>{placeholder}</div>
+          )}
           <UpdateIcon className={clsx(classes.update, hover && classes.visible)} />
         </>
       )}

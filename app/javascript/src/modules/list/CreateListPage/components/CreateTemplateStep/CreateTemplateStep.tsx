@@ -361,16 +361,18 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                       <TableCell>
                         <InputForm 
                           name="name"
-                          value={item.name as string} 
                           className={classes.textFlow}
+                          value={item.name as string} 
+                          placeholder="Add task..."
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
                       <TableCell>
                         <InputForm 
                           name="section"
-                          value={item.section ? item.section.name as string : ""} 
                           className={classes.textFlow}
+                          value={item.section ? item.section.name as string : ""}
+                          placeholder="Add section..."
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSection(event, index)}
                         />
                       </TableCell>
@@ -381,8 +383,9 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                       <TableCell>
                         <InputForm 
                           name="description"
-                          value={item.description as string} 
                           className={classes.textFlow}
+                          value={item.description as string} 
+                          placeholder="Add description..."
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
                         />
                       </TableCell>
