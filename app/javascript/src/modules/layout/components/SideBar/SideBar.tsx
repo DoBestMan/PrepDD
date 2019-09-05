@@ -19,6 +19,8 @@ import TaskIcon from '@material-ui/icons/AddBox';
 import TemplateIcon from '@material-ui/icons/LineWeight';
 
 import {MainListItems, AdminListItems} from './components/NavItems';
+import {useGlobalState} from '../../../../store';
+import {isSuperAdmin} from '../../../../helpers/roleHelpers';
 
 const PrepddLogo = require('images/logos/prepdd-logo.svg');
 
@@ -95,6 +97,16 @@ const SideBar = (props: any) => {
   const {open, setShowNarrow, history} = props;
   const classes = useStyles();
   const [openCreateMenu, setOpenCreateMenu] = useState<boolean>(false);
+  const {state} = useGlobalState();
+
+  const role = () => {
+    if (state && state.currentUser && state.currentUser.roles) {
+      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
+
+      return findRole ? findRole.name : 'User';
+    }
+    return 'User';
+  };
 
   const handleClickListCreate = () => {
     history.push('/create/list');
@@ -158,12 +170,14 @@ const SideBar = (props: any) => {
                   </ListItemIcon>
                   <ListItemText primary="New task" />
                 </ListItem>
-                <ListItem onClick={handleClickTemplateCreate}>
-                  <ListItemIcon>
-                    <TemplateIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="New template" />
-                </ListItem>
+                {isSuperAdmin(role()) && (
+                  <ListItem onClick={handleClickTemplateCreate}>
+                    <ListItemIcon>
+                      <TemplateIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="New template" />
+                  </ListItem>
+                )}
               </List>
             </Paper>
           </ClickAwayListener>
