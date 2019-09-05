@@ -320,7 +320,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           <div className={classes.grow} />
           {selected.length > 0 && (
             <Typography variant="h4" className={classes.selection}>
-              Selected {selected.length} task(s)
+              {selected.length} Task(s) Selected
             </Typography>
           )}
           {selected.length > 0 && (

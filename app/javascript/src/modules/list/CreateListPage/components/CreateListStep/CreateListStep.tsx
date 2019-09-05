@@ -114,11 +114,11 @@ export default function CreateListStep(props: CreateListStepProps) {
   const classes = useStyles();
   const {state} = useGlobalState();
   const [newTemplate, setNewTemplate] = useState<ListType>({
-    name: '',
+    name: selectedTemplate.name as string,
     description: '',
     requesterId: state.selectedCompany,
     responderId: '',
-    isTemplate: true, 
+    isTemplate: selectedTemplate.name === 'Blank Project', 
     isPublicTemplate: true,
   });
   const [sharing, setSharing] = useState<string>("internal");
@@ -160,7 +160,7 @@ export default function CreateListStep(props: CreateListStepProps) {
     addListOwner();
   }, [loading, idx(data, data => data.createList.list)])
 
-  const role = () => {
+  const getRole = () => {
     if (state && state.currentUser && state.currentUser.roles) {
       const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
 
@@ -168,25 +168,6 @@ export default function CreateListStep(props: CreateListStepProps) {
     }
     return 'User';
   };
-
-  const InternalLabel = (
-    <Typography variant="h6" className={classes.flex}>
-      <InternalIcon className={classes.icon} />
-      Internal
-    </Typography>
-  )
-  const ShareLabel = (
-    <Typography variant="h6" className={classes.flex}>
-      <ShareIcon className={classes.icon} />
-      Share
-    </Typography>
-  )
-  const RequestLabel = (
-    <Typography variant="h6" className={classes.flex}>
-      <RequestIcon className={classes.icon} />
-      Request
-    </Typography>
-  )
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTemplate({
@@ -219,6 +200,25 @@ export default function CreateListStep(props: CreateListStepProps) {
       })      
     }
   }
+
+  const InternalLabel = (
+    <Typography variant="h6" className={classes.flex}>
+      <InternalIcon className={classes.icon} />
+      Internal
+    </Typography>
+  )
+  const ShareLabel = (
+    <Typography variant="h6" className={classes.flex}>
+      <ShareIcon className={classes.icon} />
+      Share
+    </Typography>
+  )
+  const RequestLabel = (
+    <Typography variant="h6" className={classes.flex}>
+      <RequestIcon className={classes.icon} />
+      Request
+    </Typography>
+  )
 
   const handleCreate = () => {
     // Create List
@@ -253,7 +253,7 @@ export default function CreateListStep(props: CreateListStepProps) {
                 <Typography variant="h6" className={classes.explanation}>
                   Collaborate within your company. Use this setting when sharing information with your colleagues
                 </Typography>
-                {canBeAdmin(role()) && (
+                {canBeAdmin(getRole()) && (
                   <>
                     <FormControlLabel 
                       value="share" 
@@ -275,14 +275,14 @@ export default function CreateListStep(props: CreateListStepProps) {
                 )}
               </RadioGroup>
             </FormControl>
-            {canBeAdmin(role()) && (
+            {sharing !== 'internal' && (
               <Alert />
             )}
           </Grid>
           <Grid item md={6}>
             <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm label="Title" value={newTemplate.name as string} onChange={handleChangeName} />
+            <InputForm label="Title" value={newTemplate.name || selectedTemplate.name as string} onChange={handleChangeName} />
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Template</Typography>

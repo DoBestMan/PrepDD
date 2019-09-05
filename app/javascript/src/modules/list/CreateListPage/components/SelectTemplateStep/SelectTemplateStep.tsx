@@ -17,9 +17,9 @@ import {
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    root: {
+    body: {
       display: 'block', 
-      margin: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
+      padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
     }, 
     flex: {
       display: 'flex', 
@@ -60,7 +60,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
     setSelectedTemplate({
       __typename: "List",
       id: '',
-      name: '',
+      name: 'Blank Project',
       tasks: [
         {
           __typename: "Task",
@@ -81,7 +81,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
   }
 
   return stepNumber === currentStep ? (
-    <div className={classes.root}>
+    <div className={classes.body}>
       <div className={classes.flex}>
         <Typography variant="h2">
           New List
