@@ -42,7 +42,5 @@ export interface CreateListVariables {
   description?: string | null;
   requesterId: string;
   responderId: string;
-  isTemplate: boolean;
-  isPublicTemplate: boolean;
   tasks?: TaskAttributes[] | null;
 }

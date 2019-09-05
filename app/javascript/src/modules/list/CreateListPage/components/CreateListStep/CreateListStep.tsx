@@ -118,8 +118,6 @@ export default function CreateListStep(props: CreateListStepProps) {
     description: '',
     requesterId: state.selectedCompany,
     responderId: '',
-    isTemplate: selectedTemplate.name === 'Blank Project', 
-    isPublicTemplate: true,
   });
   const [sharing, setSharing] = useState<string>("internal");
   const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);

@@ -8,8 +8,6 @@ export interface ListType {
   description: string;
   requesterId: string;
   responderId: string;
-  isTemplate: boolean;
-  isPublicTemplate: boolean;
 }
 
 export interface TaskType {

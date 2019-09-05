@@ -21,8 +21,9 @@ import Dropdown from './components/Dropdown';
 
 import * as cs from '../../../../constants/theme';
 
-import {TaskType} from '../../../../constants/types';
+import {TaskAttributes} from '../../../../graphql/__generated__/globalTypes';
 import {useAllTemplates} from '../../../../graphql/queries/AllTemplates';
+import {useCreateTask} from '../../../../graphql/mutations/CreateTask';
 import {
   AllTemplates_templateLists, 
   AllTemplates_templateLists_tasks,
@@ -142,17 +143,26 @@ export default function Body() {
   const {loading, data, error} = useAllTemplates({});
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
   const [listId, setListId] = useState<string>("");
-  const [newTasks, setNewTasks] = useState<TaskType[]>([]);
-  const [newTask, setNewTask] = useState<TaskType>({
+  const [newTasks, setNewTasks] = useState<TaskAttributes[]>([]);
+  const [newTask, setNewTask] = useState<TaskAttributes>({
     name: '',
     description: '',
     priority: 'medium', 
     status: 'To do',
-    due_date: Date(), 
+    dueDate: Date(), 
     section: '', 
     isActive: true
   })
   const [editable, setEditable] = useState<boolean>(false);
+
+  const [createTask, {
+    loading: createTaskLoading, 
+    data: createTaskRes, 
+    error: createTaskError
+  }] = useCreateTask({
+    listId, 
+    tasks: [newTask], 
+  })
 
   useEffect(() => {
     const templateLists = idx(data, data => data.templateLists);
@@ -164,6 +174,8 @@ export default function Body() {
   const handleCreate = () => {
     console.log("Will create")
     setEditable(false);
+    newTasks.push(newTask);
+    createTask();
   }
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -200,7 +212,7 @@ export default function Body() {
       description: '',
       priority: 'medium', 
       status: 'To do',
-      due_date: Date(), 
+      dueDate: Date(), 
       section: '', 
       isActive: true
     })
@@ -261,7 +273,7 @@ export default function Body() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {newTasks.map((task: TaskType, index: number) => {
+              {newTasks.map((task: TaskAttributes, index: number) => {
                 return (
                   <TableRow key={index}>
                     <TableCell>
