@@ -16,14 +16,16 @@ import InternalIcon from '@material-ui/icons/Lock';
 import ShareIcon from '@material-ui/icons/People';
 import RequestIcon from '@material-ui/icons/Input';
 
-import {canBeAdmin} from '../../../../../helpers/roleHelpers';
-import {useGlobalState} from '../../../../../store';
 import InputForm from './components/InputForm';
 import OwnerForm from './components/OwnerForm';
 import CompanyForm from './components/CompanyForm';
 import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
 
+import {canBeAdmin} from '../../../../../helpers/roleHelpers';
+import {useGlobalState} from '../../../../../store';
+
+import {ListType} from '../../../../../constants/types';
 import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
@@ -94,15 +96,6 @@ interface CreateListStepProps {
   stepNumber: number;
   currentStep: number;
 };
-
-interface ListType {
-  name: string;
-  description: string;
-  requesterId: string;
-  responderId: string;
-  isTemplate: boolean;
-  isPublicTemplate: boolean;
-}
 
 export default function CreateListStep(props: CreateListStepProps) {
   const {
@@ -254,17 +247,13 @@ export default function CreateListStep(props: CreateListStepProps) {
               owners={owners}
               setOwners={setOwners}
             />
-            <CompanyForm
-            />
             {sharing !== 'internal' && (
-              <div>
-                <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
-                <div className={classes.flex}>
-                  <StyledItem label="G2 Crowd" />
-                </div>
-              </div>
+              <CompanyForm
+                sharing={sharing}
+                newTemplate={newTemplate}
+                setNewTemplate={setNewTemplate}
+              />
             )}
-
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Description</Typography>

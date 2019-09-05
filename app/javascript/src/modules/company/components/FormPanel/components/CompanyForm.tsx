@@ -24,7 +24,7 @@ import {
   SearchCompanies_searchCompanies,
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_companies,
-} from './__generated__/SearchCompanies';
+} from '../../../../list/CreateListPage/components/CreateListStep/components/__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -159,7 +159,7 @@ interface CompanyFormProps {
 }
 
 const SEARCH_COMPANIES = gql`
-  query SearchCompanies($text: String!, $companyId: ID!) {
+  query SearchCompanies($text: String!, $companyId: ID) {
     searchCompanies(text: $text, companyId: $companyId) {
       users {
         id

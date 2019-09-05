@@ -43,5 +43,5 @@ export interface SearchCompanies {
 
 export interface SearchCompaniesVariables {
   text: string;
-  companyId: string;
+  companyId?: string | null;
 }
