@@ -11,8 +11,6 @@ import FinancePane from './components/FinancePane';
 import LegalPane from './components/LegalPane';
 import MAPane from './components/MAPane';
 
-import {isSuperAdmin} from '../../../../../helpers/roleHelpers';
-import {useGlobalState} from '../../../../../store';
 import {
   AllTemplates_templateLists,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
@@ -57,15 +55,30 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
     setStep
   } = props;
   const classes = useStyles();
-  const {state} = useGlobalState();
-  const role = () => {
-    if (state && state.currentUser && state.currentUser.roles) {
-      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
 
-      return findRole ? findRole.name : 'User';
-    }
-    return 'User';
-  };
+  const handleClickBlank = () => {
+    setSelectedTemplate({
+      __typename: "List",
+      id: '',
+      name: '',
+      tasks: [
+        {
+          __typename: "Task",
+          id: '',
+          name: '',
+          section: {
+            __typename: "TaskSection",
+            id: '',
+            name: '',
+          },
+          description: '',
+          priority: 'medium',
+          status: '',
+        }
+      ],
+    })
+    setStep(1);
+  }
 
   return stepNumber === currentStep ? (
     <div className={classes.root}>
@@ -74,7 +87,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
           New List
         </Typography>
         <div className={classes.grow} />
-        <Button variant="contained" onClick={() => setStep(1)}>
+        <Button variant="contained" onClick={handleClickBlank}>
           Create blank project
         </Button>
       </div>
