@@ -167,33 +167,39 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
         },
       })
-      .then(res => {
-        const tempTasks = idx(res, res => res.data.tasks);
-        if (tempTasks) {
-          const tasks = Object.values(tempTasks);
-          const newTasks = tasks.map((task: any) => {
-            return {
-              __typename: "Task",
-              id: '',
-              name: task.name, 
-              section: {
-                __typename: "TaskSection",
-                id: '', 
-                name: task.section,                 
-              }, 
-              description: task.description, 
-              priority: task.priority, 
-              status: 'Todo'  
-            } as AllTemplates_templateLists_tasks;
-          });
-  
+      .then(async res => {
+        const taskGroups = idx(res, res => res.data.tasks);
+        if (taskGroups) {
+          const groups = Object.values(taskGroups);
+          let newTasks: AllTemplates_templateLists_tasks[] = [];
+          await groups.map(async (group: any) => {
+            const tasks = Object.values(group);
+            const tempTasks = await tasks.map((task: any) => {
+              return {
+                __typename: "Task",
+                id: '',
+                name: task.name, 
+                section: {
+                  __typename: "TaskSection",
+                  id: '', 
+                  name: task.section,                 
+                }, 
+                description: task.description, 
+                priority: task.priority, 
+                status: 'Todo'  
+              } as AllTemplates_templateLists_tasks;
+            });
+
+            newTasks = newTasks.concat(tempTasks);
+          })
+
           setSelectedTemplate({
             ...selectedTemplate, 
             tasks: [
               ...selectedTemplate.tasks, 
               ...newTasks, 
             ]
-          })          
+          }) 
         }
       })
   };
@@ -314,7 +320,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           <div className={classes.grow} />
           {selected.length > 0 && (
             <Typography variant="h4" className={classes.selection}>
-              {selected.length} task(s)
+              Selected {selected.length} task(s)
             </Typography>
           )}
           {selected.length > 0 && (
