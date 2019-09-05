@@ -157,7 +157,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     // Handle importing templates
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
-      form_data.append(`files`, file);
+      form_data.append(`files[]`, file);
     });
 
     axios
