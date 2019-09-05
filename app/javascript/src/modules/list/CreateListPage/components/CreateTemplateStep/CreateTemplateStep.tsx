@@ -14,7 +14,7 @@ import {
   Checkbox, 
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
-import ReactDropzone from 'react-dropzone';
+import ReactDropzone, { DropzoneRef } from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from './components/InputForm';
@@ -123,6 +123,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   } = props;
   const classes = useStyles();
   const [selected, setSelected] = useState<number[]>([]);
+  const dropzone = React.createRef<DropzoneRef>();
 
   function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
     if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {
@@ -285,6 +286,12 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
   }
 
+  const handleClickDownload = () => {
+    if (dropzone && dropzone.current) {
+      dropzone.current.open();
+    }
+  }
+
   const renderCheckbox = () => {
     const rowCount = selectedTemplate && selectedTemplate.tasks ?
       selectedTemplate.tasks.length : 0;
@@ -381,10 +388,17 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </TableBody>
           </Table>
           <div className={classes.rightPane}>
-            <Button variant="outlined" className={classes.uploadButton}>Download Template</Button>
+            <Button 
+              variant="outlined" 
+              className={classes.uploadButton}
+              onClick={handleClickDownload}
+            >
+              Download Template
+            </Button>
             <ReactDropzone 
-              multiple
               accept="application/*" 
+              multiple
+              ref={dropzone}
               onDrop={handleDrop}
             >
               {({getRootProps, getInputProps, isDragActive}) => (
