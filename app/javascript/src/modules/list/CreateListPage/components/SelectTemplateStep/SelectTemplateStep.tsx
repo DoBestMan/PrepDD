@@ -74,11 +74,9 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
           New List
         </Typography>
         <div className={classes.grow} />
-        {isSuperAdmin(role()) && (
-          <Button variant="contained" onClick={() => setStep(1)}>
-            Create blank project
-          </Button>
-        )}
+        <Button variant="contained" onClick={() => setStep(1)}>
+          Create blank project
+        </Button>
       </div>
       <Panel title="Create List" labels={labels}>
         <GeneralTemplatesPane 
