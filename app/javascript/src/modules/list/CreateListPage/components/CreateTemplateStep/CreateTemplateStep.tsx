@@ -289,6 +289,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         ...selectedTemplate, 
         tasks: newTasks, 
       })
+      setSelected([]);
     }
   }
 
