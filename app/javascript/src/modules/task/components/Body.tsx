@@ -206,7 +206,9 @@ export default function Body() {
                         <div className={classes.textFlow}>{item.name}</div>
                       </TableCell>
                       <TableCell>
-                        <div className={classes.textFlow}>{item.section}</div>
+                        <div className={classes.textFlow}>
+                          {item.section && item.section.name ? item.section.name: ""}
+                        </div>
                       </TableCell>
                       <TableCell>{renderPriority(item.priority as string)}</TableCell>
                       <TableCell>

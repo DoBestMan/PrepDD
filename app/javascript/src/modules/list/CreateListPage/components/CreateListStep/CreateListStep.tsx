@@ -130,11 +130,11 @@ export default function CreateListStep(props: CreateListStepProps) {
     tasks: selectedTemplate && selectedTemplate.tasks ? 
       selectedTemplate.tasks.map((task: AllTemplates_templateLists_tasks) => {
         return {
-          name: task.name as string,
-          description: task.description as string,  
-          priority: task.priority as string, 
-          status: 'Todo',
-          dueDate: '2019-09-03', 
+          name: task.name ? task.name : '',
+          description: task.description ? task.description : '',  
+          priority: task.priority ? task.priority : '', 
+          status: 'To do',
+          dueDate: Date(), 
           section: task && task.section ? task.section.name : '', 
           isActive: true,
         } as TaskAttributes
@@ -226,6 +226,7 @@ export default function CreateListStep(props: CreateListStepProps) {
       alert("Input List name");
       return;
     }
+    console.log("Template: ", selectedTemplate);
     createList();
   }
 
