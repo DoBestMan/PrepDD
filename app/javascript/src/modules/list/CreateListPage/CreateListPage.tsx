@@ -8,7 +8,7 @@ import CreateTemplateStep from './components/CreateTemplateStep';
 import CreateListStep from './components/CreateListStep';
 
 import {useAllTemplates} from '../../../graphql/queries/AllTemplates';
-import {AllTemplates_templateLists} from '../../../graphql/queries/__generated__/AllTemplates';
+import {AllTemplates_templateLists, AllTemplates} from '../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,13 +26,42 @@ export default function CreateListPage() {
     tasks: [], 
   });
 
-  const {loading, data, error} = useAllTemplates({});
+  const {loading, data, error, fetchMore} = useAllTemplates({});
+
+  useEffect(() => {
+    if (!loading && step === 0) {
+      loadMore();
+    }
+  }, [step])
 
   useEffect(() => {
     const lists = idx(data, data => data.templateLists);
 
     if (loading || !lists) return;
   }, [loading, idx(data, data => data.templateLists)])
+
+  const loadMore = () => {
+    fetchMore({
+      variables: {}, 
+      updateQuery: (
+        previousResult: AllTemplates, 
+        options: {
+          fetchMoreResult?: AllTemplates, 
+          variables?: {}, 
+        }
+      ) => {
+        const fetchMoreResult = idx(options, options => options.fetchMoreResult);
+
+        if (!fetchMoreResult) return previousResult;
+
+        return {
+          templateLists: [
+            ...fetchMoreResult.templateLists, 
+          ]
+        }
+      }
+    })
+  }
   
   return data && (
     <div className={classes.root}>
