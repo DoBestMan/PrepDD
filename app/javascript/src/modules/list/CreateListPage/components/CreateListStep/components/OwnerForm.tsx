@@ -19,7 +19,11 @@ import {useGlobalState} from '../../../../../../store';
 import StyledItem from './StyledItem';
 import DefaultUserImage from '../../../../../common/DefaultUserImage';
 
-import {SearchCompanyUsers_searchCompanyUsers_users} from './__generated__/SearchCompanyUsers';
+import {
+  SearchCompanyUsers_searchCompanyUsers,
+  SearchCompanyUsers_searchCompanyUsers_users,
+  SearchCompanyUsers_searchCompanyUsers_teams,
+} from './__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,13 +93,17 @@ const SEARCH_COMPANY_USERS = gql`
         fullName
         profileUrl
       }
+      teams {
+        id
+        name
+      }
     }
   }
 `;
 
 interface OwnerFormProps {
-  owners: SearchCompanyUsers_searchCompanyUsers_users[];
-  setOwners: React.Dispatch<React.SetStateAction<SearchCompanyUsers_searchCompanyUsers_users[]>>;
+  owners: (SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[];
+  setOwners: React.Dispatch<React.SetStateAction<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>>;
 }
 
 export default function OwnerForm(props: OwnerFormProps) {
@@ -104,17 +112,21 @@ export default function OwnerForm(props: OwnerFormProps) {
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
   const [searchUsername, setSearchUsername] = useState<string>("");
-  const [searchedUsers, setSearchedUsers] = useState<SearchCompanyUsers_searchCompanyUsers_users[]>([]);
+  const [searchResult, setSearchResult] = useState<SearchCompanyUsers_searchCompanyUsers>({
+    __typename: "SearchCompanyUsers",
+    users: null, 
+    teams: null, 
+  });
   
   const {state} = useGlobalState();
   const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
 
   useEffect(() => {
-    const users = idx(data, data => data.searchCompanyUsers.users);
+    const result = idx(data, data => data.searchCompanyUsers);
 
-    if (loading || !users) return;
-    setSearchedUsers(users);
-  }, [loading, idx(data, data => data.searchCompanyUsers.users)])
+    if (loading || !result) return;
+    setSearchResult(result);
+  }, [loading, idx(data, data => data.searchCompanyUsers)])
 
   const handleCloseAll = () => {
     setOpenAddPanel(false);
@@ -133,11 +145,22 @@ export default function OwnerForm(props: OwnerFormProps) {
     }
   }
 
-  const handleClick = (event: React.MouseEvent<unknown>, index: number) => {
-    setOwners([
-      ...owners, 
-      searchedUsers[index]
-    ])
+  const handleClickUser = (event: React.MouseEvent<unknown>, index: number) => {
+    if (searchResult.users && searchResult.users[index]) {
+      setOwners([
+        ...owners, 
+        searchResult.users[index]
+      ])
+    }
+  }
+
+  const handleClickTeam = (event: React.MouseEvent<unknown>, index: number) => {
+    if (searchResult.teams && searchResult.teams[index]) {
+      setOwners([
+        ...owners, 
+        searchResult.teams[index]
+      ])
+    }
   }
   
   return (
@@ -145,13 +168,18 @@ export default function OwnerForm(props: OwnerFormProps) {
       <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
       <div className={classes.flex}>
         {owners && owners.map(owner => {
-          return (
+          return owner.__typename === 'User' ? (
             <StyledItem 
               key={owner.id}
               type="user"
               label={owner.fullName} 
               logo={owner.profileUrl as string}
             />
+          ) : (
+            <StyledItem 
+              key={owner.id}
+              label={owner.name} 
+            />            
           )
         })}
         <div 
@@ -176,18 +204,33 @@ export default function OwnerForm(props: OwnerFormProps) {
                   onKeyUp={handleKeyUp}
                 />
                 <List component="div" aria-labelledby="Invite Owner Panel">
-                  {searchedUsers && searchedUsers.map((user: SearchCompanyUsers_searchCompanyUsers_users, index: number) => {
-                    return (
-                      <ListItem 
-                        key={user.id} 
-                        onClick={(event: React.MouseEvent<unknown>) => handleClick(event, index)}
-                        disableGutters
-                      >
-                        <DefaultUserImage userName={user.fullName} />
-                        <ListItemText primary={user.fullName} style={{marginLeft: '12px'}} />
-                      </ListItem>
-                    )
-                  })}
+                  {searchResult && searchResult.users && 
+                    searchResult.users.map((user: SearchCompanyUsers_searchCompanyUsers_users, index: number) => {
+                      return (
+                        <ListItem 
+                          key={user.id} 
+                          onClick={(event: React.MouseEvent<unknown>) => handleClickUser(event, index)}
+                          disableGutters
+                        >
+                          <DefaultUserImage userName={user.fullName} />
+                          <ListItemText primary={user.fullName} style={{marginLeft: '12px'}} />
+                        </ListItem>
+                      )
+                    })
+                  }
+                  {searchResult && searchResult.teams && 
+                    searchResult.teams.map((team: SearchCompanyUsers_searchCompanyUsers_teams, index: number) => {
+                      return (
+                        <ListItem 
+                          key={team.id} 
+                          onClick={(event: React.MouseEvent<unknown>) => handleClickTeam(event, index)}
+                          disableGutters
+                        >
+                          <ListItemText primary={team.name}/>
+                        </ListItem>
+                      )
+                    })
+                  }
                 </List>
                 {openInvitePanel ? (
                   <form>

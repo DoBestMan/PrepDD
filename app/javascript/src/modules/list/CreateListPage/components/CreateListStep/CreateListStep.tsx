@@ -32,7 +32,10 @@ import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
-import {SearchCompanyUsers_searchCompanyUsers_users} from './components/__generated__/SearchCompanyUsers';
+import {
+  SearchCompanyUsers_searchCompanyUsers_users, 
+  SearchCompanyUsers_searchCompanyUsers_teams
+} from './components/__generated__/SearchCompanyUsers';
 import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 
 const useStyles = makeStyles((theme: Theme) => 
@@ -117,7 +120,7 @@ export default function CreateListStep(props: CreateListStepProps) {
     isPublicTemplate: true,
   });
   const [sharing, setSharing] = useState<string>("internal");
-  const [owners, setOwners] = useState<SearchCompanyUsers_searchCompanyUsers_users[]>([]);
+  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
   const [listId, setListId] = useState<string>('');
 
   const [createList, {loading, data, error}] = useCreateList({
