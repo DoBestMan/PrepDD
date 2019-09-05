@@ -44,6 +44,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: '24px', 
       marginBottom: '12px', 
     },
+    addButton: {
+      border: '1px solid #D8D8D8',
+      borderRadius: '3px', 
+      fontSize: '15px', 
+    },
     addPanel: {
       position: 'absolute', 
       width: '280px', 
@@ -152,6 +157,11 @@ export default function CompanyForm(props: CompanyFormProps) {
     setSearchResult(result);
   }, [loading, idx(data, data => data.searchCompanies)])
 
+  const handleCloseAll = () => {
+    setOpen(false);
+    setOpenInvitePanel(false);
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchString(event.target.value);
   };
@@ -224,69 +234,77 @@ export default function CompanyForm(props: CompanyFormProps) {
             logo={issueCompany.logoUrl as string}
           />
         )}
-        <div className={classes.clickalbleArea} onClick={() => setOpen(true)}/>
+        <div 
+          style={{position: 'relative'}}
+          onMouseOver={() => setOpen(true)}
+          onMouseLeave={handleCloseAll}
+        >
+          <Button className={classes.addButton}>+</Button>
+          {open ? (
+            <ClickAwayListener onClickAway={() => setOpen(false)}>
+              <Paper
+                className={classes.addPanel}
+                elevation={0}
+                onMouseOver={() => setOpen(true)}
+                onMouseLeave={handleCloseAll}
+              >
+                <TextField 
+                  className={classes.input}
+                  placeholder="Search company..."
+                  value={searchString}
+                  onChange={handleChange}
+                  onKeyUp={handleKeyUp}
+                />
+                <List component="div" aria-labelledby="Invite new">
+                  {searchResult && searchResult.companies &&
+                    searchResult.companies.slice(0, 5).map((company) => {
+                      return (
+                        <ListItem 
+                          key={company.id} 
+                          onClick={() => handleClickIssueTo(company)}
+                          disableGutters
+                        >
+                          {company.logoUrl && (
+                            <img
+                              src={company.logoUrl}
+                              className={classes.companyLogo}
+                              alt={company.name}
+                            />
+                          )}
+                          <ListItemText primary={company.name as string} />
+                        </ListItem>
+                      )
+                    })}
+                </List>
+                {renderUserList()}
+                {openInvitePanel ? (
+                  <form>
+                    <Typography variant="h6" style={{marginTop: '24px'}}>New user and company</Typography>
+                    <TextField 
+                      className={classes.input}
+                      label="Email"
+                      required
+                    />
+                    <TextField 
+                      className={classes.input}
+                      label="Company"
+                      required
+                    />
+                    <Button type="submit" className={classes.addLink}>
+                      Invite new user and company
+                    </Button>
+                  </form>
+                ): (
+                  <Button 
+                    className={classes.addLink}
+                    onClick={() => setOpenInvitePanel(true)}
+                  >+ Add owner</Button>
+                )}
+              </Paper>
+            </ClickAwayListener>
+          ) : null}
+        </div>
       </div>
-      {open ? (
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Paper
-            className={classes.addPanel}
-            elevation={0}
-          >
-            <TextField 
-              className={classes.input}
-              placeholder="Search company..."
-              value={searchString}
-              onChange={handleChange}
-              onKeyUp={handleKeyUp}
-            />
-            <List component="div" aria-labelledby="Invite new">
-              {searchResult && searchResult.companies &&
-                searchResult.companies.slice(0, 5).map((company) => {
-                  return (
-                    <ListItem 
-                      key={company.id} 
-                      onClick={() => handleClickIssueTo(company)}
-                      disableGutters
-                    >
-                      {company.logoUrl && (
-                        <img
-                          src={company.logoUrl}
-                          className={classes.companyLogo}
-                          alt={company.name}
-                        />
-                      )}
-                      <ListItemText primary={company.name as string} />
-                    </ListItem>
-                  )
-                })}
-            </List>
-            {renderUserList()}
-            {openInvitePanel ? (
-              <form>
-                <Typography variant="h6" style={{marginTop: '24px'}}>New user and company</Typography>
-                <TextField 
-                  className={classes.input}
-                  label="Email"
-                  required
-                />
-                <TextField 
-                  className={classes.input}
-                  label="Company"
-                  required
-                />
-                <Button type="submit" className={classes.addLink}>
-                  Invite new user and company
-                </Button>
-              </form>
-            ): (
-              <Button 
-                className={classes.addLink}
-                onClick={() => setOpenInvitePanel(true)}
-              >+ Add owner</Button>
-            )}
-          </Paper>
-        </ClickAwayListener>
-      ) : null}
     </div>
   )
 }

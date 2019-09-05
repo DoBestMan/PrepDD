@@ -8,7 +8,7 @@ import UpdateIcon from '@material-ui/icons/Create';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      marginTop: '48px',
+      marginTop: '24px',
       color: '#606060',
       fontFamily: 'Montserrat',
       fontSize: '12px',

@@ -235,7 +235,7 @@ export default function CreateListStep(props: CreateListStepProps) {
         <Grid container spacing={6}>
           <Grid item md={6}>
             <Typography variant="h2">Create List</Typography>
-            <FormControl component="fieldset" style={{marginTop: '48px'}}>
+            <FormControl component="fieldset" style={{marginTop: '24px'}}>
               <Typography variant="h6" className={classes.sharingTitle}>
                 Sharing
               </Typography>
