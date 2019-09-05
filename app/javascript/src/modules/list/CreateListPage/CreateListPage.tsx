@@ -55,6 +55,7 @@ export default function CreateListPage() {
         selectedTemplate={selectedTemplate}
         stepNumber={2}
         currentStep={step}
+        setStep={setStep}
       />
     </div>
   );

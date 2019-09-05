@@ -101,13 +101,15 @@ interface CreateListStepProps {
   selectedTemplate: AllTemplates_templateLists;
   stepNumber: number;
   currentStep: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function CreateListStep(props: CreateListStepProps) {
   const {
     selectedTemplate, 
     stepNumber, 
-    currentStep
+    currentStep, 
+    setStep,
   } = props;
   const classes = useStyles();
   const {state} = useGlobalState();
@@ -139,16 +141,21 @@ export default function CreateListStep(props: CreateListStepProps) {
       }) : [],
   });
 
-  const [addListOwner] = useAddListOwner({
+  const [addListOwner, {loading: addOwnerLoading}] = useAddListOwner({
     listId, 
     userIds: owners.map(owner => owner.id)
   });
 
   useEffect(() => {
+    if (!addOwnerLoading) {
+      setStep(0);
+    }
+  }, [addOwnerLoading])
+
+  useEffect(() => {
     const list = idx(data, data => data.createList.list);
 
     if (loading || !list) return;
-    console.log("List: ", list);
     setListId(list.id);
     addListOwner();
   }, [loading, idx(data, data => data.createList.list)])

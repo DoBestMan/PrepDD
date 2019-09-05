@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {withRouter} from 'react-router-dom';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 
