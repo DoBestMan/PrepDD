@@ -79,12 +79,10 @@ interface PriorityFormProps {
 export default function PriorityForm(props: PriorityFormProps) {
   const {value, onChange} = props;
   const classes = useStyles();
-  const [editable, setEditable] = useState<boolean>(false);
   const [hover, setHover] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   
   const handleClick = () => {
-    if (!editable) return;
     // Open dropdown menu
     setOpen(!open);
   }
@@ -92,13 +90,11 @@ export default function PriorityForm(props: PriorityFormProps) {
   const handleSelect = (newValue: string) => {
     onChange(newValue);
     setOpen(false);
-    setEditable(false);
     setHover(false);
   }
 
   const handleClose = () => {
     setOpen(false);
-    setEditable(false);
     setHover(false);    
   }
 
@@ -119,13 +115,8 @@ export default function PriorityForm(props: PriorityFormProps) {
           )}
         />
         <Typography variant="h6" style={{textTransform: 'capitalize'}}>{value}</Typography>
-        {editable ? (
-          <ArrowDownIcon className={classes.arrowDown} />
-        ) : (
-          <UpdateIcon 
-            className={clsx(classes.update, hover && classes.visible)} 
-            onClick={() => setEditable(true)}
-          />
+        {hover && (
+          <ArrowDownIcon className={classes.arrowDown}/>
         )}
         {open ? (
           <ClickAwayListener onClickAway={() => setOpen(false)}>
@@ -142,7 +133,19 @@ export default function PriorityForm(props: PriorityFormProps) {
                     <ListItem 
                       key={option.value}
                       onClick={() => handleSelect(option.value)}
-                    >{option.label}</ListItem>
+                    >
+                      <div
+                        className={clsx(
+                          classes.status,
+                          option.value === 'high'
+                            ? classes.high
+                            : value === 'medium'
+                            ? classes.medium
+                            : classes.low
+                        )}
+                      />
+                      {option.label}
+                    </ListItem>
                   )
                 })}
               </List>

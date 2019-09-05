@@ -82,6 +82,7 @@ export default function InputForm(props: InputFormProps) {
             value={value}
             onChange={onChange}
             onKeyUp={handleKeyUp}
+            autoFocus
           />
         </ClickAwayListener>
       ): (
