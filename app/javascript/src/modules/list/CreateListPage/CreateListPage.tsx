@@ -23,7 +23,7 @@ export default function CreateListPage() {
     __typename: "List",
     id: '',
     name: '',
-    tasks: null, 
+    tasks: [], 
   });
 
   const {loading, data, error} = useAllTemplates({});
