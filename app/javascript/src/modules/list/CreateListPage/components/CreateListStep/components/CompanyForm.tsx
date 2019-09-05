@@ -16,9 +16,9 @@ import {
 } from '@material-ui/core';
 
 import StyledItem from './StyledItem';
-import DefaultUserImage from '../../../../../common/DefaultUserImage';
 import NestedList from './NestedList';
 
+import {useGlobalState} from '../../../../../../store';
 import {ListType} from '../../../../../../constants/types';
 import {
   SearchCompanies_searchCompanies, 
@@ -147,13 +147,17 @@ export default function CompanyForm(props: CompanyFormProps) {
     companies: null, 
   })
   const [issueCompany, steIssueCompany] = useState<SearchCompanies_searchCompanies_companies | null>(null);
+  const {state} = useGlobalState();
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES);
 
   useEffect(() => {
-    const result = idx(data, data => data.searchCompanies);
+    let result = idx(data, data => data.searchCompanies);
 
     if (loading || !result) return;
+    result.companies = result.companies.filter((company: SearchCompanies_searchCompanies_companies) => 
+      company.id !== state.selectedCompany
+    );
     setSearchResult(result);
   }, [loading, idx(data, data => data.searchCompanies)])
 
@@ -215,7 +219,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       )
     } else if (searchResult && searchResult.companies && !searchResult.companies.length) {
       return (
-        <Typography variant="h4" style={{marginTop: '12px'}}>
+        <Typography variant="h4">
           No match result
         </Typography>
       )

@@ -10,6 +10,7 @@ import {
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import {useGlobalState} from '../../../../../../store';
 import {
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_users_companies,
@@ -45,6 +46,7 @@ export default function NestedList(props: NestedListProps) {
   const {data, onClick} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
+  const {state} = useGlobalState();
 
   const handleClick = (company: SearchCompanies_searchCompanies_companies) => {
     onClick(company);
@@ -67,23 +69,25 @@ export default function NestedList(props: NestedListProps) {
         <List component="div" disablePadding>
           {data.companies &&
             data.companies.map(
-              (company: SearchCompanies_searchCompanies_users_companies) => (
-                <ListItem
-                  key={company.id}
-                  className={classes.nested}
-                  onClick={() => handleClick(company as SearchCompanies_searchCompanies_companies)}
-                  disableGutters
-                >
-                  {company.logoUrl && (
-                    <img
-                      className={classes.companyLogo}
-                      src={company.logoUrl}
-                      alt={company.name}
-                    />
-                  )}
-                  <ListItemText primary={company.name} />
-                </ListItem>
-              )
+              (company: SearchCompanies_searchCompanies_users_companies) => {
+                return company.id !== state.selectedCompany && (
+                  <ListItem
+                    key={company.id}
+                    className={classes.nested}
+                    onClick={() => handleClick(company as SearchCompanies_searchCompanies_companies)}
+                    disableGutters
+                  >
+                    {company.logoUrl && (
+                      <img
+                        className={classes.companyLogo}
+                        src={company.logoUrl}
+                        alt={company.name}
+                      />
+                    )}
+                    <ListItemText primary={company.name} />
+                  </ListItem>
+                )
+              }
             )}
         </List>
       </Collapse>
