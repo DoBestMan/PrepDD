@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       display: 'flex',
       marginTop: '48px',
+      height: 'calc(100% - 100px)'
     },
     styledTableCell: {
       paddingLeft: '0px', 
@@ -102,6 +103,12 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     },
+    stickyHeader: {
+      position: 'sticky',
+      top: '0px',
+      backgroundColor: '#FFFFFF',
+      zIndex: 1, 
+    }
   })
 );
 
@@ -332,71 +339,73 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           )}
         </div>
         <div className={classes.content}>
-          <Table style={{tableLayout: 'fixed'}}>
-            <TableHead>
-              <TableRow>
-                <TableCell padding="checkbox">
-                  {renderCheckbox()}
-                </TableCell>
-                <TableCell>Task</TableCell>
-                <TableCell style={{width: '200px'}}>Section</TableCell>
-                <TableCell style={{width: '150px'}}>Priority</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell style={{width: '125px'}}>Example Files</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {selectedTemplate.tasks && 
-                selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index: number) => {
-                  const isSelected = selected.indexOf(index) !== -1;
+          <div style={{overflow: 'auto'}}>
+            <Table style={{tableLayout: 'fixed', borderCollapse: 'separate'}}>
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox" className={classes.stickyHeader}>
+                    {renderCheckbox()}
+                  </TableCell>
+                  <TableCell className={classes.stickyHeader}>Task</TableCell>
+                  <TableCell className={classes.stickyHeader} style={{width: '200px'}}>Section</TableCell>
+                  <TableCell className={classes.stickyHeader} style={{width: '150px'}}>Priority</TableCell>
+                  <TableCell className={classes.stickyHeader}>Description</TableCell>
+                  <TableCell className={classes.stickyHeader} style={{width: '125px'}}>Example Files</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {selectedTemplate.tasks && 
+                  selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index: number) => {
+                    const isSelected = selected.indexOf(index) !== -1;
 
-                  return (
-                    <TableRow key={index}>
-                      <TableCell padding="checkbox">
-                        <Checkbox 
-                          checked={isSelected} 
-                          color="primary" 
-                          onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}
+                    return (
+                      <TableRow key={index}>
+                        <TableCell padding="checkbox">
+                          <Checkbox 
+                            checked={isSelected} 
+                            color="primary" 
+                            onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <InputForm 
+                            name="name"
+                            className={classes.textFlow}
+                            value={item.name as string} 
+                            placeholder="Add task..."
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <InputForm 
+                            name="section"
+                            className={classes.textFlow}
+                            value={item.section ? item.section.name as string : ""}
+                            placeholder="Add section..."
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSection(event, index)}
+                          />
+                        </TableCell>
+                        <PriorityForm 
+                          value={item.priority as string} 
+                          onChange={(newValue: string) => handleChangePriority(newValue, index)}
                         />
-                      </TableCell>
-                      <TableCell>
-                        <InputForm 
-                          name="name"
-                          className={classes.textFlow}
-                          value={item.name as string} 
-                          placeholder="Add task..."
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <InputForm 
-                          name="section"
-                          className={classes.textFlow}
-                          value={item.section ? item.section.name as string : ""}
-                          placeholder="Add section..."
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSection(event, index)}
-                        />
-                      </TableCell>
-                      <PriorityForm 
-                        value={item.priority as string} 
-                        onChange={(newValue: string) => handleChangePriority(newValue, index)}
-                      />
-                      <TableCell>
-                        <InputForm 
-                          name="description"
-                          className={classes.textFlow}
-                          value={item.description as string} 
-                          placeholder="Add description..."
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
-                        />
-                      </TableCell>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  );
-                })
-              }
-            </TableBody>
-          </Table>
+                        <TableCell>
+                          <InputForm 
+                            name="description"
+                            className={classes.textFlow}
+                            value={item.description as string} 
+                            placeholder="Add description..."
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                          />
+                        </TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    );
+                  })
+                }
+              </TableBody>
+            </Table>
+          </div>
           <div className={classes.rightPane}>
             <Button 
               variant="outlined" 
