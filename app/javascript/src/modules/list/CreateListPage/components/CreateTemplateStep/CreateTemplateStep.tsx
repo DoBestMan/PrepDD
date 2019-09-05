@@ -175,7 +175,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               __typename: "Task",
               id: '',
               name: task.name, 
-              section: task.section, 
+              section: {
+                __typename: "TaskSection",
+                id: '', 
+                name: task.section,                 
+              }, 
               description: task.description, 
               priority: task.priority, 
               status: 'Todo'  
@@ -201,6 +205,28 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       newTasks[index] = Object.assign({}, newTasks[index], {
         [name]: value, 
       });
+
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }
+  }
+
+  const handleChangeSection = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+    const {value} = event.target;
+
+    if (newTasks) {
+      const newSection = newTasks[index].section || {
+        __typename: "TaskSection",
+        id: '', 
+        name: ''
+      };
+      if (newSection && newSection.name !== null) {
+        newSection.name = value;
+        newTasks[index].section = newSection;
+      }
 
       setSelectedTemplate({
         ...selectedTemplate, 
@@ -332,7 +358,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                           name="section"
                           value={item.section ? item.section.name as string : ""} 
                           className={classes.textFlow}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSection(event, index)}
                         />
                       </TableCell>
                       <PriorityForm 

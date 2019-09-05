@@ -26,11 +26,14 @@ import {canBeAdmin} from '../../../../../helpers/roleHelpers';
 import {useGlobalState} from '../../../../../store';
 
 import {ListType} from '../../../../../constants/types';
+import {useCreateList} from '../../../../../graphql/mutations/CreateList';
+import {useAddListOwner} from '../../../../../graphql/mutations/AddListOwner';
 import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
 import {SearchCompanyUsers_searchCompanyUsers_users} from './components/__generated__/SearchCompanyUsers';
+import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -110,11 +113,42 @@ export default function CreateListStep(props: CreateListStepProps) {
     description: '',
     requesterId: state.selectedCompany,
     responderId: '',
-    isTemplate: false, 
-    isPublicTemplate: false,
+    isTemplate: true, 
+    isPublicTemplate: true,
   });
   const [sharing, setSharing] = useState<string>("internal");
   const [owners, setOwners] = useState<SearchCompanyUsers_searchCompanyUsers_users[]>([]);
+  const [listId, setListId] = useState<string>('');
+
+  const [createList, {loading, data, error}] = useCreateList({
+    ...newTemplate, 
+    tasks: selectedTemplate && selectedTemplate.tasks ? 
+      selectedTemplate.tasks.map((task: AllTemplates_templateLists_tasks) => {
+        return {
+          name: task.name as string,
+          description: task.description as string,  
+          priority: task.priority as string, 
+          status: 'Todo',
+          dueDate: '2019-09-03', 
+          section: task && task.section ? task.section.name : '', 
+          isActive: true,
+        } as TaskAttributes
+      }) : [],
+  });
+
+  const [addListOwner] = useAddListOwner({
+    listId, 
+    userIds: owners.map(owner => owner.id)
+  });
+
+  useEffect(() => {
+    const list = idx(data, data => data.createList.list);
+
+    if (loading || !list) return;
+    console.log("List: ", list);
+    setListId(list.id);
+    addListOwner();
+  }, [loading, idx(data, data => data.createList.list)])
 
   const role = () => {
     if (state && state.currentUser && state.currentUser.roles) {
@@ -178,6 +212,11 @@ export default function CreateListStep(props: CreateListStepProps) {
 
   const handleCreate = () => {
     // Create List
+    if (!newTemplate.name) {
+      alert("Input List name");
+      return;
+    }
+    createList();
   }
 
   return stepNumber == currentStep ? (

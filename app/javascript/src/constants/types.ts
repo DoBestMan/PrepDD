@@ -11,3 +11,13 @@ export interface ListType {
   isTemplate: boolean;
   isPublicTemplate: boolean;
 }
+
+export interface TaskType {
+  name: string;
+  description: string;
+  priority: string;
+  status: string;
+  due_date: string;
+  section: string;
+  isActive: boolean;
+}
