@@ -31,6 +31,8 @@ class Mutations::InviteListOwner < GraphQL::Schema::Mutation
 
       user_company =
         UsersCompany.create(user_id: user.id, company_id: company_id)
+
+      list_owner = ListsUser.create(list_id: list_id, user_id: user.id)
     end
 
     if user&.persisted?
