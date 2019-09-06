@@ -3,11 +3,11 @@ class Api::TasksController < ApplicationController
 
   def import_task
     status = true
-    begin
+    # begin
       tasks = Task.import(params[:files])
-    rescue StandardError
-      status = false
-    end
+    # rescue StandardError
+    #   status = false
+    # end
     render json: { status: status, tasks: tasks }
   end
 
