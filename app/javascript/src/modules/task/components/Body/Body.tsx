@@ -20,13 +20,13 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
 
 import * as cs from '../../../../constants/theme';
+import {NotificationType} from '../../../../constants/types'
 
 import {TaskAttributes} from '../../../../graphql/__generated__/globalTypes';
 import {useAllTemplates} from '../../../../graphql/queries/AllTemplates';
 import {useCreateTask} from '../../../../graphql/mutations/CreateTask';
 import {
   AllTemplates_templateLists, 
-  AllTemplates_templateLists_tasks,
 } from '../../../../graphql/queries/__generated__/AllTemplates'
 import PriorityForm from './components/PriorityForm';
 
@@ -138,7 +138,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Body() {
+interface BodyProps {
+  setNotification: React.Dispatch<React.SetStateAction<NotificationType | null>>;
+}
+
+export default function Body(props: BodyProps) {
+  const {setNotification} = props;
   const classes = useStyles();
   const {loading, data, error} = useAllTemplates({});
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
@@ -171,7 +176,25 @@ export default function Body() {
 
     if (loading || !templateLists) return;
     setLists(templateLists);
-  }, [loading, idx(data, data => data.templateLists)])
+  }, [loading, idx(data, data => data.templateLists)]);
+
+  useEffect(() => {
+    const response = idx(createTaskRes, createTaskRes => createTaskRes.createTask);
+
+    if (createTaskLoading || !response) return;
+
+    if (response && response.success) {
+      setNotification({
+        variant: 'success', 
+        message: 'Create new task successfully'
+      })
+    } else if (response && response.errors && response.errors.length) {
+      setNotification({
+        variant: 'success', 
+        message: response.errors[0].message, 
+      })      
+    }
+  }, [createTaskLoading, idx(createTaskRes, createTaskRes => createTaskRes.createTask)])
 
   const handleCreate = async () => {
     setEditable(false);
