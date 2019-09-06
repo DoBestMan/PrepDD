@@ -172,32 +172,6 @@
               "deprecationReason": null
             },
             {
-              "name": "lists",
-              "description": "Find a team by id",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "List",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "roles",
               "description": "Return All available roles",
               "args": [
@@ -310,32 +284,6 @@
               "deprecationReason": null
             },
             {
-              "name": "tasks",
-              "description": "Find a team by id",
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "OBJECT",
-                      "name": "Task",
-                      "ofType": null
-                    }
-                  }
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "team",
               "description": "Find a team by id",
               "args": [
@@ -368,7 +316,7 @@
             },
             {
               "name": "templateLists",
-              "description": "All Available lists",
+              "description": "All Available lists templates",
               "args": [
 
               ],
