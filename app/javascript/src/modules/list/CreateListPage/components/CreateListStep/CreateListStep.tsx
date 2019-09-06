@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
-import clsx from 'clsx';
 import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -20,7 +19,6 @@ import RequestIcon from '@material-ui/icons/Input';
 import InputForm from './components/InputForm';
 import OwnerForm from './components/OwnerForm';
 import CompanyForm from './components/CompanyForm';
-import StyledItem from './components/StyledItem';
 import Alert from './components/Alert';
 
 import {canBeAdmin} from '../../../../../helpers/roleHelpers';
@@ -125,6 +123,7 @@ const CreateListStep = (props: any) => {
     setNotification,
   } = props;
   const classes = useStyles();
+
   const {state} = useGlobalState();
   const [newTemplate, setNewTemplate] = useState<ListType>({
     name: '',
@@ -133,11 +132,7 @@ const CreateListStep = (props: any) => {
     responderId: '',
   });
   const [sharing, setSharing] = useState<string>('internal');
-  const [owners, setOwners] = useState<
-    (
-      | SearchCompanyUsers_searchCompanyUsers_users
-      | SearchCompanyUsers_searchCompanyUsers_teams)[]
-  >([]);
+  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
   const [listId, setListId] = useState<string>('');
   const [inviteCompany, setInviteCompany] = useState<NewCompanyType>({
     newCompanyName: '',
@@ -188,14 +183,18 @@ const CreateListStep = (props: any) => {
 
   const [
     addListOwner,
-    {loading: addOwnerLoading, data: addOwnerRes, error: addOwnerError},
+    {
+      loading: addOwnerLoading, 
+      data: addOwnerRes, 
+      error: addOwnerError
+    },
   ] = useAddListOwner({
     listId,
     companyId: state.selectedCompany,
     userEmails: getEmails(),
     teamIds: owners
-      .filter(owner => owner.__typename === 'Team')
-      .map(owner => owner.id),
+              .filter(owner => owner.__typename === 'Team')
+              .map(owner => owner.id),
   });
 
   useEffect(() => {
@@ -337,6 +336,11 @@ const CreateListStep = (props: any) => {
     }
   };
 
+  const handleCreate = () => {
+    // Create List
+    createList();
+  };
+
   const InternalLabel = (
     <Typography variant="h6" className={classes.flex}>
       <InternalIcon className={classes.icon} />
@@ -355,15 +359,6 @@ const CreateListStep = (props: any) => {
       Request
     </Typography>
   );
-
-  const handleCreate = () => {
-    // Create List
-    if (!newTemplate.name) {
-      alert('Input List name');
-      return;
-    }
-    createList();
-  };
 
   return stepNumber == currentStep ? (
     <div>

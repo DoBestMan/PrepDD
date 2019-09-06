@@ -1,6 +1,5 @@
 import React, {useState, useEffect, SyntheticEvent} from 'react';
 import idx from 'idx';
-import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 
 import Header from './components/Header';
@@ -16,18 +15,9 @@ import {
   AllTemplates,
 } from '../../../graphql/queries/__generated__/AllTemplates';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {},
-  })
-);
-
 export default function CreateListPage() {
-  const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    AllTemplates_templateLists
-  >({
+  const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
     __typename: 'List',
     id: '',
     name: '',
@@ -92,7 +82,7 @@ export default function CreateListPage() {
 
   return (
     data && (
-      <div className={classes.root}>
+      <div>
         {notification && (
           <Snackbar
             anchorOrigin={{
@@ -110,7 +100,9 @@ export default function CreateListPage() {
             />
           </Snackbar>
         )}
+
         <Header step={step} setStep={setStep} />
+
         <SelectTemplateStep
           data={data.templateLists}
           setSelectedTemplate={setSelectedTemplate}
@@ -118,6 +110,7 @@ export default function CreateListPage() {
           currentStep={step}
           setStep={setStep}
         />
+
         <CreateTemplateStep
           selectedTemplate={selectedTemplate}
           setSelectedTemplate={setSelectedTemplate}
@@ -125,6 +118,7 @@ export default function CreateListPage() {
           currentStep={step}
           setStep={setStep}
         />
+        
         <CreateListStep
           selectedTemplate={selectedTemplate}
           stepNumber={2}

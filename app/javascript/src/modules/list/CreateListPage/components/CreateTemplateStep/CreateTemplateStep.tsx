@@ -16,9 +16,9 @@ import {
   TextField,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 import ReactDropzone, {DropzoneRef} from 'react-dropzone';
 
-import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
 import PriorityInputForm from './components/PriorityInputForm';
@@ -55,8 +55,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     selection: {
       padding: '6px 12px',
-      color: '#3A84FF',
-      border: '2px solid #3A84FF',
+      color: cs.COLORS.primary,
+      border: `2px solid ${cs.COLORS.primary}`,
       borderRadius: '3px',
       marginRight: '12px',
     },
@@ -165,6 +165,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     setStep,
   } = props;
   const classes = useStyles();
+
   const [selected, setSelected] = useState<number[]>([]);
   const [addable, setAddable] = useState<boolean>(false);
   const [newTask, setNewTask] = useState<TaskAttributes>({
@@ -184,10 +185,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
   }, [selectedTemplate.name]);
 
-  function handleSelectAllClick(
+  const handleSelectAllClick = (
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean
-  ) {
+  ) => {
     if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {
       const newSelecteds = selectedTemplate.tasks.map(
         (tasks: AllTemplates_templateLists_tasks, index: number) => index
@@ -198,7 +199,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     setSelected([]);
   }
 
-  function handleClick(event: React.MouseEvent<unknown>, id: number) {
+  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: number[] = [];
 
@@ -233,9 +234,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       })
       .then(async res => {
         const taskGroups = idx(res, res => res.data.tasks);
+
         if (taskGroups) {
           const groups = Object.values(taskGroups);
           let newTasks: AllTemplates_templateLists_tasks[] = [];
+
           await groups.map(async (group: any) => {
             const tasks = Object.values(group);
             const tempTasks = await tasks.map((task: any) => {
@@ -299,6 +302,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         id: '',
         name: '',
       };
+
       if (newSection && newSection.name !== null) {
         newSection.name = value;
         newTasks[index].section = newSection;
@@ -312,8 +316,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   };
 
   const handleChangePriority = (newValue: string, index: number) => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null =
-      selectedTemplate.tasks;
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
 
     if (newTasks) {
       newTasks[index].priority = newValue;
