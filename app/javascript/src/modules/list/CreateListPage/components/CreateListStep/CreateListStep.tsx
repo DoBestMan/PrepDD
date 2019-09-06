@@ -155,7 +155,11 @@ const CreateListStep = (props: any) => {
         } as TaskAttributes
       }) : [],
   });
-  const [inviteNewCompanyToList] = useInviteNewCompanyToList({
+  const [inviteNewCompanyToList, {
+    loading: inviteNewCompanyLoading, 
+    data: inviteNewCompanyRes, 
+    error: inviteNewCompanyError, 
+  }] = useInviteNewCompanyToList({
     ...inviteCompany, 
     listId, 
     companyId: state.selectedCompany, 
@@ -181,41 +185,75 @@ const CreateListStep = (props: any) => {
   });
 
   useEffect(() => {
-    const success = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success)
+    const addSuccess = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success);
+    const inviteSuccess = idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success);
 
-    if (success) {
+    if (addSuccess && (!inviteCompany.ownerEmail || inviteSuccess)) {
+      setNotification({
+        variant: 'success', 
+        message: 'Create List successfully'
+      })
       history.goBack();
     }
-  }, [addOwnerLoading, idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success)])
+  }, [
+    addOwnerLoading, 
+    inviteNewCompanyLoading,
+    idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success),
+    idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success)
+  ]);
 
   useEffect(() => {
     setNewTemplate({
       ...newTemplate, 
       name: selectedTemplate.name as string, 
     })
-  }, [selectedTemplate.name])
+  }, [selectedTemplate.name]);
 
   useEffect(() => {
     const response = idx(data, data => data.createList);
     if (loading || !response) return;
 
     if (response.list) {
-      setListId(response.list.id);
-      addListOwner();
-      if (inviteCompany.ownerEmail) {
-        inviteNewCompanyToList();
-      }
-      setNotification({
-        variant: 'success', 
-        message: 'Create List successfully'
-      })
+      const createMetaData = async () => {
+        if (!response || !response.list) return;
+        await setListId(response.list.id);
+        addListOwner();
+        if (inviteCompany.ownerEmail) {
+          inviteNewCompanyToList();
+        }
+      };
+
+      createMetaData();
     } else if (response.errors && response.errors.length) {
       setNotification({
         variant: 'warning', 
         message: response.errors[0].message
       })
     }
-  }, [loading, idx(data, data => data.createList.list)])
+  }, [loading, idx(data, data => data.createList.list)]);
+
+  useEffect(() => {
+    const errors = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.errors);
+
+    if (errors && errors.length) {
+      setNotification({
+        variant: 'warning', 
+        message: errors[0].message, 
+      })
+    }
+  }, [addOwnerLoading, idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.errors)]);
+
+  useEffect(() => {
+    const errors = idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors);
+
+    console.log("Errors: ", inviteNewCompanyRes);
+    if (errors && errors.length) {
+      setNotification({
+        variant: 'warning', 
+        message: errors[0].message, 
+      })
+    }
+  }, [inviteNewCompanyLoading, idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors)])
 
   const getRole = () => {
     if (state && state.currentUser && state.currentUser.roles) {

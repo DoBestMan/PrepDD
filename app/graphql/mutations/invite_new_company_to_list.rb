@@ -71,8 +71,8 @@ class Mutations::InviteNewCompanyToList < GraphQL::Schema::Mutation
       end
     end
 
-    if user&.persisted? && company&.persisted?
-      response[:company] = company
+    if user&.persisted? && new_company&.persisted?
+      response[:company] = new_company
       response[:success] = true
     end
 
