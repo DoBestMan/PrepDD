@@ -1,4 +1,4 @@
-class Mutations::DeleteTask < GraphQL::Schema::Mutation
+class Mutations::DeleteTasks < GraphQL::Schema::Mutation
   argument :taskIds, [ID], required: true
 
   field :errors, [Types::FormErrorType], null: false
