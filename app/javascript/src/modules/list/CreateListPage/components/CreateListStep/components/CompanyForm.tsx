@@ -125,17 +125,27 @@ const SEARCH_COMPANIES = gql`
   }
 `;
 
+interface NewCompanyType {
+  newCompanyName: string;
+  ownerEmail: string;  
+}
+
 interface CompanyFormProps {
   sharing: string;
   newTemplate: ListType;
   setNewTemplate: React.Dispatch<React.SetStateAction<ListType>>;
+  inviteCompany: NewCompanyType;
+  setInviteCompany: React.Dispatch<React.SetStateAction<NewCompanyType>>;
 }
+
 
 export default function CompanyForm(props: CompanyFormProps) {
   const {
     sharing,
     newTemplate,
     setNewTemplate, 
+    inviteCompany, 
+    setInviteCompany, 
   } = props;
   const classes = useStyles();
   const [searchString, setSearchString] = useState<string>("");
@@ -193,6 +203,20 @@ export default function CompanyForm(props: CompanyFormProps) {
     }
     steIssueCompany(company);
     setOpen(false);
+  }
+
+  const handleChangeInviteInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+
+    setInviteCompany({
+      ...inviteCompany,
+      [name]: value,
+    })
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
   }
 
   const renderUserList = () => {
@@ -282,16 +306,23 @@ export default function CompanyForm(props: CompanyFormProps) {
                 </List>
                 {renderUserList()}
                 {openInvitePanel ? (
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Typography variant="h6" style={{marginTop: '24px'}}>New user and company</Typography>
                     <TextField 
-                      className={classes.input}
+                      type="email"
                       label="Email"
+                      name="ownerEmail"
+                      value={inviteCompany.ownerEmail}
+                      className={classes.input}
+                      onChange={handleChangeInviteInfo}
                       required
                     />
                     <TextField 
-                      className={classes.input}
                       label="Company"
+                      name="newCompanyName"
+                      value={inviteCompany.newCompanyName}
+                      className={classes.input}
+                      onChange={handleChangeInviteInfo}
                       required
                     />
                     <Button type="submit" className={classes.addLink}>

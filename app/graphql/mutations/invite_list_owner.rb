@@ -1,8 +1,8 @@
 class Mutations::InviteListOwner < GraphQL::Schema::Mutation
   argument :listId, ID, required: true
-  argument :companyID, String, required: true
+  argument :companyId, ID, required: true
   argument :userName, String, required: true
-  argument :userEmail, String, required: true
+  argument :userEmail, String, required: true 
 
   field :user, Types::UserType, null: false
   field :errors, [Types::FormErrorType], null: false

@@ -197,17 +197,17 @@ export default function OwnerForm(props: OwnerFormProps) {
     <div>
       <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
       <div className={classes.flex}>
-        {owners && owners.map(owner => {
+        {owners && owners.map((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams, index: number) => {
           return owner.__typename === 'User' ? (
             <StyledItem 
-              key={owner.id}
+              key={index}
               type="user"
               label={owner.fullName} 
               logo={owner.profileUrl as string}
             />
           ) : (
             <StyledItem 
-              key={owner.id}
+              key={index}
               type="user"
               label={owner.name} 
               logo=""
@@ -280,8 +280,9 @@ export default function OwnerForm(props: OwnerFormProps) {
                       label="Name"
                     />
                     <TextField 
-                      className={classes.input}
+                      type="email"
                       label="Email"
+                      className={classes.input}
                       required
                     />
                     <Button type="submit" className={classes.addLink}>

@@ -104,6 +104,16 @@ interface CreateListStepProps {
   setStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
+interface NewOwnerType {
+  userName: string;
+  userEmail: string;  
+}
+
+interface NewCompanyType {
+  newCompanyName: string;
+  ownerEmail: string;  
+}
+
 export default function CreateListStep(props: CreateListStepProps) {
   const {
     selectedTemplate, 
@@ -122,6 +132,10 @@ export default function CreateListStep(props: CreateListStepProps) {
   const [sharing, setSharing] = useState<string>("internal");
   const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
   const [listId, setListId] = useState<string>('');
+  const [inviteCompany, setInviteCompany] = useState<NewCompanyType>({
+    newCompanyName: '', 
+    ownerEmail: '', 
+  });
 
   const [createList, {loading, data, error}] = useCreateList({
     ...newTemplate, 
@@ -300,6 +314,8 @@ export default function CreateListStep(props: CreateListStepProps) {
                 sharing={sharing}
                 newTemplate={newTemplate}
                 setNewTemplate={setNewTemplate}
+                inviteCompany={inviteCompany}
+                setInviteCompany={setInviteCompany}
               />
             )}
 

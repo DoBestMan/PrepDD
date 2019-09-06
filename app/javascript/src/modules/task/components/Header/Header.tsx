@@ -42,7 +42,7 @@ const Header = (props: any) => {
   return (
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
-      <Typography variant="h4" className={classes.back}>Back</Typography>
+      <Typography variant="h4" className={classes.back} onClick={handleClose}>Back</Typography>
       <div className={classes.grow} />
       <CloseIcon className={classes.close} onClick={handleClose}/>
     </div>

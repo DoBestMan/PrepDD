@@ -2611,14 +2611,14 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "companyID",
+                  "name": "companyId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
                       "kind": "SCALAR",
-                      "name": "String",
+                      "name": "ID",
                       "ofType": null
                     }
                   },
