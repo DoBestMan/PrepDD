@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'fixed',
       top: '85px',
       left: '185px',
-      border: '2px solid #D8D8D8',
+      border: '1px solid #D8D8D8',
       zIndex: 1,
     },
     createMenuClose: {
