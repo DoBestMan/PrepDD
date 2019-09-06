@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 
@@ -13,22 +13,22 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       alignItems: 'center',
-      padding: '36px 36px 24px 36px', 
+      padding: '36px 36px 24px 36px',
     },
     back: {
-      color: cs.COLORS.primary, 
-      cursor: 'pointer', 
+      color: cs.COLORS.primary,
+      cursor: 'pointer',
     },
     close: {
       color: '#D8D8D8',
-      cursor: 'pointer', 
+      cursor: 'pointer',
     },
     grow: {
       flexGrow: 1,
     },
     secondary: {
       color: '#D8D8D8',
-    }
+    },
   })
 );
 
@@ -42,13 +42,13 @@ const Header = (props: any) => {
     } else {
       history.goBack();
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
-      <Typography 
-        variant="h4" 
+      <Typography
+        variant="h4"
         className={classes.back}
         onClick={handleClickBack}
       >
@@ -58,6 +58,6 @@ const Header = (props: any) => {
       <CloseIcon className={classes.close} onClick={() => history.goBack()} />
     </div>
   );
-}
+};
 
 export default withRouter(Header);

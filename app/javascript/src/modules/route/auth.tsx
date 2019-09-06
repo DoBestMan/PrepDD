@@ -13,10 +13,14 @@ export default function Router(props: {path: string}) {
   return (
     <Suspense fallback={<LoadingFallback />}>
       <Switch>
-        <Route exact path="/signup/:companyName" component={SignUpPage} /> 
+        <Route exact path="/signup/:companyName" component={SignUpPage} />
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/forgot" component={ForgotPasswordPage} />
-        <Route exact path="/reset_password/:token" component={ResetPasswordPage} />
+        <Route
+          exact
+          path="/reset_password/:token"
+          component={ResetPasswordPage}
+        />
         <Route exact path="/linked" component={LinkedInPopUp} />
         <Route exact path="/" component={CreateCompanyPage} />
       </Switch>

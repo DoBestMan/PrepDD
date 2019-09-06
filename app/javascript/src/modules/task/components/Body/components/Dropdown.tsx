@@ -2,35 +2,33 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  ClickAwayListener, 
+  ClickAwayListener,
   Typography,
-  Paper, 
-  List, 
-  ListItem, 
+  Paper,
+  List,
+  ListItem,
   ListItemText,
 } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
-import {
-  AllTemplates_templateLists, 
-} from '../../../../../graphql/queries/__generated__/AllTemplates'
+import {AllTemplates_templateLists} from '../../../../../graphql/queries/__generated__/AllTemplates';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: 'relative', 
-      width: 'fit-content', 
+      position: 'relative',
+      width: 'fit-content',
     },
     flex: {
-      display: 'flex', 
-      alignItems: 'center', 
-    }, 
+      display: 'flex',
+      alignItems: 'center',
+    },
     paper: {
-      position: 'absolute', 
-      top: '33px', 
-      left: '0px', 
+      position: 'absolute',
+      top: '33px',
+      left: '0px',
       border: '1px solid #D8D8D8',
-      minWidth: '100%', 
-    }
+      minWidth: '100%',
+    },
   })
 );
 
@@ -48,38 +46,36 @@ export default function Dropdown(props: DropdownProps) {
   const handleClick = (newId: string) => {
     setListId(newId);
     setOpen(false);
-  }
+  };
 
   const renderListName = () => {
     const selectList = data.find(item => item.id === listId);
-    
+
     if (selectList) return selectList.name;
-    return 'Select List'; 
-  }
+    return 'Select List';
+  };
 
   return (
     <div className={classes.root}>
       <div className={classes.flex} onClick={() => setOpen(!open)}>
-        <Typography variant="h2">
-          {renderListName()}
-        </Typography>
+        <Typography variant="h2">{renderListName()}</Typography>
         <ArrowDownIcon fontSize="large" />
       </div>
       {open && (
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Paper
-            className={classes.paper}
-            elevation={0}
-            square
-          >
+          <Paper className={classes.paper} elevation={0} square>
             <List>
-              {data && data.map((item: AllTemplates_templateLists) => {
-                return (
-                  <ListItem key={item.id} onClick={() => handleClick(item.id)}>
-                    <ListItemText primary={item.name} />
-                  </ListItem>
-                )
-              })}
+              {data &&
+                data.map((item: AllTemplates_templateLists) => {
+                  return (
+                    <ListItem
+                      key={item.id}
+                      onClick={() => handleClick(item.id)}
+                    >
+                      <ListItemText primary={item.name} />
+                    </ListItem>
+                  );
+                })}
               {(!data || !data.length) && (
                 <ListItem>
                   <ListItemText primary="No available lists" />
@@ -90,5 +86,5 @@ export default function Dropdown(props: DropdownProps) {
         </ClickAwayListener>
       )}
     </div>
-  )
+  );
 }

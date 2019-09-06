@@ -50,7 +50,7 @@ export default function NestedList(props: NestedListProps) {
 
   const handleClick = (company: SearchCompanies_searchCompanies_companies) => {
     onClick(company);
-  }
+  };
 
   return (
     <>
@@ -70,23 +70,29 @@ export default function NestedList(props: NestedListProps) {
           {data.companies &&
             data.companies.map(
               (company: SearchCompanies_searchCompanies_users_companies) => {
-                return company.id !== state.selectedCompany && (
-                  <ListItem
-                    key={company.id}
-                    className={classes.nested}
-                    onClick={() => handleClick(company as SearchCompanies_searchCompanies_companies)}
-                    disableGutters
-                  >
-                    {company.logoUrl && (
-                      <img
-                        className={classes.companyLogo}
-                        src={company.logoUrl}
-                        alt={company.name}
-                      />
-                    )}
-                    <ListItemText primary={company.name} />
-                  </ListItem>
-                )
+                return (
+                  company.id !== state.selectedCompany && (
+                    <ListItem
+                      key={company.id}
+                      className={classes.nested}
+                      onClick={() =>
+                        handleClick(
+                          company as SearchCompanies_searchCompanies_companies
+                        )
+                      }
+                      disableGutters
+                    >
+                      {company.logoUrl && (
+                        <img
+                          className={classes.companyLogo}
+                          src={company.logoUrl}
+                          alt={company.name}
+                        />
+                      )}
+                      <ListItemText primary={company.name} />
+                    </ListItem>
+                  )
+                );
               }
             )}
         </List>

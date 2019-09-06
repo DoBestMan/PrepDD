@@ -7,9 +7,7 @@ class Mutations::DeleteTasks < GraphQL::Schema::Mutation
   def resolve(task_ids: nil)
     response = { errors: [] }
 
-    task_ids.each do |id|
-      Task.find(id).destroy!
-    end
+    task_ids.each { |id| Task.find(id).destroy! }
 
     response[:success] = true
     response

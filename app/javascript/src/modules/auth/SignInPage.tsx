@@ -121,7 +121,7 @@ const SignInPage = (props: any) => {
   useEffect(() => {
     const signInUser = idx(data, data => data.signInUser);
     if (loading || !signInUser) return;
-    window.location.href = "/app"
+    window.location.href = '/app';
   }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
@@ -296,6 +296,6 @@ const SignInPage = (props: any) => {
       </div>
     </Container>
   );
-}
+};
 
 export default withRouter(SignInPage);

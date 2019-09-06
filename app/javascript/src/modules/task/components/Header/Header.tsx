@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     back: {
-      color: cs.COLORS.primary, 
-      cursor: 'pointer', 
+      color: cs.COLORS.primary,
+      cursor: 'pointer',
     },
     close: {
       color: '#D8D8D8',
-      cursor: 'pointer', 
+      cursor: 'pointer',
     },
     secondary: {
       color: '#D8D8D8',
-    }
+    },
   })
 );
 
@@ -37,16 +37,18 @@ const Header = (props: any) => {
 
   const handleClose = () => {
     history.goBack();
-  }
+  };
 
   return (
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
-      <Typography variant="h4" className={classes.back} onClick={handleClose}>Back</Typography>
+      <Typography variant="h4" className={classes.back} onClick={handleClose}>
+        Back
+      </Typography>
       <div className={classes.grow} />
-      <CloseIcon className={classes.close} onClick={handleClose}/>
+      <CloseIcon className={classes.close} onClick={handleClose} />
     </div>
   );
-}
+};
 
 export default withRouter(Header);

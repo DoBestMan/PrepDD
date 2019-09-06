@@ -18,7 +18,7 @@ export default function App() {
     if (loading) return;
     setLoaded(true);
     if (!currentUser) return;
-    
+
     dispatch({
       type: 'SET_CURRENT_USER',
       user: currentUser,

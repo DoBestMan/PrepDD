@@ -138,8 +138,8 @@ const SignUpPage = (props: any) => {
     if (loading || !signedUpUser) return;
 
     dispatch({
-      type: 'SET_CURRENT_USER', 
-      user: signedUpUser
+      type: 'SET_CURRENT_USER',
+      user: signedUpUser,
     });
     history.push('/app/');
   }, [loading, data]);
@@ -351,8 +351,12 @@ const SignUpPage = (props: any) => {
 
             <Grid container justify="center">
               <Grid item>
-                <Link component={RouterLink} variant="body2" to="/
-                ">
+                <Link
+                  component={RouterLink}
+                  variant="body2"
+                  to="/
+                "
+                >
                   {'Already have an account? Sign In'}
                 </Link>
               </Grid>
@@ -412,6 +416,6 @@ const SignUpPage = (props: any) => {
       </div>
     </Container>
   );
-}
+};
 
-export default withRouter(SignUpPage)
+export default withRouter(SignUpPage);

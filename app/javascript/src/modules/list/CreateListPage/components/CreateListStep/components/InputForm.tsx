@@ -53,9 +53,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#3A84FF',
     },
     secondary: {
-      color: '#606060', 
-      marginTop: '24px', 
-      marginBottom: '12px', 
+      color: '#606060',
+      marginTop: '24px',
+      marginBottom: '12px',
     },
   })
 );
@@ -81,10 +81,12 @@ export default function InputForm(props: InputFormProps) {
       setEditable(false);
     }
   };
-  
+
   return (
     <div className={classes.root}>
-      <Typography variant="h6" className={classes.secondary}>{label}</Typography>
+      <Typography variant="h6" className={classes.secondary}>
+        {label}
+      </Typography>
       <ClickAwayListener onClickAway={handleClickAway}>
         {editable ? (
           <input

@@ -5,11 +5,11 @@ import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Grid,
-  Typography, 
+  Typography,
   FormControl,
   FormControlLabel,
-  RadioGroup, 
-  Radio, 
+  RadioGroup,
+  Radio,
   Button,
 } from '@material-ui/core';
 
@@ -35,66 +35,66 @@ import {
   AllTemplates_templateLists_tasks,
 } from '../../../../../graphql/queries/__generated__/AllTemplates';
 import {
-  SearchCompanyUsers_searchCompanyUsers_users, 
-  SearchCompanyUsers_searchCompanyUsers_teams
+  SearchCompanyUsers_searchCompanyUsers_users,
+  SearchCompanyUsers_searchCompanyUsers_teams,
 } from './components/__generated__/SearchCompanyUsers';
 import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 
-const useStyles = makeStyles((theme: Theme) => 
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     body: {
       height: 'calc(100vh - 144px)',
-      padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
+      padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)',
       borderBottom: '1px solid #D8D8D8',
-      overflow: 'auto', 
-    }, 
+      overflow: 'auto',
+    },
     footer: {
-      height: '60px', 
-      padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)', 
-      },
-      flex: {
-        display: 'flex', 
-        alignItems: 'center', 
-      },
+      height: '60px',
+      padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)',
+    },
+    flex: {
+      display: 'flex',
+      alignItems: 'center',
+    },
     grow: {
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     secondary: {
-      color: '#606060', 
-      marginTop: '24px', 
-      marginBottom: '12px', 
+      color: '#606060',
+      marginTop: '24px',
+      marginBottom: '12px',
     },
     sharingTitle: {
-      color: '#606060', 
-      marginLeft: '3px', 
+      color: '#606060',
+      marginLeft: '3px',
     },
     icon: {
-      fontSize: '15px', 
-      marginRight: '12px', 
+      fontSize: '15px',
+      marginRight: '12px',
     },
     explanation: {
-      color: '#606060', 
-      marginLeft: '32px', 
+      color: '#606060',
+      marginLeft: '32px',
     },
     grayRect: {
-      width: '36px', 
-      height: '36px', 
+      width: '36px',
+      height: '36px',
       backgroundColor: '#F2F2F2',
       border: '1px solid #D8D8D8',
       borderRadius: '3px',
-      marginRight: '12px', 
+      marginRight: '12px',
     },
     description: {
-      width: '100%', 
-      height: '180px', 
+      width: '100%',
+      height: '180px',
       borderRadius: '3px',
-      resize: 'none', 
+      resize: 'none',
       border: '1px solid #D8D8D8',
-      color: '#2C2C2C', 
-      fontFamily: 'Montserrat', 
-      fontSize: '12px', 
-      fontWeight: 600, 
+      color: '#2C2C2C',
+      fontFamily: 'Montserrat',
+      fontSize: '12px',
+      fontWeight: 600,
     },
   })
 );
@@ -104,11 +104,11 @@ interface CreateListStepProps {
   stepNumber: number;
   currentStep: number;
   history?: any;
-};
+}
 
 interface NewOwnerType {
   userName: string;
-  userEmail: string;  
+  userEmail: string;
 }
 
 interface NewCompanyType {
@@ -118,10 +118,10 @@ interface NewCompanyType {
 
 const CreateListStep = (props: any) => {
   const {
-    selectedTemplate, 
-    stepNumber, 
-    currentStep, 
-    history, 
+    selectedTemplate,
+    stepNumber,
+    currentStep,
+    history,
     setNotification,
   } = props;
   const classes = useStyles();
@@ -132,81 +132,104 @@ const CreateListStep = (props: any) => {
     requesterId: state.selectedCompany,
     responderId: '',
   });
-  const [sharing, setSharing] = useState<string>("internal");
-  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
+  const [sharing, setSharing] = useState<string>('internal');
+  const [owners, setOwners] = useState<
+    (
+      | SearchCompanyUsers_searchCompanyUsers_users
+      | SearchCompanyUsers_searchCompanyUsers_teams)[]
+  >([]);
   const [listId, setListId] = useState<string>('');
   const [inviteCompany, setInviteCompany] = useState<NewCompanyType>({
-    newCompanyName: '', 
-    ownerEmail: '', 
+    newCompanyName: '',
+    ownerEmail: '',
   });
 
   const [createList, {loading, data, error}] = useCreateList({
-    ...newTemplate, 
-    tasks: selectedTemplate && selectedTemplate.tasks ? 
-      selectedTemplate.tasks.map((task: AllTemplates_templateLists_tasks) => {
-        return {
-          name: task.name ? task.name : '',
-          description: task.description ? task.description : '',  
-          priority: task.priority ? task.priority : '', 
-          status: 'To do',
-          dueDate: Date(), 
-          section: task && task.section ? task.section.name : '', 
-          isActive: true,
-        } as TaskAttributes
-      }) : [],
+    ...newTemplate,
+    tasks:
+      selectedTemplate && selectedTemplate.tasks
+        ? selectedTemplate.tasks.map(
+            (task: AllTemplates_templateLists_tasks) => {
+              return {
+                name: task.name ? task.name : '',
+                description: task.description ? task.description : '',
+                priority: task.priority ? task.priority : '',
+                status: 'To do',
+                dueDate: Date(),
+                section: task && task.section ? task.section.name : '',
+                isActive: true,
+              } as TaskAttributes;
+            }
+          )
+        : [],
   });
-  const [inviteNewCompanyToList, {
-    loading: inviteNewCompanyLoading, 
-    data: inviteNewCompanyRes, 
-    error: inviteNewCompanyError, 
-  }] = useInviteNewCompanyToList({
-    ...inviteCompany, 
-    listId, 
-    companyId: state.selectedCompany, 
-    isRequest: sharing === 'issue', 
-    isShare: sharing === 'share'
-  })
+  const [
+    inviteNewCompanyToList,
+    {
+      loading: inviteNewCompanyLoading,
+      data: inviteNewCompanyRes,
+      error: inviteNewCompanyError,
+    },
+  ] = useInviteNewCompanyToList({
+    ...inviteCompany,
+    listId,
+    companyId: state.selectedCompany,
+    isRequest: sharing === 'issue',
+    isShare: sharing === 'share',
+  });
 
   const getEmails = () => {
-    const userArray = owners.filter(owner => owner.__typename === 'User') as SearchCompanyUsers_searchCompanyUsers_users[];
+    const userArray = owners.filter(
+      owner => owner.__typename === 'User'
+    ) as SearchCompanyUsers_searchCompanyUsers_users[];
 
     return userArray.map(owner => owner.email);
-  }
+  };
 
-  const [addListOwner, {
-    loading: addOwnerLoading,
-    data: addOwnerRes, 
-    error: addOwnerError,
-  }] = useAddListOwner({
+  const [
+    addListOwner,
+    {loading: addOwnerLoading, data: addOwnerRes, error: addOwnerError},
+  ] = useAddListOwner({
     listId,
-    companyId: state.selectedCompany, 
-    userEmails: getEmails(), 
-    teamIds: owners.filter(owner => owner.__typename === 'Team').map(owner => owner.id)
+    companyId: state.selectedCompany,
+    userEmails: getEmails(),
+    teamIds: owners
+      .filter(owner => owner.__typename === 'Team')
+      .map(owner => owner.id),
   });
 
   useEffect(() => {
-    const addSuccess = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success);
-    const inviteSuccess = idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success);
+    const addSuccess = idx(
+      addOwnerRes,
+      addOwnerRes => addOwnerRes.addListOwner.success
+    );
+    const inviteSuccess = idx(
+      inviteNewCompanyRes,
+      inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success
+    );
 
     if (addSuccess && (!inviteCompany.ownerEmail || inviteSuccess)) {
       setNotification({
-        variant: 'success', 
-        message: 'Create List successfully'
-      })
+        variant: 'success',
+        message: 'Create List successfully',
+      });
       history.goBack();
     }
   }, [
-    addOwnerLoading, 
+    addOwnerLoading,
     inviteNewCompanyLoading,
     idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success),
-    idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success)
+    idx(
+      inviteNewCompanyRes,
+      inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.success
+    ),
   ]);
 
   useEffect(() => {
     setNewTemplate({
-      ...newTemplate, 
-      name: selectedTemplate.name as string, 
-    })
+      ...newTemplate,
+      name: selectedTemplate.name as string,
+    });
   }, [selectedTemplate.name]);
 
   useEffect(() => {
@@ -226,38 +249,54 @@ const CreateListStep = (props: any) => {
       createMetaData();
     } else if (response.errors && response.errors.length) {
       setNotification({
-        variant: 'warning', 
-        message: response.errors[0].message
-      })
+        variant: 'warning',
+        message: response.errors[0].message,
+      });
     }
   }, [loading, idx(data, data => data.createList.list)]);
 
   useEffect(() => {
-    const errors = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.errors);
+    const errors = idx(
+      addOwnerRes,
+      addOwnerRes => addOwnerRes.addListOwner.errors
+    );
 
     if (errors && errors.length) {
       setNotification({
-        variant: 'warning', 
-        message: errors[0].message, 
-      })
+        variant: 'warning',
+        message: errors[0].message,
+      });
     }
-  }, [addOwnerLoading, idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.errors)]);
+  }, [
+    addOwnerLoading,
+    idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.errors),
+  ]);
 
   useEffect(() => {
-    const errors = idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors);
+    const errors = idx(
+      inviteNewCompanyRes,
+      inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors
+    );
 
-    console.log("Errors: ", inviteNewCompanyRes);
     if (errors && errors.length) {
       setNotification({
-        variant: 'warning', 
-        message: errors[0].message, 
-      })
+        variant: 'warning',
+        message: errors[0].message,
+      });
     }
-  }, [inviteNewCompanyLoading, idx(inviteNewCompanyRes, inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors)])
+  }, [
+    inviteNewCompanyLoading,
+    idx(
+      inviteNewCompanyRes,
+      inviteNewCompanyRes => inviteNewCompanyRes.inviteNewCompanyToList.errors
+    ),
+  ]);
 
   const getRole = () => {
     if (state && state.currentUser && state.currentUser.roles) {
-      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
+      const findRole = state.currentUser.roles.find(
+        role => role.companyId === state.selectedCompany
+      );
 
       return findRole ? findRole.name : 'User';
     }
@@ -266,63 +305,65 @@ const CreateListStep = (props: any) => {
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewTemplate({
-      ...newTemplate, 
-      name: event.target.value, 
-    })
-  }
+      ...newTemplate,
+      name: event.target.value,
+    });
+  };
 
-  const handleChangeDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChangeDescription = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setNewTemplate({
-      ...newTemplate, 
-      description: event.target.value, 
-    })
-  }
+      ...newTemplate,
+      description: event.target.value,
+    });
+  };
 
   const handleChangeSharing = (event: React.ChangeEvent<{}>, value: string) => {
     setSharing(value);
 
     if (value === 'internal' || value === 'issue') {
       setNewTemplate({
-        ...newTemplate, 
-        requesterId: state.selectedCompany, 
-        responderId: ''
-      })
+        ...newTemplate,
+        requesterId: state.selectedCompany,
+        responderId: '',
+      });
     } else if (value === 'share') {
       setNewTemplate({
-        ...newTemplate, 
-        requesterId: '', 
-        responderId: state.selectedCompany
-      })      
+        ...newTemplate,
+        requesterId: '',
+        responderId: state.selectedCompany,
+      });
     }
-  }
+  };
 
   const InternalLabel = (
     <Typography variant="h6" className={classes.flex}>
       <InternalIcon className={classes.icon} />
       Internal
     </Typography>
-  )
+  );
   const ShareLabel = (
     <Typography variant="h6" className={classes.flex}>
       <ShareIcon className={classes.icon} />
       Share
     </Typography>
-  )
+  );
   const RequestLabel = (
     <Typography variant="h6" className={classes.flex}>
       <RequestIcon className={classes.icon} />
       Request
     </Typography>
-  )
+  );
 
   const handleCreate = () => {
     // Create List
     if (!newTemplate.name) {
-      alert("Input List name");
+      alert('Input List name');
       return;
     }
     createList();
-  }
+  };
 
   return stepNumber == currentStep ? (
     <div>
@@ -340,57 +381,63 @@ const CreateListStep = (props: any) => {
                 value={sharing}
                 onChange={handleChangeSharing}
               >
-                <FormControlLabel 
-                  value="internal" 
-                  label={InternalLabel} 
-                  control={<Radio color="primary" />} 
+                <FormControlLabel
+                  value="internal"
+                  label={InternalLabel}
+                  control={<Radio color="primary" />}
                 />
                 <Typography variant="h6" className={classes.explanation}>
-                  Collaborate within your company. Use this setting when sharing information with your colleagues
+                  Collaborate within your company. Use this setting when sharing
+                  information with your colleagues
                 </Typography>
                 {canBeAdmin(getRole()) && (
                   <>
-                    <FormControlLabel 
-                      value="share" 
-                      label={ShareLabel} 
-                      control={<Radio color="primary" />} 
+                    <FormControlLabel
+                      value="share"
+                      label={ShareLabel}
+                      control={<Radio color="primary" />}
                     />
                     <Typography variant="h6" className={classes.explanation}>
-                      Send information to an external company. Use this setting when your company has the primary responsibility for providing the information in the task list.
+                      Send information to an external company. Use this setting
+                      when your company has the primary responsibility for
+                      providing the information in the task list.
                     </Typography>
-                    <FormControlLabel 
-                      value="issue" 
-                      label={RequestLabel} 
-                      control={<Radio color="primary"/>} 
+                    <FormControlLabel
+                      value="issue"
+                      label={RequestLabel}
+                      control={<Radio color="primary" />}
                     />
                     <Typography variant="h6" className={classes.explanation}>
-                      Issue a request for information from an external company. Use this setting when the other company is responsible for providing most of the information in the task list.
+                      Issue a request for information from an external company.
+                      Use this setting when the other company is responsible for
+                      providing most of the information in the task list.
                     </Typography>
                   </>
                 )}
               </RadioGroup>
             </FormControl>
-            {sharing !== 'internal' && (
-              <Alert />
-            )}
+            {sharing !== 'internal' && <Alert />}
           </Grid>
           <Grid item md={6}>
             <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm label="Title" value={newTemplate.name} onChange={handleChangeName} />
+            <InputForm
+              label="Title"
+              value={newTemplate.name}
+              onChange={handleChangeName}
+            />
 
             <div>
-              <Typography variant="h6" className={classes.secondary}>Template</Typography>
+              <Typography variant="h6" className={classes.secondary}>
+                Template
+              </Typography>
               <div className={classes.flex}>
                 <div className={classes.grayRect} />
                 <Typography variant="h6">{selectedTemplate.name}</Typography>
               </div>
             </div>
 
-            <OwnerForm 
-              owners={owners}
-              setOwners={setOwners}
-            />
+            <OwnerForm owners={owners} setOwners={setOwners} />
             {sharing !== 'internal' && (
               <CompanyForm
                 sharing={sharing}
@@ -402,9 +449,11 @@ const CreateListStep = (props: any) => {
             )}
 
             <div>
-              <Typography variant="h6" className={classes.secondary}>Description</Typography>
-              <textarea 
-                className={classes.description} 
+              <Typography variant="h6" className={classes.secondary}>
+                Description
+              </Typography>
+              <textarea
+                className={classes.description}
                 value={newTemplate.description}
                 onChange={handleChangeDescription}
               />
@@ -412,7 +461,7 @@ const CreateListStep = (props: any) => {
           </Grid>
         </Grid>
       </div>
-      
+
       <div className={classes.footer}>
         <div className={classes.flex} style={{paddingTop: '12px'}}>
           <div className={classes.grow} />
@@ -422,7 +471,7 @@ const CreateListStep = (props: any) => {
         </div>
       </div>
     </div>
-  ): null;
+  ) : null;
 };
 
 export default withRouter(CreateListStep);

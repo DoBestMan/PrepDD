@@ -12,11 +12,11 @@ import {
   TableRow,
   TableCell,
   Button,
-  Checkbox, 
-  TextField, 
+  Checkbox,
+  TextField,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
-import ReactDropzone, { DropzoneRef } from 'react-dropzone';
+import ReactDropzone, {DropzoneRef} from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from './components/InputForm';
@@ -34,51 +34,51 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
       height: 'calc(100vh - 144px)',
-      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)',
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto',
     },
     footer: {
-      height: '60px', 
-      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+      height: '60px',
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)',
     },
     title: {
-      marginRight: '270px', 
-      height: '42px', 
+      marginRight: '270px',
+      height: '42px',
     },
     flex: {
       display: 'flex',
       alignItems: 'center',
     },
     grow: {
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     selection: {
       padding: '6px 12px',
       color: '#3A84FF',
       border: '2px solid #3A84FF',
-      borderRadius: '3px', 
-      marginRight: '12px', 
+      borderRadius: '3px',
+      marginRight: '12px',
     },
     deleteIcon: {
-      cursor: 'pointer', 
+      cursor: 'pointer',
     },
     content: {
       display: 'flex',
       marginTop: '48px',
-      height: 'calc(100% - 100px)'
+      height: 'calc(100% - 100px)',
     },
     styledTableCell: {
-      paddingLeft: '0px', 
+      paddingLeft: '0px',
     },
     rightPane: {
       minWidth: '200px',
       marginLeft: '72px',
     },
     uploadButton: {
-      width: '100%', 
-      height: '42px', 
-      padding: '0px', 
+      width: '100%',
+      height: '42px',
+      padding: '0px',
     },
     uploadArea: {
       width: '100%',
@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textFlow: {
       display: 'inline-block',
-      width: 'fit-content', 
+      width: 'fit-content',
       maxWidth: 'calc(80%)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -112,7 +112,7 @@ const useStyles = makeStyles((theme: Theme) =>
       position: 'sticky',
       top: '0px',
       backgroundColor: '#FFFFFF',
-      zIndex: 1, 
+      zIndex: 1,
     },
     input: {
       display: 'block',
@@ -123,7 +123,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: cs.FONT.weight.regular,
       fontSize: cs.FONT.size.xs,
       textTransform: 'none',
-      border: 'none', 
+      border: 'none',
       '& label': {
         color: '#606060',
         fontFamily: cs.FONT.family,
@@ -140,27 +140,29 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
       '& .MuiInput-underline:before, .MuiInput-underline:after, .MuiInput-underline:hover:not(.Mui-disabled):before': {
-        border: 'none'
-      }
+        border: 'none',
+      },
     },
   })
 );
 
 interface CreateTemplateStepProps {
   selectedTemplate: AllTemplates_templateLists;
-  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
+  setSelectedTemplate: React.Dispatch<
+    React.SetStateAction<AllTemplates_templateLists>
+  >;
   stepNumber: number;
   currentStep: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;  
+  setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const {
-    selectedTemplate, 
-    setSelectedTemplate, 
-    stepNumber, 
-    currentStep, 
-    setStep
+    selectedTemplate,
+    setSelectedTemplate,
+    stepNumber,
+    currentStep,
+    setStep,
   } = props;
   const classes = useStyles();
   const [selected, setSelected] = useState<number[]>([]);
@@ -168,11 +170,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const [newTask, setNewTask] = useState<TaskAttributes>({
     name: '',
     description: '',
-    priority: 'medium', 
+    priority: 'medium',
     status: 'To do',
-    dueDate: Date(), 
-    section: '', 
-    isActive: true
+    dueDate: Date(),
+    section: '',
+    isActive: true,
   });
   const dropzone = React.createRef<DropzoneRef>();
 
@@ -180,11 +182,16 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     if (selectedTemplate.name === 'Blank Project') {
       setAddable(true);
     }
-  }, [selectedTemplate.name])
+  }, [selectedTemplate.name]);
 
-  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
+  function handleSelectAllClick(
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) {
     if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {
-      const newSelecteds = selectedTemplate.tasks.map((tasks: AllTemplates_templateLists_tasks, index: number) => index);
+      const newSelecteds = selectedTemplate.tasks.map(
+        (tasks: AllTemplates_templateLists_tasks, index: number) => index
+      );
       setSelected(newSelecteds);
       return;
     }
@@ -233,59 +240,64 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             const tasks = Object.values(group);
             const tempTasks = await tasks.map((task: any) => {
               return {
-                __typename: "Task",
+                __typename: 'Task',
                 id: '',
-                name: task.name, 
+                name: task.name,
                 section: {
-                  __typename: "TaskSection",
-                  id: '', 
-                  name: task.section,                 
-                }, 
-                description: task.description, 
-                priority: task.priority, 
-                status: 'Todo'  
+                  __typename: 'TaskSection',
+                  id: '',
+                  name: task.section,
+                },
+                description: task.description,
+                priority: task.priority,
+                status: 'Todo',
               } as AllTemplates_templateLists_tasks;
             });
 
             newTasks = newTasks.concat(tempTasks);
-          })
+          });
 
           setSelectedTemplate({
-            ...selectedTemplate, 
-            tasks: [
-              ...selectedTemplate.tasks, 
-              ...newTasks, 
-            ]
-          }) 
+            ...selectedTemplate,
+            tasks: [...selectedTemplate.tasks, ...newTasks],
+          });
         }
-      })
+      });
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null =
+      selectedTemplate.tasks;
     const {name, value} = event.target;
 
     if (newTasks) {
       newTasks[index] = Object.assign({}, newTasks[index], {
-        [name]: value, 
+        [name]: value,
       });
 
       setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
+        ...selectedTemplate,
+        tasks: newTasks,
+      });
     }
-  }
+  };
 
-  const handleChangeSection = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+  const handleChangeSection = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    let newTasks: AllTemplates_templateLists_tasks[] | null =
+      selectedTemplate.tasks;
     const {value} = event.target;
 
     if (newTasks) {
       const newSection = newTasks[index].section || {
-        __typename: "TaskSection",
-        id: '', 
-        name: ''
+        __typename: 'TaskSection',
+        id: '',
+        name: '',
       };
       if (newSection && newSection.name !== null) {
         newSection.name = value;
@@ -293,119 +305,125 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       }
 
       setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
+        ...selectedTemplate,
+        tasks: newTasks,
+      });
     }
-  }
+  };
 
   const handleChangePriority = (newValue: string, index: number) => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+    let newTasks: AllTemplates_templateLists_tasks[] | null =
+      selectedTemplate.tasks;
 
     if (newTasks) {
       newTasks[index].priority = newValue;
 
       setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
+        ...selectedTemplate,
+        tasks: newTasks,
+      });
     }
-  }
+  };
 
   const handleAddTask = () => {
     setAddable(true);
     setNewTask({
       name: '',
       description: '',
-      priority: 'medium', 
+      priority: 'medium',
       status: 'To do',
-      dueDate: Date(), 
-      section: '', 
-      isActive: true      
-    })
-  }
+      dueDate: Date(),
+      section: '',
+      isActive: true,
+    });
+  };
 
   const handleDelete = () => {
     if (selectedTemplate && selectedTemplate.tasks) {
-      const newTasks = selectedTemplate.tasks.filter((task: AllTemplates_templateLists_tasks, index: number) => {
-        return selected.indexOf(index) === -1;
-      })
+      const newTasks = selectedTemplate.tasks.filter(
+        (task: AllTemplates_templateLists_tasks, index: number) => {
+          return selected.indexOf(index) === -1;
+        }
+      );
 
       setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
+        ...selectedTemplate,
+        tasks: newTasks,
+      });
       setSelected([]);
     }
-  }
+  };
 
   const handleClickDownload = () => {
     if (dropzone && dropzone.current) {
       dropzone.current.open();
     }
-  }
+  };
 
   const handleChangeNewTask = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
     setNewTask({
-      ...newTask, 
-      [name]: value, 
-    })
-  }
+      ...newTask,
+      [name]: value,
+    });
+  };
 
   const handleChangeNewTaskPriority = (newValue: string) => {
     setNewTask({
-      ...newTask, 
-      priority: newValue, 
-    });    
-  }
+      ...newTask,
+      priority: newValue,
+    });
+  };
 
   const handleFinishAdd = () => {
     setAddable(false);
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+    let newTasks: AllTemplates_templateLists_tasks[] | null =
+      selectedTemplate.tasks;
 
     if (newTasks) {
       newTasks.push({
-        __typename: "Task",
+        __typename: 'Task',
         id: '',
         name: newTask.name,
         section: {
-          __typename: "TaskSection",
-          id: '', 
-          name: newTask.section, 
+          __typename: 'TaskSection',
+          id: '',
+          name: newTask.section,
         },
         description: newTask.description,
         priority: newTask.priority,
         status: '',
-      })
+      });
 
       setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
+        ...selectedTemplate,
+        tasks: newTasks,
+      });
     }
-  }
+  };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       handleFinishAdd();
     }
-  }
+  };
 
   const renderCheckbox = () => {
-    const rowCount = selectedTemplate && selectedTemplate.tasks ?
-      selectedTemplate.tasks.length : 0;
+    const rowCount =
+      selectedTemplate && selectedTemplate.tasks
+        ? selectedTemplate.tasks.length
+        : 0;
 
     return (
-      <Checkbox 
+      <Checkbox
         indeterminate={selected.length > 0 && selected.length < rowCount}
         checked={selected.length > 0 && selected.length === rowCount}
         onChange={handleSelectAllClick}
-        color="primary" 
+        color="primary"
       />
-    )
-  }
+    );
+  };
 
   return stepNumber === currentStep ? (
     <div>
@@ -419,10 +437,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </Typography>
           )}
           {selected.length > 0 && (
-            <DeleteIcon 
-              className={classes.deleteIcon} 
-              onClick={handleDelete}
-            />
+            <DeleteIcon className={classes.deleteIcon} onClick={handleDelete} />
           )}
         </div>
         <div className={classes.content}>
@@ -430,66 +445,101 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             <Table style={{tableLayout: 'fixed', borderCollapse: 'separate'}}>
               <TableHead>
                 <TableRow>
-                  <TableCell padding="checkbox" className={classes.stickyHeader}>
+                  <TableCell
+                    padding="checkbox"
+                    className={classes.stickyHeader}
+                  >
                     {renderCheckbox()}
                   </TableCell>
                   <TableCell className={classes.stickyHeader}>Task</TableCell>
-                  <TableCell className={classes.stickyHeader} style={{width: '200px'}}>Section</TableCell>
-                  <TableCell className={classes.stickyHeader} style={{width: '150px'}}>Priority</TableCell>
-                  <TableCell className={classes.stickyHeader}>Description</TableCell>
-                  <TableCell className={classes.stickyHeader} style={{width: '125px'}}>Example Files</TableCell>
+                  <TableCell
+                    className={classes.stickyHeader}
+                    style={{width: '200px'}}
+                  >
+                    Section
+                  </TableCell>
+                  <TableCell
+                    className={classes.stickyHeader}
+                    style={{width: '150px'}}
+                  >
+                    Priority
+                  </TableCell>
+                  <TableCell className={classes.stickyHeader}>
+                    Description
+                  </TableCell>
+                  <TableCell
+                    className={classes.stickyHeader}
+                    style={{width: '125px'}}
+                  >
+                    Example Files
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {selectedTemplate.tasks && 
-                  selectedTemplate.tasks.map((item: AllTemplates_templateLists_tasks, index: number) => {
-                    const isSelected = selected.indexOf(index) !== -1;
+                {selectedTemplate.tasks &&
+                  selectedTemplate.tasks.map(
+                    (item: AllTemplates_templateLists_tasks, index: number) => {
+                      const isSelected = selected.indexOf(index) !== -1;
 
-                    return (
-                      <TableRow key={index}>
-                        <TableCell padding="checkbox">
-                          <Checkbox 
-                            checked={isSelected} 
-                            color="primary" 
-                            onClick={(e: React.MouseEvent<unknown>) => handleClick(e, index)}
+                      return (
+                        <TableRow key={index}>
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isSelected}
+                              color="primary"
+                              onClick={(e: React.MouseEvent<unknown>) =>
+                                handleClick(e, index)
+                              }
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <InputForm
+                              name="name"
+                              className={classes.textFlow}
+                              value={item.name as string}
+                              placeholder="Add task..."
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleChange(event, index)}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <InputForm
+                              name="section"
+                              className={classes.textFlow}
+                              value={
+                                item.section
+                                  ? (item.section.name as string)
+                                  : ''
+                              }
+                              placeholder="Add section..."
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleChangeSection(event, index)}
+                            />
+                          </TableCell>
+                          <PriorityForm
+                            value={item.priority as string}
+                            onChange={(newValue: string) =>
+                              handleChangePriority(newValue, index)
+                            }
                           />
-                        </TableCell>
-                        <TableCell>
-                          <InputForm 
-                            name="name"
-                            className={classes.textFlow}
-                            value={item.name as string} 
-                            placeholder="Add task..."
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <InputForm 
-                            name="section"
-                            className={classes.textFlow}
-                            value={item.section ? item.section.name as string : ""}
-                            placeholder="Add section..."
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChangeSection(event, index)}
-                          />
-                        </TableCell>
-                        <PriorityForm 
-                          value={item.priority as string} 
-                          onChange={(newValue: string) => handleChangePriority(newValue, index)}
-                        />
-                        <TableCell>
-                          <InputForm 
-                            name="description"
-                            className={classes.textFlow}
-                            value={item.description as string} 
-                            placeholder="Add description..."
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event, index)}
-                          />
-                        </TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    );
-                  })
-                }
+                          <TableCell>
+                            <InputForm
+                              name="description"
+                              className={classes.textFlow}
+                              value={item.description as string}
+                              placeholder="Add description..."
+                              onChange={(
+                                event: React.ChangeEvent<HTMLInputElement>
+                              ) => handleChange(event, index)}
+                            />
+                          </TableCell>
+                          <TableCell></TableCell>
+                        </TableRow>
+                      );
+                    }
+                  )}
                 {addable ? (
                   <ClickAwayListener onClickAway={handleFinishAdd}>
                     <TableRow>
@@ -537,15 +587,15 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             </Table>
           </div>
           <div className={classes.rightPane}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               className={classes.uploadButton}
               onClick={handleClickDownload}
             >
               Download Template
             </Button>
-            <ReactDropzone 
-              accept="application/*" 
+            <ReactDropzone
+              accept="application/*"
               multiple
               ref={dropzone}
               onDrop={handleDrop}
@@ -553,13 +603,19 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               {({getRootProps, getInputProps, isDragActive}) => (
                 <div
                   {...getRootProps()}
-                  className={clsx(classes.uploadArea, isDragActive && classes.uploadActive)}
+                  className={clsx(
+                    classes.uploadArea,
+                    isDragActive && classes.uploadActive
+                  )}
                 >
                   <input {...getInputProps()} />
                   <div>
                     <UploadIcon style={{fontSize: '120px'}} />
                     <br />
-                    <Typography variant="h4" className={classes.uploadLabelColor}>
+                    <Typography
+                      variant="h4"
+                      className={classes.uploadLabelColor}
+                    >
                       Drag and Drop/
                       <br />
                       Import Tasks
@@ -572,7 +628,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         </div>
       </div>
       <div className={classes.footer}>
-        <div className={classes.flex} style={{paddingTop: '12px', paddingRight: '270px'}}>
+        <div
+          className={classes.flex}
+          style={{paddingTop: '12px', paddingRight: '270px'}}
+        >
           <Button onClick={handleAddTask}>+ Add task</Button>
           <div className={classes.grow} />
           <Button variant="contained" onClick={() => setStep(2)}>

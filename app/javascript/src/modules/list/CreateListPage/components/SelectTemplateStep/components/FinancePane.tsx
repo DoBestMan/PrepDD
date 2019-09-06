@@ -1,21 +1,19 @@
 import React from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {
-  Paper,
-} from '@material-ui/core';
+import {Paper} from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {}, 
+    root: {},
     invisible: {
-      display: 'none', 
-    }
+      display: 'none',
+    },
   })
 );
 
 interface FinancePaneProps {
-  value?: number; 
+  value?: number;
   index?: number;
 }
 
@@ -32,4 +30,4 @@ export default function FinancePane(props: FinancePaneProps) {
       <h1>Finance</h1>
     </Paper>
   );
-};
+}

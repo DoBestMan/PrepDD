@@ -7,9 +7,7 @@ class Mutations::DeleteLists < GraphQL::Schema::Mutation
   def resolve(list_ids: nil)
     response = { errors: [] }
 
-    list_ids.each do |id|
-      List.find(id).destroy!
-    end
+    list_ids.each { |id| List.find(id).destroy! }
 
     response[:success] = true
     response

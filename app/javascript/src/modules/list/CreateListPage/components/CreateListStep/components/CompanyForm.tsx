@@ -5,14 +5,14 @@ import {gql} from 'apollo-boost';
 import {useLazyQuery} from '@apollo/react-hooks';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  ClickAwayListener, 
-  Typography, 
-  Button, 
-  Paper, 
-  List, 
-  ListItem, 
+  ClickAwayListener,
+  Typography,
+  Button,
+  Paper,
+  List,
+  ListItem,
   ListItemText,
-  TextField, 
+  TextField,
 } from '@material-ui/core';
 
 import StyledItem from './StyledItem';
@@ -21,45 +21,45 @@ import NestedList from './NestedList';
 import {useGlobalState} from '../../../../../../store';
 import {ListType} from '../../../../../../constants/types';
 import {
-  SearchCompanies_searchCompanies, 
+  SearchCompanies_searchCompanies,
   SearchCompanies_searchCompanies_users,
-  SearchCompanies_searchCompanies_companies
+  SearchCompanies_searchCompanies_companies,
 } from './__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: 'relative', 
-    }, 
+      position: 'relative',
+    },
     flex: {
-      display: 'flex', 
-      alignItems: 'center', 
+      display: 'flex',
+      alignItems: 'center',
     },
     clickalbleArea: {
       height: '36px',
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     secondary: {
-      color: '#606060', 
-      marginTop: '24px', 
-      marginBottom: '12px', 
+      color: '#606060',
+      marginTop: '24px',
+      marginBottom: '12px',
     },
     addButton: {
       border: '1px solid #D8D8D8',
-      borderRadius: '3px', 
-      fontSize: '15px', 
+      borderRadius: '3px',
+      fontSize: '15px',
     },
     addPanel: {
-      position: 'absolute', 
-      width: '280px', 
-      top: '33px', 
+      position: 'absolute',
+      width: '280px',
+      top: '33px',
       left: '0px',
-      padding: '12px 24px 18px', 
+      padding: '12px 24px 18px',
       backgroundColor: '#FFFFFF',
       border: '2px solid #D8D8D8',
-      borderRadius: '3px', 
-      zIndex: 1, 
-    }, 
+      borderRadius: '3px',
+      zIndex: 1,
+    },
     input: {
       display: 'block',
       width: '100%',
@@ -84,11 +84,11 @@ const useStyles = makeStyles((theme: Theme) =>
       '& div': {
         width: '100%',
       },
-    }, 
+    },
     addLink: {
-      marginTop: '6px', 
+      marginTop: '6px',
       paddingLeft: '0px',
-      paddingRight: '0px', 
+      paddingRight: '0px',
     },
     companyLogo: {
       width: '24px',
@@ -127,7 +127,7 @@ const SEARCH_COMPANIES = gql`
 
 interface NewCompanyType {
   newCompanyName: string;
-  ownerEmail: string;  
+  ownerEmail: string;
 }
 
 interface CompanyFormProps {
@@ -138,43 +138,50 @@ interface CompanyFormProps {
   setInviteCompany: React.Dispatch<React.SetStateAction<NewCompanyType>>;
 }
 
-
 export default function CompanyForm(props: CompanyFormProps) {
   const {
     sharing,
     newTemplate,
-    setNewTemplate, 
-    inviteCompany, 
-    setInviteCompany, 
+    setNewTemplate,
+    inviteCompany,
+    setInviteCompany,
   } = props;
   const classes = useStyles();
-  const [searchString, setSearchString] = useState<string>("");
+  const [searchString, setSearchString] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
-  const [searchResult, setSearchResult] = useState<SearchCompanies_searchCompanies>({
-    __typename: "SearchCompanies",
+  const [searchResult, setSearchResult] = useState<
+    SearchCompanies_searchCompanies
+  >({
+    __typename: 'SearchCompanies',
     users: null,
-    companies: null, 
-  })
-  const [issueCompany, setIssueCompany] = useState<SearchCompanies_searchCompanies_companies | null>(null);
+    companies: null,
+  });
+  const [
+    issueCompany,
+    setIssueCompany,
+  ] = useState<SearchCompanies_searchCompanies_companies | null>(null);
   const {state} = useGlobalState();
 
-  const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES);
+  const [searchCompanies, {loading, data, error}] = useLazyQuery(
+    SEARCH_COMPANIES
+  );
 
   useEffect(() => {
     let result = idx(data, data => data.searchCompanies);
 
     if (loading || !result) return;
-    result.companies = result.companies.filter((company: SearchCompanies_searchCompanies_companies) => 
-      company.id !== state.selectedCompany
+    result.companies = result.companies.filter(
+      (company: SearchCompanies_searchCompanies_companies) =>
+        company.id !== state.selectedCompany
     );
     setSearchResult(result);
-  }, [loading, idx(data, data => data.searchCompanies)])
+  }, [loading, idx(data, data => data.searchCompanies)]);
 
   const handleCloseAll = () => {
     setOpen(false);
     setOpenInvitePanel(false);
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchString(event.target.value);
@@ -189,40 +196,44 @@ export default function CompanyForm(props: CompanyFormProps) {
     }
   };
 
-  const handleClickIssueTo = (company: SearchCompanies_searchCompanies_companies) => {
+  const handleClickIssueTo = (
+    company: SearchCompanies_searchCompanies_companies
+  ) => {
     if (sharing === 'share') {
       setNewTemplate({
-        ...newTemplate, 
-        requesterId: company.id, 
+        ...newTemplate,
+        requesterId: company.id,
       });
     } else if (sharing === 'issue') {
       setNewTemplate({
-        ...newTemplate, 
-        responderId: company.id, 
+        ...newTemplate,
+        responderId: company.id,
       });
     }
     setIssueCompany(company);
     setOpen(false);
-  }
+  };
 
-  const handleChangeInviteInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeInviteInfo = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const {name, value} = event.target;
 
     setInviteCompany({
       ...inviteCompany,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIssueCompany({
-      __typename: "Company",
+      __typename: 'Company',
       id: '',
       name: inviteCompany.newCompanyName,
       logoUrl: '',
     });
-  }
+  };
 
   const renderUserList = () => {
     if (searchResult && searchResult.users && searchResult.users.length) {
@@ -235,39 +246,43 @@ export default function CompanyForm(props: CompanyFormProps) {
           {data &&
             searchResult &&
             searchResult.users &&
-            searchResult.users.map((user: SearchCompanies_searchCompanies_users) => {
-              return (
-                <NestedList
-                  key={user.id}
-                  data={user}
-                  onClick={handleClickIssueTo}
-                />
-              );
-            })}
+            searchResult.users.map(
+              (user: SearchCompanies_searchCompanies_users) => {
+                return (
+                  <NestedList
+                    key={user.id}
+                    data={user}
+                    onClick={handleClickIssueTo}
+                  />
+                );
+              }
+            )}
         </List>
-      )
-    } else if (searchResult && searchResult.companies && !searchResult.companies.length) {
-      return (
-        <Typography variant="h4">
-          No match result
-        </Typography>
-      )
+      );
+    } else if (
+      searchResult &&
+      searchResult.companies &&
+      !searchResult.companies.length
+    ) {
+      return <Typography variant="h4">No match result</Typography>;
     } else {
       return null;
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
-      <Typography variant="h6" className={classes.secondary}>Issue to</Typography>
+      <Typography variant="h6" className={classes.secondary}>
+        Issue to
+      </Typography>
       <div className={classes.flex}>
         {issueCompany && (
-          <StyledItem 
+          <StyledItem
             label={issueCompany.name as string}
             logo={issueCompany.logoUrl as string}
           />
         )}
-        <div 
+        <div
           style={{position: 'relative'}}
           onMouseOver={() => setOpen(true)}
           onMouseLeave={handleCloseAll}
@@ -281,7 +296,7 @@ export default function CompanyForm(props: CompanyFormProps) {
                 onMouseOver={() => setOpen(true)}
                 onMouseLeave={handleCloseAll}
               >
-                <TextField 
+                <TextField
                   className={classes.input}
                   placeholder="Search company..."
                   value={searchString}
@@ -289,11 +304,12 @@ export default function CompanyForm(props: CompanyFormProps) {
                   onKeyUp={handleKeyUp}
                 />
                 <List component="div" aria-labelledby="Invite new">
-                  {searchResult && searchResult.companies &&
-                    searchResult.companies.slice(0, 5).map((company) => {
+                  {searchResult &&
+                    searchResult.companies &&
+                    searchResult.companies.slice(0, 5).map(company => {
                       return (
-                        <ListItem 
-                          key={company.id} 
+                        <ListItem
+                          key={company.id}
                           onClick={() => handleClickIssueTo(company)}
                           disableGutters
                         >
@@ -306,14 +322,16 @@ export default function CompanyForm(props: CompanyFormProps) {
                           )}
                           <ListItemText primary={company.name as string} />
                         </ListItem>
-                      )
+                      );
                     })}
                 </List>
                 {renderUserList()}
                 {openInvitePanel ? (
                   <form onSubmit={handleSubmit}>
-                    <Typography variant="h6" style={{marginTop: '24px'}}>New user and company</Typography>
-                    <TextField 
+                    <Typography variant="h6" style={{marginTop: '24px'}}>
+                      New user and company
+                    </Typography>
+                    <TextField
                       type="email"
                       label="Email"
                       name="ownerEmail"
@@ -322,7 +340,7 @@ export default function CompanyForm(props: CompanyFormProps) {
                       onChange={handleChangeInviteInfo}
                       required
                     />
-                    <TextField 
+                    <TextField
                       label="Company"
                       name="newCompanyName"
                       value={inviteCompany.newCompanyName}
@@ -334,11 +352,13 @@ export default function CompanyForm(props: CompanyFormProps) {
                       Invite new user and company
                     </Button>
                   </form>
-                ): (
-                  <Button 
+                ) : (
+                  <Button
                     className={classes.addLink}
                     onClick={() => setOpenInvitePanel(true)}
-                  >+ Add owner</Button>
+                  >
+                    + Add owner
+                  </Button>
                 )}
               </Paper>
             </ClickAwayListener>
@@ -346,5 +366,5 @@ export default function CompanyForm(props: CompanyFormProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

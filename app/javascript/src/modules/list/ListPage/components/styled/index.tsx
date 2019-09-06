@@ -4,10 +4,4 @@ import StyledTableCell from './StyledTableCell';
 import StyledTableRow from './StyledTableRow';
 import StyledTabs from './StyledTabs';
 
-export {
-  StyledButton,
-  StyledTab,
-  StyledTableCell,
-  StyledTableRow,
-  StyledTabs,
-};
+export {StyledButton, StyledTab, StyledTableCell, StyledTableRow, StyledTabs};

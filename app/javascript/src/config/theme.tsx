@@ -54,15 +54,15 @@ const defaultTheme = createMuiTheme({
   overrides: {
     MuiContainer: {
       root: {
-        maxWidth: '1380px', 
-      }
+        maxWidth: '1380px',
+      },
     },
     MuiListItem: {
       root: {
         display: 'flex',
         textTransform: 'none',
         width: '100%',
-        cursor: 'pointer', 
+        cursor: 'pointer',
         '&$selected, &$selected:hover': {
           color: '#FFFFFF',
           backgroundColor: cs.COLORS.primary,
@@ -100,9 +100,9 @@ const defaultTheme = createMuiTheme({
         },
       },
       contained: {
-        color: '#FFFFFF', 
+        color: '#FFFFFF',
         backgroundColor: cs.COLORS.primary,
-        boxShadow: 'none', 
+        boxShadow: 'none',
         '&:hover': {
           opacity: 0.7,
           backgroundColor: cs.COLORS.primary,
@@ -117,7 +117,7 @@ const defaultTheme = createMuiTheme({
     },
     MuiTableRow: {
       root: {
-        height: '48px', 
+        height: '48px',
         color: '#606060',
         fontFamily: cs.FONT.family,
         fontWeight: cs.FONT.weight.regular,
@@ -138,30 +138,30 @@ const defaultTheme = createMuiTheme({
         fontFamily: cs.FONT.family,
         fontWeight: cs.FONT.weight.regular,
         fontSize: cs.FONT.size.xs,
-        paddingTop: '0px', 
-        paddingBottom: '0px', 
+        paddingTop: '0px',
+        paddingBottom: '0px',
       },
     },
     MuiRadio: {
       root: {
-        padding: '12px', 
+        padding: '12px',
         '& .MuiSvgIcon-root': {
-          fontSize: '18px', 
-        }
-      }, 
+          fontSize: '18px',
+        },
+      },
       colorPrimary: {
         '&.Mui-checked': {
-          color: cs.COLORS.primary, 
-        }
-      }
-    }, 
+          color: cs.COLORS.primary,
+        },
+      },
+    },
     MuiCheckbox: {
       colorPrimary: {
         '&.Mui-checked': {
-          color: cs.COLORS.primary, 
-        }
-      }
-    }, 
+          color: cs.COLORS.primary,
+        },
+      },
+    },
   },
 });
 

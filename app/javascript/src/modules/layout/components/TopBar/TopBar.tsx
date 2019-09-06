@@ -118,9 +118,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '50%',
     },
     menuRoot: {
-      display: 'flex', 
-      alignItems: 'center', 
-      position: 'relative', 
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
     },
     profileMenu: {
       width: '180px',
@@ -195,7 +195,9 @@ const TopBar = (props: any) => {
         )}
 
         <div className={classes.menuRoot}>
-          <Button variant="contained" className={classes.inviteButton}>Invite</Button>
+          <Button variant="contained" className={classes.inviteButton}>
+            Invite
+          </Button>
           <IconButton
             aria-label="show 4 new notifications"
             color="inherit"
@@ -246,6 +248,6 @@ const TopBar = (props: any) => {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default withRouter(TopBar);

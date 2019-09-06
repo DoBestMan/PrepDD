@@ -2,7 +2,7 @@ import React from 'react';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '@material-ui/core/Checkbox';
 import useStyles from '../style';
 
 import {StyledTableCell} from './styled';

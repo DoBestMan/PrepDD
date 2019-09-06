@@ -15,7 +15,7 @@ export const useAllTemplates = createQueryHook<AllTemplates, {}>(gql`
         }
         description
         priority
-        status        
+        status
       }
     }
   }

@@ -1,11 +1,5 @@
 import React, {lazy, Suspense} from 'react';
-import {
-  BrowserRouter, 
-  Switch,
-  Route,
-  Link, 
-  Redirect, 
-} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Link, Redirect} from 'react-router-dom';
 
 import LoadingFallback from '../common/LoadingFallback';
 import NotFoundPage from '../common/NotFoundPage';
@@ -25,21 +19,21 @@ const PrivateRoute = (props: any) => {
   return (
     <Route
       {...rest}
-      render={(props: any) => 
+      render={(props: any) =>
         isAuthenticated ? (
           <Component {...props} />
         ) : (
           <Redirect
             to={{
-              pathname: '/signin', 
-              state: {from: props.location}
+              pathname: '/signin',
+              state: {from: props.location},
             }}
           />
         )
       }
     />
-  )
-}
+  );
+};
 
 export default function Router() {
   return (
@@ -55,4 +49,3 @@ export default function Router() {
     </Suspense>
   );
 }
-

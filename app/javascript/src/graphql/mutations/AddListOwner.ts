@@ -9,15 +9,15 @@ export const useAddListOwner = createMutationHook<
   AddListOwnerVariables
 >(gql`
   mutation AddListOwner(
-    $listId: ID!, 
-    $companyId: ID!, 
-    $userEmails: [String!], 
+    $listId: ID!
+    $companyId: ID!
+    $userEmails: [String!]
     $teamIds: [ID!]
   ) {
-    addListOwner( 
-      listId: $listId, 
-      companyId: $companyId, 
-      userEmails: $userEmails, 
+    addListOwner(
+      listId: $listId
+      companyId: $companyId
+      userEmails: $userEmails
       teamIds: $teamIds
     ) {
       errors {

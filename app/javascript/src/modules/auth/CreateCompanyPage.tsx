@@ -135,6 +135,6 @@ const CreateCompanyPage = (props: any) => {
       </div>
     </Container>
   );
-}
+};
 
 export default withRouter(CreateCompanyPage);

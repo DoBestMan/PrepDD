@@ -51,15 +51,9 @@ class Mutations::InviteNewCompanyToList < GraphQL::Schema::Mutation
 
     list = List.find(list_id)
     if is_share
-      list.update(
-        requester_id: new_company.id,
-        responder_id: company_id,
-      )
+      list.update(requester_id: new_company.id, responder_id: company_id)
     elsif is_request
-      list.update(
-        requester_id: company_id,
-        responder_id: new_company.id,
-        )
+      list.update(requester_id: company_id, responder_id: new_company.id)
     end
 
     new_company.errors.messages.each do |path, messages|

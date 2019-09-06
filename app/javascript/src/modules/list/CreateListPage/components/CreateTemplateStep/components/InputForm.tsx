@@ -9,26 +9,26 @@ import * as cs from '../../../../../../constants/theme';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flex: {
-      display: 'flex', 
-      alignItems: 'center', 
-    }, 
+      display: 'flex',
+      alignItems: 'center',
+    },
     update: {
-      marginLeft: '12px', 
-      color: cs.COLORS.primary, 
-      fontSize: '15px', 
-      cursor: 'pointer', 
-      visibility: 'hidden'
+      marginLeft: '12px',
+      color: cs.COLORS.primary,
+      fontSize: '15px',
+      cursor: 'pointer',
+      visibility: 'hidden',
     },
     visible: {
-      visibility: 'visible', 
+      visibility: 'visible',
     },
     input: {
-      width: '100%', 
-      border: 'none', 
-      background: 'none', 
-      fontFamily: cs.FONT.family, 
-      fontSize: cs.FONT.size.xs, 
-      fontWeight: cs.FONT.weight.regular, 
+      width: '100%',
+      border: 'none',
+      background: 'none',
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.xs,
+      fontWeight: cs.FONT.weight.regular,
       '&:hover': {
         border: 'none',
       },
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
         border: 'none',
         outline: 'none',
       },
-    }, 
+    },
     secondary: {
-      color: 'rgba(0, 0, 0, 0.54)'
-    }
+      color: 'rgba(0, 0, 0, 0.54)',
+    },
   })
 );
 
@@ -61,7 +61,7 @@ export default function InputForm(props: InputFormProps) {
     if (hover) {
       setEditable(true);
     }
-  }
+  };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.persist();
@@ -71,7 +71,7 @@ export default function InputForm(props: InputFormProps) {
   };
 
   return (
-    <div 
+    <div
       className={classes.flex}
       onMouseOver={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -90,16 +90,20 @@ export default function InputForm(props: InputFormProps) {
             autoFocus
           />
         </ClickAwayListener>
-      ): (
+      ) : (
         <>
           {value ? (
             <div className={className}>{value}</div>
           ) : (
-            <div className={clsx(className, classes.secondary)}>{placeholder}</div>
+            <div className={clsx(className, classes.secondary)}>
+              {placeholder}
+            </div>
           )}
-          <UpdateIcon className={clsx(classes.update, hover && classes.visible)} />
+          <UpdateIcon
+            className={clsx(classes.update, hover && classes.visible)}
+          />
         </>
       )}
     </div>
-  )
+  );
 }

@@ -61,9 +61,9 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     logo: {
-      display: 'flex', 
-      marginTop: '24px', 
-      marginBottom: '12px', 
+      display: 'flex',
+      marginTop: '24px',
+      marginBottom: '12px',
     },
     createMenu: {
       width: '250px',
@@ -101,7 +101,9 @@ const SideBar = (props: any) => {
 
   const role = () => {
     if (state && state.currentUser && state.currentUser.roles) {
-      const findRole = state.currentUser.roles.find(role => role.companyId === state.selectedCompany);
+      const findRole = state.currentUser.roles.find(
+        role => role.companyId === state.selectedCompany
+      );
 
       return findRole ? findRole.name : 'User';
     }
@@ -133,19 +135,25 @@ const SideBar = (props: any) => {
       onMouseOver={() => setShowNarrow(true)}
       onMouseOut={() => setShowNarrow(false)}
     >
-      <div className={clsx(classes.logo, classes.paddingOpen, !open && classes.paddingClose)}>
-        <img src={PrepddLogo} alt="PrepDD" style={{marginRight: '12px'}}/>
+      <div
+        className={clsx(
+          classes.logo,
+          classes.paddingOpen,
+          !open && classes.paddingClose
+        )}
+      >
+        <img src={PrepddLogo} alt="PrepDD" style={{marginRight: '12px'}} />
         <span className={classes.mark}>
           PREP<span className={classes.primaryColor}>DD</span>
         </span>
       </div>
       <div className={clsx(classes.paddingOpen, !open && classes.paddingClose)}>
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => setOpenCreateMenu(!openCreateMenu)}
           style={{width: '100%'}}
         >
-          {open ? "Create" : <AddIcon />}
+          {open ? 'Create' : <AddIcon />}
         </Button>
         {openCreateMenu && (
           <ClickAwayListener onClickAway={() => setOpenCreateMenu(false)}>
@@ -181,13 +189,14 @@ const SideBar = (props: any) => {
               </List>
             </Paper>
           </ClickAwayListener>
-          
         )}
       </div>
       <List disablePadding style={{marginTop: '12px'}}>
         <MainListItems open={open} />
       </List>
-      <Divider className={clsx(classes.marginOpen, !open && classes.marginClose)} />
+      <Divider
+        className={clsx(classes.marginOpen, !open && classes.marginClose)}
+      />
       <List disablePadding>
         <AdminListItems open={open} />
       </List>

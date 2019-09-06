@@ -175,7 +175,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   const [user, setUser] = useState<UserType>({
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
-    displayName: state.currentUser.displayName || state.currentUser.fullName as string,
+    displayName: (state.currentUser.displayName || state.currentUser.fullName) as string,
     profile_url: state.currentUser.profileUrl as string,
     oldPassword: '',
     password: '',

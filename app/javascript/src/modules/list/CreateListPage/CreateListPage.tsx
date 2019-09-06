@@ -11,22 +11,27 @@ import FlashMessage from '../../common/FlashMessage';
 
 import {NotificationType} from '../../../constants/types';
 import {useAllTemplates} from '../../../graphql/queries/AllTemplates';
-import {AllTemplates_templateLists, AllTemplates} from '../../../graphql/queries/__generated__/AllTemplates';
+import {
+  AllTemplates_templateLists,
+  AllTemplates,
+} from '../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {}, 
+    root: {},
   })
 );
 
 export default function CreateListPage() {
   const classes = useStyles();
   const [step, setStep] = useState<number>(0);
-  const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
-    __typename: "List",
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    AllTemplates_templateLists
+  >({
+    __typename: 'List',
     id: '',
     name: '',
-    tasks: [], 
+    tasks: [],
   });
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
   const [notification, setNotification] = useState<NotificationType | null>(
@@ -39,13 +44,13 @@ export default function CreateListPage() {
     if (!loading && step === 0) {
       loadMore();
     }
-  }, [step])
+  }, [step]);
 
   useEffect(() => {
     const lists = idx(data, data => data.templateLists);
 
     if (loading || !lists) return;
-  }, [loading, idx(data, data => data.templateLists)])
+  }, [loading, idx(data, data => data.templateLists)]);
 
   useEffect(() => {
     if (notification) {
@@ -63,67 +68,70 @@ export default function CreateListPage() {
 
   const loadMore = () => {
     fetchMore({
-      variables: {}, 
+      variables: {},
       updateQuery: (
-        previousResult: AllTemplates, 
+        previousResult: AllTemplates,
         options: {
-          fetchMoreResult?: AllTemplates, 
-          variables?: {}, 
+          fetchMoreResult?: AllTemplates;
+          variables?: {};
         }
       ) => {
-        const fetchMoreResult = idx(options, options => options.fetchMoreResult);
+        const fetchMoreResult = idx(
+          options,
+          options => options.fetchMoreResult
+        );
 
         if (!fetchMoreResult) return previousResult;
 
         return {
-          templateLists: [
-            ...fetchMoreResult.templateLists, 
-          ]
-        }
-      }
-    })
-  }
-  
-  return data && (
-    <div className={classes.root}>
-      {notification && (
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          open={messageOpen}
-          autoHideDuration={3000}
-          onClose={handleCloseMessage}
-        >
-          <FlashMessage
-            variant={notification.variant}
-            message={notification.message}
+          templateLists: [...fetchMoreResult.templateLists],
+        };
+      },
+    });
+  };
+
+  return (
+    data && (
+      <div className={classes.root}>
+        {notification && (
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            open={messageOpen}
+            autoHideDuration={3000}
             onClose={handleCloseMessage}
-          />
-        </Snackbar>
-      )}
-      <Header step={step} setStep={setStep} />
-      <SelectTemplateStep
-        data={data.templateLists}
-        setSelectedTemplate={setSelectedTemplate}
-        stepNumber={0}
-        currentStep={step}
-        setStep={setStep}
-      />
-      <CreateTemplateStep
-        selectedTemplate={selectedTemplate}
-        setSelectedTemplate={setSelectedTemplate}
-        stepNumber={1}
-        currentStep={step}
-        setStep={setStep}
-      />
-      <CreateListStep 
-        selectedTemplate={selectedTemplate}
-        stepNumber={2}
-        currentStep={step}
-        setNotification={setNotification}
-      />
-    </div>
+          >
+            <FlashMessage
+              variant={notification.variant}
+              message={notification.message}
+              onClose={handleCloseMessage}
+            />
+          </Snackbar>
+        )}
+        <Header step={step} setStep={setStep} />
+        <SelectTemplateStep
+          data={data.templateLists}
+          setSelectedTemplate={setSelectedTemplate}
+          stepNumber={0}
+          currentStep={step}
+          setStep={setStep}
+        />
+        <CreateTemplateStep
+          selectedTemplate={selectedTemplate}
+          setSelectedTemplate={setSelectedTemplate}
+          stepNumber={1}
+          currentStep={step}
+          setStep={setStep}
+        />
+        <CreateListStep
+          selectedTemplate={selectedTemplate}
+          stepNumber={2}
+          currentStep={step}
+          setNotification={setNotification}
+        />
+      </div>
+    )
   );
-};
+}

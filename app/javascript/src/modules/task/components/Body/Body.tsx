@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
 import axios from 'axios';
@@ -12,7 +12,7 @@ import {
   TableCell,
   Button,
   TextField,
-  ClickAwayListener, 
+  ClickAwayListener,
 } from '@material-ui/core';
 import ReactDropzone, {DropzoneRef} from 'react-dropzone';
 
@@ -20,26 +20,24 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
 
 import * as cs from '../../../../constants/theme';
-import {NotificationType} from '../../../../constants/types'
+import {NotificationType} from '../../../../constants/types';
 
 import {TaskAttributes} from '../../../../graphql/__generated__/globalTypes';
 import {useAllTemplates} from '../../../../graphql/queries/AllTemplates';
 import {useCreateTask} from '../../../../graphql/mutations/CreateTask';
-import {
-  AllTemplates_templateLists, 
-} from '../../../../graphql/queries/__generated__/AllTemplates'
+import {AllTemplates_templateLists} from '../../../../graphql/queries/__generated__/AllTemplates';
 import PriorityForm from './components/PriorityForm';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
       height: 'calc(100vh - 144px)',
-      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)',
       borderBottom: '1px solid #D8D8D8',
     },
     footer: {
-      height: '60px', 
-      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
+      height: '60px',
+      padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)',
     },
     flex: {
       display: 'flex',
@@ -54,9 +52,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '72px',
     },
     uploadButton: {
-      width: '100%', 
-      height: '42px', 
-      padding: '0px', 
+      width: '100%',
+      height: '42px',
+      padding: '0px',
     },
     uploadArea: {
       width: '100%',
@@ -100,7 +98,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     textFlow: {
       display: 'inline-block',
-      width: 'fit-content', 
+      width: 'fit-content',
       maxWidth: 'calc(80%)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -115,7 +113,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: cs.FONT.weight.regular,
       fontSize: cs.FONT.size.xs,
       textTransform: 'none',
-      border: 'none', 
+      border: 'none',
       '& label': {
         color: '#606060',
         fontFamily: cs.FONT.family,
@@ -132,14 +130,16 @@ const useStyles = makeStyles((theme: Theme) =>
         width: '100%',
       },
       '& .MuiInput-underline:before, .MuiInput-underline:after, .MuiInput-underline:hover:not(.Mui-disabled):before': {
-        border: 'none'
-      }
+        border: 'none',
+      },
     },
   })
 );
 
 interface BodyProps {
-  setNotification: React.Dispatch<React.SetStateAction<NotificationType | null>>;
+  setNotification: React.Dispatch<
+    React.SetStateAction<NotificationType | null>
+  >;
 }
 
 export default function Body(props: BodyProps) {
@@ -147,29 +147,28 @@ export default function Body(props: BodyProps) {
   const classes = useStyles();
   const {loading, data, error} = useAllTemplates({});
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
-  const [listId, setListId] = useState<string>("");
+  const [listId, setListId] = useState<string>('');
   const [newTasks, setNewTasks] = useState<TaskAttributes[]>([]);
   const [newTask, setNewTask] = useState<TaskAttributes>({
     name: '',
     description: '',
-    priority: 'medium', 
+    priority: 'medium',
     status: 'To do',
-    dueDate: Date(), 
-    section: '', 
-    isActive: true
+    dueDate: Date(),
+    section: '',
+    isActive: true,
   });
   const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
   const dropzone = React.createRef<DropzoneRef>();
 
-  const [createTask, {
-    loading: createTaskLoading, 
-    data: createTaskRes, 
-    error: createTaskError
-  }] = useCreateTask({
-    listId, 
-    tasks: creatingTasks, 
-  })
+  const [
+    createTask,
+    {loading: createTaskLoading, data: createTaskRes, error: createTaskError},
+  ] = useCreateTask({
+    listId,
+    tasks: creatingTasks,
+  });
 
   useEffect(() => {
     const templateLists = idx(data, data => data.templateLists);
@@ -179,42 +178,48 @@ export default function Body(props: BodyProps) {
   }, [loading, idx(data, data => data.templateLists)]);
 
   useEffect(() => {
-    const response = idx(createTaskRes, createTaskRes => createTaskRes.createTask);
+    const response = idx(
+      createTaskRes,
+      createTaskRes => createTaskRes.createTask
+    );
 
     if (createTaskLoading || !response) return;
 
     if (response && response.success) {
       setNotification({
-        variant: 'success', 
-        message: 'Create new task successfully'
-      })
+        variant: 'success',
+        message: 'Create new task successfully',
+      });
     } else if (response && response.errors && response.errors.length) {
       setNotification({
-        variant: 'success', 
-        message: response.errors[0].message, 
-      })      
+        variant: 'success',
+        message: response.errors[0].message,
+      });
     }
-  }, [createTaskLoading, idx(createTaskRes, createTaskRes => createTaskRes.createTask)])
+  }, [
+    createTaskLoading,
+    idx(createTaskRes, createTaskRes => createTaskRes.createTask),
+  ]);
 
   const handleCreate = async () => {
     setEditable(false);
     await setCreatingTasks([newTask]);
     newTasks.push(newTask);
     createTask();
-  }
+  };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
       handleCreate();
     }
-  }
+  };
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
     const form_data = new FormData();
     acceptedFiles.map(file => {
       form_data.append('files[]', file);
-    })
+    });
 
     axios
       .post('/api/import_task', form_data, {
@@ -233,11 +238,11 @@ export default function Body(props: BodyProps) {
               return {
                 name: task.name ? task.name : '',
                 description: task.description ? task.description : '',
-                priority: task.priority ? task.priority : 'medium', 
+                priority: task.priority ? task.priority : 'medium',
                 status: 'To do',
-                dueDate: Date(), 
-                section: task.section ? task.section : '', 
-                isActive: true
+                dueDate: Date(),
+                section: task.section ? task.section : '',
+                isActive: true,
               } as TaskAttributes;
             });
 
@@ -245,54 +250,51 @@ export default function Body(props: BodyProps) {
           });
 
           setCreatingTasks(addingTasks);
-          setNewTasks([
-            ...newTasks, 
-            ...addingTasks, 
-          ]);
+          setNewTasks([...newTasks, ...addingTasks]);
           createTask();
         }
-      })
+      });
   };
 
   const handleAddTask = () => {
     if (!listId) {
-      alert("Please select list");
+      alert('Please select list');
       return;
     }
 
     setNewTask({
       name: '',
       description: '',
-      priority: 'medium', 
+      priority: 'medium',
       status: 'To do',
-      dueDate: Date(), 
-      section: '', 
-      isActive: true
-    })
+      dueDate: Date(),
+      section: '',
+      isActive: true,
+    });
     setEditable(true);
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
     setNewTask({
-      ...newTask, 
-      [name]: value, 
+      ...newTask,
+      [name]: value,
     });
-  }
+  };
 
   const handleChangePriority = (newValue: string) => {
     setNewTask({
-      ...newTask, 
-      priority: newValue, 
-    });    
-  }
+      ...newTask,
+      priority: newValue,
+    });
+  };
 
   const handleClickDownload = () => {
     if (dropzone && dropzone.current) {
       dropzone.current.open();
     }
-  }
+  };
 
   const renderPriority = (priority: string) => {
     return (
@@ -315,11 +317,7 @@ export default function Body(props: BodyProps) {
   return (
     <div>
       <div className={classes.body}>
-        <Dropdown 
-          data={lists} 
-          listId={listId}
-          setListId={setListId}
-        />
+        <Dropdown data={lists} listId={listId} setListId={setListId} />
         <div className={classes.content}>
           <Table style={{tableLayout: 'fixed'}}>
             <TableHead>
@@ -358,7 +356,9 @@ export default function Body(props: BodyProps) {
                         className={classes.input}
                         value={newTask.name}
                         placeholder="Add task..."
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChange(event)}
                         autoFocus
                       />
                     </TableCell>
@@ -368,11 +368,13 @@ export default function Body(props: BodyProps) {
                         className={classes.input}
                         value={newTask.section}
                         placeholder="Add section..."
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChange(event)}
                       />
                     </TableCell>
                     <TableCell>
-                      <PriorityForm 
+                      <PriorityForm
                         value={newTask.priority}
                         onChange={handleChangePriority}
                       />
@@ -383,7 +385,9 @@ export default function Body(props: BodyProps) {
                         className={classes.input}
                         value={newTask.description}
                         placeholder="Add description..."
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleChange(event)}
+                        onChange={(
+                          event: React.ChangeEvent<HTMLInputElement>
+                        ) => handleChange(event)}
                         onKeyUp={handleKeyUp}
                       />
                     </TableCell>
@@ -394,29 +398,35 @@ export default function Body(props: BodyProps) {
             </TableBody>
           </Table>
           <div className={classes.rightPane}>
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               className={classes.uploadButton}
               onClick={handleClickDownload}
             >
               Download Template
             </Button>
-            <ReactDropzone 
+            <ReactDropzone
               accept="application/*"
               multiple
-              ref={dropzone} 
+              ref={dropzone}
               onDrop={handleDrop}
             >
               {({getRootProps, getInputProps, isDragActive}) => (
                 <div
                   {...getRootProps()}
-                  className={clsx(classes.uploadArea, isDragActive && classes.uploadActive)}
+                  className={clsx(
+                    classes.uploadArea,
+                    isDragActive && classes.uploadActive
+                  )}
                 >
                   <input {...getInputProps()} />
                   <div>
                     <UploadIcon style={{fontSize: '120px'}} />
                     <br />
-                    <Typography variant="h4" className={classes.uploadLabelColor}>
+                    <Typography
+                      variant="h4"
+                      className={classes.uploadLabelColor}
+                    >
                       Drag and Drop/
                       <br />
                       Import Tasks
@@ -434,6 +444,5 @@ export default function Body(props: BodyProps) {
         </div>
       </div>
     </div>
-    
   );
 }

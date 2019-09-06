@@ -8,9 +8,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       display: 'flex',
       width: 'fit-content',
-      height: '36px', 
+      height: '36px',
       alignItems: 'center',
-      marginRight: '12px', 
+      marginRight: '12px',
       padding: '3px 6px 3px 6px',
       background: '#FFFFFF',
       border: '1px solid #D8D8D8',
@@ -26,12 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#2C2C2C',
     },
     image: {
-      width: '18px', 
-      height: '18px', 
+      width: '18px',
+      height: '18px',
       backgroundColor: '#2792A2',
       fontSize: '9px',
-      marginRight: '6px', 
-    }
+      marginRight: '6px',
+    },
   })
 );
 
@@ -39,7 +39,7 @@ interface StyledItemProps {
   logo?: string;
   label: string;
   selected?: boolean;
-  type?: "user" | "company";
+  type?: 'user' | 'company';
 }
 
 const StyledItem = React.forwardRef(
@@ -57,8 +57,10 @@ const StyledItem = React.forwardRef(
             style={{marginRight: '6px'}}
             alt={label}
           />
-        ): type === "user" && (
-          <DefaultUserImage userName={label} className={classes.image} />
+        ) : (
+          type === 'user' && (
+            <DefaultUserImage userName={label} className={classes.image} />
+          )
         )}
         <div className={clsx(classes.label, selected && classes.selected)}>
           {label}

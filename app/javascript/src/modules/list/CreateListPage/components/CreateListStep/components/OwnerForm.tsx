@@ -5,14 +5,14 @@ import {gql} from 'apollo-boost';
 import {useLazyQuery} from '@apollo/react-hooks';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  ClickAwayListener, 
-  Typography, 
-  Button, 
-  Paper, 
-  List, 
-  ListItem, 
+  ClickAwayListener,
+  Typography,
+  Button,
+  Paper,
+  List,
+  ListItem,
   ListItemText,
-  TextField, 
+  TextField,
 } from '@material-ui/core';
 
 import {useGlobalState} from '../../../../../../store';
@@ -28,30 +28,30 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     flex: {
-      display: 'flex', 
-      alignItems: 'center', 
+      display: 'flex',
+      alignItems: 'center',
     },
     secondary: {
-      color: '#606060', 
-      marginTop: '24px', 
-      marginBottom: '12px', 
+      color: '#606060',
+      marginTop: '24px',
+      marginBottom: '12px',
     },
     addButton: {
       border: '1px solid #D8D8D8',
-      borderRadius: '3px', 
-      fontSize: '15px', 
+      borderRadius: '3px',
+      fontSize: '15px',
     },
     addPanel: {
-      position: 'absolute', 
-      width: '280px', 
-      top: '35px', 
+      position: 'absolute',
+      width: '280px',
+      top: '35px',
       left: '0px',
-      padding: '12px 24px 18px', 
+      padding: '12px 24px 18px',
       backgroundColor: '#FFFFFF',
       border: '2px solid #D8D8D8',
-      borderRadius: '3px', 
-      zIndex: 1, 
-    }, 
+      borderRadius: '3px',
+      zIndex: 1,
+    },
     input: {
       display: 'block',
       width: '100%',
@@ -76,12 +76,12 @@ const useStyles = makeStyles((theme: Theme) =>
       '& div': {
         width: '100%',
       },
-    }, 
+    },
     addLink: {
-      marginTop: '6px', 
+      marginTop: '6px',
       paddingLeft: '0px',
-      paddingRight: '0px', 
-    }
+      paddingRight: '0px',
+    },
   })
 );
 
@@ -103,8 +103,16 @@ const SEARCH_COMPANY_USERS = gql`
 `;
 
 interface OwnerFormProps {
-  owners: (SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[];
-  setOwners: React.Dispatch<React.SetStateAction<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>>;
+  owners: (
+    | SearchCompanyUsers_searchCompanyUsers_users
+    | SearchCompanyUsers_searchCompanyUsers_teams)[];
+  setOwners: React.Dispatch<
+    React.SetStateAction<
+      (
+        | SearchCompanyUsers_searchCompanyUsers_users
+        | SearchCompanyUsers_searchCompanyUsers_teams)[]
+    >
+  >;
 }
 
 interface InviteOwnerType {
@@ -117,51 +125,73 @@ export default function OwnerForm(props: OwnerFormProps) {
   const classes = useStyles();
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
-  const [searchUsername, setSearchUsername] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<SearchCompanyUsers_searchCompanyUsers>({
-    __typename: "SearchCompanyUsers",
-    users: null, 
-    teams: null, 
+  const [searchUsername, setSearchUsername] = useState<string>('');
+  const [searchResult, setSearchResult] = useState<
+    SearchCompanyUsers_searchCompanyUsers
+  >({
+    __typename: 'SearchCompanyUsers',
+    users: null,
+    teams: null,
   });
   const [inviteOwner, setInviteOwner] = useState<InviteOwnerType>({
-    name: '', 
-    email: '', 
-  })
-  
+    name: '',
+    email: '',
+  });
+
   const {state} = useGlobalState();
-  const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
+  const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(
+    SEARCH_COMPANY_USERS
+  );
 
   useEffect(() => {
     let result = idx(data, data => data.searchCompanyUsers);
 
     if (loading || !result) return;
-    result.teams = result.teams.filter((team: SearchCompanyUsers_searchCompanyUsers_teams) => {
-      const bFound = owners.find((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams) => {
-        if (owner.__typename === 'Team' && owner.id === team.id)
-          return true;
-        return false;
-      })
-      return bFound ? false : true;
-    })
-    result.users = result.users.filter((user: SearchCompanyUsers_searchCompanyUsers_users) => {
-      const bFound = owners.find((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams) => {
-        if (owner.__typename === 'User' && owner.email === user.email)
-          return true;
-        return false;
-      })
-      return bFound ? false : true;
-    })
+    result.teams = result.teams.filter(
+      (team: SearchCompanyUsers_searchCompanyUsers_teams) => {
+        const bFound = owners.find(
+          (
+            owner:
+              | SearchCompanyUsers_searchCompanyUsers_users
+              | SearchCompanyUsers_searchCompanyUsers_teams
+          ) => {
+            if (owner.__typename === 'Team' && owner.id === team.id)
+              return true;
+            return false;
+          }
+        );
+        return bFound ? false : true;
+      }
+    );
+    result.users = result.users.filter(
+      (user: SearchCompanyUsers_searchCompanyUsers_users) => {
+        const bFound = owners.find(
+          (
+            owner:
+              | SearchCompanyUsers_searchCompanyUsers_users
+              | SearchCompanyUsers_searchCompanyUsers_teams
+          ) => {
+            if (owner.__typename === 'User' && owner.email === user.email)
+              return true;
+            return false;
+          }
+        );
+        return bFound ? false : true;
+      }
+    );
     setSearchResult(result);
-  }, [loading, idx(data, data => data.searchCompanyUsers)])
+  }, [loading, idx(data, data => data.searchCompanyUsers)]);
 
   const handleCloseAll = () => {
     setOpenAddPanel(false);
     setOpenInvitePanel(false);
-  }
+  };
 
-  const handleChangeSearchUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeSearchUsername = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSearchUsername(event.target.value);
-  }
+  };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.keyCode === 13) {
@@ -169,87 +199,88 @@ export default function OwnerForm(props: OwnerFormProps) {
         variables: {text: searchUsername, companyId: state.selectedCompany},
       });
     }
-  }
+  };
 
   const handleClickUser = (event: React.MouseEvent<unknown>, index: number) => {
     if (searchResult.users && searchResult.users[index]) {
       setSearchResult({
-        ...searchResult, 
+        ...searchResult,
         users: [
-          ...searchResult.users.slice(0, index), 
-          ...searchResult.users.slice(index + 1), 
-        ]
+          ...searchResult.users.slice(0, index),
+          ...searchResult.users.slice(index + 1),
+        ],
       });
-      setOwners([
-        ...owners, 
-        searchResult.users[index]
-      ])
+      setOwners([...owners, searchResult.users[index]]);
     }
-  }
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
     setInviteOwner({
-      ...inviteOwner, 
-      [name]: value, 
-    })
-  }
+      ...inviteOwner,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newOwner = {
-      __typename: "User",
+      __typename: 'User',
       id: '',
       email: inviteOwner.email,
       fullName: inviteOwner.name,
-      profileUrl: '',      
+      profileUrl: '',
     } as SearchCompanyUsers_searchCompanyUsers_users;
 
-    setOwners([
-      ...owners, 
-      newOwner, 
-    ])
-  }
+    setOwners([...owners, newOwner]);
+  };
 
   const handleClickTeam = (event: React.MouseEvent<unknown>, index: number) => {
     if (searchResult.teams && searchResult.teams[index]) {
       setSearchResult({
-        ...searchResult, 
+        ...searchResult,
         teams: [
-          ...searchResult.teams.slice(0, index), 
-          ...searchResult.teams.slice(index + 1), 
-        ]
+          ...searchResult.teams.slice(0, index),
+          ...searchResult.teams.slice(index + 1),
+        ],
       });
-      setOwners([
-        ...owners, 
-        searchResult.teams[index]
-      ])
+      setOwners([...owners, searchResult.teams[index]]);
     }
-  }
-  
+  };
+
   return (
     <div>
-      <Typography variant="h6" className={classes.secondary}>List owner(s)</Typography>
+      <Typography variant="h6" className={classes.secondary}>
+        List owner(s)
+      </Typography>
       <div className={classes.flex}>
-        {owners && owners.map((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams, index: number) => {
-          return owner.__typename === 'User' ? (
-            <StyledItem 
-              key={index}
-              type="user"
-              label={owner.fullName} 
-              logo={owner.profileUrl as string}
-            />
-          ) : (
-            <StyledItem 
-              key={index}
-              type="user"
-              label={owner.name} 
-              logo=""
-            />            
-          )
-        })}
-        <div 
+        {owners &&
+          owners.map(
+            (
+              owner:
+                | SearchCompanyUsers_searchCompanyUsers_users
+                | SearchCompanyUsers_searchCompanyUsers_teams,
+              index: number
+            ) => {
+              return owner.__typename === 'User' ? (
+                <StyledItem
+                  key={index}
+                  type="user"
+                  label={owner.fullName}
+                  logo={owner.profileUrl as string}
+                />
+              ) : (
+                <StyledItem
+                  key={index}
+                  type="user"
+                  label={owner.name}
+                  logo=""
+                />
+              );
+            }
+          )}
+        <div
           style={{position: 'relative'}}
           onMouseOver={() => setOpenAddPanel(true)}
           onMouseLeave={handleCloseAll}
@@ -263,7 +294,7 @@ export default function OwnerForm(props: OwnerFormProps) {
                 onMouseOver={() => setOpenAddPanel(true)}
                 onMouseLeave={handleCloseAll}
               >
-                <TextField 
+                <TextField
                   className={classes.input}
                   placeholder="Search by name or email"
                   value={searchUsername}
@@ -271,53 +302,75 @@ export default function OwnerForm(props: OwnerFormProps) {
                   onKeyUp={handleKeyUp}
                 />
                 <List component="div" aria-labelledby="Invite Owner Panel">
-                  {searchResult && searchResult.users && 
-                    searchResult.users.map((user: SearchCompanyUsers_searchCompanyUsers_users, index: number) => {
-                      return (
-                        <ListItem 
-                          key={user.id} 
-                          onClick={(event: React.MouseEvent<unknown>) => handleClickUser(event, index)}
-                          disableGutters
-                        >
-                          <DefaultUserImage userName={user.fullName} />
-                          <ListItemText primary={user.fullName} style={{marginLeft: '12px'}} />
-                        </ListItem>
-                      )
-                    })
-                  }
-                  {searchResult && searchResult.teams && 
-                    searchResult.teams.map((team: SearchCompanyUsers_searchCompanyUsers_teams, index: number) => {
-                      return (
-                        <ListItem 
-                          key={team.id} 
-                          onClick={(event: React.MouseEvent<unknown>) => handleClickTeam(event, index)}
-                          disableGutters
-                        >
-                          <DefaultUserImage userName={team.name} />
-                          <ListItemText primary={team.name} style={{marginLeft: '12px'}} />
-                        </ListItem>
-                      )
-                    })
-                  }
+                  {searchResult &&
+                    searchResult.users &&
+                    searchResult.users.map(
+                      (
+                        user: SearchCompanyUsers_searchCompanyUsers_users,
+                        index: number
+                      ) => {
+                        return (
+                          <ListItem
+                            key={user.id}
+                            onClick={(event: React.MouseEvent<unknown>) =>
+                              handleClickUser(event, index)
+                            }
+                            disableGutters
+                          >
+                            <DefaultUserImage userName={user.fullName} />
+                            <ListItemText
+                              primary={user.fullName}
+                              style={{marginLeft: '12px'}}
+                            />
+                          </ListItem>
+                        );
+                      }
+                    )}
+                  {searchResult &&
+                    searchResult.teams &&
+                    searchResult.teams.map(
+                      (
+                        team: SearchCompanyUsers_searchCompanyUsers_teams,
+                        index: number
+                      ) => {
+                        return (
+                          <ListItem
+                            key={team.id}
+                            onClick={(event: React.MouseEvent<unknown>) =>
+                              handleClickTeam(event, index)
+                            }
+                            disableGutters
+                          >
+                            <DefaultUserImage userName={team.name} />
+                            <ListItemText
+                              primary={team.name}
+                              style={{marginLeft: '12px'}}
+                            />
+                          </ListItem>
+                        );
+                      }
+                    )}
                 </List>
-                {searchResult && searchResult.users && !searchResult.users.length && 
-                  searchResult.teams && !searchResult.teams.length && (
-                    <Typography variant="h4">
-                      No match result
-                    </Typography>
-                  )
-                }                
+                {searchResult &&
+                  searchResult.users &&
+                  !searchResult.users.length &&
+                  searchResult.teams &&
+                  !searchResult.teams.length && (
+                    <Typography variant="h4">No match result</Typography>
+                  )}
                 {openInvitePanel ? (
                   <form onSubmit={handleSubmit}>
-                    <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>
-                    <TextField 
+                    <Typography variant="h6" style={{marginTop: '24px'}}>
+                      New owner
+                    </Typography>
+                    <TextField
                       label="Name"
                       name="name"
                       value={inviteOwner.name}
                       className={classes.input}
                       onChange={handleChange}
                     />
-                    <TextField 
+                    <TextField
                       type="email"
                       label="Email"
                       name="email"
@@ -330,8 +383,8 @@ export default function OwnerForm(props: OwnerFormProps) {
                       Invite new member
                     </Button>
                   </form>
-                ): (
-                  <Button 
+                ) : (
+                  <Button
                     className={classes.addLink}
                     onClick={() => setOpenInvitePanel(true)}
                   >
@@ -344,5 +397,5 @@ export default function OwnerForm(props: OwnerFormProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

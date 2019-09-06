@@ -8,4 +8,5 @@ export const isManager = (role: string) => role === 'Manager';
 
 export const isUser = (role: string) => role === 'User';
 
-export const canBeAdmin = (role: string) => isSuperAdmin(role) || isAdmin(role) || isOwner(role);
+export const canBeAdmin = (role: string) =>
+  isSuperAdmin(role) || isAdmin(role) || isOwner(role);
