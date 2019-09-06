@@ -1,17 +1,40 @@
 class Mutations::AddListOwner < GraphQL::Schema::Mutation
   argument :listId, ID, required: true
-  argument :userIds, [ID], required: false
+  argument :companyId, ID, required: true
+  argument :userEmails, [String], required: false
   argument :teamIds, [ID], required: false
 
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(list_id: nil, user_ids: nil, team_ids: nil)
+  def resolve(list_id: nil, user_emails: nil, team_ids: nil, company_id: nil)
     response = { errors: [] }
 
-    if user_ids
-      user_ids.each do |user_id|
-        list_owner = ListsUser.create(list_id: list_id, user_id: user_id)
+    if user_emails
+      user_emails.each do |user_email|
+        user = User.find_by_email(user_email)
+        if !user
+          password = Devise.friendly_token[0, 20]
+          user =
+            User.create(
+              {
+                email: user_email,
+                password: password,
+                password_confirmation: password
+              }
+            )
+
+          role_id = Role.find_by_name('User').id
+          user_role =
+            RolesUser.create(
+              user_id: user.id, role_id: role_id, company_id: company_id
+            )
+
+          user_company =
+            UsersCompany.create(user_id: user.id, company_id: company_id)
+        end
+
+        list_owner = ListsUser.create(list_id: list_id, user_id: user.id)
 
         list_owner.errors.messages&.each do |path, messages|
           messages.each do |message|
