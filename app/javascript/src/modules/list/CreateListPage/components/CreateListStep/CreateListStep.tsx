@@ -162,13 +162,22 @@ const CreateListStep = (props: any) => {
     isRequest: sharing === 'issue', 
     isShare: sharing === 'share'
   })
+
+  const getEmails = () => {
+    const userArray = owners.filter(owner => owner.__typename === 'User') as SearchCompanyUsers_searchCompanyUsers_users[];
+
+    return userArray.map(owner => owner.email);
+  }
+
   const [addListOwner, {
     loading: addOwnerLoading,
     data: addOwnerRes, 
     error: addOwnerError,
   }] = useAddListOwner({
-    listId, 
-    userIds: owners.map(owner => owner.id)
+    listId,
+    companyId: state.selectedCompany, 
+    userEmails: getEmails(), 
+    teamIds: owners.filter(owner => owner.__typename === 'Team').map(owner => owner.id)
   });
 
   useEffect(() => {
@@ -193,7 +202,9 @@ const CreateListStep = (props: any) => {
     if (response.list) {
       setListId(response.list.id);
       addListOwner();
-      inviteNewCompanyToList();
+      if (inviteCompany.ownerEmail) {
+        inviteNewCompanyToList();
+      }
       setNotification({
         variant: 'success', 
         message: 'Create List successfully'

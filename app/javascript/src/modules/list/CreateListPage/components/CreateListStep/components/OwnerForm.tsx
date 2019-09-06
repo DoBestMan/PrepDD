@@ -90,6 +90,7 @@ const SEARCH_COMPANY_USERS = gql`
     searchCompanyUsers(text: $text, companyId: $companyId) {
       users {
         id
+        email
         fullName
         profileUrl
       }
@@ -106,6 +107,11 @@ interface OwnerFormProps {
   setOwners: React.Dispatch<React.SetStateAction<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>>;
 }
 
+interface InviteOwnerType {
+  name: string;
+  email: string;
+}
+
 export default function OwnerForm(props: OwnerFormProps) {
   const {owners, setOwners} = props;
   const classes = useStyles();
@@ -117,6 +123,10 @@ export default function OwnerForm(props: OwnerFormProps) {
     users: null, 
     teams: null, 
   });
+  const [inviteOwner, setInviteOwner] = useState<InviteOwnerType>({
+    name: '', 
+    email: '', 
+  })
   
   const {state} = useGlobalState();
   const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
@@ -135,7 +145,7 @@ export default function OwnerForm(props: OwnerFormProps) {
     })
     result.users = result.users.filter((user: SearchCompanyUsers_searchCompanyUsers_users) => {
       const bFound = owners.find((owner: SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams) => {
-        if (owner.__typename === 'User' && owner.id === user.id)
+        if (owner.__typename === 'User' && owner.email === user.email)
           return true;
         return false;
       })
@@ -175,6 +185,31 @@ export default function OwnerForm(props: OwnerFormProps) {
         searchResult.users[index]
       ])
     }
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+
+    setInviteOwner({
+      ...inviteOwner, 
+      [name]: value, 
+    })
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const newOwner = {
+      __typename: "User",
+      id: '',
+      email: inviteOwner.email,
+      fullName: inviteOwner.name,
+      profileUrl: '',      
+    } as SearchCompanyUsers_searchCompanyUsers_users;
+
+    setOwners([
+      ...owners, 
+      newOwner, 
+    ])
   }
 
   const handleClickTeam = (event: React.MouseEvent<unknown>, index: number) => {
@@ -273,16 +308,22 @@ export default function OwnerForm(props: OwnerFormProps) {
                   )
                 }                
                 {openInvitePanel ? (
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Typography variant="h6" style={{marginTop: '24px'}}>New owner</Typography>
                     <TextField 
-                      className={classes.input}
                       label="Name"
+                      name="name"
+                      value={inviteOwner.name}
+                      className={classes.input}
+                      onChange={handleChange}
                     />
                     <TextField 
                       type="email"
                       label="Email"
+                      name="email"
+                      value={inviteOwner.email}
                       className={classes.input}
+                      onChange={handleChange}
                       required
                     />
                     <Button type="submit" className={classes.addLink}>

@@ -30,6 +30,7 @@ export interface AddListOwner {
 
 export interface AddListOwnerVariables {
   listId: string;
-  userIds?: string[] | null;
+  companyId: string;
+  userEmails?: string[] | null;
   teamIds?: string[] | null;
 }

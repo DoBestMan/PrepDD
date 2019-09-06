@@ -9,6 +9,7 @@
 export interface SearchCompanyUsers_searchCompanyUsers_users {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
   profileUrl: string | null;
 }

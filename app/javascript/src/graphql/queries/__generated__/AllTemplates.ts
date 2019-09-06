@@ -31,7 +31,7 @@ export interface AllTemplates_templateLists {
 
 export interface AllTemplates {
   /**
-   * All Available lists
+   * All Available lists templates
    */
   templateLists: AllTemplates_templateLists[];
 }
