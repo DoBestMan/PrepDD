@@ -151,7 +151,7 @@ type List {
 }
 
 type Mutation {
-  addListOwner(listId: ID!, teamIds: [ID!], userIds: [ID!]): AddListOwnerPayload
+  addListOwner(companyId: ID!, listId: ID!, teamIds: [ID!], userEmails: [String!]): AddListOwnerPayload
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
   createCompany(name: String!): CreateCompanyPayload

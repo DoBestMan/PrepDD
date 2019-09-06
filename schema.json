@@ -2194,7 +2194,21 @@
                   "defaultValue": null
                 },
                 {
-                  "name": "userIds",
+                  "name": "companyId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "userEmails",
                   "description": null,
                   "type": {
                     "kind": "LIST",
@@ -2204,7 +2218,7 @@
                       "name": null,
                       "ofType": {
                         "kind": "SCALAR",
-                        "name": "ID",
+                        "name": "String",
                         "ofType": null
                       }
                     }
