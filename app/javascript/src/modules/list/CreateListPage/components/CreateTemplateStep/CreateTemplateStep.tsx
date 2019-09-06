@@ -33,13 +33,13 @@ import {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     body: {
-      height: 'calc(100vh - 156px)',
+      height: 'calc(100vh - 144px)',
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto',
     },
     footer: {
-      height: '72px', 
+      height: '60px', 
       padding: '0px calc((100% - 1380px) / 2) 0px calc((100% - 1380px) / 2)', 
     },
     title: {
@@ -572,7 +572,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         </div>
       </div>
       <div className={classes.footer}>
-        <div className={classes.flex} style={{paddingTop: '18px', paddingRight: '270px'}}>
+        <div className={classes.flex} style={{paddingTop: '12px', paddingRight: '270px'}}>
           <Button onClick={handleAddTask}>+ Add task</Button>
           <div className={classes.grow} />
           <Button variant="contained" onClick={() => setStep(2)}>
