@@ -11,6 +11,7 @@ import {
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import * as cs from '../../../../../../constants/theme';
+import {KEYS} from '../../../../../../constants/keys';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -66,6 +67,9 @@ const useStyles = makeStyles((theme: Theme) =>
         outline: 'none', 
       }
     },
+    hover: {
+      backgroundColor: '#EBF2FF',
+    }
   })
 );
 
@@ -74,6 +78,11 @@ const options = [
   { label: 'Medium', value: 'medium' },
   { label: 'Low', value: 'low' },
 ]
+
+interface OptionType {
+  label: string;
+  value: string;
+}
 
 interface PriorityInputFormProps {
   value: string;
@@ -84,6 +93,7 @@ export default function PriorityInputForm(props: PriorityInputFormProps) {
   const {value, onChange} = props;
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
+  const [select, setSelect] = useState<number>(-1);
   
   const handleClick = () => {
     // Open dropdown menu
@@ -99,6 +109,22 @@ export default function PriorityInputForm(props: PriorityInputFormProps) {
     setOpen(false); 
   }
 
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const {keyCode} = event;
+
+    if (keyCode === KEYS.ARROW_DOWN) {
+      if (open) {
+        setSelect((select + 1) % 3);
+      } else {
+        setOpen(true);
+      }
+    } else if (keyCode === KEYS.ARROW_UP) {
+      setSelect((select - 1 + 3) % 3);
+    } else if (keyCode === KEYS.ENTER) {
+      handleSelect(options[select].value);
+    }
+  }
+
   return (
     <div 
       className={classes.root} 
@@ -106,6 +132,7 @@ export default function PriorityInputForm(props: PriorityInputFormProps) {
       onClick={handleClick} 
       onFocus={handleClick}
       onBlur={handleClose}
+      onKeyUp={handleKeyUp}
     >
       <div
         className={clsx(
@@ -126,13 +153,17 @@ export default function PriorityInputForm(props: PriorityInputFormProps) {
             elevation={0}
             square
           >
-            <List component="div" aria-labelledby="Priority Menu">
-              {options.map(option => {
+            <List  
+              component="div" 
+              aria-labelledby="Priority Menu"
+            >
+              {options.map((option: OptionType, index: number) => {
+                const isSelected = index === select;
                 return (
                   <ListItem 
                     key={option.value}
+                    className={clsx(isSelected && classes.hover)}
                     onClick={() => handleSelect(option.value)}
-                    autoFocus={option.value === value}
                   >
                     <div
                       className={clsx(
