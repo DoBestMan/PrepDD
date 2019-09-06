@@ -203,11 +203,6 @@ type Query {
   list(id: ID!): List!
 
   """
-  Find a team by id
-  """
-  lists: [List!]!
-
-  """
   Return All available roles
   """
   roles: [Role!]!
@@ -225,15 +220,10 @@ type Query {
   """
   Find a team by id
   """
-  tasks: [Task!]!
-
-  """
-  Find a team by id
-  """
   team(id: ID!): Team!
 
   """
-  All Available lists
+  All Available lists templates
   """
   templateLists: [List!]!
 
