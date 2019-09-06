@@ -6,7 +6,8 @@ import {
   Table, 
   TableBody, 
   TableRow, 
-  TableCell, 
+  TableCell,
+  Typography, 
 } from '@material-ui/core';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
@@ -80,29 +81,34 @@ export default function GeneralTemplatesPane(props: GeneralTemplatesPaneProps) {
       aria-labelledby="General Templates"
       elevation={0}
     >
-      <Table>
-        <TableBody>
-          {data && data.map((item: AllTemplates_templateLists, index: number) => {
-            const isSelected = selected === index;
+      {data && data.length ? (
+        <Table>
+          <TableBody>
+            {data && data.map((item: AllTemplates_templateLists, index: number) => {
+              const isSelected = selected === index;
 
-            return (
-              <TableRow 
-                key={item.id} 
-                onClick={() => handleClick(item)}
-                onMouseOver={() => setSelected(index)}
-                onMouseOut={() => setSelected(-1)}
-              >
-                <TableCell className={clsx(classes.flex, classes.tableCell, isSelected && classes.selectedCell)}>
-                  <div className={classes.grayRect} />
-                  <span>{item.name}</span>
-                  <div className={classes.grow} />
-                  <ArrowRightIcon className={clsx(!isSelected && classes.invisible)}/>
-                </TableCell>
-              </TableRow>
-            )
-          })}
-        </TableBody>
-      </Table>
+              return (
+                <TableRow 
+                  key={item.id} 
+                  onClick={() => handleClick(item)}
+                  onMouseOver={() => setSelected(index)}
+                  onMouseOut={() => setSelected(-1)}
+                >
+                  <TableCell className={clsx(classes.flex, classes.tableCell, isSelected && classes.selectedCell)}>
+                    <div className={classes.grayRect} />
+                    <span>{item.name}</span>
+                    <div className={classes.grow} />
+                    <ArrowRightIcon className={clsx(!isSelected && classes.invisible)}/>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
+          </TableBody>
+        </Table>
+      ): (
+        <Typography variant="h2">No available lists</Typography>
+      )}
+      
     </Paper>
   );
 };

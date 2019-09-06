@@ -80,6 +80,11 @@ export default function Dropdown(props: DropdownProps) {
                   </ListItem>
                 )
               })}
+              {(!data || !data.length) && (
+                <ListItem>
+                  <ListItemText primary="No available lists" />
+                </ListItem>
+              )}
             </List>
           </Paper>
         </ClickAwayListener>
