@@ -156,7 +156,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     users: null,
     companies: null, 
   })
-  const [issueCompany, steIssueCompany] = useState<SearchCompanies_searchCompanies_companies | null>(null);
+  const [issueCompany, setIssueCompany] = useState<SearchCompanies_searchCompanies_companies | null>(null);
   const {state} = useGlobalState();
 
   const [searchCompanies, {loading, data, error}] = useLazyQuery(SEARCH_COMPANIES);
@@ -201,7 +201,7 @@ export default function CompanyForm(props: CompanyFormProps) {
         responderId: company.id, 
       });
     }
-    steIssueCompany(company);
+    setIssueCompany(company);
     setOpen(false);
   }
 
@@ -216,7 +216,12 @@ export default function CompanyForm(props: CompanyFormProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+    setIssueCompany({
+      __typename: "Company",
+      id: '',
+      name: inviteCompany.newCompanyName,
+      logoUrl: '',
+    });
   }
 
   const renderUserList = () => {

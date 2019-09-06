@@ -1,7 +1,7 @@
 class Mutations::CreateList < GraphQL::Schema::Mutation
   argument :name, String, required: true
   argument :description, String, required: false
-  argument :requesterId, ID, required: true
+  argument :requesterId, ID, required: false
   argument :responderId, ID, required: false
   argument :tasks, [Types::TaskAttributes ], required: false
 

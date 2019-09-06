@@ -29,6 +29,7 @@ import {useGlobalState} from '../../../../../store';
 import {ListType} from '../../../../../constants/types';
 import {useCreateList} from '../../../../../graphql/mutations/CreateList';
 import {useAddListOwner} from '../../../../../graphql/mutations/AddListOwner';
+import {useInviteNewCompanyToList} from '../../../../../graphql/mutations/InviteNewCompanyToList';
 import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
@@ -154,7 +155,13 @@ const CreateListStep = (props: any) => {
         } as TaskAttributes
       }) : [],
   });
-
+  const [inviteNewCompanyToList] = useInviteNewCompanyToList({
+    ...inviteCompany, 
+    listId, 
+    companyId: state.selectedCompany, 
+    isRequest: sharing === 'issue', 
+    isShare: sharing === 'share'
+  })
   const [addListOwner, {
     loading: addOwnerLoading,
     data: addOwnerRes, 
@@ -186,6 +193,7 @@ const CreateListStep = (props: any) => {
     if (response.list) {
       setListId(response.list.id);
       addListOwner();
+      inviteNewCompanyToList();
       setNotification({
         variant: 'success', 
         message: 'Create List successfully'
