@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
 import axios from 'axios';
@@ -175,6 +175,12 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     isActive: true
   });
   const dropzone = React.createRef<DropzoneRef>();
+
+  useEffect(() => {
+    if (stepNumber === 1) {
+      setAddable(true);
+    }
+  }, [stepNumber])
 
   function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
     if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {

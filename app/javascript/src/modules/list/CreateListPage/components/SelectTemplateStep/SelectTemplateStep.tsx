@@ -61,21 +61,7 @@ export default function SelectTemplateStep(props: SelectTemplateStepProps) {
       __typename: "List",
       id: '',
       name: 'Blank Project',
-      tasks: [
-        {
-          __typename: "Task",
-          id: '',
-          name: '',
-          section: {
-            __typename: "TaskSection",
-            id: '',
-            name: '',
-          },
-          description: '',
-          priority: 'medium',
-          status: '',
-        }
-      ],
+      tasks: [],
     })
     setStep(1);
   }

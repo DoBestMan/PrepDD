@@ -124,7 +124,7 @@ export default function CreateListStep(props: CreateListStepProps) {
   const classes = useStyles();
   const {state} = useGlobalState();
   const [newTemplate, setNewTemplate] = useState<ListType>({
-    name: selectedTemplate.name as string,
+    name: '',
     description: '',
     requesterId: state.selectedCompany,
     responderId: '',
@@ -163,6 +163,13 @@ export default function CreateListStep(props: CreateListStepProps) {
       setStep(0);
     }
   }, [addOwnerLoading])
+
+  useEffect(() => {
+    setNewTemplate({
+      ...newTemplate, 
+      name: selectedTemplate.name as string, 
+    })
+  }, [selectedTemplate.name])
 
   useEffect(() => {
     const list = idx(data, data => data.createList.list);
@@ -294,7 +301,7 @@ export default function CreateListStep(props: CreateListStepProps) {
           <Grid item md={6}>
             <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm label="Title" value={newTemplate.name || selectedTemplate.name as string} onChange={handleChangeName} />
+            <InputForm label="Title" value={newTemplate.name} onChange={handleChangeName} />
 
             <div>
               <Typography variant="h6" className={classes.secondary}>Template</Typography>
