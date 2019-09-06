@@ -238,7 +238,6 @@ export default function CreateListStep(props: CreateListStepProps) {
       alert("Input List name");
       return;
     }
-    console.log("Template: ", selectedTemplate);
     createList();
   }
 

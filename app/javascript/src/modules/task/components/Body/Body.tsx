@@ -173,9 +173,9 @@ export default function Body() {
     setLists(templateLists);
   }, [loading, idx(data, data => data.templateLists)])
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     setEditable(false);
-    setCreatingTasks([newTask]);
+    await setCreatingTasks([newTask]);
     newTasks.push(newTask);
     createTask();
   }

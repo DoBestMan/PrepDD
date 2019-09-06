@@ -4,6 +4,7 @@ import idx from 'idx';
 import axios from 'axios';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
+  ClickAwayListener,
   Typography,
   Table,
   TableHead,
@@ -12,6 +13,7 @@ import {
   TableCell,
   Button,
   Checkbox, 
+  TextField, 
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import ReactDropzone, { DropzoneRef } from 'react-dropzone';
@@ -19,7 +21,10 @@ import ReactDropzone, { DropzoneRef } from 'react-dropzone';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
+import PriorityInputForm from './components/PriorityInputForm';
 
+import * as cs from '../../../../../constants/theme';
+import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 import {
   AllTemplates_templateLists,
   AllTemplates_templateLists_tasks,
@@ -108,7 +113,36 @@ const useStyles = makeStyles((theme: Theme) =>
       top: '0px',
       backgroundColor: '#FFFFFF',
       zIndex: 1, 
-    }
+    },
+    input: {
+      display: 'block',
+      width: '100%',
+      marginTop: '6px',
+      color: '#606060',
+      fontFamily: cs.FONT.family,
+      fontWeight: cs.FONT.weight.regular,
+      fontSize: cs.FONT.size.xs,
+      textTransform: 'none',
+      border: 'none', 
+      '& label': {
+        color: '#606060',
+        fontFamily: cs.FONT.family,
+        fontWeight: cs.FONT.weight.regular,
+        fontSize: cs.FONT.size.xs,
+      },
+      '&:selected': {
+        color: '#3A84FF',
+      },
+      '& input::placeholder': {
+        fontSize: '12px',
+      },
+      '& div': {
+        width: '100%',
+      },
+      '& .MuiInput-underline:before, .MuiInput-underline:after, .MuiInput-underline:hover:not(.Mui-disabled):before': {
+        border: 'none'
+      }
+    },
   })
 );
 
@@ -130,6 +164,16 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   } = props;
   const classes = useStyles();
   const [selected, setSelected] = useState<number[]>([]);
+  const [addable, setAddable] = useState<boolean>(false);
+  const [newTask, setNewTask] = useState<TaskAttributes>({
+    name: '',
+    description: '',
+    priority: 'medium', 
+    status: 'To do',
+    dueDate: Date(), 
+    section: '', 
+    isActive: true
+  });
   const dropzone = React.createRef<DropzoneRef>();
 
   function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
@@ -263,27 +307,16 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   }
 
   const handleAddTask = () => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
-
-    if (newTasks) {
-      newTasks.push({
-        __typename: "Task",
-        id: '',
-        name: '',
-        section: {
-          __typename: "TaskSection",
-          id: '', 
-          name: '', 
-        },
-        description: '',
-        priority: 'medium',
-        status: '',
-      })
-      setSelectedTemplate({
-        ...selectedTemplate, 
-        tasks: newTasks, 
-      })
-    }
+    setAddable(true);
+    setNewTask({
+      name: '',
+      description: '',
+      priority: 'medium', 
+      status: 'To do',
+      dueDate: Date(), 
+      section: '', 
+      isActive: true      
+    })
   }
 
   const handleDelete = () => {
@@ -303,6 +336,54 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const handleClickDownload = () => {
     if (dropzone && dropzone.current) {
       dropzone.current.open();
+    }
+  }
+
+  const handleChangeNewTask = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+
+    setNewTask({
+      ...newTask, 
+      [name]: value, 
+    })
+  }
+
+  const handleChangeNewTaskPriority = (newValue: string) => {
+    setNewTask({
+      ...newTask, 
+      priority: newValue, 
+    });    
+  }
+
+  const handleFinishAdd = () => {
+    setAddable(false);
+    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+
+    if (newTasks) {
+      newTasks.push({
+        __typename: "Task",
+        id: '',
+        name: newTask.name,
+        section: {
+          __typename: "TaskSection",
+          id: '', 
+          name: newTask.section, 
+        },
+        description: newTask.description,
+        priority: newTask.priority,
+        status: '',
+      })
+
+      setSelectedTemplate({
+        ...selectedTemplate, 
+        tasks: newTasks, 
+      })
+    }
+  }
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13) {
+      handleFinishAdd();
     }
   }
 
@@ -403,6 +484,49 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                     );
                   })
                 }
+                {addable ? (
+                  <ClickAwayListener onClickAway={handleFinishAdd}>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell>
+                        <TextField
+                          name="name"
+                          className={classes.input}
+                          value={newTask.name}
+                          placeholder="Add task..."
+                          onChange={handleChangeNewTask}
+                          autoFocus
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          name="section"
+                          className={classes.input}
+                          value={newTask.section}
+                          placeholder="Add section..."
+                          onChange={handleChangeNewTask}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <PriorityInputForm
+                          value={newTask.priority}
+                          onChange={handleChangeNewTaskPriority}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <TextField
+                          name="description"
+                          className={classes.input}
+                          value={newTask.description}
+                          placeholder="Add description..."
+                          onChange={handleChangeNewTask}
+                          onKeyUp={handleKeyUp}
+                        />
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </ClickAwayListener>
+                ) : null}
               </TableBody>
             </Table>
           </div>
