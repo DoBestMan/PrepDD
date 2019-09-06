@@ -141,6 +141,22 @@ const SignUpPage = (props: any) => {
       type: 'SET_CURRENT_USER',
       user: signedUpUser,
     });
+    if (signedUpUser.lastViewedCompanyId) {
+      dispatch({
+        type: 'SET_SELECTED_COMPANY', 
+        companyId: signedUpUser.lastViewedCompanyId,
+      })
+    } else if (signedUpUser.ownedCompanies) {
+      dispatch({
+        type: 'SET_SELECTED_COMPANY', 
+        companyId: signedUpUser.ownedCompanies[0].id,
+      })
+    } else if (signedUpUser.companies) {
+      dispatch({
+        type: 'SET_SELECTED_COMPANY', 
+        companyId: signedUpUser.companies[0].id, 
+      })
+    }
     history.push('/app/');
   }, [loading, data]);
 

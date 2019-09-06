@@ -258,7 +258,10 @@ export default function Body(props: BodyProps) {
 
   const handleAddTask = () => {
     if (!listId) {
-      alert('Please select list');
+      setNotification({
+        variant: 'warning',
+        message: 'Please select list',
+      });
       return;
     }
 

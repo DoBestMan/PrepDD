@@ -351,7 +351,9 @@ export default function CompanyForm(props: CompanyFormProps) {
             })}
         </List>
       );
-    } else if (result.companies || result.users) {
+    } else if (result.companies && !result.companies.length && 
+      result.users && !result.users.length
+    ) {
       return (
         <Typography variant="h4" style={{marginTop: '12px'}}>
           No match result
