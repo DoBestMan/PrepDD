@@ -102,7 +102,6 @@ interface CreateListStepProps {
   selectedTemplate: AllTemplates_templateLists;
   stepNumber: number;
   currentStep: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
   history?: any;
 };
 
@@ -121,8 +120,8 @@ const CreateListStep = (props: any) => {
     selectedTemplate, 
     stepNumber, 
     currentStep, 
-    setStep,
     history, 
+    setNotification,
   } = props;
   const classes = useStyles();
   const {state} = useGlobalState();
@@ -181,11 +180,22 @@ const CreateListStep = (props: any) => {
   }, [selectedTemplate.name])
 
   useEffect(() => {
-    const list = idx(data, data => data.createList.list);
+    const response = idx(data, data => data.createList);
+    if (loading || !response) return;
 
-    if (loading || !list) return;
-    setListId(list.id);
-    addListOwner();
+    if (response.list) {
+      setListId(response.list.id);
+      addListOwner();
+      setNotification({
+        variant: 'success', 
+        message: 'Create List successfully'
+      })
+    } else if (response.errors && response.errors.length) {
+      setNotification({
+        variant: 'warning', 
+        message: response.errors[0].message
+      })
+    }
   }, [loading, idx(data, data => data.createList.list)])
 
   const getRole = () => {
