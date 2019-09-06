@@ -177,10 +177,10 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const dropzone = React.createRef<DropzoneRef>();
 
   useEffect(() => {
-    if (stepNumber === 1) {
+    if (selectedTemplate.name === 'Blank Project') {
       setAddable(true);
     }
-  }, [stepNumber])
+  }, [selectedTemplate.name])
 
   function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) {
     if (event.target.checked && selectedTemplate && selectedTemplate.tasks) {
