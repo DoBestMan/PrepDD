@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {withRouter} from 'react-router-dom';
 import clsx from 'clsx';
 import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
@@ -102,6 +103,7 @@ interface CreateListStepProps {
   stepNumber: number;
   currentStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  history?: any;
 };
 
 interface NewOwnerType {
@@ -111,15 +113,16 @@ interface NewOwnerType {
 
 interface NewCompanyType {
   newCompanyName: string;
-  ownerEmail: string;  
+  ownerEmail: string;
 }
 
-export default function CreateListStep(props: CreateListStepProps) {
+const CreateListStep = (props: any) => {
   const {
     selectedTemplate, 
     stepNumber, 
     currentStep, 
     setStep,
+    history, 
   } = props;
   const classes = useStyles();
   const {state} = useGlobalState();
@@ -153,16 +156,22 @@ export default function CreateListStep(props: CreateListStepProps) {
       }) : [],
   });
 
-  const [addListOwner, {loading: addOwnerLoading}] = useAddListOwner({
+  const [addListOwner, {
+    loading: addOwnerLoading,
+    data: addOwnerRes, 
+    error: addOwnerError,
+  }] = useAddListOwner({
     listId, 
     userIds: owners.map(owner => owner.id)
   });
 
   useEffect(() => {
-    if (!addOwnerLoading) {
-      setStep(0);
+    const success = idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success)
+
+    if (success) {
+      history.goBack();
     }
-  }, [addOwnerLoading])
+  }, [addOwnerLoading, idx(addOwnerRes, addOwnerRes => addOwnerRes.addListOwner.success)])
 
   useEffect(() => {
     setNewTemplate({
@@ -348,3 +357,5 @@ export default function CreateListStep(props: CreateListStepProps) {
     </div>
   ): null;
 };
+
+export default withRouter(CreateListStep);

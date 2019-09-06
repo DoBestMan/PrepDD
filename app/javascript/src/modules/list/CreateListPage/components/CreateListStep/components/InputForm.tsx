@@ -52,6 +52,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginLeft: '12px',
       color: '#3A84FF',
     },
+    secondary: {
+      color: '#606060', 
+      marginTop: '24px', 
+      marginBottom: '12px', 
+    },
   })
 );
 
@@ -79,7 +84,7 @@ export default function InputForm(props: InputFormProps) {
   
   return (
     <div className={classes.root}>
-      <p style={{marginBottom: '3px'}}>{label}</p>
+      <Typography variant="h6" className={classes.secondary}>{label}</Typography>
       <ClickAwayListener onClickAway={handleClickAway}>
         {editable ? (
           <input
