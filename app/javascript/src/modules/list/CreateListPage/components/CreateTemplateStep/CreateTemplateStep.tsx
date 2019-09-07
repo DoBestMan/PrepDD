@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 import UploadIcon from '@material-ui/icons/CloudUpload';
-import ReactDropzone, {DropzoneRef} from 'react-dropzone';
+import ReactDropzone from 'react-dropzone';
 
 import InputForm from './components/InputForm';
 import PriorityForm from './components/PriorityForm';
@@ -180,7 +180,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     section: '',
     isActive: true,
   });
-  const dropzone = React.createRef<DropzoneRef>();
 
   useEffect(() => {
     if (selectedTemplate.name === 'Blank Project') {
@@ -373,9 +372,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   };
 
   const handleClickDownload = () => {
-    if (dropzone && dropzone.current) {
-      dropzone.current.open();
-    }
+    // Exporting file
   };
 
   const handleChangeNewTask = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -399,7 +396,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     let newTasks: AllTemplates_templateLists_tasks[] | null =
       selectedTemplate.tasks;
 
-    if (newTasks) {
+    if (newTasks && (newTask.name || newTask.section || newTask.description)) {
       newTasks.push({
         __typename: 'Task',
         id: '',
@@ -411,7 +408,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
         },
         description: newTask.description,
         priority: newTask.priority,
-        status: '',
+        status: 'To do',
       });
 
       setSelectedTemplate({
@@ -615,7 +612,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             <ReactDropzone
               accept="application/*"
               multiple
-              ref={dropzone}
               onDrop={handleDrop}
             >
               {({getRootProps, getInputProps, isDragActive}) => (

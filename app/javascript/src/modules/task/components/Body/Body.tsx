@@ -14,7 +14,7 @@ import {
   TextField,
   ClickAwayListener,
 } from '@material-ui/core';
-import ReactDropzone, {DropzoneRef} from 'react-dropzone';
+import ReactDropzone from 'react-dropzone';
 
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
@@ -160,7 +160,6 @@ export default function Body(props: BodyProps) {
   });
   const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
-  const dropzone = React.createRef<DropzoneRef>();
 
   const [
     createTask,
@@ -294,9 +293,7 @@ export default function Body(props: BodyProps) {
   };
 
   const handleClickDownload = () => {
-    if (dropzone && dropzone.current) {
-      dropzone.current.open();
-    }
+    // Exporting filese
   };
 
   const renderPriority = (priority: string) => {
@@ -411,7 +408,6 @@ export default function Body(props: BodyProps) {
             <ReactDropzone
               accept="application/*"
               multiple
-              ref={dropzone}
               onDrop={handleDrop}
             >
               {({getRootProps, getInputProps, isDragActive}) => (
