@@ -512,7 +512,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                             <InputForm
                               name="name"
                               className={classes.textFlow}
-                              value={item.name as string}
+                              value={item.name ? item.name : ''}
                               placeholder="Add task..."
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
@@ -525,7 +525,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                               className={classes.textFlow}
                               value={
                                 item.section
-                                  ? (item.section.name as string)
+                                  ? item.section.name ? item.section.name : ''
                                   : ''
                               }
                               placeholder="Add section..."
@@ -544,7 +544,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                             <InputForm
                               name="description"
                               className={classes.textFlow}
-                              value={item.description as string}
+                              value={item.description ? item.description : ''}
                               placeholder="Add description..."
                               onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>
