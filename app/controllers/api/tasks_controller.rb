@@ -3,17 +3,18 @@ class Api::TasksController < ApplicationController
 
   def import_task
     status = true
-    # begin
-      tasks = Task.import(params[:files])
-    # rescue StandardError
-    #   status = false
-    # end
+    begin
+      tasks = Task.import(task_params[:files])
+    rescue => error
+      Rails.logger.info error
+      status = false
+    end
     render json: { status: status, tasks: tasks }
   end
 
   private
 
   def task_params
-    params.permit(:list_id, files: [])
+    params.permit(files: [])
   end
 end
