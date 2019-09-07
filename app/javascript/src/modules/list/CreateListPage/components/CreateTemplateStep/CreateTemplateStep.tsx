@@ -615,7 +615,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               Download Template
             </Button>
             <ReactDropzone
-              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               multiple
               onDrop={handleDrop}
             >
