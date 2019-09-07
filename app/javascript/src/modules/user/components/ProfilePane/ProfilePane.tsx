@@ -24,11 +24,9 @@ import InputForm from '../../../common/InputForm';
 import CheckBox from './components/CheckBox';
 
 import {useGlobalState} from '../../../../store';
-import * as cs from '../../../../constants/types';
 import {useUpdateUserPassword} from '../../../../graphql/mutations/UpdateUserPassword';
 import {useUpdateUserData} from '../../../../graphql/mutations/UpdateUserData';
 import {CurrentUser_currentUser_user_teams} from '../../../../graphql/queries/__generated__/CurrentUser';
-import FlashMessage from '../../../common/FlashMessage';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -185,10 +183,6 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     hasEightChar: false,
   });
   const [show, setShow] = useState<boolean>(false);
-  const [messageOpen, setMessageOpen] = useState<boolean>(false);
-  const [notification, setNotification] = useState<cs.NotificationType | null>(
-    null
-  );
 
   const [
     updateUserPassword,
@@ -222,14 +216,20 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     );
 
     if (updateErrors && !updateErrors.length) {
-      setNotification({
-        variant: 'success',
-        message: 'Update user successfully',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: 'Update user successfully',
+        }
       });
     } else if (updateErrors && updateErrors.length) {
-      setNotification({
-        variant: 'warning',
-        message: updateErrors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: updateErrors[0].message,
+        }
       });
     }
   }, [
@@ -246,14 +246,20 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     );
 
     if (updateErrors && !updateErrors.length) {
-      setNotification({
-        variant: 'success',
-        message: 'Update password successfully',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: 'Update password successfully',
+        }
       });
     } else if (updateErrors && updateErrors.length) {
-      setNotification({
-        variant: 'warning',
-        message: updateErrors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: updateErrors[0].message,
+        }
       });
     }
   }, [
@@ -262,12 +268,6 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       updateUserPasswordRes => updateUserPasswordRes.updateUserPassword.errors
     ),
   ]);
-
-  useEffect(() => {
-    if (notification) {
-      setMessageOpen(true);
-    }
-  }, [notification]);
 
   const handleChange = React.useCallback(
     event => {
@@ -299,9 +299,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
   const handleChangePassword = () => {
     if (user.password !== user.confirmPassword) {
-      setNotification({
-        variant: 'warning',
-        message: 'Password is not matched',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: 'Password is not matched',
+        }
       });
       setUser(user => ({
         ...user,
@@ -310,9 +313,12 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       return;
     }
     if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
-      setNotification({
-        variant: 'warning',
-        message: 'Password is not valid',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: 'Password is not valid',
+        }
       });
       setUser(user => ({
         ...user,
@@ -360,9 +366,13 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
           ...user,
           profile_url: res.data.profile_url,
         });
-        setNotification({
-          variant: 'success',
-          message: 'Upload photo successfully',
+
+        dispatch({
+          type: 'SET_NOTIFICATION', 
+          notification: {
+            variant: 'success',
+            message: 'Upload photo successfully',
+          }
         });
 
         dispatch({
@@ -374,19 +384,14 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         });
       })
       .catch(error => {
-        setNotification({
-          variant: 'warning',
-          message: 'Upload photo failed',
+        dispatch({
+          type: 'SET_NOTIFICATION', 
+          notification: {
+            variant: 'error',
+            message: 'Upload photo failed',
+          }
         });
       });
-  };
-
-  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setMessageOpen(false);
   };
 
   const renderDropzone = () => {
@@ -436,172 +441,153 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   };
 
   return (
-    <>
-      {notification && (
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          open={messageOpen}
-          autoHideDuration={3000}
-          onClose={handleCloseMessage}
-        >
-          <FlashMessage
-            variant={notification.variant}
-            message={notification.message}
-            onClose={handleCloseMessage}
-          />
-        </Snackbar>
-      )}
-      <Paper
-        className={clsx(classes.root, value !== index && classes.invisible)}
-        aria-labelledby="Personal Information"
-        elevation={0}
+    <Paper
+      className={clsx(classes.root, value !== index && classes.invisible)}
+      aria-labelledby="Personal Information"
+      elevation={0}
+    >
+      <div
+        className={classes.profilePhoto}
+        onMouseOver={() => setShow(true)}
+        onMouseOut={() => setShow(false)}
       >
-        <div
-          className={classes.profilePhoto}
-          onMouseOver={() => setShow(true)}
-          onMouseOut={() => setShow(false)}
-        >
-          {renderDropzone()}
-        </div>
+        {renderDropzone()}
+      </div>
 
-        <Card className={classes.profile} elevation={0}>
-          <form autoComplete="off">
-            <Grid container spacing={2}>
-              <Grid item md={6}>
-                <InputForm
-                  value={user.fullName}
-                  label="Full name"
-                  name="fullName"
-                  placeholder="Full Name"
-                  onChange={handleChange}
-                  onBlur={handleChangeDetails}
-                />
-              </Grid>
-              <Grid item md={6}>
-                <InputForm
-                  value={user.displayName}
-                  label="Display name"
-                  name="displayName"
-                  placeholder="Display Name"
-                  onChange={handleChange}
-                  onBlur={handleChangeDetails}
-                />
-              </Grid>
-              <Grid item md={12}>
-                <InputForm
-                  value={user.email}
-                  label="Email address"
-                  name="email"
-                  placeholder="example.123@gmail.com"
-                  onChange={handleChange}
-                  onBlur={handleChangeDetails}
-                />
-              </Grid>
-              <Grid item md={12}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={classes.tableHead}>
-                        Company(s)
-                      </TableCell>
-                      <TableCell className={classes.tableHead}>
-                        Team(s)
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {state.currentUser.companies &&
-                      state.currentUser.companies.map(company => {
-                        let teams: CurrentUser_currentUser_user_teams[] = [];
-
-                        if (state.currentUser.teams) {
-                          teams = state.currentUser.teams.filter(
-                            team => team.companyId === company.id
-                          );
-                        }
-
-                        return (
-                          <TableRow key={company.name}>
-                            <TableCell className={classes.tableCell}>
-                              <div className={classes.flex}>
-                                <div>{company.name}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell className={classes.tableCell}>
-                              {teams && teams.length > 0
-                                ? teams.map(team => team.name).join(', ')
-                                : 'No Teams'}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                  </TableBody>
-                </Table>
-              </Grid>
+      <Card className={classes.profile} elevation={0}>
+        <form autoComplete="off">
+          <Grid container spacing={2}>
+            <Grid item md={6}>
+              <InputForm
+                value={user.fullName}
+                label="Full name"
+                name="fullName"
+                placeholder="Full Name"
+                onChange={handleChange}
+                onBlur={handleChangeDetails}
+              />
             </Grid>
-          </form>
-        </Card>
-        <Card className={classes.passwordForm} elevation={0}>
-          <Typography
-            className={classes.passwordFormTitle}
-            variant="h6"
-            gutterBottom
-          >
-            Password must contain
-          </Typography>
-          <CheckBox
-            checked={user.hasUppercase}
-            label="At least 1 uppercase letter"
-          />
-          <CheckBox
-            checked={user.hasSpecialChar}
-            label="At least 1 special character"
-          />
-          <CheckBox
-            checked={user.hasEightChar}
-            label="At least 8 total characters"
-          />
+            <Grid item md={6}>
+              <InputForm
+                value={user.displayName}
+                label="Display name"
+                name="displayName"
+                placeholder="Display Name"
+                onChange={handleChange}
+                onBlur={handleChangeDetails}
+              />
+            </Grid>
+            <Grid item md={12}>
+              <InputForm
+                value={user.email}
+                label="Email address"
+                name="email"
+                placeholder="example.123@gmail.com"
+                onChange={handleChange}
+                onBlur={handleChangeDetails}
+              />
+            </Grid>
+            <Grid item md={12}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className={classes.tableHead}>
+                      Company(s)
+                    </TableCell>
+                    <TableCell className={classes.tableHead}>
+                      Team(s)
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {state.currentUser.companies &&
+                    state.currentUser.companies.map(company => {
+                      let teams: CurrentUser_currentUser_user_teams[] = [];
 
-          <InputForm
-            value={user.oldPassword}
-            label="Current password"
-            name="oldPassword"
-            type="password"
-            placeholder="Current password"
-            onChange={handleChange}
-            style={{marginTop: '24px', marginBottom: '24px'}}
-          />
-          <InputForm
-            value={user.password}
-            label="New Password"
-            name="password"
-            type="password"
-            placeholder="New password"
-            onChange={handleChange}
-            style={{marginTop: '24px', marginBottom: '24px'}}
-          />
-          <InputForm
-            value={user.confirmPassword}
-            label="Confirm password"
-            name="confirmPassword"
-            type="password"
-            placeholder="Confirm Password"
-            onChange={handleChange}
-            style={{marginBottom: '36px'}}
-          />
-          <Button
-            className={classes.primaryButton}
-            variant="contained"
-            onClick={handleChangePassword}
-            fullWidth
-          >
-            Update password
-          </Button>
-        </Card>
-      </Paper>
-    </>
+                      if (state.currentUser.teams) {
+                        teams = state.currentUser.teams.filter(
+                          team => team.companyId === company.id
+                        );
+                      }
+
+                      return (
+                        <TableRow key={company.name}>
+                          <TableCell className={classes.tableCell}>
+                            <div className={classes.flex}>
+                              <div>{company.name}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell className={classes.tableCell}>
+                            {teams && teams.length > 0
+                              ? teams.map(team => team.name).join(', ')
+                              : 'No Teams'}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </Grid>
+          </Grid>
+        </form>
+      </Card>
+      <Card className={classes.passwordForm} elevation={0}>
+        <Typography
+          className={classes.passwordFormTitle}
+          variant="h6"
+          gutterBottom
+        >
+          Password must contain
+        </Typography>
+        <CheckBox
+          checked={user.hasUppercase}
+          label="At least 1 uppercase letter"
+        />
+        <CheckBox
+          checked={user.hasSpecialChar}
+          label="At least 1 special character"
+        />
+        <CheckBox
+          checked={user.hasEightChar}
+          label="At least 8 total characters"
+        />
+
+        <InputForm
+          value={user.oldPassword}
+          label="Current password"
+          name="oldPassword"
+          type="password"
+          placeholder="Current password"
+          onChange={handleChange}
+          style={{marginTop: '24px', marginBottom: '24px'}}
+        />
+        <InputForm
+          value={user.password}
+          label="New Password"
+          name="password"
+          type="password"
+          placeholder="New password"
+          onChange={handleChange}
+          style={{marginTop: '24px', marginBottom: '24px'}}
+        />
+        <InputForm
+          value={user.confirmPassword}
+          label="Confirm password"
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          onChange={handleChange}
+          style={{marginBottom: '36px'}}
+        />
+        <Button
+          className={classes.primaryButton}
+          variant="contained"
+          onClick={handleChangePassword}
+          fullWidth
+        >
+          Update password
+        </Button>
+      </Card>
+    </Paper>
   );
 }

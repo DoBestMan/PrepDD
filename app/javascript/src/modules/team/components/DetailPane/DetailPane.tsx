@@ -22,7 +22,7 @@ import StyledTableCell from '../styled/StyledTableCell';
 import InputForm from './components/InputForm';
 import AutoSuggest from '../AutoSuggest';
 
-import * as cs from '../../../../constants/types';
+import {useGlobalState} from '../../../../store';
 import {useUserDetails} from '../../../../graphql/queries/UserDetails';
 import {useAllRoles} from '../../../../graphql/queries/AllRoles';
 import {
@@ -178,7 +178,6 @@ interface DetailPaneProps {
   open: boolean;
   company: string;
   handleClose: () => void;
-  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
   updateMemberList: (params: {
     id: string;
     fullName: string;
@@ -204,11 +203,12 @@ export default function DetailPane(props: DetailPaneProps) {
     id,
     open,
     company,
-    setNotification,
     handleClose,
     updateMemberList,
   } = props;
   const classes = useStyles();
+
+  const {dispatch} = useGlobalState();
   const [user, setUser] = useState<UserProps>({
     __typename: 'User',
     id: '',
@@ -330,9 +330,13 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (updateTeamMemberLoading || !updatedUser) return;
     handleUpdateMemberList(updatedUser as UserDetails_user);
-    setNotification({
-      variant: 'success',
-      message: 'Update team member successfully',
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'success',
+        message: 'Update team member successfully',
+      }
     });
   }, [
     updateTeamMemberLoading,
@@ -349,9 +353,13 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setNotification({
-      variant: 'warning',
-      message: errors[0].message,
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'error',
+        message: errors[0].message,
+      }
     });
   }, [
     idx(
@@ -368,9 +376,13 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (addTeamMemberLoading || !addedUser) return;
     handleUpdateMemberList(addedUser as UserDetails_user);
-    setNotification({
-      variant: 'success',
-      message: 'Add team member successfully',
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'success',
+        message: 'Add team member successfully',
+      }
     });
   }, [
     addTeamMemberLoading,
@@ -387,9 +399,13 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setNotification({
-      variant: 'warning',
-      message: errors[0].message,
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'error',
+        message: errors[0].message,
+      }
     });
   }, [
     idx(
@@ -406,9 +422,13 @@ export default function DetailPane(props: DetailPaneProps) {
 
     if (removeTeamMemberLoading || !removedUser) return;
     handleUpdateMemberList(removedUser as UserDetails_user);
-    setNotification({
-      variant: 'success',
-      message: 'Remove team member successfully',
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'success',
+        message: 'Remove team member successfully',
+      }
     });
   }, [
     removeTeamMemberLoading,
@@ -425,9 +445,13 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setNotification({
-      variant: 'warning',
-      message: errors[0].message,
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'error',
+        message: errors[0].message,
+      }
     });
   }, [
     idx(
@@ -448,9 +472,13 @@ export default function DetailPane(props: DetailPaneProps) {
     if (companyId === company) {
       handleClose();
     }
-    setNotification({
-      variant: 'success',
-      message: 'Remove company member successfully',
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'success',
+        message: 'Remove company member successfully',
+      }
     });
   }, [
     removeCompanyMemberLoading,
@@ -468,9 +496,13 @@ export default function DetailPane(props: DetailPaneProps) {
     );
 
     if (!errors || !errors.length) return;
-    setNotification({
-      variant: 'warning',
-      message: errors[0].message,
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: {
+        variant: 'error',
+        message: errors[0].message,
+      }
     });
   }, [
     idx(

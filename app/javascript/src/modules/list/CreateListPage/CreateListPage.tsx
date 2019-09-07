@@ -6,9 +6,7 @@ import Header from './components/Header';
 import SelectTemplateStep from './components/SelectTemplateStep';
 import CreateTemplateStep from './components/CreateTemplateStep';
 import CreateListStep from './components/CreateListStep';
-import FlashMessage from '../../common/FlashMessage';
 
-import {NotificationType} from '../../../constants/types';
 import {useAllTemplates} from '../../../graphql/queries/AllTemplates';
 import {
   AllTemplates_templateLists,
@@ -23,10 +21,6 @@ export default function CreateListPage() {
     name: '',
     tasks: [],
   });
-  const [messageOpen, setMessageOpen] = useState<boolean>(false);
-  const [notification, setNotification] = useState<NotificationType | null>(
-    null
-  );
 
   const {loading, data, error, fetchMore} = useAllTemplates({});
 
@@ -41,20 +35,6 @@ export default function CreateListPage() {
 
     if (loading || !lists) return;
   }, [loading, idx(data, data => data.templateLists)]);
-
-  useEffect(() => {
-    if (notification) {
-      setMessageOpen(true);
-    }
-  }, [notification]);
-
-  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setMessageOpen(false);
-  };
 
   const loadMore = () => {
     fetchMore({
@@ -83,24 +63,6 @@ export default function CreateListPage() {
   return (
     data && (
       <div>
-        {notification && (
-          <Snackbar
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            open={messageOpen}
-            autoHideDuration={3000}
-            onClose={handleCloseMessage}
-          >
-            <FlashMessage
-              variant={notification.variant}
-              message={notification.message}
-              onClose={handleCloseMessage}
-            />
-          </Snackbar>
-        )}
-
         <Header step={step} setStep={setStep} />
 
         <SelectTemplateStep
@@ -117,14 +79,12 @@ export default function CreateListPage() {
           stepNumber={1}
           currentStep={step}
           setStep={setStep}
-          setNotification={setNotification}
         />
         
         <CreateListStep
           selectedTemplate={selectedTemplate}
           stepNumber={2}
           currentStep={step}
-          setNotification={setNotification}
         />
       </div>
     )

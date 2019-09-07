@@ -20,7 +20,7 @@ import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
 
 import * as cs from '../../../../constants/theme';
-import {NotificationType} from '../../../../constants/types';
+import {useGlobalState} from '../../../../store';
 
 import {TaskAttributes} from '../../../../graphql/__generated__/globalTypes';
 import {useAllTemplates} from '../../../../graphql/queries/AllTemplates';
@@ -136,16 +136,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface BodyProps {
-  setNotification: React.Dispatch<
-    React.SetStateAction<NotificationType | null>
-  >;
-}
-
-export default function Body(props: BodyProps) {
-  const {setNotification} = props;
+export default function Body() {
   const classes = useStyles();
-  const {loading, data, error} = useAllTemplates({});
+
+  const {dispatch} = useGlobalState();
   const [lists, setLists] = useState<AllTemplates_templateLists[]>([]);
   const [listId, setListId] = useState<string>('');
   const [newTasks, setNewTasks] = useState<TaskAttributes[]>([]);
@@ -160,7 +154,8 @@ export default function Body(props: BodyProps) {
   });
   const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
-
+  
+  const {loading, data, error} = useAllTemplates({});
   const [
     createTask,
     {loading: createTaskLoading, data: createTaskRes, error: createTaskError},
@@ -185,14 +180,20 @@ export default function Body(props: BodyProps) {
     if (createTaskLoading || !response) return;
 
     if (response && response.success) {
-      setNotification({
-        variant: 'success',
-        message: 'Create new task successfully',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: 'Create new task successfully',
+        }
       });
     } else if (response && response.errors && response.errors.length) {
-      setNotification({
-        variant: 'success',
-        message: response.errors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: response.errors[0].message,
+        }
       });
     }
   }, [
@@ -257,9 +258,12 @@ export default function Body(props: BodyProps) {
 
   const handleAddTask = () => {
     if (!listId) {
-      setNotification({
-        variant: 'warning',
-        message: 'Please select list',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: 'Please select list',
+        }
       });
       return;
     }

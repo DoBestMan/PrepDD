@@ -64,11 +64,10 @@ const useStyles = makeStyles((theme: Theme) =>
 interface UploadPanelProps {
   company: CompanySettings_company;
   setCompany: (value: React.SetStateAction<CompanySettings_company>) => void;
-  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
 }
 
 export default function UploadPanel(props: UploadPanelProps) {
-  const {company, setCompany, setNotification} = props;
+  const {company, setCompany} = props;
   const classes = useStyles();
   const [showUpload, setShowUpload] = useState(false);
 
@@ -90,9 +89,12 @@ export default function UploadPanel(props: UploadPanelProps) {
           ...company,
           logoUrl: res.data.logo_url,
         });
-        setNotification({
-          variant: 'success',
-          message: 'Upload logo successfully',
+        dispatch({
+          type: 'SET_NOTIFICATION', 
+          notification: {
+            variant: 'success',
+            message: 'Update logo successfully',
+          }
         });
 
         if (state.currentUser.companies) {
@@ -112,9 +114,12 @@ export default function UploadPanel(props: UploadPanelProps) {
         }
       })
       .catch(error => {
-        setNotification({
-          variant: 'warning',
-          message: 'Upload logo failed',
+        dispatch({
+          type: 'SET_NOTIFICATION', 
+          notification: {
+            variant: 'error',
+            message: 'Upload logo failed',
+          }
         });
       });
   };

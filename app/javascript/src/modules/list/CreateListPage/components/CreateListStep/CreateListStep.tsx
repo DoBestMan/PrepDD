@@ -120,11 +120,10 @@ const CreateListStep = (props: any) => {
     stepNumber,
     currentStep,
     history,
-    setNotification,
   } = props;
   const classes = useStyles();
 
-  const {state} = useGlobalState();
+  const {state, dispatch} = useGlobalState();
   const [newTemplate, setNewTemplate] = useState<ListType>({
     name: '',
     description: '',
@@ -208,9 +207,12 @@ const CreateListStep = (props: any) => {
     );
 
     if (addSuccess && (!inviteCompany.ownerEmail || inviteSuccess)) {
-      setNotification({
-        variant: 'success',
-        message: 'Create List successfully',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: 'Create List successfully',
+        }
       });
       history.goBack();
     }
@@ -247,9 +249,12 @@ const CreateListStep = (props: any) => {
 
       createMetaData();
     } else if (response.errors && response.errors.length) {
-      setNotification({
-        variant: 'warning',
-        message: response.errors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: response.errors[0].message,
+        }
       });
     }
   }, [loading, idx(data, data => data.createList.list)]);
@@ -261,9 +266,12 @@ const CreateListStep = (props: any) => {
     );
 
     if (errors && errors.length) {
-      setNotification({
-        variant: 'warning',
-        message: errors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: errors[0].message,
+        }
       });
     }
   }, [
@@ -278,9 +286,12 @@ const CreateListStep = (props: any) => {
     );
 
     if (errors && errors.length) {
-      setNotification({
-        variant: 'warning',
-        message: errors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: errors[0].message,
+        }
       });
     }
   }, [
