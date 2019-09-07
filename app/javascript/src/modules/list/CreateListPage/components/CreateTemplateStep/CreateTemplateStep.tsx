@@ -224,6 +224,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
     console.log("Accepted Files: ", acceptedFiles);
+    console.log("Type: ", acceptedFiles[0].type);
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
       form_data.append(`files[]`, file);
@@ -610,7 +611,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               Download Template
             </Button>
             <ReactDropzone
-              accept="application/*"
+              accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
               multiple
               onDrop={handleDrop}
             >
