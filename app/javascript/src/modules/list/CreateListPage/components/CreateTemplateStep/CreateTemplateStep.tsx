@@ -24,6 +24,7 @@ import PriorityForm from './components/PriorityForm';
 import PriorityInputForm from './components/PriorityInputForm';
 
 import * as cs from '../../../../../constants/theme';
+import {NotificationType} from '../../../../../constants/types';
 import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 import {
   AllTemplates_templateLists,
@@ -154,6 +155,7 @@ interface CreateTemplateStepProps {
   stepNumber: number;
   currentStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  setNotification: React.Dispatch<React.SetStateAction<NotificationType | null>>;
 }
 
 export default function CreateTemplateStep(props: CreateTemplateStepProps) {
@@ -163,6 +165,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     stepNumber,
     currentStep,
     setStep,
+    setNotification, 
   } = props;
   const classes = useStyles();
 
@@ -221,6 +224,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
+    console.log("Accepted Files: ", acceptedFiles);
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
       form_data.append(`files[]`, file);
@@ -264,7 +268,18 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             ...selectedTemplate,
             tasks: [...selectedTemplate.tasks, ...newTasks],
           });
+          setNotification({
+            variant: 'success', 
+            message: 'Importing tasks successfully'
+          })
         }
+      })
+      .catch(e => {
+        console.log("Upload error: ", e);
+        setNotification({
+          variant: 'warning', 
+          message: 'Importing tasks failed'
+        })
       });
   };
 

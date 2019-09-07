@@ -117,6 +117,7 @@ export default function CreateListPage() {
           stepNumber={1}
           currentStep={step}
           setStep={setStep}
+          setNotification={setNotification}
         />
         
         <CreateListStep
