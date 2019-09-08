@@ -9,7 +9,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForever';
 import AutoSuggest from '../AutoSuggest';
 import Dropdown from './components/Dropdown';
 
-import * as cs from '../../../../constants/types';
+import {useGlobalState} from '../../../../store';
 import {useAddTeamMember} from '../../../../graphql/mutations/AddTeamMember';
 import {useAllRoles} from '../../../../graphql/queries/AllRoles';
 import {
@@ -151,7 +151,6 @@ interface TableToolbarProps {
   selected: number;
   company: string;
   handleDelete: () => void;
-  setNotification: React.Dispatch<React.SetStateAction<cs.NotificationType | null>>;
   updateMemberList: (params: {
     id: string;
     fullName: string;
@@ -165,11 +164,12 @@ const TableToolbar = (props: TableToolbarProps) => {
   const {
     selected,
     company,
-    setNotification,
     handleDelete,
     updateMemberList,
   } = props;
   const classes = useToolbarStyles();
+
+  const {dispatch} = useGlobalState();
   const [open, setOpen] = useState<boolean>(false);
   const [state, setState] = useState<StateProps>({
     fullName: '',
@@ -216,9 +216,13 @@ const TableToolbar = (props: TableToolbarProps) => {
     );
 
     if (!addMemberErrors || !addMemberErrors.length) return;
-    setNotification({
-      variant: 'warning',
-      message: addMemberErrors[0].message,
+
+    dispatch({
+      type: 'SET_NOTIFICATION', 
+      notification: {
+        variant: 'error',
+        message: addMemberErrors[0].message,
+      }
     });
   }, [
     idx(
@@ -241,9 +245,13 @@ const TableToolbar = (props: TableToolbarProps) => {
       teams: addedUser.teams,
       roles: addedUser.roles,
     });
-    setNotification({
-      variant: 'success',
-      message: 'Add team member successfully',
+    
+    dispatch({
+      type: 'SET_NOTIFICATION', 
+      notification: {
+        variant: 'success',
+        message: 'Add team member successfully',
+      }
     });
   }, [
     addTeamMemberLoading,

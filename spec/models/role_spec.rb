@@ -11,30 +11,30 @@ RSpec.describe Role, type: :model do
     let!(:super_admin_role) { create(:role, name: 'Super Admin') }
 
     describe '#customize_title' do
-      it {
+      it do
         admin_role.customize_title
         expect(admin_role.name).to eql 'Admin'
-      }
+      end
 
-      it {
+      it do
         admin_role.customize_title
         expect(super_admin_role.name).to eql 'SuperAdmin'
-      }
+      end
     end
 
     describe '#self.add(name)' do
       context 'when role.name is exists' do
-        it {
+        it do
           Role.add('Admin')
           expect(Role.count).to eql 2
-        }
+        end
       end
 
       context 'when role.name is not exists' do
-        it {
+        it do
           Role.add('User')
           expect(Role.count).to eql 3
-        }
+        end
       end
 
       context 'when role.name is nil' do
@@ -46,17 +46,17 @@ RSpec.describe Role, type: :model do
       let!(:owner) { create(:role, name: 'owner') }
 
       context 'when role.name not exists' do
-        it {
+        it do
           Role.delete('NotExits')
           expect(Role.count).to eql 3
-        }
+        end
       end
 
       context 'when role.name is nil' do
-        it {
+        it do
           Role.delete(nil)
           expect(Role.count).to eql 3
-        }
+        end
       end
     end
   end

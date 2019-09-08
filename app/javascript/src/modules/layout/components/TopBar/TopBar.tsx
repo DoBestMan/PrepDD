@@ -29,7 +29,7 @@ import SignoutIcon from '@material-ui/icons/Input';
 import {useGlobalState} from '../../../../store';
 import {useSignOutUser} from '../../../../graphql/mutations/SignOutUser';
 
-import DefaultUserImage from '../../../../components/DefaultUserImage';
+import DefaultUserImage from '../../../common/DefaultUserImage';
 import Dropdown from './components/Dropdown';
 import StyledBadge from './components/StyledBadge';
 
@@ -107,18 +107,6 @@ const useStyles = makeStyles((theme: Theme) =>
     inviteButton: {
       width: '72px',
       height: '36px',
-      background: '#3A84FF',
-      borderRadius: '3px',
-      fontFamily: 'Montserrat',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      color: '#FFFFFF',
-      textAlign: 'center',
-      textTransform: 'capitalize',
-      '&:hover': {
-        opacity: 0.7,
-        background: '#3A84FF',
-      },
     },
     appBarItemSize: {
       width: '32px',
@@ -130,9 +118,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '50%',
     },
     menuRoot: {
-      display: 'flex', 
-      alignItems: 'center', 
-      position: 'relative', 
+      display: 'flex',
+      alignItems: 'center',
+      position: 'relative',
     },
     profileMenu: {
       width: '180px',
@@ -207,7 +195,9 @@ const TopBar = (props: any) => {
         )}
 
         <div className={classes.menuRoot}>
-          <Button className={classes.inviteButton}>Invite</Button>
+          <Button variant="contained" className={classes.inviteButton}>
+            Invite
+          </Button>
           <IconButton
             aria-label="show 4 new notifications"
             color="inherit"
@@ -258,6 +248,6 @@ const TopBar = (props: any) => {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default withRouter(TopBar);

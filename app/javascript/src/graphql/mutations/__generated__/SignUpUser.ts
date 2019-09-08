@@ -29,6 +29,7 @@ export interface SignUpUser_signUpUser_user_teams {
 export interface SignUpUser_signUpUser_user_roles {
   __typename: "RolesUser";
   id: string;
+  name: string;
   companyId: string;
 }
 

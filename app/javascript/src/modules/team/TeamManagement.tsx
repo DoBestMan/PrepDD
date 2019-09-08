@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import idx from 'idx';
 import _ from 'lodash';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {Paper, Table, TableBody, Snackbar} from '@material-ui/core';
+import {Paper, Table, TableBody} from '@material-ui/core';
 
-import LoadingFallback from '../../components/LoadingFallback';
-import DefaultUserImage from '../../components/DefaultUserImage';
+import LoadingFallback from '../common/LoadingFallback';
+import DefaultUserImage from '../common/DefaultUserImage';
 import TableToolbar from './components/TableToolbar';
 import Searchbar from './components/Searchbar';
 import TableHeader from './components/TableHeader';
@@ -15,9 +15,9 @@ import StyledTableRow from './components/styled/StyledTableRow';
 import StyledTableCell from './components/styled/StyledTableCell';
 import StyledItem from './components/styled/StyledItem';
 import ArrowTooltip from './components/ArrowTooltip';
+import FlashMessage from '../common/FlashMessage';
 
 import {useGlobalState} from '../../store';
-import * as cs from '../../constants/types';
 import {useCompanyUsers} from '../../graphql/queries/CompanyUsers';
 import {useRemoveCompanyMember} from '../../graphql/mutations/RemoveCompanyMember';
 import {
@@ -28,7 +28,6 @@ import {
   CompanyUsers_companyUsers_users_roles,
   CompanyUsers_companyUsers_users_teams,
 } from '../../graphql/queries/__generated__/CompanyUsers';
-import FlashMessage from '../common/FlashMessage';
 
 const PANEL_WIDTH = 500;
 const LIMIT = 12;
@@ -102,12 +101,8 @@ export default function TeamManagement(props: {path?: string}) {
     CompanyUsers_companyUsers_users[]
   >([]);
   const [filteredName, setFilteredName] = useState<string>('');
-  const [notification, setNotification] = useState<cs.NotificationType | null>(
-    null
-  );
-  const [messageOpen, setMessageOpen] = useState<boolean>(false);
 
-  const {state} = useGlobalState();
+  const {state, dispatch} = useGlobalState();
   const {loading, data, error, fetchMore} = useCompanyUsers({
     companyId: state.selectedCompany,
     teamId: team,
@@ -132,12 +127,6 @@ export default function TeamManagement(props: {path?: string}) {
   }, [state.selectedCompany]);
 
   useEffect(() => {
-    if (notification) {
-      setMessageOpen(true);
-    }
-  }, [notification]);
-
-  useEffect(() => {
     const usersList = idx(data, data => data.companyUsers.users);
 
     if (loading || !usersList) return;
@@ -153,9 +142,12 @@ export default function TeamManagement(props: {path?: string}) {
     );
 
     if (removeErrors && !removeErrors.length) {
-      setNotification({
-        variant: 'success',
-        message: 'Remove company member successfully',
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'success',
+          message: 'Remove company member successfully',
+        }
       });
 
       let newMemberList = memberList;
@@ -166,9 +158,12 @@ export default function TeamManagement(props: {path?: string}) {
       setSelected([]);
       setMemberList(newMemberList);
     } else if (removeErrors && removeErrors.length) {
-      setNotification({
-        variant: 'warning',
-        message: removeErrors[0].message,
+      dispatch({
+        type: 'SET_NOTIFICATION', 
+        notification: {
+          variant: 'error',
+          message: removeErrors[0].message,
+        }
       });
     }
   }, [
@@ -250,14 +245,6 @@ export default function TeamManagement(props: {path?: string}) {
 
   const handleChangeTeam = (newTeam: string) => {
     setTeam(newTeam);
-  };
-
-  const handleCloseMessage = (event?: SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setMessageOpen(false);
   };
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
@@ -361,23 +348,6 @@ export default function TeamManagement(props: {path?: string}) {
     <FlashMessage variant="warning" message="Loading error" />
   ) : (
     <div className={classes.root}>
-      {notification && (
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-          open={messageOpen}
-          autoHideDuration={3000}
-          onClose={handleCloseMessage}
-        >
-          <FlashMessage
-            variant={notification.variant}
-            message={notification.message}
-            onClose={handleCloseMessage}
-          />
-        </Snackbar>
-      )}
       <Paper
         className={clsx(classes.paper, isOpen() && classes.paperShift)}
         elevation={0}
@@ -387,7 +357,6 @@ export default function TeamManagement(props: {path?: string}) {
           handleDelete={handleDelete}
           company={state.selectedCompany}
           updateMemberList={updateTeamMemberList}
-          setNotification={setNotification}
         />
         {data &&
           data.companyUsers.company &&
@@ -453,11 +422,7 @@ export default function TeamManagement(props: {path?: string}) {
                                 alt="Alana"
                               />
                             ) : (
-                              <DefaultUserImage
-                                width={30}
-                                height={30}
-                                userName={user.fullName}
-                              />
+                              <DefaultUserImage userName={user.fullName} />
                             )}
                             <span style={{marginLeft: '18px'}}>
                               {user.fullName}
@@ -550,7 +515,6 @@ export default function TeamManagement(props: {path?: string}) {
           company={state.selectedCompany}
           handleClose={() => setSelected([])}
           updateMemberList={updateTeamMemberList}
-          setNotification={setNotification}
         />
       )}
     </div>

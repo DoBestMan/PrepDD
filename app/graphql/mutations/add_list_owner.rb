@@ -44,7 +44,6 @@ class Mutations::AddListOwner < GraphQL::Schema::Mutation
             response[:success] = false
           end
         end
-
       end
     end
 
@@ -60,7 +59,6 @@ class Mutations::AddListOwner < GraphQL::Schema::Mutation
             response[:success] = false
           end
         end
-
       end
     end
 

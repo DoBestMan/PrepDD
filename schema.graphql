@@ -162,7 +162,7 @@ type Mutation {
   addTeamMember(companyId: ID!, email: String!, fullName: String!, role: ID!, team: String!): AddTeamMemberPayload
   createAssociatedCompany(companyId: ID!, isBroker: Boolean, isParent: Boolean, newCompanyName: String!, ownerEmail: String!): CreateAssociatedCompanyPayload
   createCompany(name: String!): CreateCompanyPayload
-  createList(description: String, name: String!, requesterId: ID!, responderId: ID, tasks: [TaskAttributes!]): CreateListPayload
+  createList(description: String, name: String!, requesterId: ID, responderId: ID, tasks: [TaskAttributes!]): CreateListPayload
   createTask(listId: ID!, tasks: [TaskAttributes!]!): CreateTaskPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   deleteLists(listIds: [ID!]!): DeleteListsPayload

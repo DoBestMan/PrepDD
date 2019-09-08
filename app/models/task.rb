@@ -12,29 +12,28 @@ class Task < ApplicationRecord
       spreadsheet = Roo::Spreadsheet.open(file.path)
       header = spreadsheet.row(1).map(&:downcase!)
 
-      tasks_data  = (2..spreadsheet.last_row).each_with_object({}) do |i, tasks|
-        row = Hash[[header, spreadsheet.row(i)].transpose]
-        row['name'] = row.delete('task')
+      tasks_data =
+        (2..spreadsheet.last_row).each_with_object({}) do |i, tasks|
+          row = Hash[[header, spreadsheet.row(i)].transpose]
+          row['name'] = row.delete('task')
 
-        priority = row["priority"]&.downcase!
+          priority = row['priority']&.downcase!
 
-        if priority
-
-          case priority[0]
-          when 'h'
-            row["priority"] = 'high'
-          when 'm'
-            row["priority"] = 'medium'
-          when 'l'
-            row["priority"] = 'low'
-          else
-            row["priority"] = 'medium'
+          if priority
+            case priority[0]
+            when 'h'
+              row['priority'] = 'high'
+            when 'm'
+              row['priority'] = 'medium'
+            when 'l'
+              row['priority'] = 'low'
+            else
+              row['priority'] = 'medium'
+            end
           end
-
+          tasks[i - 1] = row
         end
-        tasks[i-1] = row
-      end
-      tasks[index+1] = tasks_data
+      tasks[index + 1] = tasks_data
     end
     tasks
   end

@@ -5,19 +5,20 @@ module Mutations
       it 'Create new company' do
         company = create(:company)
         expect do
-          res =  post '/graphql', params: { query: query(name: company.name) }
+          res = post '/graphql', params: { query: query(name: company.name) }
           to change { Company.count }.by(1)
-          it { expect Company.first.name.eql? company.name  }
+          it { expect Company.first.name.eql? company.name }
         end
       end
-
     end
 
     def query(name:)
       <<~GQL
        mutation{
     CreateCompany(
-      name: #{name}, 
+      name: #{
+        name
+      }, 
     ) {
       errors {
         path

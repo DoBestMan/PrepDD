@@ -18,7 +18,6 @@ import {
 import {Link as RouterLink} from 'react-router-dom';
 import {LinkedIn} from 'react-linkedin-login-oauth2';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../../hooks/auth';
 import {useSignInUser} from '../../graphql/mutations/SignInUser';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,7 +83,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const SignInPage = (props: any) => {
-  // useRequireGuest();
   const {history} = props;
 
   const classes = useStyles({});
@@ -123,7 +121,7 @@ const SignInPage = (props: any) => {
   useEffect(() => {
     const signInUser = idx(data, data => data.signInUser);
     if (loading || !signInUser) return;
-    window.location.href = "/app"
+    window.location.href = '/app';
   }, [loading, idx(data, data => data.signInUser)]);
 
   const errors = idx(data, x => x.signInUser.errors);
@@ -298,6 +296,6 @@ const SignInPage = (props: any) => {
       </div>
     </Container>
   );
-}
+};
 
 export default withRouter(SignInPage);

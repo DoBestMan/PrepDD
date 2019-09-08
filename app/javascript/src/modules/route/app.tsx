@@ -1,9 +1,6 @@
-import LoadingFallback from '../../components/LoadingFallback';
+import LoadingFallback from '../common/LoadingFallback';
 import React, {lazy, Suspense} from 'react';
-import {
-  Switch, 
-  Route,
-} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 
 const Layout = lazy(() => import('../layout'));
 const CompanyRoutes = lazy(() => import('./company'));

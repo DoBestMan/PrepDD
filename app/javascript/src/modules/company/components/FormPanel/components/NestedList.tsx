@@ -13,7 +13,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import {
   SearchCompanies_searchCompanies_users,
   SearchCompanies_searchCompanies_users_companies,
-} from './__generated__/SearchCompanies';
+} from '../../../../list/CreateListPage/components/CreateListStep/components/__generated__/SearchCompanies';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

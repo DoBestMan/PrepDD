@@ -6,14 +6,19 @@ module Mutations
         company = create(:company)
         team = create(:team)
         expect do
-          res =  post '/graphql', params: { query: query_create_company(name: company.name) }
-          res =  post '/graphql', params: { query: query(company_id: company.id, name: team.name) }
+          res =
+            post '/graphql',
+                 params: { query: query_create_company(name: company.name) }
+          res =
+            post '/graphql',
+                 params: {
+                   query: query(company_id: company.id, name: team.name)
+                 }
           to change { Team.count }.by(1)
-        it { expect Team.first.name.eql? team.name  }
-        it { expect Team.first.company_id.eql? company.id }
+          it { expect Team.first.name.eql? team.name }
+          it { expect Team.first.company_id.eql? company.id }
         end
       end
-
     end
 
     def query(company_id:, name:)
@@ -21,7 +26,9 @@ module Mutations
        mutation{
     CreateTeam(
       name: #{name}, 
-      company_id: #{company_id}
+      company_id: #{
+        company_id
+      }
     ) {
       errors {
         path
@@ -37,7 +44,9 @@ module Mutations
       <<~GQL
        mutation{
     CreateCompany(
-      name: #{name}, 
+      name: #{
+        name
+      }, 
     ) {
       errors {
         path

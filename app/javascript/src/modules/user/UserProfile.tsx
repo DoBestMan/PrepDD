@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import Panel from '../../components/Panel';
+import Panel from '../common/Panel';
 import ProfilePane from './components/ProfilePane';
 import NotificationPane from './components/NotificationPane';
 

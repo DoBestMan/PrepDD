@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
       left: drawerWidth,
       width: 24,
       height: '100vh',
-      zIndex: 10000,
+      zIndex: 1,
     },
   })
 );

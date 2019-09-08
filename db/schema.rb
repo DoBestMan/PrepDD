@@ -64,6 +64,9 @@ ActiveRecord::Schema.define(version: 2019_09_04_191854) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
+  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
   create_table "lists", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -199,10 +202,12 @@ ActiveRecord::Schema.define(version: 2019_09_04_191854) do
     t.string "user_token"
     t.string "bio"
     t.bigint "last_viewed_company_id"
+    t.bigint "task_list_id"
     t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["notification_id"], name: "index_users_on_notification_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["task_list_id"], name: "index_users_on_task_list_id"
   end
 
   create_table "users_companies", force: :cascade do |t|

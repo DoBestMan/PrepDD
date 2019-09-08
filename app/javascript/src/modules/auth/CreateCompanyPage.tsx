@@ -8,7 +8,6 @@ import {useCallback, useEffect, useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {useRequireGuest} from '../../hooks/auth';
 import {withRouter} from 'react-router';
 
 import {useCompanyCreate} from '../../graphql/mutations/CreateCompany';
@@ -136,6 +135,6 @@ const CreateCompanyPage = (props: any) => {
       </div>
     </Container>
   );
-}
+};
 
 export default withRouter(CreateCompanyPage);

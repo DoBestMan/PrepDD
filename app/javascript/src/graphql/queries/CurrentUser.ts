@@ -33,6 +33,7 @@ export const useCurrentUser = createQueryHook<CurrentUser, {}>(gql`
         }
         roles {
           id
+          name
           companyId
         }
       }

@@ -6,7 +6,11 @@ module Mutations
       it 'Sign up user' do
         user = create(:user)
         expect do
-          res =  post '/graphql', params: { query: query(email: user.email, name: user.full_name) }
+          res =
+            post '/graphql',
+                 params: {
+                   query: query(email: user.email, name: user.full_name)
+                 }
           to change { User.count }.by(1)
         end
       end
@@ -17,7 +21,9 @@ module Mutations
        mutation{
     signUpUser(
       email: #{email}, 
-      fullName: #{name}
+      fullName: #{
+        name
+      }
     ) {
       user {
         email

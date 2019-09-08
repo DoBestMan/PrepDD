@@ -1,30 +1,49 @@
 class Mutations::CreateList < GraphQL::Schema::Mutation
   argument :name, String, required: true
   argument :description, String, required: false
-  argument :requesterId, ID, required: true
+  argument :requesterId, ID, required: false
   argument :responderId, ID, required: false
-  argument :tasks, [Types::TaskAttributes ], required: false
+  argument :tasks, [Types::TaskAttributes], required: false
 
   field :list, Types::ListType, null: true
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(name: nil, description: nil, requester_id: nil, responder_id: nil, tasks: nil)
+  def resolve(
+    name: nil,
+    description: nil,
+    requester_id: nil,
+    responder_id: nil,
+    tasks: nil
+  )
     response = { errors: [] }
 
-    list = List.create(name: name, description: description, requester_id: requester_id,
-                       responder_id: responder_id, is_template: false,
-                       is_public_template: false
-    )
+    list =
+      List.create(
+        name: name,
+        description: description,
+        requester_id: requester_id,
+        responder_id: responder_id,
+        is_template: false,
+        is_public_template: false
+      )
 
     if list && tasks
       tasks.each do |task|
         if task.section.present?
           task_section = TaskSection.where(name: task.section).first_or_create
-          list.tasks.create(name: task.name, description: task.description, priority: task.priority,
-                            task_section_id: task_section&.id )
+          list.tasks.create(
+            name: task.name,
+            description: task.description,
+            priority: task.priority,
+            task_section_id: task_section&.id
+          )
         else
-          list.tasks.create(name: task.name, description: task.description, priority: task.priority)
+          list.tasks.create(
+            name: task.name,
+            description: task.description,
+            priority: task.priority
+          )
         end
       end
     end

@@ -18,7 +18,7 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
-Dir[Rails.root.join("spec", "support", "**", "*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
@@ -32,11 +32,7 @@ RSpec.configure do |config|
   end
 
   # start the transaction strategy as examples are run
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
+  config.around(:each) { |example| DatabaseCleaner.cleaning { example.run } }
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
@@ -55,8 +51,6 @@ RSpec.configure do |config|
   SimpleCov.start 'rails'
 
   def set_graphql_type
-    self.let(:subject) do
-      self.described_class
-    end
+    self.let(:subject) { self.described_class }
   end
 end
