@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       background: '#FFFFFF',
       border: '1px solid #ECECEC',
       borderRadius: '3px',
+      width: 'fit-content', 
     },
     completed: {
       backgroundColor: '#509E6D'
@@ -47,7 +48,7 @@ interface StyledItemProps {
 }
 
 export default function StyledItem(props: StyledItemProps) {
-  const {status} = props;
+  const {status, selected} = props;
   const classes = useStyles();
 
   const renderStatus = () => {
@@ -80,7 +81,7 @@ export default function StyledItem(props: StyledItemProps) {
   }
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, selected && classes.selected)}>
       {renderStatus()}
       {status}
     </div>
