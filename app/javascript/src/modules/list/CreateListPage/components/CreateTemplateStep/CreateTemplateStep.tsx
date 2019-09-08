@@ -615,7 +615,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
               Download Template
             </Button>
             <ReactDropzone
-              accept="application/*"
               multiple
               onDrop={handleDrop}
             >

@@ -1,6 +1,7 @@
 import React, {useState, useEffect, SyntheticEvent} from 'react';
 import idx from 'idx';
 import Snackbar from '@material-ui/core/Snackbar';
+import IdleTimer from 'react-idle-timer';
 
 import Router from '../../modules/route';
 import LoadingFallback from '../../modules/common/LoadingFallback';
@@ -9,11 +10,14 @@ import FlashMessage from '../../modules/common/FlashMessage';
 import {useCurrentUser} from '../../graphql/queries/CurrentUser';
 import {useGlobalState} from '../../store';
 
+const TIME_OUT = 10 * 60 * 1000;
+
 export default function App() {
   const {data, loading, error} = useCurrentUser({});
   const {state, dispatch} = useGlobalState();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
+  const timerRef = React.createRef<any>();
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user);
@@ -58,11 +62,29 @@ export default function App() {
 
     setNotificationOpen(false);
   };
+  
+  const handleWarningIdle = () => {
+    console.log("Warning");
+  }
+
+  const handleIdle = () => {
+    console.log("Idle");
+  };
 
   return !loaded ? (
     <LoadingFallback />
   ) : (
     <>
+      <IdleTimer
+        onIdle={handleWarningIdle}
+        timeout={TIME_OUT - 60 * 1000}
+        startOnMount
+      />
+      <IdleTimer 
+        onIdle={handleIdle}
+        timeout={TIME_OUT}
+        startOnMount
+      />
       {state.notification.message && (
         <Snackbar
           anchorOrigin={{
