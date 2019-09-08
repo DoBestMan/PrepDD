@@ -374,8 +374,8 @@ const CreateListStep = (props: any) => {
   return stepNumber == currentStep ? (
     <div>
       <div className={classes.body}>
-        <Grid container spacing={6}>
-          <Grid item md={6}>
+        <div className={classes.flex}>
+          <div>
             <Typography variant="h2">Create List</Typography>
             <FormControl component="fieldset" style={{marginTop: '24px'}}>
               <Typography variant="h6" className={classes.sharingTitle}>
@@ -423,49 +423,49 @@ const CreateListStep = (props: any) => {
               </RadioGroup>
             </FormControl>
             {sharing !== 'internal' && <Alert />}
-          </Grid>
-          <Grid item md={6}>
-            <Typography variant="h2">Sharing to List Type</Typography>
+          </div>
+        </div>
+        <div>
+          <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm
-              label="Title"
-              value={newTemplate.name}
-              onChange={handleChangeName}
+          <InputForm
+            label="Title"
+            value={newTemplate.name}
+            onChange={handleChangeName}
+          />
+
+          <div>
+            <Typography variant="h6" className={classes.secondary}>
+              Template
+            </Typography>
+            <div className={classes.flex}>
+              <div className={classes.grayRect} />
+              <Typography variant="h6">{selectedTemplate.name}</Typography>
+            </div>
+          </div>
+
+          <OwnerForm owners={owners} setOwners={setOwners} />
+          {sharing !== 'internal' && (
+            <CompanyForm
+              sharing={sharing}
+              newTemplate={newTemplate}
+              setNewTemplate={setNewTemplate}
+              inviteCompany={inviteCompany}
+              setInviteCompany={setInviteCompany}
             />
+          )}
 
-            <div>
-              <Typography variant="h6" className={classes.secondary}>
-                Template
-              </Typography>
-              <div className={classes.flex}>
-                <div className={classes.grayRect} />
-                <Typography variant="h6">{selectedTemplate.name}</Typography>
-              </div>
-            </div>
-
-            <OwnerForm owners={owners} setOwners={setOwners} />
-            {sharing !== 'internal' && (
-              <CompanyForm
-                sharing={sharing}
-                newTemplate={newTemplate}
-                setNewTemplate={setNewTemplate}
-                inviteCompany={inviteCompany}
-                setInviteCompany={setInviteCompany}
-              />
-            )}
-
-            <div>
-              <Typography variant="h6" className={classes.secondary}>
-                Description
-              </Typography>
-              <textarea
-                className={classes.description}
-                value={newTemplate.description}
-                onChange={handleChangeDescription}
-              />
-            </div>
-          </Grid>
-        </Grid>
+          <div>
+            <Typography variant="h6" className={classes.secondary}>
+              Description
+            </Typography>
+            <textarea
+              className={classes.description}
+              value={newTemplate.description}
+              onChange={handleChangeDescription}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={classes.footer}>

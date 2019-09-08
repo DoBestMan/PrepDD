@@ -410,7 +410,6 @@ export default function Body() {
               Download Template
             </Button>
             <ReactDropzone
-              accept="application/*"
               multiple
               onDrop={handleDrop}
             >
