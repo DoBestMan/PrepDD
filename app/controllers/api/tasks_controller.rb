@@ -2,6 +2,12 @@ class Api::TasksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def import_task
+    Rails.logger.info "TESTING NOT GETTING FILE ERROR WITH REQUEST"
+    Rails.logger.info "TESTING NOT GETTING FILE ERROR WITH REQUEST"
+    Rails.logger.info params
+    Rails.logger.info "TESTING NOT GETTING FILE ERROR WITH REQUEST"
+    Rails.logger.info "TESTING NOT GETTING FILE ERROR WITH REQUEST"
+
     status = true
     begin
       tasks = Task.import(task_params[:files])
