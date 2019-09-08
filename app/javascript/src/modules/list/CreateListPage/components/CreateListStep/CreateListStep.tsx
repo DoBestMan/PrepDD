@@ -42,10 +42,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     body: {
+      display: 'flex', 
       height: 'calc(100vh - 144px)',
       padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)',
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto',
+    },
+    pane: {
+      width: '500px', 
+      padding: '20px', 
     },
     footer: {
       height: '60px',
@@ -102,11 +107,6 @@ interface CreateListStepProps {
   stepNumber: number;
   currentStep: number;
   history?: any;
-}
-
-interface NewOwnerType {
-  userName: string;
-  userEmail: string;
 }
 
 interface NewCompanyType {
@@ -374,98 +374,96 @@ const CreateListStep = (props: any) => {
   return stepNumber == currentStep ? (
     <div>
       <div className={classes.body}>
-        <Grid container spacing={6}>
-          <Grid item md={6}>
-            <Typography variant="h2">Create List</Typography>
-            <FormControl component="fieldset" style={{marginTop: '24px'}}>
-              <Typography variant="h6" className={classes.sharingTitle}>
-                Sharing
+        <div className={classes.pane}>
+          <Typography variant="h2">Create List</Typography>
+          <FormControl component="fieldset" style={{marginTop: '24px'}}>
+            <Typography variant="h6" className={classes.sharingTitle}>
+              Sharing
+            </Typography>
+            <RadioGroup
+              aria-label="sharing"
+              name="sharing"
+              value={sharing}
+              onChange={handleChangeSharing}
+            >
+              <FormControlLabel
+                value="internal"
+                label={InternalLabel}
+                control={<Radio color="primary" />}
+              />
+              <Typography variant="h6" className={classes.explanation}>
+                Collaborate within your company. Use this setting when sharing
+                information with your colleagues
               </Typography>
-              <RadioGroup
-                aria-label="sharing"
-                name="sharing"
-                value={sharing}
-                onChange={handleChangeSharing}
-              >
-                <FormControlLabel
-                  value="internal"
-                  label={InternalLabel}
-                  control={<Radio color="primary" />}
-                />
-                <Typography variant="h6" className={classes.explanation}>
-                  Collaborate within your company. Use this setting when sharing
-                  information with your colleagues
-                </Typography>
-                {canBeAdmin(getRole()) && (
-                  <>
-                    <FormControlLabel
-                      value="share"
-                      label={ShareLabel}
-                      control={<Radio color="primary" />}
-                    />
-                    <Typography variant="h6" className={classes.explanation}>
-                      Send information to an external company. Use this setting
-                      when your company has the primary responsibility for
-                      providing the information in the task list.
-                    </Typography>
-                    <FormControlLabel
-                      value="issue"
-                      label={RequestLabel}
-                      control={<Radio color="primary" />}
-                    />
-                    <Typography variant="h6" className={classes.explanation}>
-                      Issue a request for information from an external company.
-                      Use this setting when the other company is responsible for
-                      providing most of the information in the task list.
-                    </Typography>
-                  </>
-                )}
-              </RadioGroup>
-            </FormControl>
-            {sharing !== 'internal' && <Alert />}
-          </Grid>
-          <Grid item md={6}>
-            <Typography variant="h2">Sharing to List Type</Typography>
+              {canBeAdmin(getRole()) && (
+                <>
+                  <FormControlLabel
+                    value="share"
+                    label={ShareLabel}
+                    control={<Radio color="primary" />}
+                  />
+                  <Typography variant="h6" className={classes.explanation}>
+                    Send information to an external company. Use this setting
+                    when your company has the primary responsibility for
+                    providing the information in the task list.
+                  </Typography>
+                  <FormControlLabel
+                    value="issue"
+                    label={RequestLabel}
+                    control={<Radio color="primary" />}
+                  />
+                  <Typography variant="h6" className={classes.explanation}>
+                    Issue a request for information from an external company.
+                    Use this setting when the other company is responsible for
+                    providing most of the information in the task list.
+                  </Typography>
+                </>
+              )}
+            </RadioGroup>
+          </FormControl>
+          {sharing !== 'internal' && <Alert />}
+        </div>
+        <div className={classes.pane}>
+          <Typography variant="h2">Sharing to List Type</Typography>
 
-            <InputForm
-              label="Title"
-              value={newTemplate.name}
-              onChange={handleChangeName}
+          <InputForm
+            label="Title"
+            value={newTemplate.name}
+            onChange={handleChangeName}
+          />
+
+          <div>
+            <Typography variant="h6" className={classes.secondary}>
+              Template
+            </Typography>
+            <div className={classes.flex}>
+              <div className={classes.grayRect} />
+              <Typography variant="h6">{selectedTemplate.name}</Typography>
+            </div>
+          </div>
+
+          <OwnerForm owners={owners} setOwners={setOwners} />
+          {sharing !== 'internal' && (
+            <CompanyForm
+              sharing={sharing}
+              newTemplate={newTemplate}
+              setNewTemplate={setNewTemplate}
+              inviteCompany={inviteCompany}
+              setInviteCompany={setInviteCompany}
             />
+          )}
 
-            <div>
-              <Typography variant="h6" className={classes.secondary}>
-                Template
-              </Typography>
-              <div className={classes.flex}>
-                <div className={classes.grayRect} />
-                <Typography variant="h6">{selectedTemplate.name}</Typography>
-              </div>
-            </div>
-
-            <OwnerForm owners={owners} setOwners={setOwners} />
-            {sharing !== 'internal' && (
-              <CompanyForm
-                sharing={sharing}
-                newTemplate={newTemplate}
-                setNewTemplate={setNewTemplate}
-                inviteCompany={inviteCompany}
-                setInviteCompany={setInviteCompany}
-              />
-            )}
-
-            <div>
-              <Typography variant="h6" className={classes.secondary}>
-                Description
-              </Typography>
-              <textarea
-                className={classes.description}
-                value={newTemplate.description}
-                onChange={handleChangeDescription}
-              />
-            </div>
-          </Grid>
-        </Grid>
+          <div>
+            <Typography variant="h6" className={classes.secondary}>
+              Description
+            </Typography>
+            <textarea
+              className={classes.description}
+              value={newTemplate.description}
+              onChange={handleChangeDescription}
+            />
+          </div>
+        </div>
       </div>
 
       <div className={classes.footer}>
