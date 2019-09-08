@@ -6,18 +6,22 @@ import IdleTimer from 'react-idle-timer';
 import Router from '../../modules/route';
 import LoadingFallback from '../../modules/common/LoadingFallback';
 import FlashMessage from '../../modules/common/FlashMessage';
+import Dialog from './components/Dialog';
 
 import {useCurrentUser} from '../../graphql/queries/CurrentUser';
 import {useGlobalState} from '../../store';
+import {useSignOutUser} from '../../graphql/mutations/SignOutUser';
 
 const TIME_OUT = 10 * 60 * 1000;
 
 export default function App() {
-  const {data, loading, error} = useCurrentUser({});
   const {state, dispatch} = useGlobalState();
   const [loaded, setLoaded] = useState<boolean>(false);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
-  const timerRef = React.createRef<any>();
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  
+  const {data, loading, error} = useCurrentUser({});
+  const [signOutUser] = useSignOutUser({});
 
   useEffect(() => {
     const currentUser = idx(data, data => data.currentUser.user);
@@ -62,29 +66,57 @@ export default function App() {
 
     setNotificationOpen(false);
   };
+
+  const handleActive = () => {
+    setDialogOpen(false);
+  }
   
   const handleWarningIdle = () => {
-    console.log("Warning");
+    setDialogOpen(true);
   }
 
   const handleIdle = () => {
-    console.log("Idle");
+    setDialogOpen(false);
+    dispatch({
+      type: 'SET_CURRENT_USER', 
+      user: {
+        __typename: 'User',
+        id: '',
+        email: '',
+        fullName: '',
+        displayName: '',
+        profileUrl: '',
+        lastViewedCompanyId: '',
+        ownedCompanies: [],
+        companies: [],
+        teams: [],
+        roles: [],        
+      }
+    });
+    signOutUser();
   };
 
   return !loaded ? (
     <LoadingFallback />
   ) : (
-    <>
-      <IdleTimer
-        onIdle={handleWarningIdle}
-        timeout={TIME_OUT - 60 * 1000}
-        startOnMount
-      />
-      <IdleTimer 
-        onIdle={handleIdle}
-        timeout={TIME_OUT}
-        startOnMount
-      />
+    <div>
+      {state.currentUser.email ? (
+        <>
+          <IdleTimer
+            onIdle={handleWarningIdle}
+            onActive={handleActive}
+            timeout={TIME_OUT - 60 * 1000}
+            startOnMount
+          />
+          <IdleTimer 
+            onIdle={handleIdle}
+            onActive={handleActive}
+            timeout={TIME_OUT}
+            startOnMount
+          />
+        </>
+      ) : null}
+      <Dialog open={dialogOpen} setOpen={setDialogOpen} />
       {state.notification.message && (
         <Snackbar
           anchorOrigin={{
@@ -103,6 +135,6 @@ export default function App() {
         </Snackbar>
       )}
       <Router />
-    </>
+    </div>
   );
 }
