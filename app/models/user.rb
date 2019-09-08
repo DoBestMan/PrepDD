@@ -18,6 +18,8 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
 
+  after_create :update_last_viewed_company
+
   def self.search(query)
     User.where(
       'lower(email) LIKE :email_search OR lower(full_name) LIKE :search',
@@ -29,6 +31,10 @@ class User < ApplicationRecord
     if !self.email.present? && !self.uuid.present?
       errors.add(:base, 'Email is required')
     end
+  end
+
+  def update_last_viewed_company
+    self.update_attributes(last_viewed_company_id: companies.first&.id)
   end
 
   def self.linkedin_auth(token)

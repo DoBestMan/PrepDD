@@ -82,6 +82,8 @@ class Mutations::SignUpUser < GraphQL::Schema::Mutation
           user_id: user.id, role_id: owner_id, company_id: company.id
         )
 
+      user.update_attributes(last_viewed_company_id: company.id)
+
       company&.errors.messages.each do |path, messages|
         messages.each do |message|
           response[:errors].push(
