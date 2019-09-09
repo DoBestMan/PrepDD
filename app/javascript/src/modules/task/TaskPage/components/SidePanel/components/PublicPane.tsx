@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     body: {
       borderBottom: '1px solid #D8D8D8',
-      height: 'calc(100vh - 345px)',
+      height: 'calc(100vh - 364px)',
     },
     footer: {
       padding: '16px 24px',

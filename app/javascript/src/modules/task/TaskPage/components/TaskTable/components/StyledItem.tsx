@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -83,7 +84,7 @@ export default function StyledItem(props: StyledItemProps) {
   return (
     <div className={clsx(classes.root, selected && classes.selected)}>
       {renderStatus()}
-      {status}
+      <Typography variant="h6">{status}</Typography>
     </div>
   )
 }
