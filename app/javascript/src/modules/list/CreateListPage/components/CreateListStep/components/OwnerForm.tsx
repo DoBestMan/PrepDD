@@ -185,12 +185,22 @@ export default function OwnerForm(props: OwnerFormProps) {
   const handleCloseAll = () => {
     setOpenAddPanel(false);
     setOpenInvitePanel(false);
+    setSearchResult({
+      __typename: 'SearchCompanyUsers',
+      users: null,
+      teams: null,
+    });
+    setSearchUsername('');
   };
 
   const handleChangeSearchUsername = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchUsername(event.target.value);
+    const {value} = event.target;
+    setSearchUsername(value);
+    searchCompanyUsers({
+      variables: {text: value, companyId: state.selectedCompany},
+    });
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -234,6 +244,10 @@ export default function OwnerForm(props: OwnerFormProps) {
     } as SearchCompanyUsers_searchCompanyUsers_users;
 
     setOwners([...owners, newOwner]);
+    setInviteOwner({
+      name: '',
+      email: '',      
+    });
   };
 
   const handleClickTeam = (event: React.MouseEvent<unknown>, index: number) => {

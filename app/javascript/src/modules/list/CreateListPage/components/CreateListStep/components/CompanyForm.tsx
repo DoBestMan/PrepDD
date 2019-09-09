@@ -181,10 +181,21 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleCloseAll = () => {
     setOpen(false);
     setOpenInvitePanel(false);
+    setSearchResult({
+      __typename: 'SearchCompanies',
+      users: null,
+      companies: null,
+    });
+    setSearchString('');
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchString(event.target.value);
+    const {value} = event.target;
+
+    setSearchString(value);
+    searchCompanies({
+      variables: {text: value},
+    });    
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
