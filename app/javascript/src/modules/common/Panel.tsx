@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface PanelProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   labels: string[];
 }
 
@@ -73,7 +73,7 @@ export default function Panel(props: PanelProps) {
           indicator: classes.tabsIndicator,
         }}
         value={index}
-        aria-label={title}
+        aria-label={title ? title : ''}
         onChange={handleChange}
         {...others}
       >

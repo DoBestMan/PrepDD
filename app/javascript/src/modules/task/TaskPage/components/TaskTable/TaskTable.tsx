@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
+  Paper, 
   Table, 
   TableHead, 
   TableBody, 
@@ -17,9 +18,26 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
 
+const PANEL_WIDTH = 500;
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    root: {
+    paper: {
+      width: '100%',
+      marginBottom: theme.spacing(2),
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+    },
+    paperShift: {
+      width: `calc(100% - ${PANEL_WIDTH}px)`,
+      transition: theme.transitions.create(['margin', 'width'], {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+    },
+    table: {
       tableLayout: 'fixed', 
     },
     flex: {
@@ -57,7 +75,13 @@ const data = [
   { name: 'Task Title', status: 'Not started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
 ]
 
-export default function TaskTable() {
+interface TaskTableProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function TaskTable(props: TaskTableProps) {
+  const {open, setOpen} = props;
   const classes = useStyles();
   const [hover, setHover] = useState<number>(-1);
 
@@ -76,39 +100,48 @@ export default function TaskTable() {
   }
 
   return (
-    <Table className={classes.root}>
-      <TableHead>
-        <TableRow>
-          <TableCell style={{width: '20px'}} >
-            <ArrowDownIcon />
-          </TableCell>
-          <TableCell style={{width: '20px'}} >#</TableCell>
-          <TableCell>Task</TableCell>
-          <TableCell style={{width: '180px'}} >Status</TableCell>
-          <TableCell style={{width: '200px'}} >Modified</TableCell>
-          <TableCell align="right" style={{width: '150px'}} />
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data && data.map((item: any, index: number) => {
-          const isSelected = hover === index;
+    <Paper
+      className={clsx(classes.paper, open && classes.paperShift)}
+      elevation={0}
+    >
+      <Table className={classes.table}>
+        <TableHead>
+          <TableRow>
+            <TableCell style={{width: '20px'}} >
+              <ArrowDownIcon />
+            </TableCell>
+            <TableCell style={{width: '20px'}} >#</TableCell>
+            <TableCell>Task</TableCell>
+            <TableCell style={{width: '180px'}} >Status</TableCell>
+            <TableCell style={{width: '200px'}} >Modified</TableCell>
+            <TableCell align="right" style={{width: '150px'}} />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data && data.map((item: any, index: number) => {
+            const isSelected = hover === index;
 
-          return (
-            <TableRow key={index} onMouseOver={() => setHover(index)}>
-              <TableCell className={classes.priorityColumn}>
-                {item.priority === 'high' && <RightIcon />}
-              </TableCell>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>
-                <StyledItem status={item.status} selected={isSelected} />
-              </TableCell>
-              <TableCell>{item.modified}</TableCell>
-              <TableCell>{renderOthers(isSelected)}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+            return (
+              <TableRow 
+                key={index} 
+                onClick={() => setOpen(open => !open)}
+                onMouseOver={() => setHover(index)}
+              >
+                <TableCell className={classes.priorityColumn}>
+                  {item.priority === 'high' && <RightIcon />}
+                </TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>
+                  <StyledItem status={item.status} selected={isSelected} />
+                </TableCell>
+                <TableCell>{item.modified}</TableCell>
+                <TableCell>{renderOthers(isSelected)}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Paper>
   )
 }
