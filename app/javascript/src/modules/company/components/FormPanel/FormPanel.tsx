@@ -11,9 +11,9 @@ import {
   TableCell,
 } from '@material-ui/core';
 
-import InputForm from './components/InputForm';
+import InputForm from '../../../common/EditableInputForm';
 import CompanyForm from './components/CompanyForm';
-import SwitchForm from './components/SwitchForm';
+import SwitchForm from '../../../common/SwitchForm';
 import StyledTableCell from './components/StyledTableCell';
 
 import {useGlobalState} from '../../../../store';

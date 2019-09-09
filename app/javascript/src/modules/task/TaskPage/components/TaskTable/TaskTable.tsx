@@ -39,8 +39,13 @@ const useStyles = makeStyles((theme: Theme) =>
     hoverRow: {
       opacity: 1, 
     }, 
+    miniColumn: {
+      paddingRight: '16px', 
+      width: '20px', 
+    },
     priorityColumn: {
       color: '#509E6D',
+      paddingTop: '6px',
     }
   })
 );
@@ -88,10 +93,10 @@ export default function TaskTable(props: TaskTableProps) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell style={{width: '20px'}} >
+            <TableCell className={classes.miniColumn}>
               <ArrowDownIcon />
             </TableCell>
-            <TableCell style={{width: '20px'}} >#</TableCell>
+            <TableCell className={classes.miniColumn}>#</TableCell>
             <TableCell>Task</TableCell>
             <TableCell style={{width: '180px'}} >Status</TableCell>
             <TableCell style={{width: '200px'}} >Modified</TableCell>

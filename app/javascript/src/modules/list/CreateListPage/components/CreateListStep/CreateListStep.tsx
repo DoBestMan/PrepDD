@@ -16,7 +16,7 @@ import InternalIcon from '@material-ui/icons/Lock';
 import ShareIcon from '@material-ui/icons/People';
 import RequestIcon from '@material-ui/icons/Input';
 
-import InputForm from './components/InputForm';
+import InputForm from '../../../../common/EditableInputForm';
 import OwnerForm from './components/OwnerForm';
 import CompanyForm from './components/CompanyForm';
 import Alert from './components/Alert';
