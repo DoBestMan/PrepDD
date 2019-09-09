@@ -151,7 +151,7 @@ const SideBar = (props: any) => {
         <Button
           variant="outlined"
           onClick={() => setOpenCreateMenu(!openCreateMenu)}
-          style={{width: '100%'}}
+          style={{width: '100%', fontSize: '15px'}}
         >
           {open ? 'Create' : <AddIcon />}
         </Button>

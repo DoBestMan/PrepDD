@@ -112,7 +112,7 @@ const defaultTheme = createMuiTheme({
         backgroundColor: '#FFFFFF',
         color: '#3A84FF',
         border: `2px solid ${cs.COLORS.primary}`,
-        fontSize: cs.FONT.size.sm,
+        fontSize: cs.FONT.size.xs,
       },
     },
     MuiTableRow: {
