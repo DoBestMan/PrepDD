@@ -18,25 +18,8 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
 
-const PANEL_WIDTH = 500;
-
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
-    paper: {
-      width: '100%',
-      marginBottom: theme.spacing(2),
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    paperShift: {
-      width: `calc(100% - ${PANEL_WIDTH}px)`,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
     table: {
       tableLayout: 'fixed', 
     },
@@ -76,12 +59,11 @@ const data = [
 ]
 
 interface TaskTableProps {
-  open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TaskTable(props: TaskTableProps) {
-  const {open, setOpen} = props;
+  const {setOpen} = props;
   const classes = useStyles();
   const [hover, setHover] = useState<number>(-1);
 
@@ -101,7 +83,6 @@ export default function TaskTable(props: TaskTableProps) {
 
   return (
     <Paper
-      className={clsx(classes.paper, open && classes.paperShift)}
       elevation={0}
     >
       <Table className={classes.table}>
