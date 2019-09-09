@@ -243,6 +243,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     );
 
     if (createCompanyLoading || !createdCompany) return;
+
     if (parent) {
       setCompany({
         ...companyData,
@@ -254,12 +255,14 @@ export default function CompanyForm(props: CompanyFormProps) {
         brokers: [...companyData.brokers, createdCompany],
       });
     }
+
     setState({
       companyName: '',
       userEmail: '',
       newCompany: '',
     });
-    setOpen(false);
+
+    handleClose();
   }, [
     createCompanyLoading,
     idx(
@@ -271,7 +274,12 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
-    setState(state => ({...state, [name]: value}));
+    setState(state => ({...state, [name]: value})); 
+    if (name === 'companyName') {
+      searchCompanies({
+        variables: {text: value, companyId: currentCompanyId},
+      });
+    }
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -328,6 +336,21 @@ export default function CompanyForm(props: CompanyFormProps) {
     }
     onUpdate(companyId);
   };
+
+  const handleClose = () => {
+    setOpen(false);
+    setResult({
+      __typename: 'SearchCompanies',
+      users: null,
+      companies: null,
+    });
+    setState({
+      companyName: '',
+      userEmail: '',
+      newCompany: '',
+    });
+    setOpenForm(false);
+  }
 
   const renderUserList = () => {
     if (result && result.users && result.users.length) {
@@ -415,7 +438,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       </div>
 
       {open && (
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
+        <ClickAwayListener onClickAway={handleClose}>
           <div className={classes.addPaper}>
             <TextField
               id="company"
