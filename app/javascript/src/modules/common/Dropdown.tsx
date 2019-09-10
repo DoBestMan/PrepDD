@@ -17,11 +17,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      minWidth: '150px',
+      width: 'fit-content',
     },
     outlined: {
       border: '1px solid #CACACA',
       borderRadius: '3px',
+      padding: '6px 3px 6px 12px', 
       '&:hover': {
         cursor: 'pointer',
         background: '#EBF2FF',
@@ -31,13 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       height: '100%', 
-      padding: '6px 3px 6px 12px', 
     },
     paper: {
       position: 'absolute',
-      top: '33px',
-      left: '0px',
+      top: '30px',
+      left: '-9px',
       border: '1px solid #D8D8D8',
+      width: 'max-content', 
       minWidth: '100%',
       zIndex: 2, 
     },
@@ -50,7 +51,7 @@ interface DropdownProps {
   padding?: boolean;
   value: string;
   placeholder?: string;
-  onChange: (newValue: string) => void;
+  onChange?: (newValue: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {

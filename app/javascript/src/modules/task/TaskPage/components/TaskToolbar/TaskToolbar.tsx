@@ -11,6 +11,8 @@ import GetApp from '@material-ui/icons/GetApp';
 import Delete from '@material-ui/icons/DeleteForever';
 import More from '@material-ui/icons/MoreHoriz';
 
+import Dropdown from '../../../../common/Dropdown';
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -22,18 +24,42 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     action: {
       color: theme.palette.text.secondary,      
+    },
+    split: {
+      marginLeft: '9px', 
+      marginRight: '12px',
     }
   })
 );
+
+const ListOptions = [
+  {label: 'Series B Funding', value: '1'}, 
+  {label: 'Serise A Funding', value: '2'},
+  {label: 'Series C Funding', value: '3'},
+];
+
+const SectionOptions = [
+  {label: 'Finance', value: '1'}, 
+  {label: 'Legal', value: '2'}, 
+  {label: 'Debt', value: '3'},
+];
 
 export default function TaskToolbar() {
   const classes = useStyles();
 
   return (
     <Toolbar className={classes.root}>
-      <Typography variant="h4">
-        List name / All sections
-      </Typography>
+      <Dropdown
+        options={ListOptions}
+        placeholder="List name"
+        value=""
+      />
+      <Typography variant="h4" className={classes.split}>/</Typography>
+      <Dropdown
+        options={SectionOptions}
+        placeholder="All sections"
+        value=""
+      />
       <div className={classes.grow} />
       <div className={classes.action}>
         <IconButton aria-label="filter list">
