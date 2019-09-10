@@ -117,6 +117,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
             <NameLabel label="Tommy Boy" type="user" selected />
             <NameLabel label="Tommy Timerlake" type="user" selected />
             <NameLabel label="Tommy Salami" type="user" selected />
+            <NameLabel label="+" selected />
           </div>
         </div>
         <div className={classes.metaForm}>

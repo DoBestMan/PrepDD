@@ -1,121 +1,118 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {ClickAwayListener, Paper} from '@material-ui/core';
+import {
+  ClickAwayListener,
+  Typography,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
+import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
+
+import {OptionType} from '../../constants/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      border: '1px solid #CACACA',
-      borderRadius: '3px',
       minWidth: '150px',
     },
-    smallHeight: {
-      height: '31px',
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    paper: {
-      width: '100%',
-      position: 'absolute',
-      top: 42,
-      left: 0,
-      zIndex: 2,
-    },
-    smallPaper: {
-      top: 30,
-    },
-    invisible: {
-      display: 'none',
-    },
-    item: {
-      display: 'flex',
-      padding: '12px',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      color: '#606060',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-      textTransform: 'capitalize',
+    outlined: {
+      border: '1px solid #CACACA',
+      borderRadius: '3px',
       '&:hover': {
         cursor: 'pointer',
         background: '#EBF2FF',
       },
     },
-    smallItem: {
-      padding: '6px',
+    box: {
+      display: 'flex',
+      alignItems: 'center',
+      height: '100%', 
+      padding: '6px 3px 6px 12px', 
+    },
+    paper: {
+      position: 'absolute',
+      top: '33px',
+      left: '0px',
+      border: '1px solid #D8D8D8',
+      minWidth: '100%',
+      zIndex: 2, 
     },
   })
 );
 
-interface Option {
-  id: string;
-  name: string;
-}
-
 interface DropdownProps {
-  options: Option[];
-  selected: string;
-  small?: boolean;
+  options: OptionType[];
+  variant?: 'outlined';
+  padding?: boolean;
+  value: string;
   placeholder?: string;
-  handleUpdate?: (value: string) => void;
+  onChange: (newValue: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
-  const {options, selected, small, placeholder, handleUpdate} = props;
-  const classes = useStyles();
-  const [open, setOpen] = React.useState<boolean>(false);
+  const {
+    options, 
+    variant,
+    value, 
+    placeholder, 
+    onChange
+  } = props;
+  const classes = useStyles({});
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleClick = (newValue: string) => {
+    setOpen(!open);
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
 
   const renderLabel = () => {
-    const res = options.find(option => option.id === selected);
-    if (res) return res.name;
+    const selected = options.find(option => option.value === value);
+
+    if (selected) return selected.label;
     return placeholder;
   };
 
-  const toggleMenu = () => setOpen(prev => !prev);
-
-  const handleClick = (value: string) => {
-    setOpen(prev => !prev);
-    if (handleUpdate) handleUpdate(value);
-  };
-
-  const handleClickAway = () => setOpen(false);
-
   return (
-    <div className={clsx(classes.root, small && classes.smallHeight)}>
-      <ClickAwayListener onClickAway={handleClickAway}>
-        <div>
-          <div
-            className={clsx(classes.item, small && classes.smallItem)}
-            onClick={toggleMenu}
+    <div className={clsx(classes.root, variant === 'outlined' && classes.outlined)}>
+      <div className={classes.box} onClick={() => setOpen(!open)}>
+        <Typography variant="h4">{renderLabel()}</Typography>
+        <ArrowDownIcon style={{marginLeft: '6px'}} />
+      </div>
+
+      {open && (
+        <ClickAwayListener onClickAway={() => setOpen(false)}>
+          <Paper 
+            className={classes.paper} 
+            elevation={variant === 'outlined' ? 1 : 0} 
+            square={variant !== 'outlined'}
           >
-            {renderLabel()}
-            <div className={classes.grow} />
-            <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
-          </div>
-          <Paper
-            className={clsx(
-              classes.paper,
-              !open && classes.invisible,
-              small && classes.smallPaper
-            )}
-          >
-            {options &&
-              options.map(option => (
-                <div
-                  key={option.id}
-                  className={classes.item}
-                  onClick={() => handleClick(option.id)}
-                >
-                  {option.name}
-                </div>
-              ))}
+            <List>
+              {options &&
+                options.map((option: OptionType) => {
+                  return (
+                    <ListItem
+                      key={option.value}
+                      onClick={() => handleClick(option.value)}
+                    >
+                      <ListItemText primary={option.label} />
+                    </ListItem>
+                  );
+                })}
+              {(!options || !options.length) && (
+                <ListItem>
+                  <ListItemText primary="No available data" />
+                </ListItem>
+              )}
+            </List>
           </Paper>
-        </div>
-      </ClickAwayListener>
+        </ClickAwayListener>
+      )}
     </div>
   );
 }
