@@ -79,6 +79,14 @@ module Types
 
     field :userLists, UserListType, null: false do
       description 'All users lists & tasks in current company'
+      end
+
+    field :tasks, [TaskType], null: false do
+      description 'All users lists & tasks in current company'
+    end
+
+    def tasks
+      Task.all
     end
 
     def user_lists

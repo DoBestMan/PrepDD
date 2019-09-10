@@ -11,11 +11,20 @@ module Types
     field :section, TaskSectionType, null: true
     field :isActive, Boolean, null: true
     field :list, ListType, null: true
+    field :user_owners, [UserType], null: true
+    field :team_owners, [TaskType], null: true
 
     def section
       object.task_section
     end
 
+    def user_owners
+      object.task_owner.where(task_ownerable_type: 'User').map{|task| task.task_ownerable}
+    end
+
+    def team_owners
+      object.task_owner.where(task_ownerable_type: 'Team').map{|task| task.task_ownerable}
+    end
 
   end
 end
