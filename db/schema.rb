@@ -142,12 +142,12 @@ ActiveRecord::Schema.define(version: 2019_09_09_181608) do
 
   create_table "task_owners", force: :cascade do |t|
     t.bigint "task_id"
-    t.string "taskable_type"
-    t.bigint "taskable_id"
+    t.string "task_ownerable_type"
+    t.bigint "task_ownerable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["task_id"], name: "index_task_owners_on_task_id"
-    t.index ["taskable_type", "taskable_id"], name: "index_task_owners_on_taskable_type_and_taskable_id"
+    t.index ["task_ownerable_type", "task_ownerable_id"], name: "index_task_owners_on_task_ownerable_type_and_task_ownerable_id"
   end
 
   create_table "task_sections", force: :cascade do |t|
