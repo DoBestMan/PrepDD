@@ -119,7 +119,7 @@ export default function TaskTable(props: TaskTableProps) {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>
-                  <StyledItem status={item.status} selected={isSelected} />
+                  <StyledItem currentStatus={item.status} selected={isSelected} />
                 </TableCell>
                 <TableCell>{item.modified}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>

@@ -77,7 +77,7 @@ export default function ListDetailPage(props: {open: boolean}) {
           </Typography>
         </div>
         <div className={clsx(classes.flex, classes.statusBlock)}>
-          <StyledItem status="Finished" selected />
+          <StyledItem currentStatus="Finished" selected />
           <div className={classes.grow} />
           <MoreIcon />
         </div>
