@@ -5,4 +5,7 @@ class Team < ApplicationRecord
 
   has_many :lists_users
   has_many :lists, through: :lists_users
+
+  has_many :task_owners
+  has_many :tasks, through: :task_owners
 end
