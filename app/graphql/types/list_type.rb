@@ -23,7 +23,8 @@ module Types
     end
 
     def sections
-      TaskSection.all
+      sections = object.tasks.includes(:task_section).map{|task| task.task_section&.id}
+      TaskSection.where(id: sections)
     end
   end
 end
