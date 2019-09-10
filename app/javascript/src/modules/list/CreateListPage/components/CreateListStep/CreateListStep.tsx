@@ -131,7 +131,15 @@ const CreateListStep = (props: any) => {
     responderId: '',
   });
   const [sharing, setSharing] = useState<string>('internal');
-  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
+  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([
+    {
+      __typename: "User",
+      id: state.currentUser.id,
+      email: state.currentUser.email, 
+      fullName: state.currentUser.fullName,
+      profileUrl: state.currentUser.profileUrl,
+    }
+  ]);
   const [listId, setListId] = useState<string>('');
   const [inviteCompany, setInviteCompany] = useState<NewCompanyType>({
     newCompanyName: '',
