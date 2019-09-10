@@ -154,6 +154,7 @@ type List {
   owners: [User!]
   requesterCompany: Company
   responderCompany: Company
+  sections: [TaskSection!]
   tasks: [Task!]
 }
 
@@ -485,5 +486,4 @@ CurrentUser
 type UserList {
   id: String!
   lists: [List!]
-  sections: [TaskSection!]
 }
