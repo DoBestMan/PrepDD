@@ -9,5 +9,3 @@ class CreateTaskOwners < ActiveRecord::Migration[5.2]
     end
   end
 end
-affan
-ZGFVB66YTGB 0KP,O
