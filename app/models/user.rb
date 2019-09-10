@@ -16,6 +16,9 @@ class User < ApplicationRecord
   has_many :lists_users
   has_many :lists, through: :lists_users
 
+  has_many :task_owners
+  has_many :owned_tasks, class_name: 'Task', through: :task_owners, source: :user
+
   has_one_attached :profile_picture
 
   after_create :update_last_viewed_company
