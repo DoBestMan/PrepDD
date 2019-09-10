@@ -154,6 +154,7 @@ type List {
   owners: [User!]
   requesterCompany: Company
   responderCompany: Company
+  sections: [TaskSection!]
   tasks: [Task!]
 }
 
@@ -215,6 +216,11 @@ type Query {
   Search users by company id
   """
   searchCompanyUsers(companyId: ID!, text: String!): SearchCompanyUsers!
+
+  """
+  All users lists & tasks in current company
+  """
+  tasks: [Task!]!
 
   """
   Find a team by id
@@ -370,6 +376,8 @@ type Task {
   priority: String
   section: TaskSection
   status: String
+  teamOwners: [Task!]
+  userOwners: [User!]
 }
 
 """
@@ -485,5 +493,4 @@ CurrentUser
 type UserList {
   id: String!
   lists: [List!]
-  sections: [TaskSection!]
 }
