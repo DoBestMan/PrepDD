@@ -245,6 +245,11 @@ type Query {
     """
     token: String!
   ): UserForPasswordReset
+
+  """
+  All users lists & tasks in current company
+  """
+  userLists: UserList!
 }
 
 """
@@ -472,4 +477,13 @@ User with limited fields for the password reset screen
 type UserForPasswordReset {
   email: String!
   resetPasswordPeriodValid: Boolean
+}
+
+"""
+CurrentUser
+"""
+type UserList {
+  id: String!
+  lists: [List!]
+  sections: [TaskSection!]
 }

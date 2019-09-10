@@ -12,6 +12,7 @@ module Types
     field :responderCompany, CompanyType, null: true
     field :tasks, [TaskType], null: true
     field :owners, [UserType], null: true
+    field :sections, [TaskSectionType], null: true
 
     def requester_company
       object.requester
@@ -19,6 +20,10 @@ module Types
 
     def responder_company
       object.responder
+    end
+
+    def sections
+      TaskSection.all
     end
   end
 end

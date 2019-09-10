@@ -3,6 +3,8 @@ class Task < ApplicationRecord
   enum status: { backlog: 0, pending: 1, inProgress: 2, completed: 4 }
   belongs_to :list
   belongs_to :task_section, optional: true
+  has_many :task_owner
+  has_many :owners, through: :task_owner, source: :task
 
   def self.import(files)
     require 'roo'
