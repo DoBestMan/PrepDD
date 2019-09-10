@@ -77,6 +77,16 @@ module Types
       argument :text, String, required: true
     end
 
+    field :userLists, [ListType], null: false do
+      description 'All users list in current company'
+    end
+
+    def user_lists
+      user = context[:controller].current_user
+      lists = user.lists.where(requester_id: user.last_viewed_company_id).
+        or(user.lists.where(responder_id: user.last_viewed_company_id)).uniq
+    end
+
     def search_company_users(company_id:, text:)
       company = Company.find(company_id)
       users =

@@ -245,6 +245,11 @@ type Query {
     """
     token: String!
   ): UserForPasswordReset
+
+  """
+  All users list in current company
+  """
+  userLists: [List!]!
 }
 
 """
