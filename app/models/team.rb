@@ -6,6 +6,6 @@ class Team < ApplicationRecord
   has_many :lists_users
   has_many :lists, through: :lists_users
 
-  has_many :task_owners
-  has_many :tasks, through: :task_owners
+  has_many :task_owners, as: :task_ownerable
+  has_many :owned_tasks, class_name: 'Task', through: :task_owners, :source => :task_ownerable, :source_type => 'Team'
 end
