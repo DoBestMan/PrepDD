@@ -218,11 +218,6 @@ type Query {
   searchCompanyUsers(companyId: ID!, text: String!): SearchCompanyUsers!
 
   """
-  All users lists & tasks in current company
-  """
-  tasks: [Task!]!
-
-  """
   Find a team by id
   """
   team(id: ID!): Team!
@@ -256,6 +251,11 @@ type Query {
   All users lists & tasks in current company
   """
   userLists: UserList!
+
+  """
+  All users lists & tasks in current company
+  """
+  userTasks(limit: Int, listIds: [ID!]!, offset: Int, sectionIds: [ID!]!): [Task!]!
 }
 
 """

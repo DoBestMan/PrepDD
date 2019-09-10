@@ -81,12 +81,27 @@ module Types
       description 'All users lists & tasks in current company'
       end
 
-    field :tasks, [TaskType], null: false do
+    field :userTasks, [TaskType], null: false do
       description 'All users lists & tasks in current company'
+      argument :listIds, [ID], required: true
+      argument :sectionIds, [ID], required: true
+      argument :limit, Integer, required: false
+      argument :offset, Integer, required: false
     end
 
-    def tasks
-      Task.all
+    def user_tasks(list_ids: nil, section_ids: nil, limit: nil, offset: nil)
+      tasks = []
+      list_ids&.each do |list_id|
+        list = List.find(list_id)
+        tasks += list.tasks
+      end
+
+      section_ids&.each do |section_id|
+        section = TaskSection.find(section_id)
+        tasks += section.tasks
+      end
+
+      tasks.drop(offset).first(limit)
     end
 
     def user_lists

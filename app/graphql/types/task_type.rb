@@ -28,7 +28,7 @@ module Types
     end
 
     def reviewers
-      object.task_owner.where(task_ownerable_type: 'User', owner_type: "Reviewer")
+      object.task_owner.where(task_ownerable_type: 'User', owner_type: "Reviewer").map{|task| task.task_ownerable}
     end
 
   end
