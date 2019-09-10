@@ -4,7 +4,6 @@ module Types
 
     field :id, String, null: false
     field :lists, [ListType], null: true
-    field :sections, [TaskSectionType], null: true
   end
 end
 

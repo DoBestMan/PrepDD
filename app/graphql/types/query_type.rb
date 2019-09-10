@@ -87,9 +87,7 @@ module Types
       lists = user.lists.where(requester_id: user.last_viewed_company_id).
         or(user.lists.where(responder_id: user.last_viewed_company_id)).uniq
 
-      sections = TaskSection.all
-
-      {id: 'List & Task Sections', lists: lists, sections: sections}
+      {id: 'List & Task Sections', lists: lists}
     end
 
     def search_company_users(company_id:, text:)
