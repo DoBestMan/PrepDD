@@ -1856,6 +1856,24 @@
               "deprecationReason": null
             },
             {
+              "name": "updatedAt",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "userOwners",
               "description": null,
               "args": [
@@ -3488,6 +3506,16 @@
                 },
                 {
                   "name": "priority",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "status",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
