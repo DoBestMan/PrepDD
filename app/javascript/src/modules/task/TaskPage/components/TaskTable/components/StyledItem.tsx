@@ -110,7 +110,7 @@ export default function StyledItem(props: StyledItemProps) {
         {renderStatus(currentStatus)}
         <Typography variant="h6">{currentStatus}</Typography>
       </div>
-      {open ? (
+      {/* {open ? (
         <Paper
           className={classes.paper}
           elevation={0}
@@ -127,7 +127,7 @@ export default function StyledItem(props: StyledItemProps) {
             })}
           </List>
         </Paper>
-      ) : null}
+      ) : null} */}
     </div>
   )
 }

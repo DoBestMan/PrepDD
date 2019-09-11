@@ -65,9 +65,16 @@ export default function TaskPage() {
   }, [loading, idx(data, data => data.userLists.lists)]);
 
   useEffect(() => {
-    const tasks = idx(taskRes, taskRes => taskRes.userTasks);
+    let tasks = idx(taskRes, taskRes => taskRes.userTasks);
 
     if (loading || !tasks) return;
+    tasks.sort((a: UserTasks_userTasks, b: UserTasks_userTasks) => {
+      if (a.priority && b.priority) {
+        if (a.priority > b.priority) return 1;
+        if (a.priority < b.priority) return -1;
+      }
+      return 0;
+    })
     setTasks(tasks);
   }, [taskLoading, idx(taskRes, taskRes => taskRes.userTasks)])
 
