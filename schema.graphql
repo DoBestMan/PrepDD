@@ -218,6 +218,11 @@ type Query {
   searchCompanyUsers(companyId: ID!, text: String!): SearchCompanyUsers!
 
   """
+  A task details query
+  """
+  task(id: ID!): Task!
+
+  """
   Find a team by id
   """
   team(id: ID!): Team!

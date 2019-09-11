@@ -79,7 +79,7 @@ module Types
 
     field :userLists, UserListType, null: false do
       description 'All users lists & tasks in current company'
-      end
+    end
 
     field :userTasks, [TaskType], null: false do
       description 'All users lists & tasks in current company'
@@ -87,6 +87,15 @@ module Types
       argument :sectionIds, [ID], required: true
       argument :limit, Integer, required: false
       argument :offset, Integer, required: false
+    end
+
+    field :task, TaskType, null: false do
+      description 'A task details query'
+      argument :id, ID, required: true
+    end
+
+    def task(id:)
+      Task.find(id)
     end
 
     def user_tasks(list_ids: nil, section_ids: nil, limit: nil, offset: nil)
