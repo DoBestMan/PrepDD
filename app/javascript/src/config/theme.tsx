@@ -32,6 +32,13 @@ const defaultTheme = createMuiTheme({
     h4: {
       color: cs.FONT.color,
       fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.md,
+      fontWeight: cs.FONT.weight.bold,
+      lineHeight: '24px',
+    },
+    h5: {
+      color: cs.FONT.color,
+      fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.sm,
       fontWeight: cs.FONT.weight.regular,
       lineHeight: '24px',
@@ -112,7 +119,7 @@ const defaultTheme = createMuiTheme({
         backgroundColor: '#FFFFFF',
         color: '#3A84FF',
         border: `2px solid ${cs.COLORS.primary}`,
-        fontSize: cs.FONT.size.sm,
+        fontSize: cs.FONT.size.xs,
       },
     },
     MuiTableRow: {

@@ -19,3 +19,8 @@ export interface TaskType {
   section: string;
   isActive: boolean;
 }
+
+export interface OptionType {
+  value: string;
+  label: string;
+}

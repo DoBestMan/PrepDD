@@ -19,13 +19,13 @@ import ReactDropzone from 'react-dropzone';
 import UploadIcon from '@material-ui/icons/CloudUpload';
 import Dropdown from './components/Dropdown';
 
-import * as cs from '../../../../constants/theme';
-import {useGlobalState} from '../../../../store';
+import * as cs from '../../../../../constants/theme';
+import {useGlobalState} from '../../../../../store';
 
-import {TaskAttributes} from '../../../../graphql/__generated__/globalTypes';
-import {useAllTemplates} from '../../../../graphql/queries/AllTemplates';
-import {useCreateTask} from '../../../../graphql/mutations/CreateTask';
-import {AllTemplates_templateLists} from '../../../../graphql/queries/__generated__/AllTemplates';
+import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
+import {useAllTemplates} from '../../../../../graphql/queries/AllTemplates';
+import {useCreateTask} from '../../../../../graphql/mutations/CreateTask';
+import {AllTemplates_templateLists} from '../../../../../graphql/queries/__generated__/AllTemplates';
 import PriorityForm from './components/PriorityForm';
 
 const useStyles = makeStyles((theme: Theme) =>

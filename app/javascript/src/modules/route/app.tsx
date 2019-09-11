@@ -7,6 +7,7 @@ const CompanyRoutes = lazy(() => import('./company'));
 const TeamRoutes = lazy(() => import('./team'));
 const UserRoutes = lazy(() => import('./user'));
 const ListRoutes = lazy(() => import('./list'));
+const TaskRoutes = lazy(() => import('./task'));
 
 export default function AppRoute() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoute() {
           <Route exact path="/app/team" component={TeamRoutes} />
           <Route exact path="/app/user" component={UserRoutes} />
           <Route exact path="/app/lists" component={ListRoutes} />
+          <Route exact path="/app/tasks" component={TaskRoutes} />
         </Switch>
       </Layout>
     </Suspense>

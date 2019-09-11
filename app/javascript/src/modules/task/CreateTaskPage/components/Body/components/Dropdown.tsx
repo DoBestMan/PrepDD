@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
-import {AllTemplates_templateLists} from '../../../../../graphql/queries/__generated__/AllTemplates';
+import {AllTemplates_templateLists} from '../../../../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

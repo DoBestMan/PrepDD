@@ -2,25 +2,22 @@ import React, {useState} from 'react';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Typography from '@material-ui/core/Typography';
-
 import UpdateIcon from '@material-ui/icons/Create';
+
+import * as cs from '../../constants/theme';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginTop: '24px',
-      color: '#606060',
-      fontFamily: 'Montserrat',
-      fontSize: '12px',
-      textTransform: 'capitalize',
     },
     input: {
       width: '100%',
       height: '36px',
       color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '15px',
-      fontWeight: 600,
+      fontFamily: cs.FONT.family,
+      fontSize: cs.FONT.size.md,
+      fontWeight: cs.FONT.weight.bold,
       border: 'none',
       borderBottom: '1px solid #D8D8D8',
       '&::placeholder': {
@@ -42,27 +39,26 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
       borderBottom: '1px solid #D8D8D8',
     },
-    nonEditableInput: {
-      color: '#000000',
-      fontFamily: 'Montserrat',
-      fontSize: '15px',
-      fontWeight: 600,
-    },
     nonEditableIcon: {
       marginLeft: '12px',
       color: '#3A84FF',
     },
+    secondary: {
+      color: '#606060',
+      marginTop: '24px',
+      marginBottom: '12px',
+    },
   })
 );
 
-interface InputFormProps {
-  label: string;
+interface EditableInputFormProps {
+  label?: string;
   value: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onUpdate?: () => void;
 }
 
-export default function InputForm(props: InputFormProps) {
+export default function EditableInputForm(props: EditableInputFormProps) {
   const {label, value, onChange, onUpdate} = props;
   const classes = useStyles();
   const [editable, setEditable] = useState<boolean>(false);
@@ -75,14 +71,17 @@ export default function InputForm(props: InputFormProps) {
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     event.persist();
     if (event.keyCode === 13) {
-      if (onUpdate) onUpdate();
       setEditable(false);
     }
   };
 
   return (
     <div className={classes.root}>
-      <p>{label}</p>
+      {label && (
+        <Typography variant="h6" className={classes.secondary}>
+          {label}
+        </Typography>
+      )}
       <ClickAwayListener onClickAway={handleClickAway}>
         {editable ? (
           <input
@@ -94,7 +93,7 @@ export default function InputForm(props: InputFormProps) {
           />
         ) : (
           <div className={classes.nonEditable}>
-            <Typography className={classes.nonEditableInput} variant="h6">
+            <Typography variant="h4">
               {value}
             </Typography>
             <UpdateIcon
