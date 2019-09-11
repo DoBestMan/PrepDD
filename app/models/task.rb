@@ -1,6 +1,6 @@
 class Task < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2 }
-  enum status: { backlog: 0, pending: 1, inProgress: 2, completed: 4 }
+  enum status: { Unstarted: 0, Started: 1, Finished: 2, Delivered: 4, Accepted: 5, Rejected: 6 }
   belongs_to :list
   belongs_to :task_section, optional: true
   has_many :task_owner
