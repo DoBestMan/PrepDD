@@ -6,6 +6,8 @@ class Task < ApplicationRecord
   has_many :task_owner
   has_many :owners, through: :task_owner, source: :task
 
+  has_many :task_messages
+
   def self.import(files)
     require 'roo'
 
