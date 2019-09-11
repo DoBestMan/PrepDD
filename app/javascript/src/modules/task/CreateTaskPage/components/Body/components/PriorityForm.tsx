@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 
-import * as cs from '../../../../../constants/theme';
-import {KEYS} from '../../../../../constants/keys';
+import * as cs from '../../../../../../constants/theme';
+import {KEYS} from '../../../../../../constants/keys';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

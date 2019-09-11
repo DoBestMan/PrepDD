@@ -32,13 +32,17 @@ const useStyles = makeStyles((theme: Theme) =>
     tabSelected: {
       color: '#3A84FF',
     },
+    padding: {
+      paddingLeft: '24px', 
+    }
   })
 );
 
 interface PanelProps {
   children: React.ReactNode;
-  title: string;
+  title?: string;
   labels: string[];
+  padding?: boolean;
 }
 
 interface NewPaneType {
@@ -49,7 +53,7 @@ interface NewPaneType {
 }
 
 export default function Panel(props: PanelProps) {
-  const {children, title, labels, ...others} = props;
+  const {children, title, labels, padding, ...others} = props;
   const classes = useStyles();
   const [index, setIndex] = React.useState<number>(0);
 
@@ -69,11 +73,11 @@ export default function Panel(props: PanelProps) {
     <div>
       <Tabs
         classes={{
-          root: classes.tabs,
+          root: clsx(classes.tabs, padding && classes.padding),
           indicator: classes.tabsIndicator,
         }}
         value={index}
-        aria-label={title}
+        aria-label={title ? title : ''}
         onChange={handleChange}
         {...others}
       >
