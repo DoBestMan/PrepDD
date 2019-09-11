@@ -1611,6 +1611,20 @@
               "deprecationReason": null
             },
             {
+              "name": "requesterRank",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "responderCompany",
               "description": null,
               "args": [
@@ -1619,6 +1633,20 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "Company",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "responderRank",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -3488,6 +3516,16 @@
                 },
                 {
                   "name": "priority",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                },
+                {
+                  "name": "status",
                   "description": null,
                   "type": {
                     "kind": "SCALAR",
