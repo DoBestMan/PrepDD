@@ -6,6 +6,9 @@ class Task < ApplicationRecord
   has_many :task_owner
   has_many :owners, through: :task_owner, source: :task
 
+  has_many :file_tasks
+  has_many :files, through: :file_tasks
+
   def self.import(files)
     require 'roo'
 
