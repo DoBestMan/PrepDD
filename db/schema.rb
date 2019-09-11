@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_09_181608) do
+ActiveRecord::Schema.define(version: 2019_09_10_220419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 2019_09_09_181608) do
     t.bigint "task_ownerable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "owner_type"
     t.index ["task_id"], name: "index_task_owners_on_task_id"
     t.index ["task_ownerable_type", "task_ownerable_id"], name: "index_task_owners_on_task_ownerable_type_and_task_ownerable_id"
   end

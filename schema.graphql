@@ -251,6 +251,11 @@ type Query {
   All users lists & tasks in current company
   """
   userLists: UserList!
+
+  """
+  All users lists & tasks in current company
+  """
+  userTasks(limit: Int, listIds: [ID!]!, offset: Int, sectionIds: [ID!]!): [Task!]!
 }
 
 """
@@ -369,8 +374,11 @@ type Task {
   list: List
   name: String
   priority: String
+  reviewers: [User!]
   section: TaskSection
   status: String
+  teamOwners: [Task!]
+  userOwners: [User!]
 }
 
 """
