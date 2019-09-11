@@ -15,7 +15,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForever';
 
 import LoadingFallback from '../../../common/LoadingFallback';
 import DefaultUserImage from '../../../common/DefaultUserImage';
-import Dropdown from '../../../common/OutlinedDropdown';
+import Dropdown from '../../../common/Dropdown';
 import StyledItem from '../styled/StyledItem';
 import StyledTableRow from '../styled/StyledTableRow';
 import StyledTableCell from '../styled/StyledTableCell';
