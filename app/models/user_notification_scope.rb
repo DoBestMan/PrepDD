@@ -1,0 +1,2 @@
+class UserNotificationScope < ApplicationRecord
+end
