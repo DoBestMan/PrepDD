@@ -91,7 +91,7 @@ export default function StyledItem(props: StyledItemProps) {
     {value: 'Delivered', element: deliveredElement}, 
     {value: 'Finished', element: finishedElement}, 
     {value: 'In Progress', element: inProgressElement}, 
-    {value: 'Not Started', element: notStartedElement}, 
+    {value: 'Unstarted', element: notStartedElement}, 
     {value: 'Reject', element: rejectedElement},
   ];
 

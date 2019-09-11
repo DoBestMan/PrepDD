@@ -8,6 +8,7 @@ import {
   TableBody, 
   TableRow, 
   TableCell, 
+  Typography, 
 } from '@material-ui/core';
 import SmsIcon from '@material-ui/icons/SmsOutlined';
 import ListIcon from '@material-ui/icons/ListAlt';
@@ -22,6 +23,10 @@ import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
+    root: {
+      height: 'calc(100vh - 138px)', 
+      overflow: 'auto', 
+    },
     table: {
       tableLayout: 'fixed', 
     },
@@ -34,6 +39,14 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '24px', 
       marginRight: '12px', 
       backgroundColor: '#2792A2', 
+    },
+    textFlow: {
+      display: 'inline-block',
+      width: 'fit-content',
+      maxWidth: 'calc(80%)',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     },
     unHoverRow: {
       opacity: 0.6, 
@@ -48,22 +61,9 @@ const useStyles = makeStyles((theme: Theme) =>
     priorityColumn: {
       color: '#509E6D',
       paddingTop: '6px',
-    }
+    },
   })
 );
-
-const data = [
-  { name: 'Task Title', status: 'Completed', modified: 'Edited 5 hours ago', priority: 'high' }, 
-  { name: 'Task Title', status: 'Delivered', modified: 'Date/Time', priority: 'high' }, 
-  { name: 'A longer task', status: 'Finished', modified: 'Date/Time', priority: 'medium' }, 
-  { name: 'Task Title', status: 'In Progress', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Not Started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Rejected', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Not started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Not started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Not started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-  { name: 'Task Title', status: 'Not started', modified: 'Edited 5 hours ago', priority: 'medium' }, 
-]
 
 interface TaskTableProps {
   tasks: UserTasks_userTasks[];
@@ -94,6 +94,7 @@ export default function TaskTable(props: TaskTableProps) {
 
   return (
     <Paper
+      className={classes.root}
       elevation={0}
     >
       <Table className={classes.table}>
@@ -110,7 +111,7 @@ export default function TaskTable(props: TaskTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data && data.map((task: any, index: number) => {
+          {tasks && tasks.map((task: UserTasks_userTasks, index: number) => {
             const isSelected = hover === index;
 
             return (
@@ -123,11 +124,15 @@ export default function TaskTable(props: TaskTableProps) {
                   {task.priority === 'high' && <RightIcon />}
                 </TableCell>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{task.name}</TableCell>
                 <TableCell>
-                  <StyledItem currentStatus={task.status} selected={isSelected} />
+                  <Typography variant="h6" className={classes.textFlow}>
+                    {task.name}
+                  </Typography>
                 </TableCell>
-                <TableCell>{task.modified}</TableCell>
+                <TableCell>
+                  <StyledItem currentStatus={task.status as string} selected={isSelected} />
+                </TableCell>
+                <TableCell>{task.dueDate}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
             );
