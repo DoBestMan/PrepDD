@@ -1,0 +1,2 @@
+class TaskMessage < ApplicationRecord
+end
