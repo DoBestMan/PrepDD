@@ -10,10 +10,14 @@ import SidePanel from './components/SidePanel';
 import {useUserLists} from '../../../graphql/queries/UserLists';
 import {useUserTasks} from '../../../graphql/queries/UserTasks';
 import {UserLists_userLists_lists} from '../../../graphql/queries/__generated__/UserLists';
-import {UserTasks_userTasks} from '../../../graphql/queries/__generated__/UserTasks';
+import {
+  UserTasks, 
+  UserTasksVariables,
+  UserTasks_userTasks
+} from '../../../graphql/queries/__generated__/UserTasks';
 
 const PANEL_WIDTH = 500;
-const LIMIT = 200;
+const LIMIT = 20;
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -50,6 +54,7 @@ export default function TaskPage() {
     loading: taskLoading, 
     data: taskRes, 
     error: taskError, 
+    fetchMore, 
   } = useUserTasks({
     listIds: selectedLists, 
     sectionIds: selectedSections, 
@@ -67,16 +72,53 @@ export default function TaskPage() {
   useEffect(() => {
     let tasks = idx(taskRes, taskRes => taskRes.userTasks);
 
-    if (loading || !tasks) return;
-    tasks.sort((a: UserTasks_userTasks, b: UserTasks_userTasks) => {
-      if (a.priority && b.priority) {
-        if (a.priority > b.priority) return 1;
-        if (a.priority < b.priority) return -1;
-      }
-      return 0;
-    })
+    if (taskLoading || !tasks) return;
     setTasks(tasks);
-  }, [taskLoading, idx(taskRes, taskRes => taskRes.userTasks)])
+  }, [idx(taskRes, taskRes => taskRes.userTasks)]);
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    event.persist();
+    const scrollHeight = (event.target as HTMLDivElement).scrollHeight;
+    const scrollTop = (event.target as HTMLDivElement).scrollTop;
+    const height = (event.target as HTMLDivElement).clientHeight;
+    const delta = 10;
+
+    if (scrollTop + height + delta >= scrollHeight && !taskLoading) {
+      loadMore();
+    }
+  };
+
+  const loadMore = () => {
+    fetchMore({
+      variables: {
+        listIds: selectedLists, 
+        sectionIds: selectedSections, 
+        limit: LIMIT,
+        offset: tasks.length, 
+      },
+      updateQuery: (
+        previousQueryResult: UserTasks,
+        options: {
+          fetchMoreResult?: UserTasks;
+          variables?: UserTasksVariables;
+        }
+      ) => {
+        const fetchMoreResult = idx(
+          options,
+          options => options.fetchMoreResult
+        );
+
+        if (!fetchMoreResult) return previousQueryResult;
+
+        return {
+          userTasks: [
+            ...previousQueryResult.userTasks,
+            ...fetchMoreResult.userTasks,
+          ],
+        };
+      },
+    });
+  };
 
   return (
     <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
@@ -89,7 +131,8 @@ export default function TaskPage() {
       />
       <TaskTable 
         tasks={tasks}
-        setOpen={setOpenSidePanel} 
+        setOpen={setOpenSidePanel}
+        onScroll={handleScroll}
       />
       <SidePanel open={openSidePanel} />
     </div>

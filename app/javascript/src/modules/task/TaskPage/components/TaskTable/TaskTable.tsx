@@ -29,6 +29,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       tableLayout: 'fixed', 
+      borderCollapse: 'separate',
+    },
+    stickyColumn: {
+      position: 'sticky',
+      top: '0px',
+      backgroundColor: '#FFFFFF',
+      zIndex: 1,
     },
     flex: {
       display: 'flex', 
@@ -68,12 +75,14 @@ const useStyles = makeStyles((theme: Theme) =>
 interface TaskTableProps {
   tasks: UserTasks_userTasks[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
 }
 
 export default function TaskTable(props: TaskTableProps) {
   const {
     tasks, 
-    setOpen
+    setOpen,
+    onScroll, 
   } = props;
   const classes = useStyles();
   const [hover, setHover] = useState<number>(-1);
@@ -93,21 +102,21 @@ export default function TaskTable(props: TaskTableProps) {
   }
 
   return (
-    <Paper
+    <div
       className={classes.root}
-      elevation={0}
+      onScroll={onScroll}
     >
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.miniColumn}>
+            <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>
               <ArrowDownIcon />
             </TableCell>
-            <TableCell className={classes.miniColumn}>#</TableCell>
-            <TableCell>Task</TableCell>
-            <TableCell style={{width: '180px'}} >Status</TableCell>
-            <TableCell style={{width: '200px'}} >Modified</TableCell>
-            <TableCell align="right" style={{width: '150px'}} />
+            <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>#</TableCell>
+            <TableCell className={classes.stickyColumn}>Task</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '180px'}} >Status</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '200px'}} >Modified</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '150px'}} />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -139,6 +148,6 @@ export default function TaskTable(props: TaskTableProps) {
           })}
         </TableBody>
       </Table>
-    </Paper>
+    </div>
   )
 }
