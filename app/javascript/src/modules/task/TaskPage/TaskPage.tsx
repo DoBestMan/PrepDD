@@ -48,6 +48,18 @@ export default function TaskPage() {
 
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
+    __typename: "Task",
+    id: '',
+    name: '',
+    priority: '',
+    status: '',
+    dueDate: '',
+    updatedAt: '',
+    userOwners: null, 
+    teamOwners: null, 
+    reviewers: null, 
+  });
 
   const {loading, data, error} = useUserLists({});
   const {
@@ -131,10 +143,12 @@ export default function TaskPage() {
       />
       <TaskTable 
         tasks={tasks}
+        taskId={selectedTask.id}
         setOpen={setOpenSidePanel}
+        setCurrentTask={setSelectedTask}
         onScroll={handleScroll}
       />
-      <SidePanel open={openSidePanel} />
+      <SidePanel open={openSidePanel} selectedTask={selectedTask} />
     </div>
-  )
+  );
 }

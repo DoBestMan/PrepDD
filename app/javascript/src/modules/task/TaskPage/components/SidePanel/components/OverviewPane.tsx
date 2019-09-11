@@ -19,6 +19,13 @@ import InputForm from '../../../../../common/EditableInputForm';
 import SwitchForm from './SwitchForm';
 import NameLabel from '../../../../../common/NameLabel';
 
+import {
+  UserTasks_userTasks,
+  UserTasks_userTasks_userOwners,
+  UserTasks_userTasks_teamOwners,
+  UserTasks_userTasks_reviewers,
+} from '../../../../../../graphql/queries/__generated__/UserTasks';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -89,10 +96,11 @@ const useStyles = makeStyles((theme: Theme) =>
 interface OverviewPaneProps {
   value?: number;
   index?: number;
+  task: UserTasks_userTasks;
 }
 
 export default function OverviewPane(props: OverviewPaneProps) {
-  const {value, index} = props;
+  const {value, index, task} = props;
   const classes = useStyles();
 
   const handleChange = () => {
@@ -106,7 +114,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
       elevation={0}
     >
       <InputForm
-        value="Series B Funding for a great company"
+        value={task.name as string}
       />
       <div className={classes.metaBox}>
         <div className={classes.metaForm}>
@@ -114,9 +122,21 @@ export default function OverviewPane(props: OverviewPaneProps) {
             Owner
           </Typography>
           <div className={classes.flex} style={{flexWrap: 'wrap'}}>
-            <NameLabel label="Tommy Boy" type="user" selected />
-            <NameLabel label="Tommy Timerlake" type="user" selected />
-            <NameLabel label="Tommy Salami" type="user" selected />
+            {task.userOwners && task.userOwners.map((owner: UserTasks_userTasks_userOwners) => {
+              return (
+                <NameLabel 
+                  type="user" 
+                  label={owner.fullName as string} 
+                  logo={owner.profileUrl as string} 
+                  selected 
+                />
+              );
+            })}
+            {task.teamOwners && task.teamOwners.map((owner: UserTasks_userTasks_teamOwners) => {
+              return (
+                <NameLabel label={owner.name as string} selected />
+              )
+            })}
             <NameLabel label="+" selected />
           </div>
         </div>
@@ -124,15 +144,22 @@ export default function OverviewPane(props: OverviewPaneProps) {
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Reviewer
           </Typography>
-          <NameLabel label="Tommy Boy" type="user" selected />
+          {task.reviewers && task.reviewers.map((reviewer: UserTasks_userTasks_reviewers) => {
+            return (
+              <NameLabel label={reviewer.fullName as string} selected />
+            )
+          })}
+          <NameLabel label="+" selected />
         </div>
         <div className={classes.metaForm} style={{alignItems: 'center'}}>
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Priority
           </Typography>
           <div className={classes.priority}>
-            <RightIcon />
-            <Typography variant="h6">High</Typography>
+            {task.priority === 'high' && (
+              <RightIcon />
+            )}
+            <Typography variant="h6">{task.priority}</Typography>
           </div>
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Due date

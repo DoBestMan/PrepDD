@@ -9,7 +9,9 @@
 export interface UserTasks_userTasks_userOwners {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
 }
 
 export interface UserTasks_userTasks_teamOwners {

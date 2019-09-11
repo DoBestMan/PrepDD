@@ -82,14 +82,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface TaskTableProps {
   tasks: UserTasks_userTasks[];
+  taskId: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
 }
 
 export default function TaskTable(props: TaskTableProps) {
   const {
     tasks, 
+    taskId, 
     setOpen,
+    setCurrentTask,
     onScroll, 
   } = props;
   const classes = useStyles();
@@ -115,7 +119,6 @@ export default function TaskTable(props: TaskTableProps) {
     id: selectedTask.id, 
     name: selectedTask.name, 
     priority: selectedTask.priority, 
-
   });
 
   const handleClickPriority = (event: React.MouseEvent<HTMLDivElement>, task: UserTasks_userTasks) => {
@@ -145,6 +148,11 @@ export default function TaskTable(props: TaskTableProps) {
         break;
     }
     asyncSetState(updatedTask);
+  }
+
+  const handleClickRow = (task: UserTasks_userTasks) => {
+    setOpen(open => !open);
+    setCurrentTask(task);
   }
 
   const renderOthers = (isSelected: boolean) => {
@@ -186,8 +194,8 @@ export default function TaskTable(props: TaskTableProps) {
             return (
               <TableRow 
                 key={index} 
-                className={clsx(isSelected && classes.selectedRow)}
-                onClick={() => setOpen(open => !open)}
+                className={clsx(task.id === taskId && classes.selectedRow)}
+                onClick={() => handleClickRow(task)}
                 onMouseOver={() => setHover(index)}
               >
                 <TableCell className={classes.priorityColumn}>

@@ -22,7 +22,9 @@ export const useUserTasks = createQueryHook<UserTasks, {}>(gql`
       updatedAt
       userOwners{
         id
+        email
         fullName
+        profileUrl
       }
       teamOwners{
         id
