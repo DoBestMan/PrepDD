@@ -19,7 +19,8 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
 
-import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks'
+import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
+import {useUpdateTask} from '../../../../../graphql/mutations/UpdateTask';
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -47,6 +48,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: '12px', 
       backgroundColor: '#2792A2', 
     },
+    rejectStatus: {
+      position: 'absolute', 
+      left: '-90px',
+    },
     textFlow: {
       display: 'inline-block',
       width: 'fit-content',
@@ -61,6 +66,9 @@ const useStyles = makeStyles((theme: Theme) =>
     hoverRow: {
       opacity: 1, 
     }, 
+    selectedRow: {
+      backgroundColor: '#EBF2FF',
+    },
     miniColumn: {
       paddingRight: '16px', 
       width: '20px', 
@@ -86,6 +94,58 @@ export default function TaskTable(props: TaskTableProps) {
   } = props;
   const classes = useStyles();
   const [hover, setHover] = useState<number>(-1);
+  const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
+    __typename: "Task",
+    id: '',
+    name: null,
+    priority: null,
+    status: null,
+    dueDate: null,
+    updatedAt: '',
+    userOwners: null,
+    teamOwners: null,
+    reviewers: null,
+  });
+
+  const [updateTask, {
+    loading: updateTaskLoading, 
+    data: updateTaskRes, 
+    error: updateTaskError
+  }] = useUpdateTask({
+    id: selectedTask.id, 
+    name: selectedTask.name, 
+    priority: selectedTask.priority, 
+
+  });
+
+  const handleClickPriority = (event: React.MouseEvent<HTMLDivElement>, task: UserTasks_userTasks) => {
+    event.stopPropagation();
+    
+    const asyncSetState = async (newTask: UserTasks_userTasks) => {
+      await setSelectedTask(newTask);
+      updateTask();
+    };
+
+    let updatedTask = task;
+    switch (task.status) {
+      case 'Unstarted': 
+        updatedTask.status = 'Started';
+        break;
+      case 'Started':
+        updatedTask.status = 'Finished';
+        break;
+      case 'Finished':
+        updatedTask.status = 'Delivered';
+        break;
+      case 'Delivered':
+        updatedTask.status = 'Accepted';
+        break;
+      default:
+        updatedTask.status = 'Rejected';
+        break;
+    }
+    asyncSetState(updatedTask);
+  }
 
   const renderOthers = (isSelected: boolean) => {
     return (
@@ -126,6 +186,7 @@ export default function TaskTable(props: TaskTableProps) {
             return (
               <TableRow 
                 key={index} 
+                className={clsx(isSelected && classes.selectedRow)}
                 onClick={() => setOpen(open => !open)}
                 onMouseOver={() => setHover(index)}
               >
@@ -139,7 +200,21 @@ export default function TaskTable(props: TaskTableProps) {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <StyledItem currentStatus={task.status as string} selected={isSelected} />
+                  <div className={classes.flex} style={{position: 'relative'}}>
+                    <StyledItem 
+                      currentStatus={task.status as string} 
+                      selected={isSelected} 
+                      onClick={(event: React.MouseEvent<HTMLDivElement>) => handleClickPriority(event, task)}
+                    />
+                    {isSelected && 
+                      (task.status === 'Delivered' || task.status === 'Accepted') && (
+                      <StyledItem
+                        currentStatus="Rejected"
+                        selected
+                        className={classes.rejectStatus}
+                      />
+                    )}
+                  </div>
                 </TableCell>
                 <TableCell>{task.updatedAt}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
