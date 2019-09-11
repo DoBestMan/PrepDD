@@ -16,7 +16,7 @@ import {
 
 import * as cs from '../../../../../../constants/theme';
 import InputForm from '../../../../../common/EditableInputForm';
-import SwitchForm from '../../../../../common/SwitchForm';
+import SwitchForm from './SwitchForm';
 import NameLabel from '../../../../../common/NameLabel';
 
 const useStyles = makeStyles((theme: Theme) =>

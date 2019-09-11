@@ -13,12 +13,13 @@ import {UserLists_userLists_lists} from '../../../graphql/queries/__generated__/
 import {UserTasks_userTasks} from '../../../graphql/queries/__generated__/UserTasks';
 
 const PANEL_WIDTH = 500;
-const LIMIT = 12;
+const LIMIT = 200;
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     paper: {
       width: '100%',
+      height: 'calc(100vh - 80px)',
       marginBottom: theme.spacing(2),
       transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
