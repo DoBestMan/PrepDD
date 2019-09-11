@@ -13,6 +13,8 @@ module Types
     field :tasks, [TaskType], null: true
     field :owners, [UserType], null: true
     field :sections, [TaskSectionType], null: true
+    field :requester_rank, Integer, null: true
+    field :responder_rank, Integer, null: true
 
     def requester_company
       object.requester

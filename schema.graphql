@@ -153,7 +153,9 @@ type List {
   name: String
   owners: [User!]
   requesterCompany: Company
+  requesterRank: Int
   responderCompany: Company
+  responderRank: Int
   sections: [TaskSection!]
   tasks: [Task!]
 }
