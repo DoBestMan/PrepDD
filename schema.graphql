@@ -378,6 +378,7 @@ type Task {
   section: TaskSection
   status: String
   teamOwners: [Task!]
+  updatedAt: String!
   userOwners: [User!]
 }
 

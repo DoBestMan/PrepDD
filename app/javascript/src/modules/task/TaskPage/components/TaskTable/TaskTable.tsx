@@ -141,7 +141,7 @@ export default function TaskTable(props: TaskTableProps) {
                 <TableCell>
                   <StyledItem currentStatus={task.status as string} selected={isSelected} />
                 </TableCell>
-                <TableCell>{task.dueDate}</TableCell>
+                <TableCell>{task.updatedAt}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
             );

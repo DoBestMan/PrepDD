@@ -31,6 +31,7 @@ export interface UserTasks_userTasks {
   priority: string | null;
   status: string | null;
   dueDate: string | null;
+  updatedAt: string;
   userOwners: UserTasks_userTasks_userOwners[] | null;
   teamOwners: UserTasks_userTasks_teamOwners[] | null;
   reviewers: UserTasks_userTasks_reviewers[] | null;
