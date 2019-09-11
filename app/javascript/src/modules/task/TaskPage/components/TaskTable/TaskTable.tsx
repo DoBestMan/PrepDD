@@ -18,6 +18,8 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
 
+import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks'
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     table: {
@@ -64,11 +66,15 @@ const data = [
 ]
 
 interface TaskTableProps {
+  tasks: UserTasks_userTasks[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TaskTable(props: TaskTableProps) {
-  const {setOpen} = props;
+  const {
+    tasks, 
+    setOpen
+  } = props;
   const classes = useStyles();
   const [hover, setHover] = useState<number>(-1);
 
@@ -104,7 +110,7 @@ export default function TaskTable(props: TaskTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data && data.map((item: any, index: number) => {
+          {data && data.map((task: any, index: number) => {
             const isSelected = hover === index;
 
             return (
@@ -114,14 +120,14 @@ export default function TaskTable(props: TaskTableProps) {
                 onMouseOver={() => setHover(index)}
               >
                 <TableCell className={classes.priorityColumn}>
-                  {item.priority === 'high' && <RightIcon />}
+                  {task.priority === 'high' && <RightIcon />}
                 </TableCell>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{item.name}</TableCell>
+                <TableCell>{task.name}</TableCell>
                 <TableCell>
-                  <StyledItem currentStatus={item.status} selected={isSelected} />
+                  <StyledItem currentStatus={task.status} selected={isSelected} />
                 </TableCell>
-                <TableCell>{item.modified}</TableCell>
+                <TableCell>{task.modified}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
             );

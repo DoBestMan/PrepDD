@@ -17,15 +17,15 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       position: 'relative',
       width: 'fit-content',
+      '&:hover': {
+        cursor: 'pointer',
+        background: '#EBF2FF',
+      },
     },
     outlined: {
       border: '1px solid #CACACA',
       borderRadius: '3px',
       padding: '6px 3px 6px 12px', 
-      '&:hover': {
-        cursor: 'pointer',
-        background: '#EBF2FF',
-      },
     },
     box: {
       display: 'flex',
@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
       minWidth: '100%',
       zIndex: 2, 
     },
+    item: {
+      '&.Mui-selected .MuiTypography-body1': {
+        color: '#FFFFFF',
+      }
+    }
   })
 );
 
@@ -106,8 +111,9 @@ export default function Dropdown(props: DropdownProps) {
                   return (
                     <ListItem
                       key={option.value}
-                      onClick={() => handleClick(option.value)}
+                      className={classes.item}
                       selected={isSelected}
+                      onClick={() => handleClick(option.value)}
                     >
                       <ListItemText primary={option.label} />
                     </ListItem>

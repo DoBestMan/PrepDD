@@ -43,14 +43,21 @@ const SectionOptions = [
 
 interface TaskToolbarProps {
   lists: UserLists_userLists_lists[];
+  selectedLists: string[];
+  setSelectedLists: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedSections: string[];
+  setSelectedSections: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function TaskToolbar(props: TaskToolbarProps) {
-  const {lists} = props;
+  const {
+    lists,
+    selectedLists, 
+    setSelectedLists, 
+    selectedSections, 
+    setSelectedSections, 
+  } = props;
   const classes = useStyles();
-
-  const [selectedLists, setSelectedLists] = useState<string[]>([]);
-  const [selectedSections, setSelectedSections] = useState<string[]>([]);
 
   const ListOptions = lists.map(list => {
     return {
