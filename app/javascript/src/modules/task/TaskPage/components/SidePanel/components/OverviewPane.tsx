@@ -22,14 +22,13 @@ import NameLabel from '../../../../../common/NameLabel';
 
 import {
   UserTasks_userTasks,
-  UserTasks_userTasks_userOwners,
-  UserTasks_userTasks_teamOwners,
   UserTasks_userTasks_reviewers,
 } from '../../../../../../graphql/queries/__generated__/UserTasks';
 import {
   SearchCompanyUsers_searchCompanyUsers_teams,
   SearchCompanyUsers_searchCompanyUsers_users,
 } from '../../../../../common/__generated__/SearchCompanyUsers';
+import {useUpdateTask} from '../../../../../../graphql/mutations/UpdateTask';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -102,10 +101,20 @@ interface OverviewPaneProps {
   value?: number;
   index?: number;
   task: UserTasks_userTasks;
+  tasks: UserTasks_userTasks[];
+  setTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
+  setTasks: React.Dispatch<React.SetStateAction<UserTasks_userTasks[]>>;
 }
 
 export default function OverviewPane(props: OverviewPaneProps) {
-  const {value, index, task} = props;
+  const {
+    value, 
+    index, 
+    task,
+    tasks, 
+    setTask, 
+    setTasks, 
+  } = props;
   const classes = useStyles();
 
   const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([
@@ -127,6 +136,37 @@ export default function OverviewPane(props: OverviewPaneProps) {
     }), 
   ]);
 
+  const [updateTask, {loading, data, error}] = useUpdateTask({
+    id: task.id, 
+    name: task.name, 
+    priority: task.priority, 
+  });
+
+  const updateTaskList = () => {
+    const findIndex = tasks.findIndex(each => each.id === task.id);
+
+    if (findIndex >= 0) {
+      let newTasks = tasks;
+
+      newTasks[findIndex] = task;
+      setTasks(newTasks);
+    }
+  }
+
+  const handleChangeName = (newValue: string) => {
+    const asyncSetState = async () => {
+      await setTask({
+        ...task, 
+        name: newValue,
+      });
+
+      updateTask();
+      updateTaskList();
+    };
+
+    asyncSetState();
+  }
+
   const handleChange = () => {
     
   }
@@ -139,6 +179,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
     >
       <InputForm
         value={task.name as string}
+        onChange={handleChangeName}
       />
       <div className={classes.metaBox}>
         <div className={classes.metaForm}>

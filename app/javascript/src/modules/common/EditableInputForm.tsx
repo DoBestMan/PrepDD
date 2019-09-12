@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       color: '#000000',
       lineHeight: '24px',
+      wordBreak: 'break-all',
+      letterSpacing: '0em', 
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.sm,
       fontWeight: cs.FONT.weight.regular,

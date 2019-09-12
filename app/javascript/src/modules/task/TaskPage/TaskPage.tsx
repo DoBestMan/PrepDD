@@ -148,7 +148,13 @@ export default function TaskPage() {
         setCurrentTask={setSelectedTask}
         onScroll={handleScroll}
       />
-      <SidePanel open={openSidePanel} selectedTask={selectedTask} />
+      <SidePanel 
+        open={openSidePanel} 
+        selectedTask={selectedTask} 
+        setSelectedTask={setSelectedTask}
+        tasks={tasks}
+        setTasks={setTasks}
+      />
     </div>
   );
 }
