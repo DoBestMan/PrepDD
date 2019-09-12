@@ -58,7 +58,7 @@ export default function TaskPage() {
     updatedAt: '',
     userOwners: null, 
     teamOwners: null, 
-    reviewers: null, 
+    userReviewers: null,
   });
 
   const {loading, data, error} = useUserLists({});
