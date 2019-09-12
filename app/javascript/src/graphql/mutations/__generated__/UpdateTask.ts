@@ -66,4 +66,5 @@ export interface UpdateTaskVariables {
   description?: string | null;
   priority?: string | null;
   status?: string | null;
+  dueDate?: string | null;
 }

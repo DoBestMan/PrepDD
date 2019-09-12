@@ -14,6 +14,7 @@ export const useUpdateTask = createMutationHook<
     $description: String, 
     $priority: String, 
     $status: String, 
+    $dueDate: String, 
   ) {
     updateTask(
       id: $id, 
@@ -21,6 +22,7 @@ export const useUpdateTask = createMutationHook<
       description: $description, 
       priority: $priority, 
       status: $status, 
+      dueDate: $dueDate, 
     ) {
       success
       errors {

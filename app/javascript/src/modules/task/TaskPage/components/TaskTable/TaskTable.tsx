@@ -118,7 +118,7 @@ export default function TaskTable(props: TaskTableProps) {
   }] = useUpdateTask({
     id: selectedTask.id, 
     name: selectedTask.name, 
-    priority: selectedTask.priority, 
+    status: selectedTask.status, 
   });
 
   const handleClickPriority = (event: React.MouseEvent<HTMLDivElement>, task: UserTasks_userTasks) => {
@@ -131,17 +131,23 @@ export default function TaskTable(props: TaskTableProps) {
 
     let updatedTask = task;
     switch (task.status) {
+      case 'Rejected':
+        updatedTask.status = 'Unstarted';
+        break;
       case 'Unstarted': 
-        updatedTask.status = 'Started';
+        updatedTask.status = 'Start';
         break;
-      case 'Started':
-        updatedTask.status = 'Finished';
+      case 'Start':
+        updatedTask.status = 'Finish';
         break;
-      case 'Finished':
-        updatedTask.status = 'Delivered';
+      case 'Finish':
+        updatedTask.status = 'Deliver';
         break;
-      case 'Delivered':
-        updatedTask.status = 'Accepted';
+      case 'Deliver':
+        updatedTask.status = 'Accept';
+        break;
+      case 'Accept':
+        updatedTask.status = 'Completed';
         break;
       default:
         updatedTask.status = 'Rejected';
