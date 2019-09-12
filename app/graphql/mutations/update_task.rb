@@ -19,7 +19,7 @@ class Mutations::UpdateTask < GraphQL::Schema::Mutation
         name: name,
         description: description,
         priority: priority,
-        status: status
+        status: status,
       }
     )
     
