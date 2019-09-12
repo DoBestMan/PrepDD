@@ -110,6 +110,7 @@ module Types
         tasks += section.tasks
       end
 
+      tasks.sort_by! &:priority
       tasks.drop(offset).first(limit)
     end
 
