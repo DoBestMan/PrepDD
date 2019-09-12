@@ -203,7 +203,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
 
   useEffect(() => {
     if (task.id) {
-      // addTaskOwners();
+      addTaskOwners();
     }
   }, [owners]);
 
