@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
     priority: {
       display: 'flex', 
       width: 'fit-content', 
-      height: 'fit-content', 
+      height: '28px', 
       cursor: 'pointer', 
       color: '#509E6D',
       background: '#FFFFFF',
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     priorityDropdown: {
       position: 'absolute', 
-      top: '25px',
+      top: '27px',
       left: '0px', 
       width: 'max-content', 
       color: '#509E6D',
@@ -241,6 +241,10 @@ export default function OverviewPane(props: OverviewPaneProps) {
     asyncSetState();
   }
 
+  const handleRemoveOwner = (removeId: number) => {
+
+  };
+
   const handleChangePriority = (newPriority: string) => {
     const asyncSetState = async () => {
       await setTask({
@@ -302,12 +306,13 @@ export default function OverviewPane(props: OverviewPaneProps) {
                       type="user"
                       label={owner.fullName}
                       logo={owner.profileUrl as string}
+                      onClose={() => handleRemoveOwner(index)}
                     />
                   ) : (
                     <NameLabel
                       key={index}
                       label={owner.name}
-                      selected
+                      onClose={() => handleRemoveOwner(index)}
                     />
                   );
                 }

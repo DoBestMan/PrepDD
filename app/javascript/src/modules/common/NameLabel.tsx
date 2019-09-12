@@ -28,15 +28,20 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '9px',
       marginRight: '6px',
     },
+    close: {
+      fontSize: '12px',
+      marginLeft: '12px',
+    },
   })
 );
 
 interface NameLabelProps {
+  type?: 'user' | 'company' | 'team';
   logo?: string;
   label: string;
-  selected?: boolean;
-  type?: 'user' | 'company' | 'team';
   className?: string;
+  selected?: boolean;
+  onClose?: () => void;
 }
 
 const NameLabel = React.forwardRef(
@@ -47,6 +52,7 @@ const NameLabel = React.forwardRef(
       selected, 
       type, 
       className, 
+      onClose, 
       ...other
     } = props;
     const classes = useStyles();
@@ -69,6 +75,12 @@ const NameLabel = React.forwardRef(
         <div className={classes.label}>
           {label}
         </div>
+        {onClose && (
+          <i
+            className={clsx(classes.close, 'fa fa-times')}
+            onClick={onClose}
+          />
+        )}
       </div>
     );
   }

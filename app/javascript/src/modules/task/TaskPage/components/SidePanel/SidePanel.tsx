@@ -83,7 +83,6 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
   } = props;
   const classes = useStyles();
 
-  console.log("Selected Task: ", selectedTask);
   return (
     <Drawer
       className={classes.drawer}
