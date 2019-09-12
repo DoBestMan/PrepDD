@@ -83,10 +83,10 @@ export default function FormPanel(props: FormPanelProps) {
 
   const {state, dispatch} = useGlobalState();
 
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeName = (newValue: string) => {
     setCompany({
       ...company,
-      name: event.target.value,
+      name: newValue,
     });
   };
 

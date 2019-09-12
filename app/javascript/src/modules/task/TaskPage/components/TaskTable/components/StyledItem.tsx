@@ -68,10 +68,12 @@ export default function StyledItem(props: StyledItemProps) {
   const rejectedElement = <div className={clsx(classes.status, classes.rejected)} />;
 
   const statusOptions = [
+    {value: 'Reject', label: 'Reject', element: rejectedElement},
     {value: 'Completed', label: 'Completed', element: completedElement},
-    {value: 'Delivered', label: 'Delivered', element: deliveredElement}, 
-    {value: 'Finished', label: 'Finished', element: finishedElement}, 
-    {value: 'Started', label: 'In Progress', element: inProgressElement}, 
+    {value: 'Accept', label: 'Accept', element: null},
+    {value: 'Deliver', label: 'Deliver', element: deliveredElement}, 
+    {value: 'Finish', label: 'Finish', element: finishedElement}, 
+    {value: 'Start', label: 'In Progress', element: inProgressElement}, 
     {value: 'Unstarted', label: 'Not Started', element: notStartedElement}, 
     {value: 'Rejected', label: 'Rejected', element: rejectedElement},
   ];

@@ -17,7 +17,8 @@ import ShareIcon from '@material-ui/icons/People';
 import RequestIcon from '@material-ui/icons/Input';
 
 import InputForm from '../../../../common/EditableInputForm';
-import OwnerForm from './components/OwnerForm';
+import NameLabel from '../../../../common/NameLabel';
+import OwnerForm from '../../../../common/InviteForm';
 import CompanyForm from './components/CompanyForm';
 import Alert from './components/Alert';
 
@@ -35,7 +36,7 @@ import {
 import {
   SearchCompanyUsers_searchCompanyUsers_users,
   SearchCompanyUsers_searchCompanyUsers_teams,
-} from './components/__generated__/SearchCompanyUsers';
+} from '../../../../common/__generated__/SearchCompanyUsers';
 import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,6 +68,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#606060',
       marginTop: '24px',
       marginBottom: '12px',
+    },
+    ownerLabel: {
+      height: '36px', 
     },
     sharingTitle: {
       color: '#606060',
@@ -321,10 +325,10 @@ const CreateListStep = (props: any) => {
     return 'User';
   };
 
-  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeName = (newValue: string) => {
     setNewTemplate({
       ...newTemplate,
-      name: event.target.value,
+      name: newValue,
     });
   };
 
@@ -450,7 +454,40 @@ const CreateListStep = (props: any) => {
             </div>
           </div>
 
-          <OwnerForm owners={owners} setOwners={setOwners} />
+          <div>
+            <Typography variant="h6" className={classes.secondary}>
+              List owner(s)
+            </Typography>
+            <div className={classes.flex}>
+              {owners &&
+                owners.map(
+                  (
+                    owner:
+                      | SearchCompanyUsers_searchCompanyUsers_users
+                      | SearchCompanyUsers_searchCompanyUsers_teams,
+                    index: number
+                  ) => {
+                    return owner.__typename === 'User' ? (
+                      <NameLabel
+                        key={index}
+                        type="user"
+                        className={classes.ownerLabel}
+                        label={owner.fullName}
+                        logo={owner.profileUrl as string}
+                      />
+                    ) : (
+                      <NameLabel
+                        key={index}
+                        type="user"
+                        className={classes.ownerLabel}
+                        label={owner.name}
+                      />
+                    );
+                  }
+                )}
+                <OwnerForm owners={owners} setOwners={setOwners} />
+              </div>
+          </div>
           {sharing !== 'internal' && (
             <CompanyForm
               sharing={sharing}

@@ -17,13 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
     },
     label: {
-      color: '#2C2C2C',
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 600,
-    },
-    selected: {
-      color: '#2C2C2C',
     },
     image: {
       width: '18px',
@@ -32,23 +28,37 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '9px',
       marginRight: '6px',
     },
+    close: {
+      fontSize: '12px',
+      marginLeft: '12px',
+    },
   })
 );
 
 interface NameLabelProps {
+  type?: 'user' | 'company' | 'team';
   logo?: string;
   label: string;
+  className?: string;
   selected?: boolean;
-  type?: 'user' | 'company';
+  onClose?: () => void;
 }
 
 const NameLabel = React.forwardRef(
   (props: NameLabelProps, ref: React.Ref<HTMLDivElement>) => {
-    const {logo, label, selected, type, ...other} = props;
+    const {
+      logo, 
+      label, 
+      selected, 
+      type, 
+      className, 
+      onClose, 
+      ...other
+    } = props;
     const classes = useStyles();
 
     return (
-      <div {...other} className={classes.root} ref={ref}>
+      <div {...other} className={clsx(classes.root, className)} ref={ref}>
         {logo ? (
           <img
             src={logo}
@@ -62,9 +72,15 @@ const NameLabel = React.forwardRef(
             <DefaultUserImage userName={label} className={classes.image} />
           )
         )}
-        <div className={clsx(classes.label, selected && classes.selected)}>
+        <div className={classes.label}>
           {label}
         </div>
+        {onClose && (
+          <i
+            className={clsx(classes.close, 'fa fa-times')}
+            onClick={onClose}
+          />
+        )}
       </div>
     );
   }

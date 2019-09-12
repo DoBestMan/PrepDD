@@ -14,10 +14,10 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
     response = { errors: [] }
 
     task = Task.find(task_id)
-
+    
     task_user_owner_emails =  task.user_owners.pluck(:email)
     task_team_owner_ids = task.team_owners.pluck(:id)
-
+    
     if user_owners.present?
       new_users = user_owners - task_user_owner_emails
       new_users.each do |email|
