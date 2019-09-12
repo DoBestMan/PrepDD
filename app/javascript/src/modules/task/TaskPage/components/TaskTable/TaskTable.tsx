@@ -127,6 +127,7 @@ export default function TaskTable(props: TaskTableProps) {
     status: null,
     dueDate: null,
     updatedAt: '',
+		updated: '',
     userOwners: null,
     teamOwners: null,
     userReviewers: null,
@@ -267,7 +268,7 @@ export default function TaskTable(props: TaskTableProps) {
                     )}
                   </div>
                 </TableCell>
-                <TableCell>{task.updatedAt}</TableCell>
+                <TableCell>{task.updated}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
             );

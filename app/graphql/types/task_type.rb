@@ -6,6 +6,7 @@ module Types
     field :name, String, null: true
     field :description, String, null: true
     field :updated_at, String, null: true, method: :last_updated_at
+    field :updated, String, null: true, method: :last_updated_at
     field :priority, String, null: true
     field :status, String, null: true
     field :due_date, String, null: true

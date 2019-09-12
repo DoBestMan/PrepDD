@@ -396,6 +396,7 @@ type Task {
   status: String
   teamOwners: [Team!]
   teamReviewers: [Team!]
+  updated: String
   updatedAt: String!
   userOwners: [User!]
   userReviewers: [User!]
