@@ -17,13 +17,9 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
     },
     label: {
-      color: '#2C2C2C',
       fontFamily: 'Montserrat',
       fontSize: '12px',
       fontWeight: 600,
-    },
-    selected: {
-      color: '#2C2C2C',
     },
     image: {
       width: '18px',
@@ -70,7 +66,7 @@ const NameLabel = React.forwardRef(
             <DefaultUserImage userName={label} className={classes.image} />
           )
         )}
-        <div className={clsx(classes.label, selected && classes.selected)}>
+        <div className={classes.label}>
           {label}
         </div>
       </div>

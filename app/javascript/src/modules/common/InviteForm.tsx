@@ -18,6 +18,7 @@ import {
 import * as cs from '../../constants/theme';
 import {useGlobalState} from '../../store';
 import DefaultUserImage from './DefaultUserImage';
+import NameLabel from './NameLabel';
 
 import {
   SearchCompanyUsers_searchCompanyUsers,
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '12px',
     },
     addButton: {
+      color: cs.COLORS.primary,
       border: '1px solid #D8D8D8',
       borderRadius: '3px',
       fontSize: '15px',
@@ -49,9 +51,12 @@ const useStyles = makeStyles((theme: Theme) =>
       left: '0px',
       padding: '12px 24px 18px',
       backgroundColor: '#FFFFFF',
-      border: '2px solid #D8D8D8',
+      border: '1px solid #D8D8D8',
       borderRadius: '3px',
       zIndex: 1,
+    },
+    smallPanelPos: {
+      top: '24px',
     },
     input: {
       display: 'block',
@@ -114,6 +119,7 @@ interface OwnerFormProps {
         | SearchCompanyUsers_searchCompanyUsers_teams)[]
     >
   >;
+  size?: 'small';
 }
 
 interface InviteMemberType {
@@ -122,7 +128,7 @@ interface InviteMemberType {
 }
 
 export default function OwnerForm(props: OwnerFormProps) {
-  const {owners, setOwners} = props;
+  const {owners, setOwners, size} = props;
   const classes = useStyles();
   
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
@@ -185,6 +191,7 @@ export default function OwnerForm(props: OwnerFormProps) {
   }, [loading, idx(data, data => data.searchCompanyUsers)]);
 
   const handleCloseAll = () => {
+    setOpenAddPanel(false);
     setOpenInvitePanel(false);
     setSearchResult({
       __typename: 'SearchCompanyUsers',
@@ -270,11 +277,16 @@ export default function OwnerForm(props: OwnerFormProps) {
       onMouseOver={() => setOpenAddPanel(true)}
       onMouseLeave={handleCloseAll}
     >
-      <Button className={classes.addButton}>+</Button>
+      {size && size === 'small' ? (
+        <NameLabel label="+" className={classes.addButton} />
+      ) : (
+        <Button className={classes.addButton}>+</Button>
+      )}
+
       {openAddPanel ? (
         <ClickAwayListener onClickAway={() => setOpenAddPanel(false)}>
           <Paper
-            className={classes.addPanel}
+            className={clsx(classes.addPanel, size === 'small' && classes.smallPanelPos)}
             elevation={0}
             onMouseOver={() => setOpenAddPanel(true)}
             onMouseLeave={handleCloseAll}

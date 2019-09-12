@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
@@ -29,6 +30,8 @@ import {
   SearchCompanyUsers_searchCompanyUsers_users,
 } from '../../../../../common/__generated__/SearchCompanyUsers';
 import {useUpdateTask} from '../../../../../../graphql/mutations/UpdateTask';
+import {useAddTaskOwners} from '../../../../../../graphql/mutations/AddTaskOwners';
+import { canNotDefineSchemaWithinExtensionMessage } from 'graphql/validation/rules/LoneSchemaDefinition';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,6 +49,9 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       marginBottom: '24px', 
     }, 
+    transform: {
+      textTrasnform: 'capitalize', 
+    },
     flex: {
       display: 'flex', 
     },
@@ -117,7 +123,9 @@ export default function OverviewPane(props: OverviewPaneProps) {
   } = props;
   const classes = useStyles();
 
-  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([
+  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([]);
+
+  const [reviewers, setReviewers] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([
     ...(task.userOwners || []).map(user => {
       return {
         __typename: "User",
@@ -136,19 +144,69 @@ export default function OverviewPane(props: OverviewPaneProps) {
     }), 
   ]);
 
-  const [updateTask, {loading, data, error}] = useUpdateTask({
+  const [updateTask, {
+    loading: updateTaskLoading, 
+    data: updateTaskRes, 
+    error: updateTaskError, 
+  }] = useUpdateTask({
     id: task.id, 
     name: task.name, 
     priority: task.priority, 
   });
 
-  const updateTaskList = () => {
-    const findIndex = tasks.findIndex(each => each.id === task.id);
+  const [addTaskOwners, {
+    loading: addTaskLoading, 
+    data: addTaskRes, 
+    error: addTaskError, 
+  }] = useAddTaskOwners({
+    taskID: task.id, 
+    userOwners: (owners.filter(owner => owner.__typename === 'User') as SearchCompanyUsers_searchCompanyUsers_users[]).map(owner => (owner.email || '')), 
+    userReviewers: [], 
+    teamOwners: owners.filter(owner => owner.__typename === 'Team').map(owner => owner.id), 
+    teamReviewers: [], 
+  });
+
+  useEffect(() => {
+    setOwners([
+      ...(task.userOwners || []).map(user => {
+        return {
+          __typename: "User",
+          id: user.id,
+          email: user.email, 
+          fullName: user.fullName,
+          profileUrl: user.profileUrl,
+        } as SearchCompanyUsers_searchCompanyUsers_users;
+      }), 
+      ...(task.teamOwners || []).map(team => {
+        return {
+          __typename: "Team",
+          id: team.id, 
+          name: team.name, 
+        } as SearchCompanyUsers_searchCompanyUsers_teams;
+      }), 
+    ]);
+  }, [task.userOwners, task.teamOwners]);
+
+  useEffect(() => {
+    if (task.id) {
+      // addTaskOwners();
+    }
+  }, [owners]);
+
+  useEffect(() => {
+    const fetchTask = idx(addTaskRes, addTaskRes => addTaskRes.addTaskOwners.task);
+
+    if (addTaskLoading || !fetchTask) return;
+    updateTaskList(fetchTask as UserTasks_userTasks);
+  }, [addTaskLoading, idx(addTaskRes, addTaskRes => addTaskRes.addTaskOwners.task)])
+
+  const updateTaskList = (updateTask: UserTasks_userTasks) => {
+    const findIndex = tasks.findIndex(each => each.id === updateTask.id);
 
     if (findIndex >= 0) {
       let newTasks = tasks;
 
-      newTasks[findIndex] = task;
+      newTasks[findIndex] = updateTask;
       setTasks(newTasks);
     }
   }
@@ -161,14 +219,26 @@ export default function OverviewPane(props: OverviewPaneProps) {
       });
 
       updateTask();
-      updateTaskList();
+      updateTaskList(task);
     };
 
     asyncSetState();
   }
 
-  const handleChange = () => {
-    
+  const handleChangeDate = (newDate: Date | null) => {
+    // const asyncSetState = async () => {
+    //   if (newDate) {
+    //     await setTask({
+    //       ...task, 
+    //       dueDate: Date.toString(),
+    //     });
+
+    //     updateTask();
+    //     updateTaskList(task);
+    //   }
+    // };
+
+    // asyncSetState();    
   }
 
   return (
@@ -211,7 +281,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
                   );
                 }
               )}
-            <InviteForm owners={owners} setOwners={setOwners} />
+            <InviteForm owners={owners} setOwners={setOwners} size="small" />
           </div>
         </div>
 
@@ -219,16 +289,33 @@ export default function OverviewPane(props: OverviewPaneProps) {
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Reviewer
           </Typography>
-          {task.reviewers && task.reviewers.map((reviewer: UserTasks_userTasks_reviewers) => {
-            return (
-              <NameLabel label={reviewer.fullName as string} selected />
-            )
-          })}
-          <NameLabel
-            type="user"
-            label="Ruzza Stefano"
-          />
-          <NameLabel label="+" selected />
+          <div className={classes.flex} style={{flexWrap: 'wrap'}}>
+            {reviewers &&
+              reviewers.map(
+                (
+                  reviewer:
+                    | SearchCompanyUsers_searchCompanyUsers_users
+                    | SearchCompanyUsers_searchCompanyUsers_teams,
+                  index: number
+                ) => {
+                  return reviewer.__typename === 'User' ? (
+                    <NameLabel
+                      key={index}
+                      type="user"
+                      label={reviewer.fullName}
+                      logo={reviewer.profileUrl as string}
+                    />
+                  ) : (
+                    <NameLabel
+                      key={index}
+                      label={reviewer.name}
+                      selected
+                    />
+                  );
+                }
+              )}
+            <InviteForm owners={reviewers} setOwners={setReviewers} size="small" />
+          </div>
         </div>
 
         <div className={classes.metaForm} style={{alignItems: 'center'}}>
@@ -239,7 +326,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
             {task.priority === 'high' && (
               <RightIcon />
             )}
-            <Typography variant="h6">{task.priority}</Typography>
+            <Typography variant="h6" className={classes.transform}>{task.priority}</Typography>
           </div>
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Due date
@@ -252,8 +339,8 @@ export default function OverviewPane(props: OverviewPaneProps) {
               format="MM/dd/yyyy"
               margin="normal"
               id="date-picker-inline"
-              value="09-09-2019"
-              onChange={handleChange}
+              value="2019-09-13"
+              onChange={handleChangeDate}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}
