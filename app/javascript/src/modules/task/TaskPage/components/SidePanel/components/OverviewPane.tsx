@@ -23,7 +23,7 @@ import {
   UserTasks_userTasks,
   UserTasks_userTasks_userOwners,
   UserTasks_userTasks_teamOwners,
-  UserTasks_userTasks_reviewers,
+  UserTasks_userTasks_userReviewers,
 } from '../../../../../../graphql/queries/__generated__/UserTasks';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -144,7 +144,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Reviewer
           </Typography>
-          {task.reviewers && task.reviewers.map((reviewer: UserTasks_userTasks_reviewers) => {
+          {task.userReviewers && task.userReviewers.map((reviewer: UserTasks_userTasks_userReviewers) => {
             return (
               <NameLabel label={reviewer.fullName as string} selected />
             )

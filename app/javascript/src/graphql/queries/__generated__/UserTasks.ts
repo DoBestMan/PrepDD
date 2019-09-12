@@ -15,12 +15,12 @@ export interface UserTasks_userTasks_userOwners {
 }
 
 export interface UserTasks_userTasks_teamOwners {
-  __typename: "Task";
+  __typename: "Team";
   id: string;
-  name: string | null;
+  name: string;
 }
 
-export interface UserTasks_userTasks_reviewers {
+export interface UserTasks_userTasks_userReviewers {
   __typename: "User";
   id: string;
   fullName: string;
@@ -36,7 +36,7 @@ export interface UserTasks_userTasks {
   updatedAt: string;
   userOwners: UserTasks_userTasks_userOwners[] | null;
   teamOwners: UserTasks_userTasks_teamOwners[] | null;
-  reviewers: UserTasks_userTasks_reviewers[] | null;
+  userReviewers: UserTasks_userTasks_userReviewers[] | null;
 }
 
 export interface UserTasks {
