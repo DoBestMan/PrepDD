@@ -15,8 +15,12 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
 
     task = Task.find(id)
 
+    task_user_owner_emails =  task.user_owners.pluck(:email)
+    task_team_owner_ids = task.team_owners.pluck(:id)
+
     if user_owners.present?
-      user_owners.each do |email|
+      new_users = user_owners - task_user_owner_emails
+      new_users.each do |email|
         user = User.find_by_email(email)
         if !user
           password = Devise.friendly_token[0, 20]
@@ -45,7 +49,8 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
     end
 
     if user_reviewers.present?
-      user_reviewers.each do |email|
+      new_users = user_reviewers - task_user_owner_emails
+      new_users.each do |email|
         user = User.find_by_email(email)
         if !user
           password = Devise.friendly_token[0, 20]
@@ -74,14 +79,16 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
     end
 
     if team_owners
-      team_owners.each do |id|
+      new_teams = team_owners - task_team_owner_ids
+      new_teams.each do |id|
         team = Team.find(id)
         task_owners.create(task_id: task.id, owner_type: 'Owner')
       end
     end
 
     if team_reviewers
-      team_owners.each do |id|
+      new_teams = team_reviewers - task_team_owner_ids
+      new_teams.each do |id|
         team = Team.find(id)
         task_owners.create(task_id: task.id, owner_type: 'Reviewer')
       end
