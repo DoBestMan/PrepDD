@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -16,6 +16,7 @@ import {
 
 import * as cs from '../../../../../../constants/theme';
 import InputForm from '../../../../../common/EditableInputForm';
+import InviteForm from '../../../../../common/InviteForm';
 import SwitchForm from './SwitchForm';
 import NameLabel from '../../../../../common/NameLabel';
 
@@ -25,6 +26,10 @@ import {
   UserTasks_userTasks_teamOwners,
   UserTasks_userTasks_reviewers,
 } from '../../../../../../graphql/queries/__generated__/UserTasks';
+import {
+  SearchCompanyUsers_searchCompanyUsers_teams,
+  SearchCompanyUsers_searchCompanyUsers_users,
+} from '../../../../../common/__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,6 +108,25 @@ export default function OverviewPane(props: OverviewPaneProps) {
   const {value, index, task} = props;
   const classes = useStyles();
 
+  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([
+    ...(task.userOwners || []).map(user => {
+      return {
+        __typename: "User",
+        id: user.id,
+        email: user.email, 
+        fullName: user.fullName,
+        profileUrl: user.profileUrl,
+      } as SearchCompanyUsers_searchCompanyUsers_users;
+    }), 
+    ...(task.teamOwners || []).map(team => {
+      return {
+        __typename: "Team",
+        id: team.id, 
+        name: team.name, 
+      } as SearchCompanyUsers_searchCompanyUsers_teams;
+    }), 
+  ]);
+
   const handleChange = () => {
     
   }
@@ -122,24 +146,34 @@ export default function OverviewPane(props: OverviewPaneProps) {
             Owner
           </Typography>
           <div className={classes.flex} style={{flexWrap: 'wrap'}}>
-            {task.userOwners && task.userOwners.map((owner: UserTasks_userTasks_userOwners) => {
-              return (
-                <NameLabel 
-                  type="user" 
-                  label={owner.fullName as string} 
-                  logo={owner.profileUrl as string} 
-                  selected 
-                />
-              );
-            })}
-            {task.teamOwners && task.teamOwners.map((owner: UserTasks_userTasks_teamOwners) => {
-              return (
-                <NameLabel label={owner.name as string} selected />
-              )
-            })}
-            <NameLabel label="+" selected />
+            {owners &&
+              owners.map(
+                (
+                  owner:
+                    | SearchCompanyUsers_searchCompanyUsers_users
+                    | SearchCompanyUsers_searchCompanyUsers_teams,
+                  index: number
+                ) => {
+                  return owner.__typename === 'User' ? (
+                    <NameLabel
+                      key={index}
+                      type="user"
+                      label={owner.fullName}
+                      logo={owner.profileUrl as string}
+                    />
+                  ) : (
+                    <NameLabel
+                      key={index}
+                      label={owner.name}
+                      selected
+                    />
+                  );
+                }
+              )}
+            <InviteForm owners={owners} setOwners={setOwners} />
           </div>
         </div>
+
         <div className={classes.metaForm}>
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Reviewer
@@ -151,6 +185,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
           })}
           <NameLabel label="+" selected />
         </div>
+
         <div className={classes.metaForm} style={{alignItems: 'center'}}>
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Priority
@@ -181,6 +216,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
           </MuiPickersUtilsProvider>
         </div>
       </div>
+      
       <div style={{marginTop: '24px'}}>
         <div className={classes.metaForm}>
           <Typography variant="h6" className={classes.secondary}>

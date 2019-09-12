@@ -39,16 +39,24 @@ interface NameLabelProps {
   logo?: string;
   label: string;
   selected?: boolean;
-  type?: 'user' | 'company';
+  type?: 'user' | 'company' | 'team';
+  className?: string;
 }
 
 const NameLabel = React.forwardRef(
   (props: NameLabelProps, ref: React.Ref<HTMLDivElement>) => {
-    const {logo, label, selected, type, ...other} = props;
+    const {
+      logo, 
+      label, 
+      selected, 
+      type, 
+      className, 
+      ...other
+    } = props;
     const classes = useStyles();
 
     return (
-      <div {...other} className={classes.root} ref={ref}>
+      <div {...other} className={clsx(classes.root, className)} ref={ref}>
         {logo ? (
           <img
             src={logo}
