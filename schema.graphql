@@ -392,12 +392,13 @@ type Task {
   list: List
   name: String
   priority: String
-  reviewers: [User!]
   section: TaskSection
   status: String
-  teamOwners: [Task!]
+  teamOwners: [Team!]
+  teamReviewers: [Team!]
   updatedAt: String!
   userOwners: [User!]
+  userReviewers: [User!]
 }
 
 """

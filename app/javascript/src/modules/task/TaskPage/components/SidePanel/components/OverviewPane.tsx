@@ -25,7 +25,6 @@ import NameLabel from '../../../../../common/NameLabel';
 
 import {
   UserTasks_userTasks,
-  UserTasks_userTasks_reviewers,
 } from '../../../../../../graphql/queries/__generated__/UserTasks';
 import {
   SearchCompanyUsers_searchCompanyUsers_teams,
@@ -33,7 +32,6 @@ import {
 } from '../../../../../common/__generated__/SearchCompanyUsers';
 import {useUpdateTask} from '../../../../../../graphql/mutations/UpdateTask';
 import {useAddTaskOwners} from '../../../../../../graphql/mutations/AddTaskOwners';
-import { canNotDefineSchemaWithinExtensionMessage } from 'graphql/validation/rules/LoneSchemaDefinition';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

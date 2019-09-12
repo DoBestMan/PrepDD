@@ -8,6 +8,13 @@ class Task < ApplicationRecord
   has_many :task_owner
   has_many :owners, through: :task_owner, source: :task
 
+
+  # Takes a rails timestamp and converts to a unix epoch integer
+  # GQL sends this as a string
+  def adjust_epoch
+    self.updated_at.to_f * 1000
+  end
+
   def self.import(files)
     require 'roo'
 

@@ -21,19 +21,29 @@ export interface AddTaskOwners_addTaskOwners_errors {
 export interface AddTaskOwners_addTaskOwners_task_userOwners {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
 }
 
 export interface AddTaskOwners_addTaskOwners_task_teamOwners {
-  __typename: "Task";
+  __typename: "Team";
   id: string;
-  name: string | null;
+  name: string;
 }
 
-export interface AddTaskOwners_addTaskOwners_task_reviewers {
+export interface AddTaskOwners_addTaskOwners_task_userReviewers {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
+}
+
+export interface AddTaskOwners_addTaskOwners_task_teamReviewers {
+  __typename: "Team";
+  id: string;
+  name: string;
 }
 
 export interface AddTaskOwners_addTaskOwners_task {
@@ -46,7 +56,8 @@ export interface AddTaskOwners_addTaskOwners_task {
   updatedAt: string;
   userOwners: AddTaskOwners_addTaskOwners_task_userOwners[] | null;
   teamOwners: AddTaskOwners_addTaskOwners_task_teamOwners[] | null;
-  reviewers: AddTaskOwners_addTaskOwners_task_reviewers[] | null;
+  userReviewers: AddTaskOwners_addTaskOwners_task_userReviewers[] | null;
+  teamReviewers: AddTaskOwners_addTaskOwners_task_teamReviewers[] | null;
 }
 
 export interface AddTaskOwners_addTaskOwners {

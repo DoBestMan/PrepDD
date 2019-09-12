@@ -129,7 +129,8 @@ export default function TaskTable(props: TaskTableProps) {
     updatedAt: '',
     userOwners: null,
     teamOwners: null,
-    reviewers: null,
+    userReviewers: null,
+    teamReviewers: null,
   });
 
   const [updateTask, {

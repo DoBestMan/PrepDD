@@ -56,9 +56,10 @@ export default function TaskPage() {
     status: '',
     dueDate: '',
     updatedAt: '',
-    userOwners: null, 
-    teamOwners: null, 
-    reviewers: null, 
+    userOwners: null,
+    teamOwners: null,
+    userReviewers: null,
+    teamReviewers: null,
   });
 
   const {loading, data, error} = useUserLists({});

@@ -36,17 +36,25 @@ export const useUpdateTask = createMutationHook<
         status
         dueDate
         updatedAt
-        userOwners{
+        userOwners {
           id
+          email
           fullName
+          profileUrl
         }
-        teamOwners{
+        teamOwners {
           id
           name
         }
-        reviewers{
+        userReviewers {
           id
+          email
           fullName
+          profileUrl
+        }
+        teamReviewers {
+          id
+          name
         }
       }
     }
