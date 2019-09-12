@@ -5,7 +5,9 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper,
   Typography,
-  Button, 
+  List, 
+  ListItem, 
+  ClickAwayListener,
 } from '@material-ui/core';
 import RightIcon from '@material-ui/icons/KeyboardArrowRightSharp';
 
@@ -49,9 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       marginBottom: '24px', 
     }, 
-    transform: {
-      textTrasnform: 'capitalize', 
-    },
     flex: {
       display: 'flex', 
     },
@@ -73,13 +72,28 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       width: 'fit-content', 
       height: 'fit-content', 
+      cursor: 'pointer', 
+      color: '#509E6D',
+      background: '#FFFFFF',
       alignItems: 'center', 
       padding: '1px 6px 1px 0px',
       marginRight: '60px', 
+      border: '1px solid #D8D8D8',
+      borderRadius: '3px',
+    },
+    transform: {
+      textTransform: 'capitalize', 
+      paddingLeft: '6px', 
+    },
+    priorityDropdown: {
+      position: 'absolute', 
+      top: '25px',
+      left: '0px', 
+      width: 'max-content', 
+      color: '#509E6D',
       background: '#FFFFFF',
       border: '1px solid #D8D8D8',
       borderRadius: '3px',
-      color: '#509E6D',    
     },
     date: {
       '& .MuiInput-root': {
@@ -122,6 +136,8 @@ export default function OverviewPane(props: OverviewPaneProps) {
     setTasks, 
   } = props;
   const classes = useStyles();
+
+  const [openPriority, setOpenPriority] = useState<boolean>(false);
 
   const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_teams | SearchCompanyUsers_searchCompanyUsers_users)[]>([]);
 
@@ -225,6 +241,21 @@ export default function OverviewPane(props: OverviewPaneProps) {
     asyncSetState();
   }
 
+  const handleChangePriority = (newPriority: string) => {
+    const asyncSetState = async () => {
+      await setTask({
+        ...task, 
+        priority: newPriority, 
+      });
+
+      updateTask();
+      updateTaskList(task);
+      setOpenPriority(false);
+    };
+
+    asyncSetState();
+  }
+
   const handleChangeDate = (newDate: Date | null) => {
     // const asyncSetState = async () => {
     //   if (newDate) {
@@ -322,12 +353,32 @@ export default function OverviewPane(props: OverviewPaneProps) {
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Priority
           </Typography>
-          <div className={classes.priority}>
-            {task.priority === 'high' && (
-              <RightIcon />
-            )}
-            <Typography variant="h6" className={classes.transform}>{task.priority}</Typography>
-          </div>
+          <ClickAwayListener onClickAway={() => setOpenPriority(false)}>
+            <div style={{position: 'relative'}}>
+              <div className={classes.priority} onClick={() => setOpenPriority(!openPriority)}>
+                {task.priority === 'high' && (
+                  <RightIcon />
+                )}
+                <Typography variant="h6" className={classes.transform}>{task.priority}</Typography>
+              </div>
+
+              {openPriority && (
+                  <List className={classes.priorityDropdown}>
+                    <ListItem onClick={() => handleChangePriority('high')}>
+                      <RightIcon />
+                      <Typography variant="h6">High</Typography>
+                    </ListItem>
+                    <ListItem onClick={() => handleChangePriority('medium')}>
+                      <Typography variant="h6">Medium</Typography>
+                    </ListItem>
+                    <ListItem onClick={() => handleChangePriority('low')}>
+                      <Typography variant="h6">Low</Typography>
+                    </ListItem>
+                  </List>
+                )}
+            </div>
+          </ClickAwayListener>
+
           <Typography variant="h6" className={clsx(classes.secondary, classes.label)}>
             Due date
           </Typography>
