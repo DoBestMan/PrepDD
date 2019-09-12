@@ -25,12 +25,12 @@ export interface UpdateTask_updateTask_task_userOwners {
 }
 
 export interface UpdateTask_updateTask_task_teamOwners {
-  __typename: "Task";
+  __typename: "Team";
   id: string;
-  name: string | null;
+  name: string;
 }
 
-export interface UpdateTask_updateTask_task_reviewers {
+export interface UpdateTask_updateTask_task_userReviewers {
   __typename: "User";
   id: string;
   fullName: string;
@@ -46,7 +46,7 @@ export interface UpdateTask_updateTask_task {
   updatedAt: string;
   userOwners: UpdateTask_updateTask_task_userOwners[] | null;
   teamOwners: UpdateTask_updateTask_task_teamOwners[] | null;
-  reviewers: UpdateTask_updateTask_task_reviewers[] | null;
+  userReviewers: UpdateTask_updateTask_task_userReviewers[] | null;
 }
 
 export interface UpdateTask_updateTask {

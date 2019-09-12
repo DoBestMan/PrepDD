@@ -30,7 +30,7 @@ export const useUserTasks = createQueryHook<UserTasks, {}>(gql`
         id
         name
       }
-      reviewers{
+      userReviewers{
         id
         fullName
       }

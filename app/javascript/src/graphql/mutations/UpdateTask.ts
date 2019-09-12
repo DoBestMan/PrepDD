@@ -42,7 +42,7 @@ export const useUpdateTask = createMutationHook<
           id
           name
         }
-        reviewers{
+        userReviewers{
           id
           fullName
         }
