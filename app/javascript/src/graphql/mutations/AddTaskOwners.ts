@@ -1,34 +1,32 @@
 import {createMutationHook, gql} from '../graphqlHelpers';
 import {
-  UpdateTask,
-  UpdateTaskVariables,
-} from './__generated__/UpdateTask';
+  AddTaskOwners,
+  AddTaskOwnersVariables,
+} from './__generated__/AddTaskOwners';
 
-export const useUpdateTask = createMutationHook<
-  UpdateTask,
-  UpdateTaskVariables
+export const useAddTaskOwners = createMutationHook<
+  AddTaskOwners,
+  AddTaskOwnersVariables
 >(gql`
-  mutation UpdateTask(
-    $id: ID!
-    $name: String, 
-    $description: String, 
-    $priority: String, 
-    $status: String, 
-    $dueDate: String, 
+  mutation AddTaskOwners(
+    $taskID: ID!, 
+    $userOwners: [String!], 
+    $userReviewers: [String!], 
+    $teamOwners: [ID!], 
+    $teamReviewers: [ID!],
   ) {
-    updateTask(
-      id: $id, 
-      name: $name, 
-      description: $description, 
-      priority: $priority, 
-      status: $status, 
-      dueDate: $dueDate, 
+    addTaskOwners(
+      taskID: $taskID, 
+      userOwners: $userOwners, 
+      userReviewers: $userReviewers, 
+      teamOwners: $teamOwners, 
+      teamReviewers: $teamReviewers, 
     ) {
-      success
       errors {
         path
         message
       }
+      success
       task {
         id
         name

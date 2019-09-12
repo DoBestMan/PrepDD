@@ -68,13 +68,21 @@ const labels = ["Overview", "Files", "Public", "Internal", "Timeline"];
 interface TaskDetailPageProps {
   open: boolean;
   selectedTask: UserTasks_userTasks;
+  tasks: UserTasks_userTasks[];
+  setSelectedTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
+  setTasks: React.Dispatch<React.SetStateAction<UserTasks_userTasks[]>>;
 }
 
 export default function TaskDetailPage(props: TaskDetailPageProps) {
-  const {open, selectedTask} = props;
+  const {
+    open, 
+    selectedTask,
+    tasks, 
+    setSelectedTask, 
+    setTasks, 
+  } = props;
   const classes = useStyles();
 
-  console.log("Selected Task: ", selectedTask);
   return (
     <Drawer
       className={classes.drawer}
@@ -100,7 +108,12 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
         </div>
       </div>
       <Panel labels={labels} padding>
-        <OverviewPane task={selectedTask} />
+        <OverviewPane 
+          task={selectedTask} 
+          tasks={tasks}
+          setTask={setSelectedTask}
+          setTasks={setTasks}
+        />
         <FilesPane />
         <PublicPane />
         <InternalPane />

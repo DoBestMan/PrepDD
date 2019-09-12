@@ -10,8 +10,11 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
+import CheckIcon from '@material-ui/icons/Done';
 
+import * as cs from '../../../../../../constants/theme';
 import {OptionType} from '../../../../../../constants/types';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -44,6 +47,12 @@ const useStyles = makeStyles((theme: Theme) =>
       '&.Mui-selected .MuiTypography-body1': {
         color: '#FFFFFF',
       }
+    }, 
+    check: {
+      color: cs.COLORS.primary, 
+    }, 
+    grow: {
+      flexGrow: 1, 
     }
   })
 );
@@ -111,10 +120,15 @@ export default function Dropdown(props: DropdownProps) {
                     <ListItem
                       key={option.value}
                       className={classes.item}
-                      selected={isSelected}
                       onClick={() => handleClick(option.value)}
                     >
                       <ListItemText primary={option.label} />
+                      {isSelected && (
+                        <>
+                          <div className={classes.grow} />
+                          <CheckIcon className={classes.check} />
+                        </>
+                      )}
                     </ListItem>
                   );
                 })}

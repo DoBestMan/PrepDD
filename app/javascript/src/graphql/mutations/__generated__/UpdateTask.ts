@@ -21,7 +21,9 @@ export interface UpdateTask_updateTask_errors {
 export interface UpdateTask_updateTask_task_userOwners {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
 }
 
 export interface UpdateTask_updateTask_task_teamOwners {
@@ -33,7 +35,15 @@ export interface UpdateTask_updateTask_task_teamOwners {
 export interface UpdateTask_updateTask_task_userReviewers {
   __typename: "User";
   id: string;
+  email: string;
   fullName: string;
+  profileUrl: string | null;
+}
+
+export interface UpdateTask_updateTask_task_teamReviewers {
+  __typename: "Team";
+  id: string;
+  name: string;
 }
 
 export interface UpdateTask_updateTask_task {
@@ -47,6 +57,7 @@ export interface UpdateTask_updateTask_task {
   userOwners: UpdateTask_updateTask_task_userOwners[] | null;
   teamOwners: UpdateTask_updateTask_task_teamOwners[] | null;
   userReviewers: UpdateTask_updateTask_task_userReviewers[] | null;
+  teamReviewers: UpdateTask_updateTask_task_teamReviewers[] | null;
 }
 
 export interface UpdateTask_updateTask {
@@ -66,4 +77,5 @@ export interface UpdateTaskVariables {
   description?: string | null;
   priority?: string | null;
   status?: string | null;
+  dueDate?: string | null;
 }

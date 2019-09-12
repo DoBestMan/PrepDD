@@ -9,6 +9,9 @@ import {
   TableRow, 
   TableCell, 
   Typography, 
+  List, 
+  ListItem,
+  ClickAwayListener, 
 } from '@material-ui/core';
 import SmsIcon from '@material-ui/icons/SmsOutlined';
 import ListIcon from '@material-ui/icons/ListAlt';
@@ -22,6 +25,13 @@ import StyledBadge from './components/StyledBadge';
 import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
 import {useUpdateTask} from '../../../../../graphql/mutations/UpdateTask';
 
+const options = [
+  {label: 'All', value: 'all'}, 
+  {label: 'High', value: 'high'}, 
+  {label: 'Medium', value: 'medium'}, 
+  {label: 'Low', value: 'Low'}, 
+];
+
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
@@ -31,6 +41,15 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       tableLayout: 'fixed', 
       borderCollapse: 'separate',
+    },
+    filterList: {
+      position: 'absolute', 
+      top: '18px', 
+      left: '3px', 
+      background: '#FFFFFF', 
+      border: '1px solid #D8D8D8', 
+      borderRadius: '3px', 
+      zIndex: 2, 
     },
     stickyColumn: {
       position: 'sticky',
@@ -97,6 +116,8 @@ export default function TaskTable(props: TaskTableProps) {
     onScroll, 
   } = props;
   const classes = useStyles();
+
+  const [openPriority, setOpenPriority] = useState<boolean>(false);
   const [hover, setHover] = useState<number>(-1);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
     __typename: "Task",
@@ -109,6 +130,7 @@ export default function TaskTable(props: TaskTableProps) {
     userOwners: null,
     teamOwners: null,
     userReviewers: null,
+    teamReviewers: null,
   });
 
   const [updateTask, {
@@ -118,7 +140,7 @@ export default function TaskTable(props: TaskTableProps) {
   }] = useUpdateTask({
     id: selectedTask.id, 
     name: selectedTask.name, 
-    priority: selectedTask.priority, 
+    status: selectedTask.status, 
   });
 
   const handleClickPriority = (event: React.MouseEvent<HTMLDivElement>, task: UserTasks_userTasks) => {
@@ -131,17 +153,23 @@ export default function TaskTable(props: TaskTableProps) {
 
     let updatedTask = task;
     switch (task.status) {
+      case 'Rejected':
+        updatedTask.status = 'Unstarted';
+        break;
       case 'Unstarted': 
-        updatedTask.status = 'Started';
+        updatedTask.status = 'Start';
         break;
-      case 'Started':
-        updatedTask.status = 'Finished';
+      case 'Start':
+        updatedTask.status = 'Finish';
         break;
-      case 'Finished':
-        updatedTask.status = 'Delivered';
+      case 'Finish':
+        updatedTask.status = 'Deliver';
         break;
-      case 'Delivered':
-        updatedTask.status = 'Accepted';
+      case 'Deliver':
+        updatedTask.status = 'Accept';
+        break;
+      case 'Accept':
+        updatedTask.status = 'Completed';
         break;
       default:
         updatedTask.status = 'Rejected';
@@ -178,7 +206,22 @@ export default function TaskTable(props: TaskTableProps) {
         <TableHead>
           <TableRow>
             <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>
-              <ArrowDownIcon />
+              <ClickAwayListener onClickAway={() => setOpenPriority(false)}>
+                <div style={{position: 'relative'}} onClick={() => setOpenPriority(!openPriority)}>
+                  <ArrowDownIcon />
+                  {/* {openPriority && (
+                    <List className={classes.filterList}>
+                      {options.map(option => {
+                        return (
+                          <ListItem key={option.value}>
+                            <Typography variant="h6">{option.label}</Typography>
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  )} */}
+                </div>
+              </ClickAwayListener>
             </TableCell>
             <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>#</TableCell>
             <TableCell className={classes.stickyColumn}>Task</TableCell>
@@ -215,7 +258,7 @@ export default function TaskTable(props: TaskTableProps) {
                       onClick={(event: React.MouseEvent<HTMLDivElement>) => handleClickPriority(event, task)}
                     />
                     {isSelected && 
-                      (task.status === 'Delivered' || task.status === 'Accepted') && (
+                      (task.status === 'Deliver' || task.status === 'Accept') && (
                       <StyledItem
                         currentStatus="Rejected"
                         selected
