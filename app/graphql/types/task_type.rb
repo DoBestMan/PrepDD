@@ -5,6 +5,7 @@ module Types
     field :id, String, null: false
     field :name, String, null: true
     field :description, String, null: true
+    field :updated_at, GraphQL::Types::BigInt, null: true, method: :adjust_epoch
     field :priority, String, null: true
     field :status, String, null: true
     field :due_date, String, null: true
