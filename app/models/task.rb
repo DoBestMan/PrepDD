@@ -6,7 +6,8 @@ class Task < ApplicationRecord
   belongs_to :list
   belongs_to :task_section, optional: true
   has_many :task_owner
-  has_many :owners, through: :task_owner, source: :task
+  has_many :user_owners, through: :task_owner, :source => :task_ownerable, :source_type => 'User'
+  has_many :team_owners, through: :task_owner, :source => :task_ownerable, :source_type => 'Team'
 
   def self.import(files)
     require 'roo'
