@@ -15,6 +15,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForever';
 
 import * as cs from '../../../../../../constants/theme';
 import VersionDropdown from './VersionDropdown';
+import TitleDropdown from './TitleDropdown'
 import StatusLabel from '../../../../../common/StatusLabel';
 
 const Excel = require('images/dummy/logos/excel.svg');
@@ -24,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {},
     invisible: {
       display: 'none',
+    },
+    table: {
+      tableLayout: 'fixed', 
     },
     primary: {
       color: cs.COLORS.primary, 
@@ -47,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
         border: `1px solid ${cs.COLORS.primary}`, 
         borderRadius: '3px', 
       }
+    },
+    mr12: {
+      marginRight: '12px',
     }
   })
 );
@@ -74,7 +81,7 @@ export default function MultipleTasks(props: MultipleTasksProps) {
         <DeleteIcon className={classes.delete} />
       </div>
 
-      <Table>
+      <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
@@ -95,12 +102,16 @@ export default function MultipleTasks(props: MultipleTasksProps) {
             </TableCell>
             <TableCell>
               <div className={classes.flex}>
-                <img src={Excel} width="18" height="18" />
+                <img src={Excel} width="18" height="18" className={classes.mr12} />
                 <Typography variant="h6">File name</Typography>
               </div>
             </TableCell>
-            <TableCell>List Title</TableCell>
-            <TableCell>Task Title</TableCell>
+            <TableCell>
+              <TitleDropdown value="List Title" />
+            </TableCell>
+            <TableCell>
+              <TitleDropdown value="Task Title" />              
+            </TableCell>
             <TableCell>
               <StatusLabel currentStatus="Start" selected />
             </TableCell>

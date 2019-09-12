@@ -59,7 +59,7 @@ interface DropdownProps {
   handleUpdate?: (value: string) => void;
 }
 
-export default function TitleDropdown(props: DropdownProps) {
+export default function VersionDropdown(props: DropdownProps) {
   const {value, handleUpdate} = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState<boolean>(false);

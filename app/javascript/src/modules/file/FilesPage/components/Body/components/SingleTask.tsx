@@ -16,7 +16,7 @@ import DeleteIcon from '@material-ui/icons/DeleteForever';
 import * as cs from '../../../../../../constants/theme';
 import NameLabel from '../../../../../common/NameLabel';
 import StatusLabel from '../../../../../common/StatusLabel';
-import TitleDropdown from './TitleDropdown';
+import ListDropdown from './ListDropdown';
 import VersionDropdown from './VersionDropdown';
 
 const Excel = require('images/dummy/logos/excel.svg');
@@ -126,11 +126,11 @@ export default function SingleTask(props: SingleTaskProps) {
       />
 
       <div className={classes.flex} style={{marginTop: '24px'}}>
-        <TitleDropdown
+        <ListDropdown
           options={options}
           value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
         />
-        <TitleDropdown
+        <ListDropdown
           options={options}
           value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
         />

@@ -2,120 +2,108 @@ import React from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
-  ClickAwayListener, 
   Paper, 
   List, 
   ListItem, 
   Typography, 
 } from '@material-ui/core';
 
-import {OptionType} from '../../../../../../constants/types';
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       position: 'relative',
-      width: '450px', 
-      marginRight: '30px', 
+      cursor: 'pointer', 
+      width: '100px', 
     },
-    grow: {
-      flexGrow: 1,
-    },
+    hover: {
+      position: 'absolute', 
+      top: '-12px', 
+      left: '-6px', 
+      padding: '3px 6px', 
+      border: '1px solid #D8D8D8', 
+      borderRadius: '3px', 
+    }, 
+    flex: {
+      display: 'flex', 
+      alignItems: 'center', 
+    }, 
     paper: {
-      width: '100%',
+      width: '200px',
       position: 'absolute',
       border: '1px solid #D8D8D8', 
-      top: 42,
-      left: 0,
+      top: '17px',
+      left: '-6px',
       zIndex: 2,
     },
     invisible: {
       display: 'none',
     },
-    item: {
-      display: 'flex',
-      padding: '12px',
-      alignItems: 'center',
-      boxSizing: 'border-box',
-      color: '#606060',
-      fontFamily: 'Montserrat',
-      fontWeight: 600,
-      fontSize: '12px',
-      textTransform: 'capitalize',
-      '&:hover': {
-        cursor: 'pointer',
-        background: '#EBF2FF',
-      },
-    },
-    textFlow: {
-      display: 'inline-block',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      textOverflow: 'ellipsis',
-    },
+    mr12: {
+      marginRight: '12px',
+    }
   })
 );
 
 interface DropdownProps {
-  options: OptionType[];
   value: string;
   placeholder?: string;
   handleUpdate?: (value: string) => void;
 }
 
 export default function TitleDropdown(props: DropdownProps) {
-  const {options, value, placeholder, handleUpdate} = props;
+  const {value, handleUpdate} = props;
   const classes = useStyles();
   const [open, setOpen] = React.useState<boolean>(false);
-
-  const renderLabel = () => {
-    const res = options.find(option => option.value === value);
-    if (res) return res.label;
-    return placeholder;
-  };
-
-  const toggleMenu = () => setOpen(prev => !prev);
 
   const handleClick = (value: string) => {
     setOpen(prev => !prev);
     if (handleUpdate) handleUpdate(value);
   };
 
-  const handleClickAway = () => setOpen(false);
-
   return (
-    <div className={classes.root}>
-      <ClickAwayListener onClickAway={handleClickAway}>
-        <div>
-          <div className={classes.item} onClick={toggleMenu}>
-            <Typography variant="h6" className={classes.textFlow}>
-              {renderLabel()}              
-            </Typography>
-            <div className={classes.grow} />
+    <div 
+      className={classes.root}
+      onMouseOver={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div 
+        className={clsx(open && classes.hover)}
+        onMouseOver={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        <Typography variant="h6" className={classes.flex}>
+          {value}
+          {open && (
             <i className="fa fa-caret-down" style={{marginLeft: '12px'}}></i>
-          </div>
-          <Paper
-            className={clsx(
-              classes.paper,
-              !open && classes.invisible,
-            )}
-            elevation={0}
-            square
-          >
-            <List>
-              {options &&
-                options.map(option => (
-                  <ListItem key={option.value} onClick={() => handleClick(option.value)}>
-                    <Typography variant="h6" className={classes.textFlow}>
-                      {option.label}
-                    </Typography>
-                  </ListItem>
-                ))
-              }
-            </List>
-          </Paper>
-        </div>
-      </ClickAwayListener>
+          )}
+        </Typography>
+      </div>
+      <Paper
+        className={clsx(
+          classes.paper,
+          !open && classes.invisible,
+        )}
+        elevation={0}
+        square
+      >
+        <List>
+          <ListItem>
+            <Typography variant="h6">
+              List Title
+            </Typography>
+          </ListItem>
+          <ListItem>
+            <Typography variant="h6">
+              List Title
+            </Typography>
+          </ListItem>
+          <ListItem>
+            <Typography variant="h6">
+              List Title
+            </Typography>
+          </ListItem>
+        </List>
+      </Paper>
     </div>
   );
 }
