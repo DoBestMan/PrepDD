@@ -183,6 +183,10 @@ export default function OverviewPane(props: OverviewPaneProps) {
               <NameLabel label={reviewer.fullName as string} selected />
             )
           })}
+          <NameLabel
+            type="user"
+            label="Ruzza Stefano"
+          />
           <NameLabel label="+" selected />
         </div>
 
