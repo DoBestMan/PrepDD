@@ -11,9 +11,6 @@ import {
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
-      position: 'relative', 
-    },
-    flex: {
       display: 'flex', 
       alignItems: 'center', 
       padding: '3px 6px',
@@ -30,22 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: '3px',
       width: 'fit-content', 
       cursor: 'pointer', 
-    },
-    paper: {
-      position: 'absolute', 
-      top: '30px', 
-      left: '0px', 
-      backgroundColor: '#FFFFFF', 
-      zIndex: 1, 
-      width: 'max-content', 
-      minWidht: '100%',
-      border: '1px solid #D8D8D8', 
-    },
-    item: {
-      marginTop: '3px', 
-      marginBottom: '3px', 
-      paddingLeft: '12px', 
-      paddingRight: '12px', 
     },
     completed: {
       backgroundColor: '#509E6D'
@@ -71,13 +52,13 @@ const useStyles = makeStyles((theme: Theme) =>
 interface StyledItemProps {
   currentStatus: string;
   selected?: boolean;
-  onChange?: (newStatus: string) => void;
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  className?: string;
 }
 
 export default function StyledItem(props: StyledItemProps) {
-  const {currentStatus, selected} = props;
+  const {currentStatus, selected, onClick, className} = props;
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
 
   const completedElement = <div className={clsx(classes.status, classes.completed)} />;
   const deliveredElement = <div className={clsx(classes.status, classes.delivered)} />;
@@ -87,47 +68,38 @@ export default function StyledItem(props: StyledItemProps) {
   const rejectedElement = <div className={clsx(classes.status, classes.rejected)} />;
 
   const statusOptions = [
-    {value: 'Completed', element: completedElement},
-    {value: 'Delivered', element: deliveredElement}, 
-    {value: 'Finished', element: finishedElement}, 
-    {value: 'In Progress', element: inProgressElement}, 
-    {value: 'Unstarted', element: notStartedElement}, 
-    {value: 'Reject', element: rejectedElement},
+    {value: 'Reject', label: 'Reject', element: rejectedElement},
+    {value: 'Completed', label: 'Completed', element: completedElement},
+    {value: 'Accept', label: 'Accept', element: null},
+    {value: 'Deliver', label: 'Deliver', element: deliveredElement}, 
+    {value: 'Finish', label: 'Finish', element: finishedElement}, 
+    {value: 'Start', label: 'In Progress', element: inProgressElement}, 
+    {value: 'Unstarted', label: 'Not Started', element: notStartedElement}, 
+    {value: 'Rejected', label: 'Rejected', element: rejectedElement},
   ];
 
   const renderStatus = (status: string) => {
     const findOption = statusOptions.find(option => option.value === status);
 
     if (findOption) {
-      return findOption.element;
+      return (
+        <>
+          {findOption.element}
+          <Typography variant="h6">{findOption.label}</Typography>
+        </>
+      );
     }
-    return null;
+    return (
+      <Typography variant="h6">{currentStatus}</Typography>
+    )
   }
 
   return (
-    <div className={classes.root} onClick={() => setOpen(!open)}>
-      <div className={clsx(classes.flex, selected && classes.selected)}>
-        {renderStatus(currentStatus)}
-        <Typography variant="h6">{currentStatus}</Typography>
-      </div>
-      {open ? (
-        <Paper
-          className={classes.paper}
-          elevation={0}
-          square
-        >
-          <List>
-            {statusOptions.map(option => {
-              return (
-                <ListItem key={option.value} className={clsx(classes.flex, classes.item)}>
-                  {renderStatus(option.value)}
-                  <Typography variant="h6">{option.value}</Typography>
-                </ListItem>            
-              )
-            })}
-          </List>
-        </Paper>
-      ) : null}
+    <div 
+      className={clsx(classes.root, className, selected && classes.selected)}
+      onClick={onClick}
+    >
+      {renderStatus(currentStatus)}
     </div>
   )
 }

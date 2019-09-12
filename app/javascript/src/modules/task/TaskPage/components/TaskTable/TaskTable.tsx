@@ -9,6 +9,9 @@ import {
   TableRow, 
   TableCell, 
   Typography, 
+  List, 
+  ListItem,
+  ClickAwayListener, 
 } from '@material-ui/core';
 import SmsIcon from '@material-ui/icons/SmsOutlined';
 import ListIcon from '@material-ui/icons/ListAlt';
@@ -19,7 +22,15 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
 
-import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks'
+import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
+import {useUpdateTask} from '../../../../../graphql/mutations/UpdateTask';
+
+const options = [
+  {label: 'All', value: 'all'}, 
+  {label: 'High', value: 'high'}, 
+  {label: 'Medium', value: 'medium'}, 
+  {label: 'Low', value: 'Low'}, 
+];
 
 const useStyles = makeStyles((theme: Theme) => 
   createStyles({
@@ -29,6 +40,22 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       tableLayout: 'fixed', 
+      borderCollapse: 'separate',
+    },
+    filterList: {
+      position: 'absolute', 
+      top: '18px', 
+      left: '3px', 
+      background: '#FFFFFF', 
+      border: '1px solid #D8D8D8', 
+      borderRadius: '3px', 
+      zIndex: 2, 
+    },
+    stickyColumn: {
+      position: 'sticky',
+      top: '0px',
+      backgroundColor: '#FFFFFF',
+      zIndex: 1,
     },
     flex: {
       display: 'flex', 
@@ -39,6 +66,10 @@ const useStyles = makeStyles((theme: Theme) =>
       height: '24px', 
       marginRight: '12px', 
       backgroundColor: '#2792A2', 
+    },
+    rejectStatus: {
+      position: 'absolute', 
+      left: '-90px',
     },
     textFlow: {
       display: 'inline-block',
@@ -54,6 +85,9 @@ const useStyles = makeStyles((theme: Theme) =>
     hoverRow: {
       opacity: 1, 
     }, 
+    selectedRow: {
+      backgroundColor: '#EBF2FF',
+    },
     miniColumn: {
       paddingRight: '16px', 
       width: '20px', 
@@ -67,16 +101,87 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface TaskTableProps {
   tasks: UserTasks_userTasks[];
+  taskId: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
+  onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
 }
 
 export default function TaskTable(props: TaskTableProps) {
   const {
     tasks, 
-    setOpen
+    taskId, 
+    setOpen,
+    setCurrentTask,
+    onScroll, 
   } = props;
   const classes = useStyles();
+
+  const [openPriority, setOpenPriority] = useState<boolean>(false);
   const [hover, setHover] = useState<number>(-1);
+  const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
+    __typename: "Task",
+    id: '',
+    name: null,
+    priority: null,
+    status: null,
+    dueDate: null,
+    updatedAt: '',
+    userOwners: null,
+    teamOwners: null,
+    userReviewers: null,
+    teamReviewers: null,
+  });
+
+  const [updateTask, {
+    loading: updateTaskLoading, 
+    data: updateTaskRes, 
+    error: updateTaskError
+  }] = useUpdateTask({
+    id: selectedTask.id, 
+    name: selectedTask.name, 
+    status: selectedTask.status, 
+  });
+
+  const handleClickPriority = (event: React.MouseEvent<HTMLDivElement>, task: UserTasks_userTasks) => {
+    event.stopPropagation();
+    
+    const asyncSetState = async (newTask: UserTasks_userTasks) => {
+      await setSelectedTask(newTask);
+      updateTask();
+    };
+
+    let updatedTask = task;
+    switch (task.status) {
+      case 'Rejected':
+        updatedTask.status = 'Unstarted';
+        break;
+      case 'Unstarted': 
+        updatedTask.status = 'Start';
+        break;
+      case 'Start':
+        updatedTask.status = 'Finish';
+        break;
+      case 'Finish':
+        updatedTask.status = 'Deliver';
+        break;
+      case 'Deliver':
+        updatedTask.status = 'Accept';
+        break;
+      case 'Accept':
+        updatedTask.status = 'Completed';
+        break;
+      default:
+        updatedTask.status = 'Rejected';
+        break;
+    }
+    asyncSetState(updatedTask);
+  }
+
+  const handleClickRow = (task: UserTasks_userTasks) => {
+    setOpen(open => !open);
+    setCurrentTask(task);
+  }
 
   const renderOthers = (isSelected: boolean) => {
     return (
@@ -93,21 +198,36 @@ export default function TaskTable(props: TaskTableProps) {
   }
 
   return (
-    <Paper
+    <div
       className={classes.root}
-      elevation={0}
+      onScroll={onScroll}
     >
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell className={classes.miniColumn}>
-              <ArrowDownIcon />
+            <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>
+              <ClickAwayListener onClickAway={() => setOpenPriority(false)}>
+                <div style={{position: 'relative'}} onClick={() => setOpenPriority(!openPriority)}>
+                  <ArrowDownIcon />
+                  {/* {openPriority && (
+                    <List className={classes.filterList}>
+                      {options.map(option => {
+                        return (
+                          <ListItem key={option.value}>
+                            <Typography variant="h6">{option.label}</Typography>
+                          </ListItem>
+                        )
+                      })}
+                    </List>
+                  )} */}
+                </div>
+              </ClickAwayListener>
             </TableCell>
-            <TableCell className={classes.miniColumn}>#</TableCell>
-            <TableCell>Task</TableCell>
-            <TableCell style={{width: '180px'}} >Status</TableCell>
-            <TableCell style={{width: '200px'}} >Modified</TableCell>
-            <TableCell align="right" style={{width: '150px'}} />
+            <TableCell className={clsx(classes.miniColumn, classes.stickyColumn)}>#</TableCell>
+            <TableCell className={classes.stickyColumn}>Task</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '180px'}} >Status</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '200px'}} >Modified</TableCell>
+            <TableCell className={classes.stickyColumn} style={{width: '150px'}} />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -117,7 +237,8 @@ export default function TaskTable(props: TaskTableProps) {
             return (
               <TableRow 
                 key={index} 
-                onClick={() => setOpen(open => !open)}
+                className={clsx(task.id === taskId && classes.selectedRow)}
+                onClick={() => handleClickRow(task)}
                 onMouseOver={() => setHover(index)}
               >
                 <TableCell className={classes.priorityColumn}>
@@ -130,15 +251,29 @@ export default function TaskTable(props: TaskTableProps) {
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <StyledItem currentStatus={task.status as string} selected={isSelected} />
+                  <div className={classes.flex} style={{position: 'relative'}}>
+                    <StyledItem 
+                      currentStatus={task.status as string} 
+                      selected={isSelected} 
+                      onClick={(event: React.MouseEvent<HTMLDivElement>) => handleClickPriority(event, task)}
+                    />
+                    {isSelected && 
+                      (task.status === 'Deliver' || task.status === 'Accept') && (
+                      <StyledItem
+                        currentStatus="Rejected"
+                        selected
+                        className={classes.rejectStatus}
+                      />
+                    )}
+                  </div>
                 </TableCell>
-                <TableCell>{task.dueDate}</TableCell>
+                <TableCell>{task.updatedAt}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
-    </Paper>
+    </div>
   )
 }
