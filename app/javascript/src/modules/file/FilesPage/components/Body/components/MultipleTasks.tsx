@@ -120,6 +120,30 @@ export default function MultipleTasks(props: MultipleTasksProps) {
               <VersionDropdown value="Update" />
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell padding="checkbox">
+              <Checkbox color="primary" />
+            </TableCell>
+            <TableCell>
+              <div className={classes.flex}>
+                <img src={Excel} width="18" height="18" className={classes.mr12} />
+                <Typography variant="h6">File name</Typography>
+              </div>
+            </TableCell>
+            <TableCell>
+              <TitleDropdown value="List Title" />
+            </TableCell>
+            <TableCell>
+              <TitleDropdown value="Task Title" />              
+            </TableCell>
+            <TableCell>
+              <StatusLabel currentStatus="Deliver" selected />
+            </TableCell>
+            <TableCell>Add...</TableCell>
+            <TableCell>
+              <VersionDropdown value="Update" />
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </Paper>
