@@ -3,6 +3,7 @@ class Task < ApplicationRecord
   enum status: { Rejected: 0, Unstarted: 1, Start: 2, Finish: 3, Deliver: 4,
                  Accept: 5, Completed: 6, Reject: 7 }
 
+  #
   belongs_to :list
   belongs_to :task_section, optional: true
   has_many :task_owner
