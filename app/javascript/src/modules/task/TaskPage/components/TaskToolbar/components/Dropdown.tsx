@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'fit-content',
       '&:hover': {
         cursor: 'pointer',
-        background: '#EBF2FF',
       },
     },
     outlined: {

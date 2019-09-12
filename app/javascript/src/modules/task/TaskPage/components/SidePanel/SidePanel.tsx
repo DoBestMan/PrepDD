@@ -16,6 +16,8 @@ import InternalPane from './components/InternalPane';
 import TimelinePane from './components/TimelinePane';
 import StyledItem from '../TaskTable/components/StyledItem';
 
+import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
+
 const panelWidth = 500;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,21 +51,36 @@ const useStyles = makeStyles((theme: Theme) =>
     statusBlock: {
       marginTop: '12px', 
       paddingLeft: '8px', 
-    }
+    },
+    textFlow: {
+      display: 'inline-block',
+      width: 'fit-content',
+      maxWidth: 'calc(80%)',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    },
   })
 );
 
 const labels = ["Overview", "Files", "Public", "Internal", "Timeline"];
 
-export default function ListDetailPage(props: {open: boolean}) {
+interface TaskDetailPageProps {
+  open: boolean;
+  selectedTask: UserTasks_userTasks;
+}
+
+export default function TaskDetailPage(props: TaskDetailPageProps) {
+  const {open, selectedTask} = props;
   const classes = useStyles();
 
+  console.log("Selected Task: ", selectedTask);
   return (
     <Drawer
       className={classes.drawer}
       variant="persistent"
       anchor="right"
-      open={props.open}
+      open={open}
       classes={{
         paper: classes.drawerPaper,
       }}
@@ -72,18 +89,18 @@ export default function ListDetailPage(props: {open: boolean}) {
       <div className={classes.drawerHeader}>
         <div className={classes.flex}>
           <RightIcon className={classes.priority} />
-          <Typography variant="h2">
-            R-903 <span className={classes.light}>Series B Funding</span>
+          <Typography variant="h2" className={classes.textFlow}>
+            R-903 <span className={classes.light}>{selectedTask.name}</span>
           </Typography>
         </div>
         <div className={clsx(classes.flex, classes.statusBlock)}>
-          <StyledItem currentStatus="Finished" selected />
+          <StyledItem currentStatus={selectedTask.status as string} selected />
           <div className={classes.grow} />
           <MoreIcon />
         </div>
       </div>
       <Panel labels={labels} padding>
-        <OverviewPane />
+        <OverviewPane task={selectedTask} />
         <FilesPane />
         <PublicPane />
         <InternalPane />

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_10_220419) do
+ActiveRecord::Schema.define(version: 2019_09_11_184105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,8 @@ ActiveRecord::Schema.define(version: 2019_09_10_220419) do
     t.bigint "responder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "requester_rank"
+    t.integer "responder_rank"
     t.index ["requester_id"], name: "index_lists_on_requester_id"
     t.index ["responder_id"], name: "index_lists_on_responder_id"
   end
@@ -140,6 +142,26 @@ ActiveRecord::Schema.define(version: 2019_09_10_220419) do
     t.string "name"
   end
 
+  create_table "task_message_alerts", force: :cascade do |t|
+    t.bigint "task_message_id"
+    t.bigint "user_id"
+    t.boolean "is_read", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_message_id"], name: "index_task_message_alerts_on_task_message_id"
+    t.index ["user_id"], name: "index_task_message_alerts_on_user_id"
+  end
+
+  create_table "task_messages", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "team_id"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_task_messages_on_team_id"
+    t.index ["user_id"], name: "index_task_messages_on_user_id"
+  end
+
   create_table "task_owners", force: :cascade do |t|
     t.bigint "task_id"
     t.string "task_ownerable_type"
@@ -188,6 +210,18 @@ ActiveRecord::Schema.define(version: 2019_09_10_220419) do
     t.datetime "updated_at", null: false
     t.index ["team_id"], name: "index_teams_users_on_team_id"
     t.index ["user_id"], name: "index_teams_users_on_user_id"
+  end
+
+  create_table "user_notification_frequencies", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_notification_scopes", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

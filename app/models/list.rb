@@ -5,4 +5,12 @@ class List < ApplicationRecord
   has_many :tasks
   has_many :lists_users
   has_many :owners, class_name: 'User', through: :lists_users, source: :user
+
+  after_create :add_rank
+
+  def add_rank
+    self.responder_rank = self.id
+    self.requester_rank = self.id
+    self.save!
+  end
 end

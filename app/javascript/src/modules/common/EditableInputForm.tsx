@@ -10,38 +10,34 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginTop: '24px',
+      height: 'fit-content', 
+    },
+    title: {
+      width: '100%', 
+      height: 'fit-content', 
+      borderBottom: '1px solid #D8D8D8', 
     },
     input: {
       width: '100%',
-      height: '36px',
       color: '#000000',
+      lineHeight: '24px',
       fontFamily: cs.FONT.family,
-      fontSize: cs.FONT.size.md,
-      fontWeight: cs.FONT.weight.bold,
+      fontSize: cs.FONT.size.sm,
+      fontWeight: cs.FONT.weight.regular,
+      outline: 'none',
       border: 'none',
-      borderBottom: '1px solid #D8D8D8',
-      '&::placeholder': {
-        color: '#red',
-      },
-      '&:hover': {
-        border: 'none',
-        borderBottom: '1px solid #D8D8D8',
-      },
-      '&:focus': {
-        border: 'none',
-        borderBottom: '1px solid #D8D8D8',
-        outline: 'none',
-      },
+      borderBottom: '1px solid #D8D8D8',      
     },
     nonEditable: {
       display: 'flex',
-      height: '36px',
+      height: 'fit-content',
       alignItems: 'center',
-      borderBottom: '1px solid #D8D8D8',
     },
     nonEditableIcon: {
+      fontSize: '15px', 
       marginLeft: '12px',
       color: '#3A84FF',
+      marginBottom: '-3px',
     },
     secondary: {
       color: '#606060',
@@ -84,23 +80,26 @@ export default function EditableInputForm(props: EditableInputFormProps) {
       )}
       <ClickAwayListener onClickAway={handleClickAway}>
         {editable ? (
-          <input
-            type="text"
+          // <textarea
+          //   className={classes.input}
+          //   value={value}
+          //   autoFocus
+          // />
+          <div 
             className={classes.input}
-            value={value}
-            onChange={onChange}
-            onKeyUp={handleKeyUp}
-          />
+            contentEditable={true}
+          >
+            {value}
+          </div>
         ) : (
           <div className={classes.nonEditable}>
-            <Typography variant="h4">
+            <Typography variant="h5" className={classes.title}>
               {value}
+              <UpdateIcon
+                className={classes.nonEditableIcon}
+                onClick={() => setEditable(true)}
+              />
             </Typography>
-            <UpdateIcon
-              className={classes.nonEditableIcon}
-              fontSize="small"
-              onClick={() => setEditable(true)}
-            />
           </div>
         )}
       </ClickAwayListener>

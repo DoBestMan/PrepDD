@@ -19,9 +19,12 @@ export const useUserTasks = createQueryHook<UserTasks, {}>(gql`
       priority
       status
       dueDate
+      updatedAt
       userOwners{
         id
+        email
         fullName
+        profileUrl
       }
       teamOwners{
         id
