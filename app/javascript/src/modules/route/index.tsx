@@ -5,6 +5,7 @@ import LoadingFallback from '../common/LoadingFallback';
 import NotFoundPage from '../common/NotFoundPage';
 import CreateListPage from '../list/CreateListPage';
 import CreateTaskPage from '../task/CreateTaskPage';
+import FilesPage from '../file/FilesPage';
 
 import {useGlobalState} from '../../store';
 
@@ -43,6 +44,7 @@ export default function Router() {
           <PrivateRoute path="/app" component={AppRoutes} />
           <PrivateRoute path="/create/list" component={CreateListPage} />
           <PrivateRoute path="/create/task" component={CreateTaskPage} />
+          <PrivateRoute path="/files" component={FilesPage} />
           <Route path="/" component={AuthRoutes} />
         </Switch>
       </BrowserRouter>

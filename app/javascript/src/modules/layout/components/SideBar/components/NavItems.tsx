@@ -85,7 +85,7 @@ const mainPages = [
   },
   {
     title: 'Files',
-    href: '/app/files',
+    href: '/files',
     icon: <LayersIcon />,
   },
 ];
