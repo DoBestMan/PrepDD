@@ -10,8 +10,7 @@ class Mutations::UpdateTask < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(id: nil, name: nil, description: nil, priority: nil, status: nil, due_date: nil,
-              user_owners: nil, user_reviewers:nil, team_owners: nil, team_reviewers: nil)
+  def resolve(id: nil, name: nil, description: nil, priority: nil, status: nil, due_date: nil)
 
     response = { errors: [] }
 
