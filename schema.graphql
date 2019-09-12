@@ -178,7 +178,7 @@ type Mutation {
   signOutUser: SignOutUserPayload
   signUpUser(companyName: String, email: String!, fullName: String!, password: String!, provider: String, socialLogin: Boolean, tokenID: String, uuID: String): SignUpUserPayload
   updateCompanySettings(automaticPdf: Boolean, brokerId: ID, deleteBrokerId: ID, deleteParentId: ID, dynamicWatermarking: Boolean, id: ID!, name: String, parentId: ID, previewOnly: Boolean): UpdateCompanySettingsPayload
-  updateTask(description: String, id: ID!, name: String, priority: String, status: String): UpdateTaskPayload
+  updateTask(description: String, dueDate: String, id: ID!, name: String, priority: String, status: String, teamOwners: [ID!], teamReviewers: [ID!], userOwners: [String!], userReviewers: [String!]): UpdateTaskPayload
   updateTeamMember(companyId: ID!, fullName: String!, id: ID!, role: ID!): UpdateTeamMemberPayload
   updateUserData(displayName: String!, email: String!, fullName: String!, lastViewedCompanyId: ID): UpdateUserDataPayload
   updateUserPassword(oldPassword: String!, password: String!): UpdateUserPasswordPayload
