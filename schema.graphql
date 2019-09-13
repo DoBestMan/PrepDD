@@ -390,6 +390,7 @@ type Task {
   id: String!
   isActive: Boolean
   list: List
+  messages: [TaskMessage!]
   name: String
   priority: String
   section: TaskSection
@@ -412,6 +413,16 @@ input TaskAttributes {
   priority: String!
   section: String!
   status: String!
+}
+
+"""
+TaskMessage
+"""
+type TaskMessage {
+  id: ID!
+  message: String!
+  task: Task!
+  user: User!
 }
 
 """
