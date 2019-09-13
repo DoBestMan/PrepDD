@@ -1,5 +1,6 @@
 module Types
   class MutationType < GraphQL::Schema::Object
+    field :createTaskMessages, mutation: Mutations::CreateTaskMessages
     field :addTaskOwners, mutation: Mutations::AddTaskOwners
     field :updateTask, mutation: Mutations::UpdateTask
     field :deleteLists, mutation: Mutations::DeleteLists
