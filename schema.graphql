@@ -430,6 +430,7 @@ TaskMessage
 """
 type TaskMessage {
   id: ID!
+  isPublic: Boolean!
   message: String!
   task: Task!
   user: User!
