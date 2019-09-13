@@ -410,6 +410,7 @@ type Task {
   id: String!
   isActive: Boolean
   list: List
+  listNumber: Int
   messages: [TaskMessage!]
   name: String
   priority: String
@@ -417,7 +418,7 @@ type Task {
   status: String
   teamOwners: [Team!]
   teamReviewers: [Team!]
-  updatedAt: String!
+  updatedAt: String
   userOwners: [User!]
   userReviewers: [User!]
 }

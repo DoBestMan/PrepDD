@@ -53,7 +53,7 @@ export interface AddTaskOwners_addTaskOwners_task {
   priority: string | null;
   status: string | null;
   dueDate: string | null;
-  updatedAt: string;
+  updatedAt: string | null;
   userOwners: AddTaskOwners_addTaskOwners_task_userOwners[] | null;
   teamOwners: AddTaskOwners_addTaskOwners_task_teamOwners[] | null;
   userReviewers: AddTaskOwners_addTaskOwners_task_userReviewers[] | null;
