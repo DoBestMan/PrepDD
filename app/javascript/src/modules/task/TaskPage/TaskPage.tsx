@@ -45,7 +45,6 @@ export default function TaskPage() {
   const [openSidePanel, setOpenSidePanel] = useState<boolean>(false);
   const [lists, setLists] = useState<UserLists_userLists_lists[]>([]);
   const [tasks, setTasks] = useState<UserTasks_userTasks[]>([]);
-
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
@@ -56,6 +55,7 @@ export default function TaskPage() {
     status: '',
     dueDate: '',
     updatedAt: '',
+//		listNumber: null,
     userOwners: null,
     teamOwners: null,
     userReviewers: null,
@@ -80,6 +80,9 @@ export default function TaskPage() {
 
     if (loading || !lists) return;
     setLists(lists);
+    /*- TODO:  <13-09-19, mpf: this is a bit hacky, but works to load the 
+    page in w/ all tasks> -*/
+    setSelectedLists(lists.map(l => l.id))
   }, [loading, idx(data, data => data.userLists.lists)]);
 
   useEffect(() => {
