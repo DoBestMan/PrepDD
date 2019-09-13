@@ -6,5 +6,6 @@ module Types
     field :user, UserType, null: false
     field :task, TaskType, null: false
     field :message, String, null: false 
+    field :isPublic, Boolean, null: false
   end
 end
