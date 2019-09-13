@@ -17,6 +17,7 @@ module Types
     field :teamOwners, [TeamType], null: true
     field :teamReviewers, [TeamType], null: true
     field :updated_at, String, null: false
+    field :taskMessages, [TaskMessage ], null: true
 
     def section
       object.task_section
