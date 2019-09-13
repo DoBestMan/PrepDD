@@ -53,7 +53,7 @@ export interface UpdateTask_updateTask_task {
   priority: string | null;
   status: string | null;
   dueDate: string | null;
-  updatedAt: string;
+  updatedAt: string | null;
   userOwners: UpdateTask_updateTask_task_userOwners[] | null;
   teamOwners: UpdateTask_updateTask_task_teamOwners[] | null;
   userReviewers: UpdateTask_updateTask_task_userReviewers[] | null;

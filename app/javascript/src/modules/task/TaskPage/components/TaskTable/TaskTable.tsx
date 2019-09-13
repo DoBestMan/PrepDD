@@ -127,6 +127,7 @@ export default function TaskTable(props: TaskTableProps) {
     status: null,
     dueDate: null,
     updatedAt: '',
+    listNumber: null,
     userOwners: null,
     teamOwners: null,
     userReviewers: null,
@@ -244,7 +245,7 @@ export default function TaskTable(props: TaskTableProps) {
                 <TableCell className={classes.priorityColumn}>
                   {task.priority === 'high' && <RightIcon />}
                 </TableCell>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{task.listNumber}</TableCell>
                 <TableCell>
                   <Typography variant="h6" className={classes.textFlow}>
                     {task.name}

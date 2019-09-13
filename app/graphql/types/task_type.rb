@@ -11,6 +11,7 @@ module Types
     field :due_date, String, null: true
     field :section, TaskSectionType, null: true
     field :isActive, Boolean, null: true
+    field :list_number, Int, null: true
     field :list, ListType, null: true
     field :userOwners, [UserType], null: true
     field :userReviewers, [UserType], null: true

@@ -55,7 +55,7 @@ export default function TaskPage() {
     status: '',
     dueDate: '',
     updatedAt: '',
-//		listNumber: null,
+    listNumber: null,
     userOwners: null,
     teamOwners: null,
     userReviewers: null,
