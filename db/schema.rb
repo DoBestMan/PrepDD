@@ -154,11 +154,11 @@ ActiveRecord::Schema.define(version: 2019_09_11_184105) do
 
   create_table "task_messages", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "team_id"
+    t.bigint "task_id"
     t.text "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["team_id"], name: "index_task_messages_on_team_id"
+    t.index ["task_id"], name: "index_task_messages_on_task_id"
     t.index ["user_id"], name: "index_task_messages_on_user_id"
   end
 
