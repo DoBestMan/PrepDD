@@ -16,7 +16,6 @@ module Types
     field :userReviewers, [UserType], null: true
     field :teamOwners, [TeamType], null: true
     field :teamReviewers, [TeamType], null: true
-    field :updated_at, String, null: false
 
     def section
       object.task_section
