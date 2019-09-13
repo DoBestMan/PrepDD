@@ -18,6 +18,9 @@ class User < ApplicationRecord
 
   has_many :task_owners, as: :task_ownerable
   has_many :owned_tasks, class_name: 'Task', through: :task_owners, :source => :task_ownerable, :source_type => 'User'
+
+  has_many :task_messages
+
   has_one_attached :profile_picture
 
   after_create :update_last_viewed_company
