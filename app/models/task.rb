@@ -16,6 +16,8 @@ class Task < ApplicationRecord
     self.updated_at.to_f * 1000
   end
 
+  has_many :task_messages
+
   def self.import(files)
     require 'roo'
 
