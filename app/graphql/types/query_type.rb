@@ -105,11 +105,14 @@ module Types
         tasks += list.tasks
       end
 
-      section_ids&.each do |section_id|
-        section = TaskSection.find(section_id)
-        tasks += section.tasks
+      ## If section ids are sent -- only display the tasks which are
+      ## in that section
+      if section_ids.any?
+        #  TODO:3  <13-09-19, mpf: make this less ugly> #
+        tasks = tasks.select {|t| section_ids.include?(t.task_section_id.to_s)}
       end
 
+      tasks.sort_by! &:priority
       tasks.drop(offset).first(limit)
     end
 

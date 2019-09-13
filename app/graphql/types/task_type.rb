@@ -11,12 +11,13 @@ module Types
     field :due_date, String, null: true
     field :section, TaskSectionType, null: true
     field :isActive, Boolean, null: true
+    field :list_number, Int, null: true
     field :list, ListType, null: true
     field :userOwners, [UserType], null: true
     field :userReviewers, [UserType], null: true
     field :teamOwners, [TeamType], null: true
     field :teamReviewers, [TeamType], null: true
-    field :updated_at, String, null: false
+    field :messages, [TaskMessageType ], null: true
 
     def section
       object.task_section
@@ -38,5 +39,8 @@ module Types
       object.task_owner.where(task_ownerable_type: 'Team', owner_type: "Reviewer").map{|task| task.task_ownerable}
     end
 
+    def messages
+      object.task_messages
+    end
   end
 end

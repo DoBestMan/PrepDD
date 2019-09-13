@@ -96,9 +96,10 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
       <div className={classes.drawerSpacer} />
       <div className={classes.drawerHeader}>
         <div className={classes.flex}>
-          <RightIcon className={classes.priority} />
+          {selectedTask.priority === 'high' && <RightIcon className={classes.priority} /> }
           <Typography variant="h2" className={classes.textFlow}>
-            R-903 <span className={classes.light}>{selectedTask.name}</span>
+            { selectedTask.listNumber ? selectedTask.listNumber + " " : " "}
+            <span className={classes.light}>{selectedTask.name}</span>
           </Typography>
         </div>
         <div className={clsx(classes.flex, classes.statusBlock)}>
