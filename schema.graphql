@@ -194,7 +194,7 @@ type Mutation {
   createCompany(name: String!): CreateCompanyPayload
   createList(description: String, name: String!, requesterId: ID, responderId: ID, tasks: [TaskAttributes!]): CreateListPayload
   createTask(listId: ID!, tasks: [TaskAttributes!]!): CreateTaskPayload
-  createTaskMessages(message: String!, taskId: ID!, userId: ID!): CreateTaskMessagesPayload
+  createTaskMessages(isPublic: Boolean, message: String!, taskId: ID!, userId: ID): CreateTaskMessagesPayload
   createTeam(companyID: String!, name: String!): CreateTeamPayload
   deleteLists(listIds: [ID!]!): DeleteListsPayload
   deleteTaskMessage(id: ID!): DeleteTaskMessagePayload
@@ -450,6 +450,7 @@ input TaskAttributes {
 TaskMessage
 """
 type TaskMessage {
+  createdAt: String!
   id: ID!
   isPublic: Boolean!
   message: String!

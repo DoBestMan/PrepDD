@@ -7,5 +7,8 @@ module Types
     field :task, TaskType, null: false
     field :message, String, null: false 
     field :isPublic, Boolean, null: false
+    # Right now, we're not implementing editing on messages -- 
+    # but we will, so this field name will change
+    field :createdAt, String, null: false, method: :last_updated_at
   end
 end

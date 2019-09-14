@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Typography
@@ -52,11 +53,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface MessageProps {
   data: {
-    from: string; 
-    to: string;
-    content: string;
-    time: string;
+    message: string;
     status: boolean;
+		user: any;
+		createdAt: string;
   }, 
   className?: string;
 }
@@ -68,22 +68,22 @@ export default function Message(props: MessageProps) {
   return (
     <div className={clsx(classes.root, className)}>
       <div className={classes.flex}>
-        <DefaultUserImage userName={data.from} className={classes.avatar} />
+        <DefaultUserImage userName={data.user && data.user.fullName || ""} className={classes.avatar} />
         <Typography variant="h6">
-          {data.from}
+          {data.user && data.user.fullName}
         </Typography>
         <div className={classes.grow} />
         {data.status && (
           <div className={classes.status} />
         )}
         <Typography variant="h6" className={classes.secondary}>
-          {data.time}
+          {data.createdAt}
         </Typography>
       </div>
       <div className={classes.content}>
         <Typography variant="h6" color="textSecondary">
-          <span className={classes.primary}>{data.to + ' '}</span>
-          {data.content}
+          { false && <span className={classes.primary}>{' '}</span> }
+          {data.message}
         </Typography>
       </div>
     </div>

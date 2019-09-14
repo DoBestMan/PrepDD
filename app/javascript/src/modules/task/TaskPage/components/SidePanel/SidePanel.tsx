@@ -116,7 +116,9 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
           setTasks={setTasks}
         />
         <FilesPane />
-        <PublicPane />
+        <PublicPane 
+					task = { selectedTask }
+				/>
         <InternalPane />
         <TimelinePane />
       </Panel>
