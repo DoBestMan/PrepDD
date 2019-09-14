@@ -94,8 +94,23 @@ module Types
       argument :id, ID, required: true
     end
 
+    field :private_task_messages, [TaskMessageType], null: false do
+      description 'A separate query to retrieve private messages'
+      argument :task_id, ID, required: true
+    end
+
+    ## For tasks and private_task_messages, ids can come in as empty
+    ## strings, so have to explicitly check
+    def private_task_messages(task_id:)
+      return nil if task_id == ''
+      Task.find(task_id.to_i)
+        .task_messages
+        .where(is_public: false)
+    end
+
     def task(id:)
-      Task.find(id)
+      return nil if id == ''
+      Task.find(id.to_i)
     end
 
     def user_tasks(list_ids: nil, section_ids: nil, limit: nil, offset: nil)

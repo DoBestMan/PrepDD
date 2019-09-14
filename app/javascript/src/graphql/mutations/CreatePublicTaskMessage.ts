@@ -9,7 +9,7 @@ const createPublicTaskMessage = createMutationHook<
 	CreatePublicTaskMessageVariables 
 >(gql`
 	mutation CreatePublicTaskMessage($taskId: ID!, $message: String!) {
-		createTaskMessages(taskId: $taskId, message: $message) {
+		createTaskMessages(taskId: $taskId, message: $message, isPublic: true) {
 			success
 			message {
 				id

@@ -237,6 +237,11 @@ type Query {
   list(id: ID!): List!
 
   """
+  A separate query to retrieve private messages
+  """
+  privateTaskMessages(taskId: ID!): [TaskMessage!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!

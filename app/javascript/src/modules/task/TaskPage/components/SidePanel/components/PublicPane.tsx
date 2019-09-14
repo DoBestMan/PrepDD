@@ -89,19 +89,22 @@ interface InternalPaneProps {
   index?: number;
   //- TODO:  <14-09-19, mpf> -
 	// we just need the task id 
-	task?:  taskType;
+	taskId?:  string;
 }
 
 export default function InternalPane(props: InternalPaneProps) {
-  const {value, index, task} = props;
+  const {value, index, taskId} = props;
   const classes = useStyles();
 
 	const [messages, setMessages] = useState<any[]>([]);
-	const {loading, data, error} = taskMessages({id: 16});
+	const data = taskMessages({id: taskId});
 
+	// initialize new Message to empty string
 	const [newMessage, setNewMessage] = useState<string>('');
-  const [createMessage, res] = createPublicMessage({message: newMessage, taskId: '16'});
+	// upcates state
 	const updateNewMessage = (e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)
+  // [run mutation, response]
+  const [createMessage, res] = createPublicMessage({message: newMessage, taskId: '16'});
 
 	const handleSendClick = () => {
 		createMessage();
@@ -110,11 +113,10 @@ export default function InternalPane(props: InternalPaneProps) {
 
   // loads messages at query change
 	useEffect(() => {
-		const messages = idx(data, data => data.task.messages);
+		const messages = idx(data, data => data.data.task.messages);
 
-		if (loading) return;
 		if (messages) setMessages(messages);
-	}, [loading])
+	}, [data])
 
 	// updates DOM
 	useEffect(() => {
@@ -122,8 +124,6 @@ export default function InternalPane(props: InternalPaneProps) {
 
 		if (newMessage) setMessages([...messages, newMessage])
 	}, [res] )
-
-	
 
   return (
     <Paper

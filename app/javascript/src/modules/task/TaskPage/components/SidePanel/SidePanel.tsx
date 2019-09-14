@@ -117,9 +117,11 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
         />
         <FilesPane />
         <PublicPane 
-					task = { selectedTask }
+					taskId = { selectedTask.id }
 				/>
-        <InternalPane />
+        <InternalPane 
+					taskId = { selectedTask.id }
+				/>
         <TimelinePane />
       </Panel>
     </Drawer>
