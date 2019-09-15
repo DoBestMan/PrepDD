@@ -17,6 +17,8 @@ import {
   UserTasks_userTasks
 } from '../../../graphql/queries/__generated__/UserTasks';
 
+import deleteTasks from '../../../graphql/mutations/DeleteTasks';
+
 const PANEL_WIDTH = 500;
 const LIMIT = 20;
 
@@ -79,6 +81,12 @@ export default function TaskPage() {
     limit: LIMIT,
     offset: 0, 
   });
+
+	const [doDelete, {
+		loading: deleteLoading,
+		data: deleteData,
+		error: deleteError
+	}] = deleteTasks({taskIds: multiTasks})
 
   useEffect(() => {
     const lists = idx(data, data => data.userLists.lists);
@@ -147,7 +155,19 @@ export default function TaskPage() {
     });
   };
 
-	const batchDelete = () => null
+	/* performs the batch delete */
+	/* uses: state of multiTasks (ids of tasks user has selected) 
+           state of tasks 
+     updates: state of task 
+	            state of multiTasks 
+  */
+	const batchDelete = () => {
+		doDelete();
+		tasks.filter(t => multiTasks.includes(t.id));
+		setTasks(tasks);
+		setMultiTasks([]);
+		closeDeleteModal();
+	}
 
   return (
     <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
