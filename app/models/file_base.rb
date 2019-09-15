@@ -1,0 +1,2 @@
+class FileBase < ApplicationRecord
+end
