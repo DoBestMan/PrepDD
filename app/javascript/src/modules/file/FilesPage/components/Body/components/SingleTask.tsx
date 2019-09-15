@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import {withRouter} from 'react-router';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper, 
@@ -11,14 +12,19 @@ import {
   TableRow, 
   TableCell, 
   Checkbox, 
+	Button
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 
+import { useDropzone } from 'react-dropzone'
 import * as cs from '../../../../../../constants/theme';
 import NameLabel from '../../../../../common/NameLabel';
 import StatusLabel from '../../../../../common/StatusLabel';
 import ListDropdown from './ListDropdown';
 import VersionDropdown from './VersionDropdown';
+
+import {useUserLists} from '../../../../../../graphql/queries/UserLists';
+import {useUserTasks} from '../../../../../../graphql/queries/UserTasks';
 
 const Excel = require('images/dummy/logos/excel.svg');
 
@@ -110,17 +116,80 @@ function SingleTask(props: SingleTaskProps) {
   const classes = useStyles();
 	console.log(location);
 
+	const [lists, setLists] = useState<any>([]);
+  const [selectedListId, setSelectedListId] = useState<string>('');
+
+	const [tasks, setTasks] = useState<any>([]);
+  const [selectedTaskId, setSelectedTaskId] = useState<string>('');
+
+	const [files, setFiles] = useState<File[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
+
+  const {
+		loading: listLoading, 
+		data: listData, 
+		error: listError
+  } = useUserLists({});
+
+	const {
+		loading: taskLoading,
+		data: taskData,
+		error: taskError
+	} = useUserTasks({
+	  listIds: [selectedListId],
+		sectionIds: [],
+		limit: 1000,
+		offset: 0	
+	});
+
+  const onDrop = useCallback((addedFiles: File[]) => {
+		// check if duplicate file
+		// if not, add to files
+		setFiles([...files, ...addedFiles])
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+
+	const toggleSelectedFile = (id: number) => {
+		if (selectedFiles.includes(id)) {
+			setSelectedFiles(selectedFiles.filter(fid => fid != id))
+		} else {
+			setSelectedFiles([...selectedFiles, id])
+		}
+	}
+
+	useEffect(() => {
+		var lists = idx(listData, listData => listData.userLists.lists)
+
+		if (listLoading) return;
+		if (lists) { 
+			setLists(lists.map(list => ({label: list.name, value: list.id})))
+		};
+	}, [listLoading]);
+
+	useEffect(() => {
+		var tasks = idx(taskData, taskData => taskData.userTasks)
+
+		if (taskLoading) return;
+		if (tasks) { 
+			setTasks(tasks.map(task => ({label: task.name, value: task.id})))
+		}; 
+	}, [taskLoading]);
+
+
   return (
     <Paper
       className={clsx(classes.root, value !== index && classes.invisible)}
       aria-labelledby="Single Task"
       elevation={0}
     >
-      <div className={clsx(classes.filesPane, classes.flex)}>
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
+      <div className={clsx(classes.filesPane, classes.flex)} {...getRootProps()}>
+				<input {...getInputProps()} />
+			{
+				isDragActive ? (<p>drop some files</p>) : (!files.length ? <p>drop</p> : files.map((file, index) => 
+						<NameLabel label={file.name} key={index} logo={Excel} className={classes.fileLabel} />
+				))
+			}
       </div>
 
       <textarea 
@@ -130,12 +199,16 @@ function SingleTask(props: SingleTaskProps) {
 
       <div className={classes.flex} style={{marginTop: '24px'}}>
         <ListDropdown
-          options={options}
-          value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
+          options={lists}
+					handleUpdate={setSelectedListId}
+					placeholder='select a List'
+          value={selectedListId}
         />
         <ListDropdown
-          options={options}
-          value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
+          options={tasks}
+					handleUpdate={setSelectedTaskId}
+					placeholder='select a Task'
+          value={selectedTaskId}
         />
         <div className={classes.grow} />
         <StatusLabel currentStatus="Start" selected/>
@@ -153,7 +226,8 @@ function SingleTask(props: SingleTaskProps) {
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox color="primary" />
+              <Checkbox color="primary" 
+							/>
             </TableCell>
             <TableCell>File</TableCell>
             <TableCell>Public Comment</TableCell>
@@ -161,14 +235,18 @@ function SingleTask(props: SingleTaskProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
+{ files.map( (file, index) =>
+          <TableRow key={index}>
             <TableCell padding="checkbox">
-              <Checkbox color="primary" />
+              <Checkbox color="primary"
+								checked={selectedFiles.includes(index)}
+								onChange={() => toggleSelectedFile(index)}
+							 />
             </TableCell>
             <TableCell>
               <div className={classes.flex}>
                 <img width="18" height="18" src={Excel} className={classes.mr12} />
-                <Typography variant="h6">File name</Typography>
+                <Typography variant="h6">{file.name}</Typography>
               </div>
             </TableCell>
             <TableCell>
@@ -178,8 +256,12 @@ function SingleTask(props: SingleTaskProps) {
               <VersionDropdown value="Update" />
             </TableCell>
           </TableRow>
+) }
         </TableBody>
       </Table>
+<Button>
+Upload
+</Button>
     </Paper>
   );
 }

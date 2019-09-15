@@ -114,6 +114,7 @@ module Types
     end
 
     def user_tasks(list_ids: nil, section_ids: nil, limit: nil, offset: nil)
+      return nil if list_ids == [""]
       tasks = []
       list_ids&.each do |list_id|
         list = List.find(list_id)

@@ -1,0 +1,2 @@
+class FileMessageAlert < ApplicationRecord
+end

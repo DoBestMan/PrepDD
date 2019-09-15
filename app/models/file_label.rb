@@ -1,0 +1,2 @@
+class FileLabel < ApplicationRecord
+end
