@@ -87,8 +87,16 @@ export default function InternalPane(props: InternalPaneProps) {
   // [run mutation, response]
   const [createMessage, res] = CreatePrivateTaskMessage({message: newMessage, taskId: taskId as string});
 
+	const hashMessage = async () => {
+		// make ajax call to service w/ text
+		// return hash
+    // await 
+    // setNewMessage(hash)
+	}
+
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		hashMessage();
 		createMessage();
 		setNewMessage('');
 	}
