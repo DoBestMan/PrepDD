@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -105,15 +105,19 @@ interface TaskTableProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
+	multiTasks: any[];
+	setMultiTasks: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export default function TaskTable(props: TaskTableProps) {
   const {
     tasks, 
     taskId, 
+		multiTasks,
     setOpen,
     setCurrentTask,
     onScroll, 
+	  setMultiTasks
   } = props;
   const classes = useStyles();
 
@@ -179,10 +183,23 @@ export default function TaskTable(props: TaskTableProps) {
     asyncSetState(updatedTask);
   }
 
-  const handleClickRow = (task: UserTasks_userTasks) => {
-    setOpen(open => !open);
-    setCurrentTask(task);
+  const handleClickRow = (e: any, task: UserTasks_userTasks) => {
+		var shiftPressed = e.nativeEvent.shiftKey; 
+		if (shiftPressed) {
+			setMultiTasks([...multiTasks, ...selectedTask.id, task.id]);
+		} else {
+			setMultiTasks([]);
+			setOpen(open => !open);
+			setCurrentTask(task);
+		}
   }
+		
+	useEffect(() => {
+		if (multiTasks.length) { 
+			setOpen(o => false)
+			console.log(tasks);
+		}
+	}, [multiTasks]);
 
   const renderOthers = (isSelected: boolean) => {
     return (
@@ -233,13 +250,13 @@ export default function TaskTable(props: TaskTableProps) {
         </TableHead>
         <TableBody>
           {tasks && tasks.map((task: UserTasks_userTasks, index: number) => {
-            const isSelected = hover === index;
+            const isSelected = hover === index || multiTasks.includes(String(task.id));
 
             return (
               <TableRow 
                 key={index} 
-                className={clsx(task.id === taskId && classes.selectedRow)}
-                onClick={() => handleClickRow(task)}
+                className={clsx((task.id === taskId || multiTasks.includes(task.id))&& classes.selectedRow)}
+                onClick={(e) => handleClickRow(e, task)}
                 onMouseOver={() => setHover(index)}
               >
                 <TableCell className={classes.priorityColumn}>

@@ -47,6 +47,7 @@ export default function TaskPage() {
   const [tasks, setTasks] = useState<UserTasks_userTasks[]>([]);
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [multiTasks, setMultiTasks] = useState<any[]>([]);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
     __typename: "Task",
     id: '',
@@ -144,10 +145,13 @@ export default function TaskPage() {
         selectedSections={selectedSections}
         setSelectedLists={setSelectedLists}
         setSelectedSections={setSelectedSections} 
+				multiTasks={multiTasks}
       />
       <TaskTable 
         tasks={tasks}
         taskId={selectedTask.id}
+	      multiTasks={multiTasks}
+	      setMultiTasks={setMultiTasks}
         setOpen={setOpenSidePanel}
         setCurrentTask={setSelectedTask}
         onScroll={handleScroll}

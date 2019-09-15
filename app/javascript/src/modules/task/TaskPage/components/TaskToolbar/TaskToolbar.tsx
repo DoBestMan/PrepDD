@@ -4,6 +4,7 @@ import {
   Toolbar,
   Typography, 
   IconButton,
+	Button
 } from '@material-ui/core';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import AttachFile from '@material-ui/icons/AttachFile';
@@ -47,6 +48,7 @@ interface TaskToolbarProps {
   setSelectedLists: React.Dispatch<React.SetStateAction<string[]>>;
   selectedSections: string[];
   setSelectedSections: React.Dispatch<React.SetStateAction<string[]>>;
+	multiTasks: any[];
 }
 
 export default function TaskToolbar(props: TaskToolbarProps) {
@@ -56,6 +58,7 @@ export default function TaskToolbar(props: TaskToolbarProps) {
     setSelectedLists, 
     selectedSections, 
     setSelectedSections, 
+		multiTasks
   } = props;
   const classes = useStyles();
 
@@ -137,6 +140,13 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         onChange={handleChangeSection}
       />
       <div className={classes.grow} />
+			<div>
+			{ multiTasks.length ? 
+      <Button variant="outlined" className={''}>
+				{ multiTasks.length + " tasks selected" } 
+      </Button>
+			: null }
+      </div>
       <div className={classes.action}>
         <IconButton aria-label="filter list">
           <PersonAdd />
