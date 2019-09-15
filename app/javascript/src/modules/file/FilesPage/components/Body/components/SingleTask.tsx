@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import {withRouter} from 'react-router';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper, 
@@ -86,6 +87,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface SingleTaskProps {
   value?: number;
   index?: number;
+	location?: any;
 }
 
 const options = [
@@ -103,9 +105,10 @@ const options = [
   }
 ]
 
-export default function SingleTask(props: SingleTaskProps) {
-  const {value, index} = props;
+function SingleTask(props: SingleTaskProps) {
+  const {value, index, location} = props;
   const classes = useStyles();
+	console.log(location);
 
   return (
     <Paper
@@ -180,3 +183,5 @@ export default function SingleTask(props: SingleTaskProps) {
     </Paper>
   );
 }
+
+export default withRouter(SingleTask);
