@@ -6,6 +6,7 @@ import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import TaskToolbar from './components/TaskToolbar';
 import TaskTable from './components/TaskTable';
 import SidePanel from './components/SidePanel';
+import ConfirmModal from '../../common/ConfirmModal';
 
 import {useUserLists} from '../../../graphql/queries/UserLists';
 import {useUserTasks} from '../../../graphql/queries/UserTasks';
@@ -42,7 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function TaskPage() {
   const classes  = useStyles();
+	/* description of initial state */
   const [openSidePanel, setOpenSidePanel] = useState<boolean>(false);
+  const [deleteModal, setDeleteModal] = useState<boolean>(false);
+  const [addUsersModal, setAddUsersModal] = useState<boolean>(false);
   const [lists, setLists] = useState<UserLists_userLists_lists[]>([]);
   const [tasks, setTasks] = useState<UserTasks_userTasks[]>([]);
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
@@ -93,6 +97,12 @@ export default function TaskPage() {
     setTasks(tasks);
   }, [idx(taskRes, taskRes => taskRes.userTasks)]);
 
+	const openDeleteModal = () => setDeleteModal(true)
+	const closeDeleteModal = () => setDeleteModal(false)
+
+	const openAddUsersModal = () => setAddUsersModal(true)
+	const closeAddUsersModal = () => setAddUsersModal(false)
+
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     event.persist();
     const scrollHeight = (event.target as HTMLDivElement).scrollHeight;
@@ -137,6 +147,8 @@ export default function TaskPage() {
     });
   };
 
+	const batchDelete = () => null
+
   return (
     <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
       <TaskToolbar 
@@ -145,8 +157,18 @@ export default function TaskPage() {
         selectedSections={selectedSections}
         setSelectedLists={setSelectedLists}
         setSelectedSections={setSelectedSections} 
+				openDeleteModal={openDeleteModal}
+				addUsersModal={addUsersModal}
+				openAddUsersModal={openAddUsersModal}
 				multiTasks={multiTasks}
       />
+			{ deleteModal && 
+			<ConfirmModal 
+				confirmMessage={'Are you sure you want to delete the following:${}'}
+				confirmAction={batchDelete}
+				denyAction={closeDeleteModal}
+			/> 
+			}
       <TaskTable 
         tasks={tasks}
         taskId={selectedTask.id}
