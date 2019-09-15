@@ -10,7 +10,7 @@ class Company::CompanyKmsCreationWorker
       kms =
         client.create_key(
           {
-            tags: [{ tag_key: 'CompanyName', tag_value: company.name.downcase }]
+            tags: [{ tag_key: 'CompanyName', tag_value: company.name.downcase + "-prepdd-" + Rails.env }]
           }
         )
     end
