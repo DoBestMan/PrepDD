@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_165628) do
+ActiveRecord::Schema.define(version: 2019_09_15_022826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_165628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_public", default: false
+    t.bigint "company_id"
     t.index ["task_id"], name: "index_task_messages_on_task_id"
     t.index ["user_id"], name: "index_task_messages_on_user_id"
   end
@@ -191,6 +192,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_165628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "task_section_id"
+    t.bigint "list_number"
     t.index ["list_id"], name: "index_tasks_on_list_id"
     t.index ["task_section_id"], name: "index_tasks_on_task_section_id"
   end

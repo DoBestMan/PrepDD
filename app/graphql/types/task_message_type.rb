@@ -10,5 +10,7 @@ module Types
     # Right now, we're not implementing editing on messages -- 
     # but we will, so this field name will change
     field :createdAt, String, null: false, method: :last_updated_at
+    # For private messages, the message belongs to a company
+    field :company, CompanyType, null: true
   end
 end

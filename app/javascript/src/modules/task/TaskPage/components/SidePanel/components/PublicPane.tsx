@@ -16,8 +16,8 @@ import Alert from './Alert';
 import {
   UserTasks_userTasks as taskType
 } from '../../../../../../graphql/queries/__generated__/UserTasks';
-import { taskMessages_task_messages as taskMessagesType } from '../../../../../../graphql/queries/__generated__/taskMessages';
-import taskMessages from '../../../../../../graphql/queries/TaskMessages';
+//import { publicTaskMessages_publicTaskMessages as taskMessagesType } from '../../../../../../graphql/queries/__generated__/publicTaskMessages';
+import PublicTaskMessages from '../../../../../../graphql/queries/PublicTaskMessages';
 
 import createPublicMessage from '../../../../../../graphql/mutations/CreatePublicTaskMessage';
 
@@ -96,25 +96,37 @@ export default function InternalPane(props: InternalPaneProps) {
   const {value, index, taskId} = props;
   const classes = useStyles();
 
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+
 	const [messages, setMessages] = useState<any[]>([]);
-	const data = taskMessages({id: taskId});
+	const data = PublicTaskMessages({taskId});
 
 	// initialize new Message to empty string
 	const [newMessage, setNewMessage] = useState<string>('');
 	// upcates state
 	const updateNewMessage = (e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)
   // [run mutation, response]
-  const [createMessage, res] = createPublicMessage({message: newMessage, taskId: '16'});
+  const [createMessage, res] = createPublicMessage({message: newMessage, taskId: taskId as string});
 
 	const handleSendClick = () => {
 		createMessage();
 		setNewMessage('');
+		setShowAlert(false);
+	}
+
+	const handleCancelClick = () => {
+		setNewMessage('');
+		setShowAlert(false);
+	}
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		setShowAlert(true)
 	}
 
   // loads messages at query change
 	useEffect(() => {
-		const messages = idx(data, data => data.data.task.messages);
-
+		const messages = idx(data, data => data.data.publicTaskMessages);
 		if (messages) setMessages(messages);
 	}, [data])
 
@@ -145,6 +157,7 @@ export default function InternalPane(props: InternalPaneProps) {
 			<div className={classes.footer}>
 			<div className={classes.messageBox}>
 			<ClipIcon className={classes.icon} />
+			<form onSubmit={handleSubmit}>
 			<TextField 
 				id='new-message-input'
 				name='messageText'
@@ -153,8 +166,9 @@ export default function InternalPane(props: InternalPaneProps) {
 				onChange={updateNewMessage}
 				value={newMessage}
 			/>
+			</form>
 			</div>
-			<Alert onClick={handleSendClick}/>
+			{ showAlert && <Alert onClick={handleSendClick}/> }
 			</div>
 			</Paper>
 			);
