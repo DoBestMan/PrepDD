@@ -243,6 +243,11 @@ type Query {
   privateTaskMessages(taskId: ID!): [TaskMessage!]!
 
   """
+  A separate query to retrieve public messages
+  """
+  publicTaskMessages(taskId: ID!): [TaskMessage!]!
+
+  """
   Return All available roles
   """
   roles: [Role!]!
@@ -456,6 +461,7 @@ input TaskAttributes {
 TaskMessage
 """
 type TaskMessage {
+  company: Company
   createdAt: String!
   id: ID!
   isPublic: Boolean!

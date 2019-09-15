@@ -20,6 +20,12 @@ class Mutations::CreateTaskMessages < GraphQL::Schema::Mutation
 
     task_message = TaskMessage.create(task_id: task_id, user_id: user_id, message: message, is_public: is_public)
 
+    # For internal tasks, we want to use the user's current company to restrict
+    # access. 
+    if !is_public 
+      task_message.update(company_id: context[:controller].current_user.last_viewed_company_id)
+    end
+
     task_message.errors.messages.each do |path, messages|
       messages.each do |message|
         response[:errors].push(

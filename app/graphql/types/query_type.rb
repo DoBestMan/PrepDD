@@ -99,6 +99,18 @@ module Types
       argument :task_id, ID, required: true
     end
 
+    field :public_task_messages, [TaskMessageType], null: false do
+      description 'A separate query to retrieve public messages'
+      argument :task_id, ID, required: true
+    end
+
+    def public_task_messages(task_id:)
+      return nil if task_id == ''
+      Task.find(task_id.to_i)
+        .task_messages
+        .where(is_public: true)
+    end
+
     ## For tasks and private_task_messages, ids can come in as empty
     ## strings, so have to explicitly check
     def private_task_messages(task_id:)
@@ -106,6 +118,7 @@ module Types
       Task.find(task_id.to_i)
         .task_messages
         .where(is_public: false)
+        .where(company_id: get_current_user.last_viewed_company_id)
     end
 
     def task(id:)
@@ -227,6 +240,12 @@ module Types
       end
 
       { companies: companies.uniq, users: users }
+    end
+
+    private
+    
+    def get_current_user
+      context[:controller].current_user
     end
   end
 end
