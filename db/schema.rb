@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_165628) do
+ActiveRecord::Schema.define(version: 2019_09_15_022826) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,57 @@ ActiveRecord::Schema.define(version: 2019_09_13_165628) do
   end
 
   create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
+  end
+
+  create_table "file_bases", force: :cascade do |t|
+    t.boolean "is_active"
+    t.boolean "is_template"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "file_labels", force: :cascade do |t|
+    t.text "description"
+    t.string "file_label_color"
+    t.boolean "is_active"
+    t.boolean "is_public"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "file_message_alerts", force: :cascade do |t|
+    t.integer "file_message_id"
+    t.integer "user_id"
+    t.boolean "is_read"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "file_messages", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "file_version_id"
+    t.text "message"
+    t.boolean "is_public"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "file_tasks", force: :cascade do |t|
+    t.bigint "file_version_id"
+    t.bigint "task_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "file_versions", force: :cascade do |t|
+    t.integer "file_id"
+    t.integer "file_owner_id"
+    t.integer "version"
+    t.string "file_name"
+    t.string "file_extension"
+    t.string "file_location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "lists", force: :cascade do |t|
@@ -159,6 +210,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_165628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_public", default: false
+    t.bigint "company_id"
     t.index ["task_id"], name: "index_task_messages_on_task_id"
     t.index ["user_id"], name: "index_task_messages_on_user_id"
   end
@@ -191,6 +243,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_165628) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "task_section_id"
+    t.bigint "list_number"
     t.index ["list_id"], name: "index_tasks_on_list_id"
     t.index ["task_section_id"], name: "index_tasks_on_task_section_id"
   end
