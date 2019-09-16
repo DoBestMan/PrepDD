@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_15_022826) do
+ActiveRecord::Schema.define(version: 2019_09_16_060852) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,11 @@ ActiveRecord::Schema.define(version: 2019_09_15_022826) do
     t.bigint "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "file_version_tasks", force: :cascade do |t|
+    t.bigint "file_version_id"
+    t.bigint "task_id"
   end
 
   create_table "file_versions", force: :cascade do |t|

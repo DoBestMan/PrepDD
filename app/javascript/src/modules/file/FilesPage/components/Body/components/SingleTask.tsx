@@ -96,25 +96,9 @@ interface SingleTaskProps {
 	location?: any;
 }
 
-const options = [
-  {
-    label: 'Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company.', 
-    value: 'Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company.', 
-  }, 
-  {
-    label: 'The Company’s stock books or ledgers and current capitalization table (including restricted stock, options, RSUs, phantom stock and warrants).', 
-    value: 'The Company’s stock books or ledgers and current capitalization table (including restricted stock, options, RSUs, phantom stock and warrants).', 
-  }, 
-  {
-    label: 'Lists of all current owners of shares or convertible securities, including address, tax ID or SSN, number of shares owned, dates of issuance and full payment, the consideration received by the Company and applicable stop transfer orders or restrictive legends.', 
-    value: 'Lists of all current owners of shares or convertible securities, including address, tax ID or SSN, number of shares owned, dates of issuance and full payment, the consideration received by the Company and applicable stop transfer orders or restrictive legends.', 
-  }
-]
-
 function SingleTask(props: SingleTaskProps) {
   const {value, index, location} = props;
   const classes = useStyles();
-	console.log(location);
 
 	const [lists, setLists] = useState<any>([]);
   const [selectedListId, setSelectedListId] = useState<string>('');
@@ -122,7 +106,7 @@ function SingleTask(props: SingleTaskProps) {
 	const [tasks, setTasks] = useState<any>([]);
   const [selectedTaskId, setSelectedTaskId] = useState<string>('');
 
-	const [files, setFiles] = useState<File[]>([]);
+	const [files, setFiles] = useState<any[]>([]);
 	const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
 
   const {
@@ -142,11 +126,9 @@ function SingleTask(props: SingleTaskProps) {
 		offset: 0	
 	});
 
-  const onDrop = useCallback((addedFiles: File[]) => {
-		// check if duplicate file
-		// if not, add to files
+  const onDrop = (addedFiles: File[]) => {
 		setFiles([...files, ...addedFiles])
-  }, [])
+  }
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
 
@@ -158,9 +140,29 @@ function SingleTask(props: SingleTaskProps) {
 		}
 	}
 
+	const handleUpload = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+			var formData = new FormData();
+			formData.append('task_id', selectedTaskId);
+			files.forEach((file: File) => {
+				formData.append(`files[]`, file);
+			});
+   
+			var ok = await fetch('/api/upload', {
+				method: 'POST',
+				headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
+				},
+				body: formData
+			})	
+
+			var json = await ok.json()
+			console.log(json);
+	}
+
 	useEffect(() => {
 		var lists = idx(listData, listData => listData.userLists.lists)
 
+		if (selectedTaskId) console.log(lists);
 		if (listLoading) return;
 		if (lists) { 
 			setLists(lists.map(list => ({label: list.name, value: list.id})))
@@ -176,6 +178,20 @@ function SingleTask(props: SingleTaskProps) {
 		}; 
 	}, [taskLoading]);
 
+
+  /* handles updating files, lists, tasks, when a file is dragged from
+		 the task screen
+	*/
+	useEffect(() => {
+		var files = idx(location, location => location.files.files);
+		var listId = idx(location, location => location.files.listId);
+		var taskId = idx(location, location => location.files.taskId);
+
+		if (files) setFiles(files) 
+	  if (listId) setSelectedListId(listId)	
+		if (taskId) setSelectedTaskId(taskId)
+		
+	}, [location])
 
   return (
     <Paper
@@ -259,7 +275,7 @@ function SingleTask(props: SingleTaskProps) {
 ) }
         </TableBody>
       </Table>
-<Button>
+<Button onClick={handleUpload}>
 Upload
 </Button>
     </Paper>

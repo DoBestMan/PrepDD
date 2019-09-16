@@ -313,7 +313,8 @@ const onDrop = useCallback(acceptedFiles => {
 			pathname: '/files',
 			files: {
 				files: acceptedFiles,
-				taskId: task.id 
+				taskId: task.id,
+				listId: task.list.id
 			}
 		});
   }, [])
