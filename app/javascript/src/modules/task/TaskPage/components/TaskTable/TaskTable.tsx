@@ -399,8 +399,8 @@ function TaskTableRow(props: any) {
             (task.status === 'Deliver' || task.status === 'Accept') && (
               <StyledItem
                 currentStatus="Rejected"
-                selected
                 className={classes.rejectStatus}
+                selected
               />
             )}
         </div>
