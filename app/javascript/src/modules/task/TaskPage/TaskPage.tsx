@@ -174,8 +174,8 @@ export default function TaskPage() {
   };
 
   return (
-    <div className={clsx(classes.paper, multiTasks.length && classes.paperShift)}>
-      <ClickAwayListener onClickAway={handleClickAway}>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div className={clsx(classes.paper, multiTasks.length && classes.paperShift)}>
         <div>
           <TaskToolbar
             lists={lists}
@@ -206,14 +206,14 @@ export default function TaskPage() {
             onScroll={handleScroll}
           />
         </div>
-      </ClickAwayListener>
-      <SidePanel
-        open={multiTasks.length ? true : false}
-        selectedTask={selectedTask}
-        setSelectedTask={setSelectedTask}
-        tasks={tasks}
-        setTasks={setTasks}
-      />
-    </div>
+        <SidePanel
+          open={multiTasks.length ? true : false}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+          tasks={tasks}
+          setTasks={setTasks}
+        />
+      </div>
+    </ClickAwayListener>    
   );
 }
