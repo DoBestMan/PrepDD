@@ -118,7 +118,6 @@ const useStyles = makeStyles((theme: Theme) =>
 interface TaskTableProps {
   tasks: UserTasks_userTasks[];
   taskId: string;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
   multiTasks: string[];
@@ -130,7 +129,6 @@ function TaskTable(props: any) {
     tasks,
     taskId,
     multiTasks,
-    setOpen,
     setCurrentTask,
     onScroll,
     setMultiTasks,
@@ -209,8 +207,7 @@ function TaskTable(props: any) {
   };
 
   const updateCurrentTask = (task: UserTasks_userTasks) => {
-    setMultiTasks([]);
-    setOpen((open: boolean) => !open);
+    setMultiTasks([task.id]);
     setCurrentTask(task);
   };
 
@@ -222,13 +219,6 @@ function TaskTable(props: any) {
       setMultiTasks([...multiTasks, ...selectedTask.id, taskId]);
     }
   };
-
-  // If the user is holding shift and selecting tasks, close the side panel
-  useEffect(() => {
-    if (multiTasks.length) {
-      setOpen((o: boolean) => false);
-    }
-  }, [multiTasks]);
 
   const renderOthers = (isSelected: boolean) => {
     return (

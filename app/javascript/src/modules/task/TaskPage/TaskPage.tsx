@@ -47,14 +47,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TaskPage() {
   const classes = useStyles();
   /* description of initial state */
-  const [openSidePanel, setOpenSidePanel] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [addUsersModal, setAddUsersModal] = useState<boolean>(false);
   const [lists, setLists] = useState<UserLists_userLists_lists[]>([]);
   const [tasks, setTasks] = useState<UserTasks_userTasks[]>([]);
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [multiTasks, setMultiTasks] = useState<any[]>([]);
+  const [multiTasks, setMultiTasks] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
     __typename: 'Task',
     id: '',
@@ -175,7 +174,7 @@ export default function TaskPage() {
   };
 
   return (
-    <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
+    <div className={clsx(classes.paper, multiTasks.length && classes.paperShift)}>
       <ClickAwayListener onClickAway={handleClickAway}>
         <div>
           <TaskToolbar
@@ -203,14 +202,13 @@ export default function TaskPage() {
             taskId={selectedTask.id}
             multiTasks={multiTasks}
             setMultiTasks={setMultiTasks}
-            setOpen={setOpenSidePanel}
             setCurrentTask={setSelectedTask}
             onScroll={handleScroll}
           />
         </div>
       </ClickAwayListener>
       <SidePanel
-        open={openSidePanel}
+        open={multiTasks.length ? true : false}
         selectedTask={selectedTask}
         setSelectedTask={setSelectedTask}
         tasks={tasks}

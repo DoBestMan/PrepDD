@@ -155,7 +155,7 @@ export default function TaskToolbar(props: TaskToolbarProps) {
       <div className={classes.grow} />
       <div>{addUsersModal && <AddUsersModal test="ok" />}</div>
       <div>
-        {multiTasks.length ? (
+        {multiTasks.length > 1 ? (
           <Button variant="outlined" className={''}>
             {multiTasks.length + ' tasks selected'}
           </Button>
