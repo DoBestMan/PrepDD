@@ -1,21 +1,29 @@
 class Task < ApplicationRecord
   enum priority: { low: 0, medium: 1, high: 2 }
-  enum status: { Rejected: 0, Unstarted: 1, Start: 2, Finish: 3, Deliver: 4,
-                 Accept: 5, Completed: 6, Reject: 7 }
+  enum status: {
+         Rejected: 0,
+         Unstarted: 1,
+         Start: 2,
+         Finish: 3,
+         Deliver: 4,
+         Accept: 5,
+         Completed: 6,
+         Reject: 7
+       }
 
   #
   belongs_to :list
   belongs_to :task_section, optional: true
   has_many :task_owner
-  has_many :user_owners, through: :task_owner, :source => :task_ownerable, :source_type => 'User'
-  has_many :team_owners, through: :task_owner, :source => :task_ownerable, :source_type => 'Team'
+  has_many :user_owners,
+           through: :task_owner, source: :task_ownerable, source_type: 'User'
+  has_many :team_owners,
+           through: :task_owner, source: :task_ownerable, source_type: 'Team'
 
+  has_many :task_messages
 
-  # Takes a rails timestamp and converts to a unix epoch integer
-  # GQL sends this as a string
-  def adjust_epoch
-    self.updated_at.to_f * 1000
-  end
+  has_many :file_version_tasks
+  has_many :file_versions, through: :file_version_tasks
 
   def self.import(files)
     require 'roo'

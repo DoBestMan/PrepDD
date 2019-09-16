@@ -154,7 +154,7 @@ export default function Body() {
   });
   const [creatingTasks, setCreatingTasks] = useState<TaskAttributes[]>([]);
   const [editable, setEditable] = useState<boolean>(false);
-  
+
   const {loading, data, error} = useAllTemplates({});
   const [
     createTask,
@@ -181,19 +181,19 @@ export default function Body() {
 
     if (response && response.success) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: 'Create new task successfully',
-        }
+        },
       });
     } else if (response && response.errors && response.errors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: response.errors[0].message,
-        }
+        },
       });
     }
   }, [
@@ -259,11 +259,11 @@ export default function Body() {
   const handleAddTask = () => {
     if (!listId) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: 'Please select list',
-        }
+        },
       });
       return;
     }
@@ -409,10 +409,7 @@ export default function Body() {
             >
               Download Template
             </Button>
-            <ReactDropzone
-              multiple
-              onDrop={handleDrop}
-            >
+            <ReactDropzone multiple onDrop={handleDrop}>
               {({getRootProps, getInputProps, isDragActive}) => (
                 <div
                   {...getRootProps()}

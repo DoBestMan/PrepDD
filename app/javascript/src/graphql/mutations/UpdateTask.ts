@@ -1,8 +1,5 @@
 import {createMutationHook, gql} from '../graphqlHelpers';
-import {
-  UpdateTask,
-  UpdateTaskVariables,
-} from './__generated__/UpdateTask';
+import {UpdateTask, UpdateTaskVariables} from './__generated__/UpdateTask';
 
 export const useUpdateTask = createMutationHook<
   UpdateTask,
@@ -10,19 +7,19 @@ export const useUpdateTask = createMutationHook<
 >(gql`
   mutation UpdateTask(
     $id: ID!
-    $name: String, 
-    $description: String, 
-    $priority: String, 
-    $status: String, 
-    $dueDate: String, 
+    $name: String
+    $description: String
+    $priority: String
+    $status: String
+    $dueDate: String
   ) {
     updateTask(
-      id: $id, 
-      name: $name, 
-      description: $description, 
-      priority: $priority, 
-      status: $status, 
-      dueDate: $dueDate, 
+      id: $id
+      name: $name
+      description: $description
+      priority: $priority
+      status: $status
+      dueDate: $dueDate
     ) {
       success
       errors {

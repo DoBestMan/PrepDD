@@ -6,4 +6,3 @@ module Types
     field :lists, [ListType], null: true
   end
 end
-

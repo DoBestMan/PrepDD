@@ -27,33 +27,33 @@ const useStyles = makeStyles((theme: Theme) =>
     outlined: {
       border: '1px solid #CACACA',
       borderRadius: '3px',
-      padding: '6px 3px 6px 12px', 
+      padding: '6px 3px 6px 12px',
     },
     box: {
       display: 'flex',
       alignItems: 'center',
-      height: '100%', 
+      height: '100%',
     },
     paper: {
       position: 'absolute',
       top: '30px',
       left: '-9px',
       border: '1px solid #D8D8D8',
-      width: 'max-content', 
+      width: 'max-content',
       minWidth: '100%',
-      zIndex: 2, 
+      zIndex: 2,
     },
     item: {
       '&.Mui-selected .MuiTypography-body1': {
         color: '#FFFFFF',
-      }
-    }, 
+      },
+    },
     check: {
-      color: cs.COLORS.primary, 
-    }, 
+      color: cs.COLORS.primary,
+    },
     grow: {
-      flexGrow: 1, 
-    }
+      flexGrow: 1,
+    },
   })
 );
 
@@ -69,12 +69,12 @@ interface DropdownProps {
 
 export default function Dropdown(props: DropdownProps) {
   const {
-    options, 
+    options,
     variant,
-    value, 
-    placeholder, 
-    multiSelection, 
-    onChange
+    value,
+    placeholder,
+    multiSelection,
+    onChange,
   } = props;
   const classes = useStyles({});
   const [open, setOpen] = useState<boolean>(false);
@@ -87,10 +87,10 @@ export default function Dropdown(props: DropdownProps) {
 
   const renderLabel = () => {
     if (value.length > 1) {
-      return multiSelection ? multiSelection : "";
-    } else if(value.length === 1) {
+      return multiSelection ? multiSelection : '';
+    } else if (value.length === 1) {
       const selected = options.find(option => option.value === value[0]);
-  
+
       if (selected) return selected.label;
     } else {
       return placeholder;
@@ -98,7 +98,9 @@ export default function Dropdown(props: DropdownProps) {
   };
 
   return (
-    <div className={clsx(classes.root, variant === 'outlined' && classes.outlined)}>
+    <div
+      className={clsx(classes.root, variant === 'outlined' && classes.outlined)}
+    >
       <div className={classes.box} onClick={() => setOpen(!open)}>
         <Typography variant="h4">{renderLabel()}</Typography>
         <ArrowDownIcon style={{marginLeft: '6px'}} />
@@ -106,15 +108,16 @@ export default function Dropdown(props: DropdownProps) {
 
       {open && (
         <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <Paper 
-            className={classes.paper} 
-            elevation={variant === 'outlined' ? 1 : 0} 
+          <Paper
+            className={classes.paper}
+            elevation={variant === 'outlined' ? 1 : 0}
             square={variant !== 'outlined'}
           >
             <List>
               {options &&
                 options.map((option: OptionType) => {
-                  const isSelected = value.findIndex(selected => selected === option.value) >= 0;
+                  const isSelected =
+                    value.findIndex(selected => selected === option.value) >= 0;
 
                   return (
                     <ListItem

@@ -13,9 +13,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 import * as cs from '../../../../../../constants/theme';
 
-import {
-  AllTemplates_templateLists,
-} from '../../../../../../graphql/queries/__generated__/AllTemplates';
+import {AllTemplates_templateLists} from '../../../../../../graphql/queries/__generated__/AllTemplates';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,7 +52,9 @@ interface GeneralTemplatesPaneProps {
   value?: number;
   index?: number;
   data: AllTemplates_templateLists[];
-  setSelectedTemplate: React.Dispatch<React.SetStateAction<AllTemplates_templateLists>>;
+  setSelectedTemplate: React.Dispatch<
+    React.SetStateAction<AllTemplates_templateLists>
+  >;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
 

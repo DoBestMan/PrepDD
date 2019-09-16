@@ -25,8 +25,9 @@ export default function Alert() {
     <div className={classes.root}>
       <WarningIcon />
       <Typography variant="h6" style={{marginLeft: '12px'}}>
-        This list and all of it’s contents will be public to the selected company upon creation.
+        This list and all of it’s contents will be public to the selected
+        company upon creation.
       </Typography>
     </div>
-  )
-};
+  );
+}

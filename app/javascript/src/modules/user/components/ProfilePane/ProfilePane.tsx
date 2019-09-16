@@ -173,7 +173,8 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   const [user, setUser] = useState<UserType>({
     email: state.currentUser.email as string,
     fullName: state.currentUser.fullName as string,
-    displayName: (state.currentUser.displayName || state.currentUser.fullName) as string,
+    displayName: (state.currentUser.displayName ||
+      state.currentUser.fullName) as string,
     profile_url: state.currentUser.profileUrl as string,
     oldPassword: '',
     password: '',
@@ -217,19 +218,19 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     if (updateErrors && !updateErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: 'Update user successfully',
-        }
+        },
       });
     } else if (updateErrors && updateErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: updateErrors[0].message,
-        }
+        },
       });
     }
   }, [
@@ -247,19 +248,19 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
 
     if (updateErrors && !updateErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: 'Update password successfully',
-        }
+        },
       });
     } else if (updateErrors && updateErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: updateErrors[0].message,
-        }
+        },
       });
     }
   }, [
@@ -300,11 +301,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
   const handleChangePassword = () => {
     if (user.password !== user.confirmPassword) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: 'Password is not matched',
-        }
+        },
       });
       setUser(user => ({
         ...user,
@@ -314,11 +315,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
     }
     if (!user.hasEightChar || !user.hasSpecialChar || !user.hasUppercase) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: 'Password is not valid',
-        }
+        },
       });
       setUser(user => ({
         ...user,
@@ -368,11 +369,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
         });
 
         dispatch({
-          type: 'SET_NOTIFICATION', 
+          type: 'SET_NOTIFICATION',
           notification: {
             variant: 'success',
             message: 'Upload photo successfully',
-          }
+          },
         });
 
         dispatch({
@@ -385,11 +386,11 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
       })
       .catch(error => {
         dispatch({
-          type: 'SET_NOTIFICATION', 
+          type: 'SET_NOTIFICATION',
           notification: {
             variant: 'error',
             message: 'Upload photo failed',
-          }
+          },
         });
       });
   };
@@ -494,9 +495,7 @@ export default function ProfilePane(props: {value?: number; index?: number}) {
                     <TableCell className={classes.tableHead}>
                       Company(s)
                     </TableCell>
-                    <TableCell className={classes.tableHead}>
-                      Team(s)
-                    </TableCell>
+                    <TableCell className={classes.tableHead}>Team(s)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

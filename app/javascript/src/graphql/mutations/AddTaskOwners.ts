@@ -9,18 +9,18 @@ export const useAddTaskOwners = createMutationHook<
   AddTaskOwnersVariables
 >(gql`
   mutation AddTaskOwners(
-    $taskID: ID!, 
-    $userOwners: [String!], 
-    $userReviewers: [String!], 
-    $teamOwners: [ID!], 
-    $teamReviewers: [ID!],
+    $taskID: ID!
+    $userOwners: [String!]
+    $userReviewers: [String!]
+    $teamOwners: [ID!]
+    $teamReviewers: [ID!]
   ) {
     addTaskOwners(
-      taskID: $taskID, 
-      userOwners: $userOwners, 
-      userReviewers: $userReviewers, 
-      teamOwners: $teamOwners, 
-      teamReviewers: $teamReviewers, 
+      taskID: $taskID
+      userOwners: $userOwners
+      userReviewers: $userReviewers
+      teamOwners: $teamOwners
+      teamReviewers: $teamReviewers
     ) {
       errors {
         path

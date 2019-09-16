@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#3A84FF',
     },
     padding: {
-      paddingLeft: '24px', 
-    }
+      paddingLeft: '24px',
+    },
   })
 );
 

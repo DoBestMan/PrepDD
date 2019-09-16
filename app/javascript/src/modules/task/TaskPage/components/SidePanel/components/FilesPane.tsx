@@ -1,11 +1,11 @@
 import React from 'react';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 import {
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableRow, 
-  Paper, 
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
   Typography,
 } from '@material-ui/core';
 
@@ -23,19 +23,19 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flex: {
       display: 'flex',
-      alignItems: 'center', 
+      alignItems: 'center',
     },
     icon: {
-      marginRight: '12px', 
+      marginRight: '12px',
     },
     modified: {
       opacity: 0.5,
       color: '#606060',
     },
     download: {
-      cursor: 'pointer', 
-      marginLeft: '12px', 
-    }
+      cursor: 'pointer',
+      marginLeft: '12px',
+    },
   })
 );
 
@@ -103,10 +103,8 @@ export default function FilesPane(props: FilesPaneProps) {
             <TableRow key={`files-${index}`}>
               <TableCell align="left">
                 <div className={classes.flex}>
-                  <img className={classes.icon} src={Excel} alt="Excel" /> 
-                  <Typography variant="h6">
-                    {row.title}
-                  </Typography>
+                  <img className={classes.icon} src={Excel} alt="Excel" />
+                  <Typography variant="h6">{row.title}</Typography>
                   <div className={classes.grow} />
                   <Typography variant="h6" className={classes.modified}>
                     {row.modified}

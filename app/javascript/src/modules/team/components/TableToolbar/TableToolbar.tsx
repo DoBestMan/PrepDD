@@ -161,12 +161,7 @@ interface TableToolbarProps {
 }
 
 const TableToolbar = (props: TableToolbarProps) => {
-  const {
-    selected,
-    company,
-    handleDelete,
-    updateMemberList,
-  } = props;
+  const {selected, company, handleDelete, updateMemberList} = props;
   const classes = useToolbarStyles();
 
   const {dispatch} = useGlobalState();
@@ -218,11 +213,11 @@ const TableToolbar = (props: TableToolbarProps) => {
     if (!addMemberErrors || !addMemberErrors.length) return;
 
     dispatch({
-      type: 'SET_NOTIFICATION', 
+      type: 'SET_NOTIFICATION',
       notification: {
         variant: 'error',
         message: addMemberErrors[0].message,
-      }
+      },
     });
   }, [
     idx(
@@ -245,13 +240,13 @@ const TableToolbar = (props: TableToolbarProps) => {
       teams: addedUser.teams,
       roles: addedUser.roles,
     });
-    
+
     dispatch({
-      type: 'SET_NOTIFICATION', 
+      type: 'SET_NOTIFICATION',
       notification: {
         variant: 'success',
         message: 'Add team member successfully',
-      }
+      },
     });
   }, [
     addTeamMemberLoading,

@@ -17,7 +17,14 @@ class User < ApplicationRecord
   has_many :lists, through: :lists_users
 
   has_many :task_owners, as: :task_ownerable
-  has_many :owned_tasks, class_name: 'Task', through: :task_owners, :source => :task_ownerable, :source_type => 'User'
+  has_many :owned_tasks,
+           class_name: 'Task',
+           through: :task_owners,
+           source: :task_ownerable,
+           source_type: 'User'
+
+  has_many :task_messages
+
   has_one_attached :profile_picture
 
   after_create :update_last_viewed_company
@@ -44,7 +51,12 @@ class User < ApplicationRecord
     require 'uri'
     require 'json'
 
-      uri = URI.parse("https://www.linkedin.com/oauth/v2/accessToken?code=#{token}&grant_type=authorization_code&client_secret=WEtzX4TyCF0ubk9l&client_id=867vhof1bgd0vm&redirect_uri=https://app-prepdd-staging.herokuapp.com/linkedin")
+    uri =
+      URI.parse(
+        "https://www.linkedin.com/oauth/v2/accessToken?code=#{
+          token
+        }&grant_type=authorization_code&client_secret=WEtzX4TyCF0ubk9l&client_id=867vhof1bgd0vm&redirect_uri=https://app-prepdd-staging.herokuapp.com/linkedin"
+      )
     request = Net::HTTP::Post.new(uri)
     req_options = { use_ssl: uri.scheme == 'https' }
     response =

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     post '/update_user_profile', to: 'users#update'
     post '/update_company_logo', to: 'companies#update_log'
     post '/import_task', to: 'tasks#import_task'
+    post '/upload', to: 'file_versions#create'
   end
 
   require 'sidekiq/web'

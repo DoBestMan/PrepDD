@@ -143,11 +143,11 @@ export default function TeamManagement(props: {path?: string}) {
 
     if (removeErrors && !removeErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: 'Remove company member successfully',
-        }
+        },
       });
 
       let newMemberList = memberList;
@@ -159,11 +159,11 @@ export default function TeamManagement(props: {path?: string}) {
       setMemberList(newMemberList);
     } else if (removeErrors && removeErrors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: removeErrors[0].message,
-        }
+        },
       });
     }
   }, [

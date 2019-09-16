@@ -19,7 +19,7 @@ export default function App() {
   const [loaded, setLoaded] = useState<boolean>(false);
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  
+
   const {data, loading, error} = useCurrentUser({});
   const [signOutUser] = useSignOutUser({});
 
@@ -69,16 +69,16 @@ export default function App() {
 
   const handleActive = () => {
     setDialogOpen(false);
-  }
-  
+  };
+
   const handleWarningIdle = () => {
     setDialogOpen(true);
-  }
+  };
 
   const handleIdle = () => {
     setDialogOpen(false);
     dispatch({
-      type: 'SET_CURRENT_USER', 
+      type: 'SET_CURRENT_USER',
       user: {
         __typename: 'User',
         id: '',
@@ -90,8 +90,8 @@ export default function App() {
         ownedCompanies: [],
         companies: [],
         teams: [],
-        roles: [],        
-      }
+        roles: [],
+      },
     });
     signOutUser();
   };
@@ -108,7 +108,7 @@ export default function App() {
             timeout={TIME_OUT - 60 * 1000}
             startOnMount
           />
-          <IdleTimer 
+          <IdleTimer
             onIdle={handleIdle}
             onActive={handleActive}
             timeout={TIME_OUT}

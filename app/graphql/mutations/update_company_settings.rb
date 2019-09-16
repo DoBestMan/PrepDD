@@ -50,11 +50,19 @@ class Mutations::UpdateCompanySettings < GraphQL::Schema::Mutation
     end
 
     if delete_parent_id.present?
-      ParentCompany.where(child_company_id: company&.id, parent_company_id: delete_parent_id).first&.destroy!
+      ParentCompany.where(
+        child_company_id: company&.id, parent_company_id: delete_parent_id
+      )
+        .first
+        &.destroy!
     end
 
     if delete_broker_id.present?
-      BrokerCompany.where(child_broker_id: company&.id, parent_broker_id: delete_broker_id).first&.destroy!
+      BrokerCompany.where(
+        child_broker_id: company&.id, parent_broker_id: delete_broker_id
+      )
+        .first
+        &.destroy!
     end
 
     parents = company.company_parents

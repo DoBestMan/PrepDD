@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
         color: '#3A84FF',
       },
       '& input::placeholder': {
-        fontSize: cs.FONT.size.xs, 
+        fontSize: cs.FONT.size.xs,
       },
       '& div': {
         width: '100%',
@@ -130,7 +130,7 @@ interface InviteMemberType {
 export default function OwnerForm(props: OwnerFormProps) {
   const {owners, setOwners, size} = props;
   const classes = useStyles();
-  
+
   const [openAddPanel, setOpenAddPanel] = useState<boolean>(false);
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
   const [searchUsername, setSearchUsername] = useState<string>('');
@@ -254,7 +254,7 @@ export default function OwnerForm(props: OwnerFormProps) {
     setOwners([...owners, newOwner]);
     setInviteMember({
       name: '',
-      email: '',      
+      email: '',
     });
   };
 
@@ -286,7 +286,10 @@ export default function OwnerForm(props: OwnerFormProps) {
       {openAddPanel ? (
         <ClickAwayListener onClickAway={() => setOpenAddPanel(false)}>
           <Paper
-            className={clsx(classes.addPanel, size === 'small' && classes.smallPanelPos)}
+            className={clsx(
+              classes.addPanel,
+              size === 'small' && classes.smallPanelPos
+            )}
             elevation={0}
             onMouseOver={() => setOpenAddPanel(true)}
             onMouseLeave={handleCloseAll}

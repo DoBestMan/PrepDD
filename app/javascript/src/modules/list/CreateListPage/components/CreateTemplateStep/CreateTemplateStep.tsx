@@ -198,7 +198,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
       return;
     }
     setSelected([]);
-  }
+  };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
@@ -218,11 +218,11 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
     }
 
     setSelected(newSelected);
-  }
+  };
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
-    console.log("Accepted Files: ", acceptedFiles);
+    console.log('Accepted Files: ', acceptedFiles);
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
       form_data.append(`files[]`, file);
@@ -267,22 +267,22 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             tasks: [...selectedTemplate.tasks, ...newTasks],
           });
           dispatch({
-            type: 'SET_NOTIFICATION', 
+            type: 'SET_NOTIFICATION',
             notification: {
-              variant: 'success', 
-              message: 'Importing tasks successfully'
-            }
+              variant: 'success',
+              message: 'Importing tasks successfully',
+            },
           });
         }
       })
       .catch(e => {
-        console.log("Upload error: ", e);
+        console.log('Upload error: ', e);
         dispatch({
-          type: 'SET_NOTIFICATION', 
+          type: 'SET_NOTIFICATION',
           notification: {
-            variant: 'success', 
-            message: 'Importing tasks failed'
-          }
+            variant: 'success',
+            message: 'Importing tasks failed',
+          },
         });
       });
   };
@@ -335,7 +335,8 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
   };
 
   const handleChangePriority = (newValue: string, index: number) => {
-    let newTasks: AllTemplates_templateLists_tasks[] | null = selectedTemplate.tasks;
+    let newTasks: AllTemplates_templateLists_tasks[] | null =
+      selectedTemplate.tasks;
 
     if (newTasks) {
       newTasks[index].priority = newValue;
@@ -529,7 +530,9 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                               className={classes.textFlow}
                               value={
                                 item.section
-                                  ? item.section.name ? item.section.name : ''
+                                  ? item.section.name
+                                    ? item.section.name
+                                    : ''
                                   : ''
                               }
                               placeholder="Add section..."
@@ -614,10 +617,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
             >
               Download Template
             </Button>
-            <ReactDropzone
-              multiple
-              onDrop={handleDrop}
-            >
+            <ReactDropzone multiple onDrop={handleDrop}>
               {({getRootProps, getInputProps, isDragActive}) => (
                 <div
                   {...getRootProps()}

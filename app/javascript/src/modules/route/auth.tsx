@@ -33,7 +33,7 @@ const PublicRoute = (props: any) => {
       }
     />
   );
-};  
+};
 
 export default function Router(props: {path: string}) {
   return (

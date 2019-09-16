@@ -143,19 +143,19 @@ const SignUpPage = (props: any) => {
     });
     if (signedUpUser.lastViewedCompanyId) {
       dispatch({
-        type: 'SET_SELECTED_COMPANY', 
+        type: 'SET_SELECTED_COMPANY',
         companyId: signedUpUser.lastViewedCompanyId,
-      })
+      });
     } else if (signedUpUser.ownedCompanies) {
       dispatch({
-        type: 'SET_SELECTED_COMPANY', 
+        type: 'SET_SELECTED_COMPANY',
         companyId: signedUpUser.ownedCompanies[0].id,
-      })
+      });
     } else if (signedUpUser.companies) {
       dispatch({
-        type: 'SET_SELECTED_COMPANY', 
-        companyId: signedUpUser.companies[0].id, 
-      })
+        type: 'SET_SELECTED_COMPANY',
+        companyId: signedUpUser.companies[0].id,
+      });
     }
     history.push('/app/');
   }, [loading, data]);

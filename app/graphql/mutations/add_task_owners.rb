@@ -9,15 +9,20 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(task_id: nil, user_owners: nil, user_reviewers:nil, team_owners: nil, team_reviewers: nil)
-
+  def resolve(
+    task_id: nil,
+    user_owners: nil,
+    user_reviewers: nil,
+    team_owners: nil,
+    team_reviewers: nil
+  )
     response = { errors: [] }
 
     task = Task.find(task_id)
-    
-    task_user_owner_emails =  task.user_owners.pluck(:email)
+
+    task_user_owner_emails = task.user_owners.pluck(:email)
     task_team_owner_ids = task.team_owners.pluck(:id)
-    
+
     if user_owners.present?
       new_users = user_owners - task_user_owner_emails
       new_users.each do |email|
@@ -98,5 +103,4 @@ class Mutations::AddTaskOwners < GraphQL::Schema::Mutation
     response[:task] = task
     response
   end
-
 end

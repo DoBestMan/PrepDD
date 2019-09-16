@@ -1,10 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
-import {
-  Drawer, 
-  Typography, 
-} from '@material-ui/core';
+import {Drawer, Typography} from '@material-ui/core';
 import RightIcon from '@material-ui/icons/KeyboardArrowRightSharp';
 import MoreIcon from '@material-ui/icons/MoreHoriz';
 
@@ -33,24 +30,24 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: 64,
     },
     drawerHeader: {
-      padding: '24px 24px 0px 16px', 
-    }, 
+      padding: '24px 24px 0px 16px',
+    },
     flex: {
-      display: 'flex', 
-      alignItems: 'center', 
+      display: 'flex',
+      alignItems: 'center',
     },
     grow: {
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     priority: {
       color: '#509E6D',
     },
     light: {
-      fontWeight: 400, 
-    }, 
+      fontWeight: 400,
+    },
     statusBlock: {
-      marginTop: '12px', 
-      paddingLeft: '8px', 
+      marginTop: '12px',
+      paddingLeft: '8px',
     },
     textFlow: {
       display: 'inline-block',
@@ -63,7 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const labels = ["Overview", "Files", "Public", "Internal", "Timeline"];
+const labels = ['Overview', 'Files', 'Public', 'Internal', 'Timeline'];
 
 interface TaskDetailPageProps {
   open: boolean;
@@ -74,13 +71,7 @@ interface TaskDetailPageProps {
 }
 
 export default function TaskDetailPage(props: TaskDetailPageProps) {
-  const {
-    open, 
-    selectedTask,
-    tasks, 
-    setSelectedTask, 
-    setTasks, 
-  } = props;
+  const {open, selectedTask, tasks, setSelectedTask, setTasks} = props;
   const classes = useStyles();
 
   return (
@@ -96,9 +87,12 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
       <div className={classes.drawerSpacer} />
       <div className={classes.drawerHeader}>
         <div className={classes.flex}>
-          <RightIcon className={classes.priority} />
+          {selectedTask.priority === 'high' && (
+            <RightIcon className={classes.priority} />
+          )}
           <Typography variant="h2" className={classes.textFlow}>
-            R-903 <span className={classes.light}>{selectedTask.name}</span>
+            {selectedTask.listNumber ? selectedTask.listNumber + ' ' : ' '}
+            <span className={classes.light}>{selectedTask.name}</span>
           </Typography>
         </div>
         <div className={clsx(classes.flex, classes.statusBlock)}>
@@ -108,15 +102,15 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
         </div>
       </div>
       <Panel labels={labels} padding>
-        <OverviewPane 
-          task={selectedTask} 
+        <OverviewPane
+          task={selectedTask}
           tasks={tasks}
           setTask={setSelectedTask}
           setTasks={setTasks}
         />
         <FilesPane />
-        <PublicPane />
-        <InternalPane />
+        <PublicPane taskId={selectedTask.id} />
+        <InternalPane taskId={selectedTask.id} />
         <TimelinePane />
       </Panel>
     </Drawer>

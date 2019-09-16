@@ -90,11 +90,11 @@ export default function UploadPanel(props: UploadPanelProps) {
           logoUrl: res.data.logo_url,
         });
         dispatch({
-          type: 'SET_NOTIFICATION', 
+          type: 'SET_NOTIFICATION',
           notification: {
             variant: 'success',
             message: 'Update logo successfully',
-          }
+          },
         });
 
         if (state.currentUser.companies) {
@@ -115,11 +115,11 @@ export default function UploadPanel(props: UploadPanelProps) {
       })
       .catch(error => {
         dispatch({
-          type: 'SET_NOTIFICATION', 
+          type: 'SET_NOTIFICATION',
           notification: {
             variant: 'error',
             message: 'Upload logo failed',
-          }
+          },
         });
       });
   };

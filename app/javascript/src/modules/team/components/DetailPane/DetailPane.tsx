@@ -199,13 +199,7 @@ interface Role {
 }
 
 export default function DetailPane(props: DetailPaneProps) {
-  const {
-    id,
-    open,
-    company,
-    handleClose,
-    updateMemberList,
-  } = props;
+  const {id, open, company, handleClose, updateMemberList} = props;
   const classes = useStyles();
 
   const {dispatch} = useGlobalState();
@@ -336,7 +330,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'success',
         message: 'Update team member successfully',
-      }
+      },
     });
   }, [
     updateTeamMemberLoading,
@@ -359,7 +353,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'error',
         message: errors[0].message,
-      }
+      },
     });
   }, [
     idx(
@@ -382,7 +376,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'success',
         message: 'Add team member successfully',
-      }
+      },
     });
   }, [
     addTeamMemberLoading,
@@ -405,7 +399,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'error',
         message: errors[0].message,
-      }
+      },
     });
   }, [
     idx(
@@ -428,7 +422,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'success',
         message: 'Remove team member successfully',
-      }
+      },
     });
   }, [
     removeTeamMemberLoading,
@@ -451,7 +445,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'error',
         message: errors[0].message,
-      }
+      },
     });
   }, [
     idx(
@@ -478,7 +472,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'success',
         message: 'Remove company member successfully',
-      }
+      },
     });
   }, [
     removeCompanyMemberLoading,
@@ -502,7 +496,7 @@ export default function DetailPane(props: DetailPaneProps) {
       notification: {
         variant: 'error',
         message: errors[0].message,
-      }
+      },
     });
   }, [
     idx(

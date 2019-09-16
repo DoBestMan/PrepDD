@@ -29,7 +29,7 @@ const rootReducer: React.Reducer<State, Action> = (state, action) => {
       break;
     case 'SET_NOTIFICATION':
       return {
-        ...state, 
+        ...state,
         notification: action.notification,
       };
       break;
@@ -54,9 +54,9 @@ const initialState: State = {
     roles: [],
   },
   notification: {
-    variant: 'success', 
-    message: '', 
-  }
+    variant: 'success',
+    message: '',
+  },
 };
 
 type ContextType = {

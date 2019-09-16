@@ -274,7 +274,7 @@ export default function CompanyForm(props: CompanyFormProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
 
-    setState(state => ({...state, [name]: value})); 
+    setState(state => ({...state, [name]: value}));
     if (name === 'companyName') {
       searchCompanies({
         variables: {text: value, companyId: currentCompanyId},
@@ -350,7 +350,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       newCompany: '',
     });
     setOpenForm(false);
-  }
+  };
 
   const renderUserList = () => {
     if (result && result.users && result.users.length) {
@@ -374,8 +374,11 @@ export default function CompanyForm(props: CompanyFormProps) {
             })}
         </List>
       );
-    } else if (result.companies && !result.companies.length && 
-      result.users && !result.users.length
+    } else if (
+      result.companies &&
+      !result.companies.length &&
+      result.users &&
+      !result.users.length
     ) {
       return (
         <Typography variant="h4" style={{marginTop: '12px'}}>

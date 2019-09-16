@@ -6,6 +6,11 @@
 // GraphQL query operation: UserTasks
 // ====================================================
 
+export interface UserTasks_userTasks_list {
+  __typename: "List";
+  id: string;
+}
+
 export interface UserTasks_userTasks_userOwners {
   __typename: "User";
   id: string;
@@ -41,8 +46,9 @@ export interface UserTasks_userTasks {
   priority: string | null;
   status: string | null;
   dueDate: string | null;
-  updatedAt: string;
-  updated: string | null;
+  updatedAt: string | null;
+  listNumber: number | null;
+  list: UserTasks_userTasks_list | null;
   userOwners: UserTasks_userTasks_userOwners[] | null;
   teamOwners: UserTasks_userTasks_teamOwners[] | null;
   userReviewers: UserTasks_userTasks_userReviewers[] | null;

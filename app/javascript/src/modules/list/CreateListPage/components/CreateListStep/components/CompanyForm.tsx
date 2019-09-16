@@ -195,7 +195,7 @@ export default function CompanyForm(props: CompanyFormProps) {
     setSearchString(value);
     searchCompanies({
       variables: {text: value},
-    });    
+    });
   };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {

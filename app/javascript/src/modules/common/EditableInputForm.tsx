@@ -10,12 +10,12 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       marginTop: '24px',
-      height: 'fit-content', 
+      height: 'fit-content',
     },
     title: {
-      width: '100%', 
-      height: 'fit-content', 
-      borderBottom: '1px solid #D8D8D8', 
+      width: '100%',
+      height: 'fit-content',
+      borderBottom: '1px solid #D8D8D8',
       wordBreak: 'break-all',
     },
     input: {
@@ -23,13 +23,13 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#000000',
       lineHeight: '24px',
       wordBreak: 'break-all',
-      letterSpacing: '0em', 
+      letterSpacing: '0em',
       fontFamily: cs.FONT.family,
       fontSize: cs.FONT.size.sm,
       fontWeight: cs.FONT.weight.regular,
       outline: 'none',
       border: 'none',
-      borderBottom: '1px solid #D8D8D8',      
+      borderBottom: '1px solid #D8D8D8',
     },
     nonEditable: {
       display: 'flex',
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'center',
     },
     nonEditableIcon: {
-      fontSize: '15px', 
+      fontSize: '15px',
       marginLeft: '12px',
       color: '#3A84FF',
       marginBottom: '-3px',
@@ -65,17 +65,29 @@ export default function EditableInputForm(props: EditableInputFormProps) {
   useEffect(() => {
     if (!editable) return;
 
-    let editableObj = document.getElementById("editor");
+    let editableObj = document.getElementById('editor');
 
     if (editableObj) {
-      editableObj.addEventListener('blur', (event) => {
-        if (onChange && event.target && (event.target as HTMLDivElement).innerText)
-          onChange((event.target as HTMLDivElement).innerText);
-      }, false);
-  
-      editableObj.addEventListener('keyup', (event) => {
+      editableObj.addEventListener(
+        'blur',
+        event => {
+          if (
+            onChange &&
+            event.target &&
+            (event.target as HTMLDivElement).innerText
+          )
+            onChange((event.target as HTMLDivElement).innerText);
+        },
+        false
+      );
+
+      editableObj.addEventListener('keyup', event => {
         if (event.keyCode === 13) {
-          if (onChange && event.target && (event.target as HTMLDivElement).innerText)
+          if (
+            onChange &&
+            event.target &&
+            (event.target as HTMLDivElement).innerText
+          )
             onChange((event.target as HTMLDivElement).innerText);
 
           setEditable(false);
@@ -84,14 +96,11 @@ export default function EditableInputForm(props: EditableInputFormProps) {
     }
 
     return () => {
-
       if (editableObj) {
-        editableObj.removeEventListener('input', (event) => {
-        }, false);
-    
-        editableObj.removeEventListener('keyup', (event) => {
-        });
-      }   
+        editableObj.removeEventListener('input', event => {}, false);
+
+        editableObj.removeEventListener('keyup', event => {});
+      }
     };
   }, [editable]);
 
@@ -109,7 +118,7 @@ export default function EditableInputForm(props: EditableInputFormProps) {
       )}
       <ClickAwayListener onClickAway={handleClickAway}>
         {editable ? (
-          <div 
+          <div
             id="editor"
             className={classes.input}
             contentEditable={true}

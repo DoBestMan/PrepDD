@@ -4,7 +4,7 @@ import {UserLists} from './__generated__/UserLists';
 export const useUserLists = createQueryHook<UserLists, {}>(gql`
   query UserLists {
     userLists {
-      id 
+      id
       lists {
         id
         name

@@ -1,9 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {
-  Typography
-} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 
 import * as cs from '../../../../../constants/theme';
 import DefaultUserImage from '../../../../common/DefaultUserImage';
@@ -11,53 +10,52 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '12px 24px', 
+      padding: '12px 24px',
       borderRadius: '3px',
-      marginBottom: '12px', 
+      marginBottom: '12px',
     },
     flex: {
-      display: 'flex', 
+      display: 'flex',
       alignItems: 'center',
     },
     grow: {
-      flexGrow: 1, 
+      flexGrow: 1,
     },
     avatar: {
-      width: '18px', 
-      height: '18px', 
-      fontSize: '9px', 
+      width: '18px',
+      height: '18px',
+      fontSize: '9px',
       backgroundColor: 'rgba(42,137,75,0.80)',
-      marginRight: '12px', 
+      marginRight: '12px',
     },
     status: {
-      width: '8px', 
-      height: '8px', 
-      borderRadius: '50%', 
+      width: '8px',
+      height: '8px',
+      borderRadius: '50%',
       backgroundColor: '#6EB81D',
-      marginRight: '12px', 
-    }, 
+      marginRight: '12px',
+    },
     primary: {
       color: cs.COLORS.primary,
     },
     secondary: {
       color: '#606060',
       opacity: 0.5,
-    }, 
+    },
     content: {
-      marginTop: '12px', 
+      marginTop: '12px',
       marginLeft: '30px',
-    }
+    },
   })
 );
 
 interface MessageProps {
   data: {
-    from: string; 
-    to: string;
-    content: string;
-    time: string;
+    message: string;
     status: boolean;
-  }, 
+    user: any;
+    createdAt: string;
+  };
   className?: string;
 }
 
@@ -68,24 +66,23 @@ export default function Message(props: MessageProps) {
   return (
     <div className={clsx(classes.root, className)}>
       <div className={classes.flex}>
-        <DefaultUserImage userName={data.from} className={classes.avatar} />
-        <Typography variant="h6">
-          {data.from}
-        </Typography>
+        <DefaultUserImage
+          userName={(data.user && data.user.fullName) || ''}
+          className={classes.avatar}
+        />
+        <Typography variant="h6">{data.user && data.user.fullName}</Typography>
         <div className={classes.grow} />
-        {data.status && (
-          <div className={classes.status} />
-        )}
+        {data.status && <div className={classes.status} />}
         <Typography variant="h6" className={classes.secondary}>
-          {data.time}
+          {data.createdAt}
         </Typography>
       </div>
       <div className={classes.content}>
         <Typography variant="h6" color="textSecondary">
-          <span className={classes.primary}>{data.to + ' '}</span>
-          {data.content}
+          {false && <span className={classes.primary}> </span>}
+          {data.message}
         </Typography>
       </div>
     </div>
-  )
+  );
 }

@@ -10,31 +10,27 @@ class Mutations::UpdateTask < GraphQL::Schema::Mutation
   field :errors, [Types::FormErrorType], null: false
   field :success, Boolean, null: false
 
-  def resolve(id: nil, name: nil, description: nil, priority: nil, status: nil, due_date: nil)
-
+  def resolve(
+    id: nil,
+    name: nil,
+    description: nil,
+    priority: nil,
+    status: nil,
+    due_date: nil
+  )
     response = { errors: [] }
 
     task = Task.find(id)
 
-    if name.present?
-      task.update(name: name)
-    end
+    task.update(name: name) if name.present?
 
-    if description.present?
-      task.update(description: description)
-    end
+    task.update(description: description) if description.present?
 
-    if priority.present?
-      task.update(priority: priority)
-    end
+    task.update(priority: priority) if priority.present?
 
-    if status.present?
-      task.update(status: status)
-    end
+    task.update(status: status) if status.present?
 
-    if due_date.present?
-      task.update(due_date: due_date)
-    end
+    task.update(due_date: due_date) if due_date.present?
 
     if task&.persisted?
       response[:success] = true

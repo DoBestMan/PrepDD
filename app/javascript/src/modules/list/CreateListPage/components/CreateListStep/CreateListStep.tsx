@@ -43,15 +43,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {},
     body: {
-      display: 'flex', 
+      display: 'flex',
       height: 'calc(100vh - 144px)',
       padding: '0px calc((100% - 1080px) / 2) 0px calc((100% - 1080px) / 2)',
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto',
     },
     pane: {
-      width: '500px', 
-      padding: '20px', 
+      width: '500px',
+      padding: '20px',
     },
     footer: {
       height: '60px',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: '12px',
     },
     ownerLabel: {
-      height: '36px', 
+      height: '36px',
     },
     sharingTitle: {
       color: '#606060',
@@ -119,12 +119,7 @@ interface NewCompanyType {
 }
 
 const CreateListStep = (props: any) => {
-  const {
-    selectedTemplate,
-    stepNumber,
-    currentStep,
-    history,
-  } = props;
+  const {selectedTemplate, stepNumber, currentStep, history} = props;
   const classes = useStyles();
 
   const {state, dispatch} = useGlobalState();
@@ -135,14 +130,18 @@ const CreateListStep = (props: any) => {
     responderId: '',
   });
   const [sharing, setSharing] = useState<string>('internal');
-  const [owners, setOwners] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([
+  const [owners, setOwners] = useState<
+    (
+      | SearchCompanyUsers_searchCompanyUsers_users
+      | SearchCompanyUsers_searchCompanyUsers_teams)[]
+  >([
     {
-      __typename: "User",
+      __typename: 'User',
       id: state.currentUser.id,
-      email: state.currentUser.email, 
+      email: state.currentUser.email,
       fullName: state.currentUser.fullName,
       profileUrl: state.currentUser.profileUrl,
-    }
+    },
   ]);
   const [listId, setListId] = useState<string>('');
   const [inviteCompany, setInviteCompany] = useState<NewCompanyType>({
@@ -194,18 +193,14 @@ const CreateListStep = (props: any) => {
 
   const [
     addListOwner,
-    {
-      loading: addOwnerLoading, 
-      data: addOwnerRes, 
-      error: addOwnerError
-    },
+    {loading: addOwnerLoading, data: addOwnerRes, error: addOwnerError},
   ] = useAddListOwner({
     listId,
     companyId: state.selectedCompany,
     userEmails: getEmails(),
     teamIds: owners
-              .filter(owner => owner.__typename === 'Team')
-              .map(owner => owner.id),
+      .filter(owner => owner.__typename === 'Team')
+      .map(owner => owner.id),
   });
 
   useEffect(() => {
@@ -220,11 +215,11 @@ const CreateListStep = (props: any) => {
 
     if (addSuccess && (!inviteCompany.ownerEmail || inviteSuccess)) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'success',
           message: 'Create List successfully',
-        }
+        },
       });
       history.goBack();
     }
@@ -262,11 +257,11 @@ const CreateListStep = (props: any) => {
       createMetaData();
     } else if (response.errors && response.errors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: response.errors[0].message,
-        }
+        },
       });
     }
   }, [loading, idx(data, data => data.createList.list)]);
@@ -279,11 +274,11 @@ const CreateListStep = (props: any) => {
 
     if (errors && errors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: errors[0].message,
-        }
+        },
       });
     }
   }, [
@@ -299,11 +294,11 @@ const CreateListStep = (props: any) => {
 
     if (errors && errors.length) {
       dispatch({
-        type: 'SET_NOTIFICATION', 
+        type: 'SET_NOTIFICATION',
         notification: {
           variant: 'error',
           message: errors[0].message,
-        }
+        },
       });
     }
   }, [
@@ -485,8 +480,8 @@ const CreateListStep = (props: any) => {
                     );
                   }
                 )}
-                <OwnerForm owners={owners} setOwners={setOwners} />
-              </div>
+              <OwnerForm owners={owners} setOwners={setOwners} />
+            </div>
           </div>
           {sharing !== 'internal' && (
             <CompanyForm

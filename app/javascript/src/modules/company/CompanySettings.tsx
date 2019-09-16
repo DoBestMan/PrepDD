@@ -101,11 +101,11 @@ export default function CompanySettings(props: {path?: string}) {
     setDeletedParent('');
     setDeletedBroker('');
     dispatch({
-      type: 'SET_NOTIFICATION', 
+      type: 'SET_NOTIFICATION',
       notification: {
         variant: 'success',
         message: 'Update company data successfully',
-      }
+      },
     });
   }, [
     updateCompanyLoading,
@@ -123,11 +123,11 @@ export default function CompanySettings(props: {path?: string}) {
 
     if (!errors || !errors.length) return;
     dispatch({
-      type: 'SET_NOTIFICATION', 
+      type: 'SET_NOTIFICATION',
       notification: {
         variant: 'error',
         message: errors[0].message,
-      }
+      },
     });
   }, [
     idx(
@@ -150,10 +150,7 @@ export default function CompanySettings(props: {path?: string}) {
         />
       </div>
       <div className={classes.uploadPanel}>
-        <UploadPanel
-          company={company}
-          setCompany={setCompany}
-        />
+        <UploadPanel company={company} setCompany={setCompany} />
       </div>
     </div>
   );

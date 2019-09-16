@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'fit-content',
       alignItems: 'center',
       marginRight: '6px',
-      marginBottom: '12px', 
+      marginBottom: '12px',
       padding: '3px 6px 3px 6px',
       background: '#FFFFFF',
       border: '1px solid #D8D8D8',
@@ -46,15 +46,7 @@ interface NameLabelProps {
 
 const NameLabel = React.forwardRef(
   (props: NameLabelProps, ref: React.Ref<HTMLDivElement>) => {
-    const {
-      logo, 
-      label, 
-      selected, 
-      type, 
-      className, 
-      onClose, 
-      ...other
-    } = props;
+    const {logo, label, selected, type, className, onClose, ...other} = props;
     const classes = useStyles();
 
     return (
@@ -72,14 +64,9 @@ const NameLabel = React.forwardRef(
             <DefaultUserImage userName={label} className={classes.image} />
           )
         )}
-        <div className={classes.label}>
-          {label}
-        </div>
+        <div className={classes.label}>{label}</div>
         {onClose && (
-          <i
-            className={clsx(classes.close, 'fa fa-times')}
-            onClick={onClose}
-          />
+          <i className={clsx(classes.close, 'fa fa-times')} onClick={onClose} />
         )}
       </div>
     );
