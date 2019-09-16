@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface PanelProps {
   children: React.ReactNode;
   title?: string;
-  labels: string[];
+  labels: any[];
   padding?: boolean;
 }
 
@@ -81,14 +81,15 @@ export default function Panel(props: PanelProps) {
         onChange={handleChange}
         {...others}
       >
-        {labels.map((label: string, id: number) => (
+        {labels.map((label: any, id: number) => (
           <Tab
             key={`pane-${id}`}
             classes={{
               root: classes.tab,
               selected: classes.tabSelected,
             }}
-            label={label}
+            label={label.label}
+            onClick={label.onClick}
           />
         ))}
       </Tabs>

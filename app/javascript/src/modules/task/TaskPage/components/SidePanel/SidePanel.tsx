@@ -60,7 +60,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const labels = ['Overview', 'Files', 'Public', 'Internal', 'Timeline'];
+const labels = [
+  {label: 'Overview'}, 
+  {label: 'Files'}, 
+  {label: 'Public'}, 
+  {label: 'Internal'}, 
+  {label: 'Timeline'},
+];
 
 interface TaskDetailPageProps {
   open: boolean;

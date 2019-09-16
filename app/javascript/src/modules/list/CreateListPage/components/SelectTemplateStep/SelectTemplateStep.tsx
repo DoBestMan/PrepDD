@@ -26,7 +26,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const labels = ['General Templates', 'Finance', 'Legal', 'M&A'];
+const labels = [
+  {label: 'General Templates'}, 
+  {label: 'Finance'}, 
+  {label: 'Legal'}, 
+  {label: 'M&A'}
+];
 
 interface SelectTemplateStepProps {
   data: AllTemplates_templateLists[];
