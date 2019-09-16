@@ -56,19 +56,19 @@ export default function TaskPage() {
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [multiTasks, setMultiTasks] = useState<any[]>([]);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
-    __typename: "Task",
+    __typename: 'Task',
     id: '',
     name: '',
     priority: '',
-    status: '', 
+    status: '',
     dueDate: '',
     updatedAt: '',
-    listNumber: null, 
-    list: null, 
-    userOwners: null, 
-    teamOwners: null, 
-    userReviewers: null, 
-    teamReviewers: null, 
+    listNumber: null,
+    list: null,
+    userOwners: null,
+    teamOwners: null,
+    userReviewers: null,
+    teamReviewers: null,
   });
 
   const {loading, data, error} = useUserLists({});

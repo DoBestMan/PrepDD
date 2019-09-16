@@ -26,34 +26,26 @@ module Types
 
     def user_owners
       object.task_owner.where(task_ownerable_type: 'User', owner_type: 'Owner')
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def team_owners
       object.task_owner.where(task_ownerable_type: 'Team', owner_type: 'Owner')
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def user_reviewers
       object.task_owner.where(
         task_ownerable_type: 'User', owner_type: 'Reviewer'
       )
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def team_reviewers
       object.task_owner.where(
         task_ownerable_type: 'Team', owner_type: 'Reviewer'
       )
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def messages

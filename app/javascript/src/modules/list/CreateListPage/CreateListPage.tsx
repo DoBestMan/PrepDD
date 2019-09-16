@@ -15,7 +15,9 @@ import {
 
 export default function CreateListPage() {
   const [step, setStep] = useState<number>(0);
-  const [selectedTemplate, setSelectedTemplate] = useState<AllTemplates_templateLists>({
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    AllTemplates_templateLists
+  >({
     __typename: 'List',
     id: '',
     name: '',
@@ -80,7 +82,7 @@ export default function CreateListPage() {
           currentStep={step}
           setStep={setStep}
         />
-        
+
         <CreateListStep
           selectedTemplate={selectedTemplate}
           stepNumber={2}

@@ -3,16 +3,16 @@ import {UserTasks} from './__generated__/UserTasks';
 
 export const useUserTasks = createQueryHook<UserTasks, {}>(gql`
   query UserTasks(
-    $listIds: [ID!]!, 
-    $sectionIds: [ID!]!, 
-    $offset: Int, 
-    $limit: Int, 
+    $listIds: [ID!]!
+    $sectionIds: [ID!]!
+    $offset: Int
+    $limit: Int
   ) {
     userTasks(
-      listIds: $listIds, 
-      sectionIds: $sectionIds, 
-      offset: $offset, 
-      limit: $limit, 
+      listIds: $listIds
+      sectionIds: $sectionIds
+      offset: $offset
+      limit: $limit
     ) {
       id
       name
@@ -20,10 +20,10 @@ export const useUserTasks = createQueryHook<UserTasks, {}>(gql`
       status
       dueDate
       updatedAt
-			listNumber
-			list {
-				id
-			}
+      listNumber
+      list {
+        id
+      }
       userOwners {
         id
         email
