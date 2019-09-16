@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     body: {
       borderBottom: '1px solid #D8D8D8',
+      height: 'calc(100vh - 292px)',
+    },
+    miniBody: {
       height: 'calc(100vh - 364px)',
     },
     footer: {
@@ -34,6 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
     messageBox: {
       display: 'flex',
       marginBottom: '12px',
+      alignItems: 'center', 
     },
     primary: {
       color: cs.COLORS.primary,
@@ -139,7 +143,7 @@ export default function InternalPane(props: InternalPaneProps) {
       aria-labelledby="Internal"
       elevation={0}
     >
-      <div className={classes.body}>
+      <div className={clsx(classes.body, showAlert && classes.miniBody)}>
         {messages.map((message: any, index: number) => {
           return (
             <Message key={index} data={message} className={classes.message} />
