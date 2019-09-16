@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 'calc(100vh - 266px)',
       padding: '12px 24px',
       borderBottom: '1px solid #D8D8D8',
+      overflow: 'auto', 
     },
     invisible: {
       display: 'none',
