@@ -8,10 +8,3 @@ amazon:
   secret_access_key: <%= ENV.fetch('AWS_SECRET_ACCESS_KEY') %>
   bucket: "main-prepdd"
   region: "us-east-1"
-
-devazon:
-  service: "S3"
-  access_key_id: <%= ENV.fetch('DEV_AWS_ACCESS')%>
-  secret_access_key: <%= ENV.fetch('DEV_AWS_KEY')
-  bucket: 'tbd'
-  region: 'us-east-1'
