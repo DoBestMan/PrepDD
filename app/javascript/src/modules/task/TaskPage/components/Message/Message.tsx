@@ -10,8 +10,9 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '24px 24px 0px 24px',
+      padding: '24px',
       borderRadius: '3px',
+      marginBottom: '12px', 
     },
     flex: {
       display: 'flex',

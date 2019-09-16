@@ -10,7 +10,6 @@ import Message from '../../Message';
 import Alert from './Alert';
 
 import {UserTasks_userTasks as taskType} from '../../../../../../graphql/queries/__generated__/UserTasks';
-//import { publicTaskMessages_publicTaskMessages as taskMessagesType } from '../../../../../../graphql/queries/__generated__/publicTaskMessages';
 import PublicTaskMessages from '../../../../../../graphql/queries/PublicTaskMessages';
 
 import createPublicMessage from '../../../../../../graphql/mutations/CreatePublicTaskMessage';
@@ -165,7 +164,7 @@ export default function InternalPane(props: InternalPaneProps) {
             />
           </form>
         </div>
-        {showAlert && <Alert onClick={handleSendClick} />}
+        {showAlert && <Alert onClick={handleSendClick} onCancel={handleCancelClick}/>}
       </div>
     </Paper>
   );

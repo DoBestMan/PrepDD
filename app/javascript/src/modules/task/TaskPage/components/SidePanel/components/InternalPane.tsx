@@ -13,11 +13,11 @@ import CreatePrivateTaskMessage from '../../../../../../graphql/mutations/Create
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '24px',
     },
     body: {
+      height: 'calc(100vh - 266px)',
+      padding: '12px 24px',
       borderBottom: '1px solid #D8D8D8',
-      height: 'calc(100vh - 364px)',
     },
     invisible: {
       display: 'none',
@@ -26,16 +26,15 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: 'rgba(39, 146, 162, 0.1)',
     },
     footer: {
-      padding: '16px 24px',
+      padding: '12px 24px',
     },
     messageBox: {
       display: 'flex',
-      marginBottom: '12px',
+      alignItems: 'center', 
     },
     input: {
       display: 'block',
       width: '100%',
-      marginTop: '6px',
       color: '#606060',
       fontFamily: cs.FONT.family,
       fontWeight: cs.FONT.weight.regular,
