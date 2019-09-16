@@ -110,6 +110,18 @@ const useStyles = makeStyles((theme: Theme) =>
         border: 'none',
       },
     },
+    morePaper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      width: '200px',
+      position: 'absolute',
+      top: '28px',
+      right: '3px',
+      padding: '9px',
+      boxSizing: 'border-box',
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
   })
 );
 
@@ -127,6 +139,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
   const classes = useStyles();
 
   const [openPriority, setOpenPriority] = useState<boolean>(false);
+  const [moreHover, setMoreHover] = useState<boolean>(false);
 
   const [owners, setOwners] = useState<
     (
@@ -202,6 +215,9 @@ export default function OverviewPane(props: OverviewPaneProps) {
         } as SearchCompanyUsers_searchCompanyUsers_teams;
       }),
     ]);
+
+    console.log("User Owners: ", task.userOwners);
+    console.log("Task Owners: ", task.teamOwners);
   }, [task.userOwners, task.teamOwners]);
 
   useEffect(() => {
@@ -296,7 +312,9 @@ export default function OverviewPane(props: OverviewPaneProps) {
           </Typography>
           <div className={classes.flex} style={{flexWrap: 'wrap'}}>
             {owners &&
-              owners.map(
+              owners
+                .slice(0, 5)
+                .map(
                 (
                   owner:
                     | SearchCompanyUsers_searchCompanyUsers_users
@@ -320,6 +338,54 @@ export default function OverviewPane(props: OverviewPaneProps) {
                   );
                 }
               )}
+
+              {owners && owners.length > 5 && (
+                <div 
+                  onMouseOver={() => setMoreHover(true)}
+                  onMouseLeave={() => setMoreHover(false)}
+                  style={{position: 'relative'}}                  
+                >
+                  <NameLabel 
+                    label={`${owners.length - 5}`}
+                  />
+                  {moreHover && (
+                    <Paper
+                      className={classes.morePaper}
+                      elevation={0}
+                      onMouseOver={() => setMoreHover(true)}
+                      onMouseLeave={() => setMoreHover(false)}
+                    >
+                      {owners
+                        .slice(2)
+                        .map(
+                          (
+                            owner:
+                              | SearchCompanyUsers_searchCompanyUsers_users
+                              | SearchCompanyUsers_searchCompanyUsers_teams,
+                            index: number
+                          ) => {
+                            return owner.__typename === 'User' ? (
+                              <NameLabel
+                                key={index}
+                                type="user"
+                                label={owner.fullName}
+                                logo={owner.profileUrl as string}
+                                onClose={() => handleRemoveOwner(index)}
+                              />
+                            ) : (
+                              <NameLabel
+                                key={index}
+                                label={owner.name}
+                                onClose={() => handleRemoveOwner(index)}
+                              />
+                            );
+                          }
+                        )}
+                    </Paper>                    
+                  )}
+                </div>
+              )}
+
             <InviteForm owners={owners} setOwners={setOwners} size="small" />
           </div>
         </div>
