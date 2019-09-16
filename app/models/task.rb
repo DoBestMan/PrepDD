@@ -10,13 +10,10 @@ class Task < ApplicationRecord
   has_many :team_owners, through: :task_owner, :source => :task_ownerable, :source_type => 'Team'
 
 
-  # Takes a rails timestamp and converts to a unix epoch integer
-  # GQL sends this as a string
-  def adjust_epoch
-    self.updated_at.to_f * 1000
-  end
-
   has_many :task_messages
+
+  has_many :file_version_tasks
+  has_many :file_versions, through: :file_version_tasks
 
   def self.import(files)
     require 'roo'

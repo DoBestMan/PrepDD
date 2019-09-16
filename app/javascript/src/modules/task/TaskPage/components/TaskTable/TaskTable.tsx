@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -21,6 +21,9 @@ import RightIcon from '@material-ui/icons/KeyboardArrowRightSharp';
 import DefaultUserImage from '../../../../common/DefaultUserImage';
 import StyledItem from './components/StyledItem';
 import StyledBadge from './components/StyledBadge';
+
+import {useDropzone} from 'react-dropzone'
+import {withRouter} from 'react-router';
 
 import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
 import {useUpdateTask} from '../../../../../graphql/mutations/UpdateTask';
@@ -72,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
       left: '-90px',
     },
     textFlow: {
+			userSelect: 'none',
       display: 'inline-block',
       width: 'fit-content',
       maxWidth: 'calc(80%)',
@@ -79,6 +83,9 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     },
+		noSelect: {
+			userSelect: 'none'
+		},
     unHoverRow: {
       opacity: 0.6, 
     },
@@ -105,15 +112,20 @@ interface TaskTableProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
+	multiTasks: string[];
+	setMultiTasks: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export default function TaskTable(props: TaskTableProps) {
+function TaskTable(props: any) {
   const {
     tasks, 
     taskId, 
+		multiTasks,
     setOpen,
     setCurrentTask,
     onScroll, 
+	  setMultiTasks,
+		history
   } = props;
   const classes = useStyles();
 
@@ -179,10 +191,34 @@ export default function TaskTable(props: TaskTableProps) {
     asyncSetState(updatedTask);
   }
 
-  const handleClickRow = (task: UserTasks_userTasks) => {
-    setOpen(open => !open);
-    setCurrentTask(task);
+  const handleClickRow = (e: any, task: UserTasks_userTasks) => {
+		var shiftPressed = e.nativeEvent.shiftKey; 
+		shiftPressed ? 
+			updateMultipleSelection(task.id) :
+      updateCurrentTask(task)
   }
+
+	const updateCurrentTask = (task: UserTasks_userTasks) => {
+			setMultiTasks([]);
+			setOpen((open: boolean) => !open);
+			setCurrentTask(task);
+	}
+
+	const updateMultipleSelection = (taskId: string) => {
+		if (multiTasks.includes(taskId)) {
+			var taskIdRemoved = multiTasks.filter( (id: string) => id !== taskId);
+			setMultiTasks(taskIdRemoved);
+		} else {
+			setMultiTasks([...multiTasks, ...selectedTask.id, taskId]);
+		}
+	}
+		
+	// If the user is holding shift and selecting tasks, close the side panel
+	useEffect(() => {
+		if (multiTasks.length) { 
+			setOpen((o: boolean) => false)
+		}
+	}, [multiTasks]);
 
   const renderOthers = (isSelected: boolean) => {
     return (
@@ -233,19 +269,70 @@ export default function TaskTable(props: TaskTableProps) {
         </TableHead>
         <TableBody>
           {tasks && tasks.map((task: UserTasks_userTasks, index: number) => {
-            const isSelected = hover === index;
+            const isSelected = hover === index || multiTasks.includes(String(task.id));
 
-            return (
-              <TableRow 
-                key={index} 
-                className={clsx(task.id === taskId && classes.selectedRow)}
-                onClick={() => handleClickRow(task)}
+            return ( 
+										<TaskTableRow
+								taskId={taskId}
+								history={history}
+                onClick={(e:any) => handleClickRow(e, task)}
                 onMouseOver={() => setHover(index)}
+												index={index}
+                        task={task}
+												isSelected={isSelected}
+		key={index}
+		handleClickPriority={handleClickPriority}
+		renderOthers={renderOthers}
+classes={classes}
+multiTasks={multiTasks}
+                     />
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
+
+/** pulling this out to access index **/
+function TaskTableRow(props: any) {
+	const {
+		task,
+	  isSelected,
+    classes,
+		handleClickPriority,
+		renderOthers,
+		onClick,
+		onMouseOver,
+		taskId,
+    multiTasks,
+		history
+	} = props
+const onDrop = useCallback(acceptedFiles => {
+    history.push({
+			pathname: '/files',
+			files: {
+				files: acceptedFiles,
+				taskId: task.id,
+				listId: task.list.id
+			}
+		});
+  }, [])
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, noClick: true})
+
+	return (
+              <TableRow 
+								className={clsx((task.id === taskId || multiTasks.includes(task.id))&& classes.selectedRow)}
+								onMouseOver={onMouseOver}
+								{...getRootProps({
+								onClick: onClick
+								})}
               >
+							<input {...getInputProps()} />
                 <TableCell className={classes.priorityColumn}>
                   {task.priority === 'high' && <RightIcon />}
                 </TableCell>
-                <TableCell>{task.listNumber}</TableCell>
+                <TableCell className={classes.noSelect}>{task.listNumber}</TableCell>
                 <TableCell>
                   <Typography variant="h6" className={classes.textFlow}>
                     {task.name}
@@ -268,13 +355,10 @@ export default function TaskTable(props: TaskTableProps) {
                     )}
                   </div>
                 </TableCell>
-                <TableCell>{task.updatedAt}</TableCell>
+                <TableCell className={classes.noSelect}>{task.updatedAt}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
-  )
+	);
 }
+
+export default withRouter(TaskTable)

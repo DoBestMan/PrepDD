@@ -4,6 +4,7 @@ import {
   Toolbar,
   Typography, 
   IconButton,
+	Button
 } from '@material-ui/core';
 import PersonAdd from '@material-ui/icons/PersonAdd';
 import AttachFile from '@material-ui/icons/AttachFile';
@@ -12,6 +13,7 @@ import Delete from '@material-ui/icons/DeleteForever';
 import More from '@material-ui/icons/MoreHoriz';
 
 import Dropdown from './components/Dropdown';
+import AddUsersModal from './components/AddUsersModal';
 
 import {OptionType} from '../../../../../constants/types';
 import {UserLists_userLists_lists} from '../../../../../graphql/queries/__generated__/UserLists';
@@ -47,6 +49,10 @@ interface TaskToolbarProps {
   setSelectedLists: React.Dispatch<React.SetStateAction<string[]>>;
   selectedSections: string[];
   setSelectedSections: React.Dispatch<React.SetStateAction<string[]>>;
+	multiTasks: any[];
+	openDeleteModal: () => void;
+	openAddUsersModal: () => void;
+  addUsersModal: boolean;
 }
 
 export default function TaskToolbar(props: TaskToolbarProps) {
@@ -56,6 +62,10 @@ export default function TaskToolbar(props: TaskToolbarProps) {
     setSelectedLists, 
     selectedSections, 
     setSelectedSections, 
+		multiTasks,
+		openDeleteModal,
+		openAddUsersModal,
+		addUsersModal,
   } = props;
   const classes = useStyles();
 
@@ -119,6 +129,21 @@ export default function TaskToolbar(props: TaskToolbarProps) {
     }
   }
 
+  // All these two handlers are doing is picking up a click. 
+	// checking for multiple selections, passing back to task page
+	const handleAddPersonClick = (e: any) => {
+	  if (multiTasks.length) {
+			openAddUsersModal();
+		}
+	}
+
+	// see handleAddPersonClick comment
+	const handleDeleteClick = (e: any) => {
+		if (multiTasks.length) {
+				openDeleteModal();
+			} 
+	}
+
   return (
     <Toolbar className={classes.root}>
       <Dropdown
@@ -137,8 +162,20 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         onChange={handleChangeSection}
       />
       <div className={classes.grow} />
+			<div>
+				{ addUsersModal && 
+					<AddUsersModal test="ok"/>
+				}
+			</div>
+			<div>
+			{ multiTasks.length ? 
+      <Button variant="outlined" className={''}>
+				{ multiTasks.length + " tasks selected" } 
+      </Button>
+			: null }
+      </div>
       <div className={classes.action}>
-        <IconButton aria-label="filter list">
+        <IconButton onClick={handleAddPersonClick} aria-label="filter list">
           <PersonAdd />
         </IconButton>
         <IconButton aria-label="filter list">
@@ -147,7 +184,7 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         <IconButton aria-label="filter list">
           <GetApp />
         </IconButton>
-        <IconButton aria-label="filter list">
+        <IconButton onClick={handleDeleteClick} aria-label="filter list">
           <Delete />
         </IconButton>
         <IconButton aria-label="filter list">

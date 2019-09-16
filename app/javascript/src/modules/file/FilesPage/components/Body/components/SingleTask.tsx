@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
+import {withRouter} from 'react-router';
+import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
   Paper, 
@@ -10,14 +12,19 @@ import {
   TableRow, 
   TableCell, 
   Checkbox, 
+	Button
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/DeleteForever';
 
+import { useDropzone } from 'react-dropzone'
 import * as cs from '../../../../../../constants/theme';
 import NameLabel from '../../../../../common/NameLabel';
 import StatusLabel from '../../../../../common/StatusLabel';
 import ListDropdown from './ListDropdown';
 import VersionDropdown from './VersionDropdown';
+
+import {useUserLists} from '../../../../../../graphql/queries/UserLists';
+import {useUserTasks} from '../../../../../../graphql/queries/UserTasks';
 
 const Excel = require('images/dummy/logos/excel.svg');
 
@@ -86,26 +93,105 @@ const useStyles = makeStyles((theme: Theme) =>
 interface SingleTaskProps {
   value?: number;
   index?: number;
+	location?: any;
 }
 
-const options = [
-  {
-    label: 'Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company.', 
-    value: 'Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company.', 
-  }, 
-  {
-    label: 'The Company’s stock books or ledgers and current capitalization table (including restricted stock, options, RSUs, phantom stock and warrants).', 
-    value: 'The Company’s stock books or ledgers and current capitalization table (including restricted stock, options, RSUs, phantom stock and warrants).', 
-  }, 
-  {
-    label: 'Lists of all current owners of shares or convertible securities, including address, tax ID or SSN, number of shares owned, dates of issuance and full payment, the consideration received by the Company and applicable stop transfer orders or restrictive legends.', 
-    value: 'Lists of all current owners of shares or convertible securities, including address, tax ID or SSN, number of shares owned, dates of issuance and full payment, the consideration received by the Company and applicable stop transfer orders or restrictive legends.', 
-  }
-]
-
-export default function SingleTask(props: SingleTaskProps) {
-  const {value, index} = props;
+function SingleTask(props: SingleTaskProps) {
+  const {value, index, location} = props;
   const classes = useStyles();
+
+	const [lists, setLists] = useState<any>([]);
+  const [selectedListId, setSelectedListId] = useState<string>('');
+
+	const [tasks, setTasks] = useState<any>([]);
+  const [selectedTaskId, setSelectedTaskId] = useState<string>('');
+
+	const [files, setFiles] = useState<any[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
+
+  const {
+		loading: listLoading, 
+		data: listData, 
+		error: listError
+  } = useUserLists({});
+
+	const {
+		loading: taskLoading,
+		data: taskData,
+		error: taskError
+	} = useUserTasks({
+	  listIds: [selectedListId],
+		sectionIds: [],
+		limit: 1000,
+		offset: 0	
+	});
+
+  const onDrop = (addedFiles: File[]) => {
+		setFiles([...files, ...addedFiles])
+  }
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+
+	const toggleSelectedFile = (id: number) => {
+		if (selectedFiles.includes(id)) {
+			setSelectedFiles(selectedFiles.filter(fid => fid != id))
+		} else {
+			setSelectedFiles([...selectedFiles, id])
+		}
+	}
+
+	const handleUpload = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+			var formData = new FormData();
+			formData.append('task_id', selectedTaskId);
+			files.forEach((file: File) => {
+				formData.append(`files[]`, file);
+			});
+   
+			var ok = await fetch('/api/upload', {
+				method: 'POST',
+				headers: {
+          'x-api-key': 'jKXFpXpMXYeeI0aCPfh14w',
+				},
+				body: formData
+			})	
+
+			var json = await ok.json()
+			console.log(json);
+	}
+
+	useEffect(() => {
+		var lists = idx(listData, listData => listData.userLists.lists)
+
+		if (selectedTaskId) console.log(lists);
+		if (listLoading) return;
+		if (lists) { 
+			setLists(lists.map(list => ({label: list.name, value: list.id})))
+		};
+	}, [listLoading]);
+
+	useEffect(() => {
+		var tasks = idx(taskData, taskData => taskData.userTasks)
+
+		if (taskLoading) return;
+		if (tasks) { 
+			setTasks(tasks.map(task => ({label: task.name, value: task.id})))
+		}; 
+	}, [taskLoading]);
+
+
+  /* handles updating files, lists, tasks, when a file is dragged from
+		 the task screen
+	*/
+	useEffect(() => {
+		var files = idx(location, location => location.files.files);
+		var listId = idx(location, location => location.files.listId);
+		var taskId = idx(location, location => location.files.taskId);
+
+		if (files) setFiles(files) 
+	  if (listId) setSelectedListId(listId)	
+		if (taskId) setSelectedTaskId(taskId)
+		
+	}, [location])
 
   return (
     <Paper
@@ -113,11 +199,13 @@ export default function SingleTask(props: SingleTaskProps) {
       aria-labelledby="Single Task"
       elevation={0}
     >
-      <div className={clsx(classes.filesPane, classes.flex)}>
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
-        <NameLabel label="_excel file_" logo={Excel} className={classes.fileLabel} />
+      <div className={clsx(classes.filesPane, classes.flex)} {...getRootProps()}>
+				<input {...getInputProps()} />
+			{
+				isDragActive ? (<p>drop some files</p>) : (!files.length ? <p>drop</p> : files.map((file, index) => 
+						<NameLabel label={file.name} key={index} logo={Excel} className={classes.fileLabel} />
+				))
+			}
       </div>
 
       <textarea 
@@ -127,12 +215,16 @@ export default function SingleTask(props: SingleTaskProps) {
 
       <div className={classes.flex} style={{marginTop: '24px'}}>
         <ListDropdown
-          options={options}
-          value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
+          options={lists}
+					handleUpdate={setSelectedListId}
+					placeholder='select a List'
+          value={selectedListId}
         />
         <ListDropdown
-          options={options}
-          value="Any powers of attorneys granted by the Company to a third party, granting such party the authority to bind the Company."
+          options={tasks}
+					handleUpdate={setSelectedTaskId}
+					placeholder='select a Task'
+          value={selectedTaskId}
         />
         <div className={classes.grow} />
         <StatusLabel currentStatus="Start" selected/>
@@ -150,7 +242,8 @@ export default function SingleTask(props: SingleTaskProps) {
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              <Checkbox color="primary" />
+              <Checkbox color="primary" 
+							/>
             </TableCell>
             <TableCell>File</TableCell>
             <TableCell>Public Comment</TableCell>
@@ -158,14 +251,18 @@ export default function SingleTask(props: SingleTaskProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
+{ files.map( (file, index) =>
+          <TableRow key={index}>
             <TableCell padding="checkbox">
-              <Checkbox color="primary" />
+              <Checkbox color="primary"
+								checked={selectedFiles.includes(index)}
+								onChange={() => toggleSelectedFile(index)}
+							 />
             </TableCell>
             <TableCell>
               <div className={classes.flex}>
                 <img width="18" height="18" src={Excel} className={classes.mr12} />
-                <Typography variant="h6">File name</Typography>
+                <Typography variant="h6">{file.name}</Typography>
               </div>
             </TableCell>
             <TableCell>
@@ -175,8 +272,14 @@ export default function SingleTask(props: SingleTaskProps) {
               <VersionDropdown value="Update" />
             </TableCell>
           </TableRow>
+) }
         </TableBody>
       </Table>
+<Button onClick={handleUpload}>
+Upload
+</Button>
     </Paper>
   );
 }
+
+export default withRouter(SingleTask);

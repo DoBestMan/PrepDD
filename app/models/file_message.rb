@@ -1,0 +1,2 @@
+class FileMessage < ApplicationRecord
+end

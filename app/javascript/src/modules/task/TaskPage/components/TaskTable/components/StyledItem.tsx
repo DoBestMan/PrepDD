@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex', 
       alignItems: 'center', 
       padding: '3px 6px',
+			userSelect: 'none'
     },
     status: {
       width: '10px',

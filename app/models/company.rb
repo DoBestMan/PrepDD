@@ -31,6 +31,8 @@ class Company < ApplicationRecord
   has_many :lists, foreign_key: 'requester_id'
   has_many :responded_lists, class_name: 'List', foreign_key: 'responder_id'
 
+  has_many :task_messages
+
   has_one_attached :logo
 
   validates :name, presence: true

@@ -24,8 +24,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Alert() {
+interface AlertProps {
+  onClick?: () => void;
+}
+
+export default function Alert( props: any) {
   const classes = useStyles();
+	const { onClick } = props;
 
   return (
     <div className={classes.root}>
@@ -36,7 +41,7 @@ export default function Alert() {
       <Button variant="outlined" className={classes.mr12}>
         Cancel
       </Button>
-      <Button variant="contained">
+      <Button onClick={onClick} variant="contained">
         Post
       </Button>
     </div>
