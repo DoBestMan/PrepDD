@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
+import { ClickAwayListener } from '@material-ui/core';
 
 import TaskToolbar from './components/TaskToolbar';
 import TaskTable from './components/TaskTable';
@@ -93,8 +94,6 @@ export default function TaskPage() {
 
     if (loading || !lists) return;
     setLists(lists);
-    /*- TODO:  <13-09-19, mpf: this is a bit hacky, but works to load the 
-    page in w/ all tasks> -*/
     setSelectedLists(lists.map(l => l.id))
   }, [loading, idx(data, data => data.userLists.lists)]);
 
@@ -158,8 +157,8 @@ export default function TaskPage() {
 	/* performs the batch delete */
 	/* uses: state of multiTasks (ids of tasks user has selected) 
            state of tasks 
-     updates: state of task 
-	            state of multiTasks 
+     updates state - tasks - removes tasks deleted
+	                 - multiTasks - clears them out, new selection
   */
 	const batchDelete = () => {
 		doDelete();
@@ -169,8 +168,14 @@ export default function TaskPage() {
 		closeDeleteModal();
 	}
 
+	const handleClickAway = (e: React.MouseEvent<Document, MouseEvent>) => {
+		setMultiTasks([]);
+	}
+
   return (
     <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
+			<ClickAwayListener onClickAway={handleClickAway}>
+			<div>
       <TaskToolbar 
         lists={lists}
         selectedLists={selectedLists}
@@ -198,6 +203,8 @@ export default function TaskPage() {
         setCurrentTask={setSelectedTask}
         onScroll={handleScroll}
       />
+			</div>
+			</ClickAwayListener>
       <SidePanel 
         open={openSidePanel} 
         selectedTask={selectedTask} 

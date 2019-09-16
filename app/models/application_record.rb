@@ -13,7 +13,7 @@ class ApplicationRecord < ActiveRecord::Base
       diff = (diff / 3600).to_i
       unit = 'hour'.pluralize diff
     else 
-      diff = (diff / 3600 * 24).to_i
+      diff = (diff / (3600 * 24)).to_i
       unit = 'day'.pluralize diff
     end
     "#{diff} #{unit} ago"

@@ -75,6 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
       left: '-90px',
     },
     textFlow: {
+			userSelect: 'none',
       display: 'inline-block',
       width: 'fit-content',
       maxWidth: 'calc(80%)',
@@ -82,6 +83,9 @@ const useStyles = makeStyles((theme: Theme) =>
       overflow: 'hidden',
       textOverflow: 'ellipsis',
     },
+		noSelect: {
+			userSelect: 'none'
+		},
     unHoverRow: {
       opacity: 0.6, 
     },
@@ -108,8 +112,8 @@ interface TaskTableProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   onScroll: (event: React.UIEvent<HTMLDivElement>) => void;
-	multiTasks: any[];
-	setMultiTasks: React.Dispatch<React.SetStateAction<any[]>>;
+	multiTasks: string[];
+	setMultiTasks: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 function TaskTable(props: any) {
@@ -189,19 +193,30 @@ function TaskTable(props: any) {
 
   const handleClickRow = (e: any, task: UserTasks_userTasks) => {
 		var shiftPressed = e.nativeEvent.shiftKey; 
-		if (shiftPressed) {
-			setMultiTasks([...multiTasks, ...selectedTask.id, task.id]);
-		} else {
+		shiftPressed ? 
+			updateMultipleSelection(task.id) :
+      updateCurrentTask(task)
+  }
+
+	const updateCurrentTask = (task: UserTasks_userTasks) => {
 			setMultiTasks([]);
 			setOpen((open: boolean) => !open);
 			setCurrentTask(task);
+	}
+
+	const updateMultipleSelection = (taskId: string) => {
+		if (multiTasks.includes(taskId)) {
+			var taskIdRemoved = multiTasks.filter( (id: string) => id !== taskId);
+			setMultiTasks(taskIdRemoved);
+		} else {
+			setMultiTasks([...multiTasks, ...selectedTask.id, taskId]);
 		}
-  }
+	}
 		
+	// If the user is holding shift and selecting tasks, close the side panel
 	useEffect(() => {
 		if (multiTasks.length) { 
 			setOpen((o: boolean) => false)
-			console.log(tasks);
 		}
 	}, [multiTasks]);
 
@@ -316,7 +331,7 @@ const onDrop = useCallback(acceptedFiles => {
                 <TableCell className={classes.priorityColumn}>
                   {task.priority === 'high' && <RightIcon />}
                 </TableCell>
-                <TableCell>{task.listNumber}</TableCell>
+                <TableCell className={classes.noSelect}>{task.listNumber}</TableCell>
                 <TableCell>
                   <Typography variant="h6" className={classes.textFlow}>
                     {task.name}
@@ -339,7 +354,7 @@ const onDrop = useCallback(acceptedFiles => {
                     )}
                   </div>
                 </TableCell>
-                <TableCell>{task.updatedAt}</TableCell>
+                <TableCell className={classes.noSelect}>{task.updatedAt}</TableCell>
                 <TableCell>{renderOthers(isSelected)}</TableCell>
               </TableRow>
 	);

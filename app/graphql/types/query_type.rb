@@ -141,6 +141,7 @@ module Types
         tasks = tasks.select {|t| section_ids.include?(t.task_section_id.to_s)}
       end
 
+      # tasks.sort_by! {|t| t.priority, t.list.list_rank} --> something like this for when we have ranking implemented
       tasks.sort_by! &:priority
       tasks.drop(offset).first(limit)
     end

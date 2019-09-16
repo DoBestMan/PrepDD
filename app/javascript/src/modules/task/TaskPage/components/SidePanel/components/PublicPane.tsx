@@ -160,6 +160,7 @@ export default function InternalPane(props: InternalPaneProps) {
 			<form onSubmit={handleSubmit}>
 			<TextField 
 				id='new-message-input'
+				autoComplete='off'
 				name='messageText'
 				className={classes.input}
 				placeholder='Message...'
