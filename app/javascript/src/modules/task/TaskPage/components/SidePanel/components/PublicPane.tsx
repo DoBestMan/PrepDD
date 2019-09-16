@@ -22,21 +22,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     body: {
       borderBottom: '1px solid #D8D8D8',
-      height: 'calc(100vh - 292px)',
+      height: 'calc(100vh - 254px)',
       overflow: 'auto', 
     },
     miniBody: {
-      height: 'calc(100vh - 364px)',
+      height: 'calc(100vh - 326px)',
     },
     footer: {
-      padding: '16px 24px',
+      padding: '6px 24px',
     },
     message: {
       backgroundColor: '#FFFFFF',
     },
     messageBox: {
       display: 'flex',
-      marginBottom: '12px',
       alignItems: 'center', 
     },
     primary: {
@@ -51,7 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
     input: {
       display: 'block',
       width: '100%',
-      marginTop: '6px',
       color: '#606060',
       fontFamily: cs.FONT.family,
       fontWeight: cs.FONT.weight.regular,
@@ -153,7 +151,7 @@ export default function InternalPane(props: InternalPaneProps) {
       <div className={classes.footer}>
         <div className={classes.messageBox}>
           <ClipIcon className={classes.icon} />
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{width: '100%'}}>
             <TextField
               id="new-message-input"
               autoComplete="off"

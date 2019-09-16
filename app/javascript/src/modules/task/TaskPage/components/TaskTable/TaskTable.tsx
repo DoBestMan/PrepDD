@@ -204,8 +204,8 @@ function TaskTable(props: any) {
   };
 
   const handleClickRow = (e: any, task: UserTasks_userTasks) => {
-    var shiftPressed = e.nativeEvent.shiftKey;
-    shiftPressed ? updateMultipleSelection(task.id) : updateCurrentTask(task);
+    var pressed = e.nativeEvent.ctrlKey || e.nativeEvent.metaKey;
+    pressed ? updateMultipleSelection(task.id) : updateCurrentTask(task);
   };
 
   const updateCurrentTask = (task: UserTasks_userTasks) => {

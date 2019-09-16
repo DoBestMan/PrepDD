@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
     },
     body: {
-      height: 'calc(100vh - 266px)',
-      padding: '12px 24px',
+      height: 'calc(100vh - 254px)',
+      padding: '6px 24px',
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto', 
     },
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: 'rgba(39, 146, 162, 0.1)',
     },
     footer: {
-      padding: '12px 24px',
+      padding: '6px 24px',
     },
     messageBox: {
       display: 'flex',
@@ -130,7 +130,7 @@ export default function InternalPane(props: InternalPaneProps) {
       </div>
       <div className={classes.footer}>
         <div className={classes.messageBox}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{width: '100%'}}>
             <TextField
               id="new-message-input"
               autoComplete="off"
