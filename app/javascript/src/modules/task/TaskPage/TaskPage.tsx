@@ -168,6 +168,8 @@ export default function TaskPage() {
 		closeDeleteModal();
 	}
 
+	/* the click away listener is to empty the multiple select array when
+   * the user clicks out of the main panel */
 	const handleClickAway = (e: React.MouseEvent<Document, MouseEvent>) => {
 		setMultiTasks([]);
 	}

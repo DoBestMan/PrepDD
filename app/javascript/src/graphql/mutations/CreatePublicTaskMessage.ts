@@ -1,3 +1,5 @@
+/* Again, using separate mutations to be safe and make it 
+ * hard to mixup private and public */
 import {createMutationHook, gql} from '../graphqlHelpers';
 import {
 	CreatePublicTaskMessage,

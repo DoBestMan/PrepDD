@@ -94,6 +94,8 @@ module Types
       argument :id, ID, required: true
     end
 
+    # making public and private separate queries entirely to be safe and
+    # explicit about which one we're using
     field :private_task_messages, [TaskMessageType], null: false do
       description 'A separate query to retrieve private messages'
       argument :task_id, ID, required: true
@@ -104,6 +106,8 @@ module Types
       argument :task_id, ID, required: true
     end
 
+    ## For tasks and task_messages, ids can come in as empty
+    ## strings, so have to explicitly check
     def public_task_messages(task_id:)
       return nil if task_id == ''
       Task.find(task_id.to_i)
@@ -111,8 +115,7 @@ module Types
         .where(is_public: true)
     end
 
-    ## For tasks and private_task_messages, ids can come in as empty
-    ## strings, so have to explicitly check
+    # see above
     def private_task_messages(task_id:)
       return nil if task_id == ''
       Task.find(task_id.to_i)
@@ -121,6 +124,7 @@ module Types
         .where(company_id: get_current_user.last_viewed_company_id)
     end
 
+    #see above
     def task(id:)
       return nil if id == ''
       Task.find(id.to_i)
