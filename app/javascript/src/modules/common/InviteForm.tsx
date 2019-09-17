@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import clsx from 'clsx';
 import idx from 'idx';
-import {gql} from 'apollo-boost';
 import {useLazyQuery} from '@apollo/react-hooks';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {
@@ -20,11 +19,12 @@ import {useGlobalState} from '../../store';
 import DefaultUserImage from './DefaultUserImage';
 import NameLabel from './NameLabel';
 
+import {SEARCH_COMPANY_USERS} from '../../helpers/queries';
 import {
   SearchCompanyUsers_searchCompanyUsers,
   SearchCompanyUsers_searchCompanyUsers_users,
   SearchCompanyUsers_searchCompanyUsers_teams,
-} from './__generated__/SearchCompanyUsers';
+} from '../../helpers/__generated__/SearchCompanyUsers';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -91,23 +91,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SEARCH_COMPANY_USERS = gql`
-  query SearchCompanyUsers($text: String!, $companyId: ID!) {
-    searchCompanyUsers(text: $text, companyId: $companyId) {
-      users {
-        id
-        email
-        fullName
-        profileUrl
-      }
-      teams {
-        id
-        name
-      }
-    }
-  }
-`;
-
 interface OwnerFormProps {
   owners: (
     | SearchCompanyUsers_searchCompanyUsers_users
@@ -147,9 +130,7 @@ export default function OwnerForm(props: OwnerFormProps) {
   });
 
   const {state} = useGlobalState();
-  const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(
-    SEARCH_COMPANY_USERS
-  );
+  const [searchCompanyUsers, {loading, data, error}] = useLazyQuery(SEARCH_COMPANY_USERS);
 
   useEffect(() => {
     let result = idx(data, data => data.searchCompanyUsers);
@@ -356,7 +337,7 @@ export default function OwnerForm(props: OwnerFormProps) {
               !searchResult.users.length &&
               searchResult.teams &&
               !searchResult.teams.length && (
-                <Typography variant="h4">No match result</Typography>
+                <Typography variant="h3">No match result</Typography>
               )}
             {openInvitePanel ? (
               <form onSubmit={handleSubmit}>

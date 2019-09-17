@@ -14,11 +14,11 @@ class Task < ApplicationRecord
   #
   belongs_to :list
   belongs_to :task_section, optional: true
-  has_many :task_owner
+  has_many :task_owners
   has_many :user_owners,
-           through: :task_owner, source: :task_ownerable, source_type: 'User'
+           through: :task_owners, source: :task_ownerable, source_type: 'User'
   has_many :team_owners,
-           through: :task_owner, source: :task_ownerable, source_type: 'Team'
+           through: :task_owners, source: :task_ownerable, source_type: 'Team'
 
   has_many :task_messages
 

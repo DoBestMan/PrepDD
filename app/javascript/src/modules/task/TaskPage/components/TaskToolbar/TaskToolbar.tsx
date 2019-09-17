@@ -23,20 +23,18 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
     },
     action: {
-      color: theme.palette.text.secondary,
+      display: 'flex', 
+      color: theme.palette.text.secondary,      
     },
     split: {
       marginLeft: '9px',
       marginRight: '12px',
     },
+    relative: {
+      position: 'relative', 
+    }
   })
 );
-
-const SectionOptions = [
-  {label: 'Finance', value: '1'},
-  {label: 'Legal', value: '2'},
-  {label: 'Debt', value: '3'},
-];
 
 interface TaskToolbarProps {
   lists: UserLists_userLists_lists[];
@@ -46,7 +44,6 @@ interface TaskToolbarProps {
   setSelectedSections: React.Dispatch<React.SetStateAction<string[]>>;
   multiTasks: any[];
   openDeleteModal: () => void;
-  openAddUsersModal: () => void;
   addUsersModal: boolean;
 }
 
@@ -59,10 +56,11 @@ export default function TaskToolbar(props: TaskToolbarProps) {
     setSelectedSections,
     multiTasks,
     openDeleteModal,
-    openAddUsersModal,
     addUsersModal,
   } = props;
   const classes = useStyles();
+
+  const [openAddUsersModal, setOpenAddUsersModal] = useState<boolean>(false);
 
   const ListOptions = lists.map(list => {
     return {
@@ -121,9 +119,9 @@ export default function TaskToolbar(props: TaskToolbarProps) {
   // All these two handlers are doing is picking up a click.
   // checking for multiple selections, passing back to task page
   const handleAddPersonClick = (e: any) => {
-    if (multiTasks.length) {
-      openAddUsersModal();
-    }
+    setOpenAddUsersModal(!openAddUsersModal);
+    // if (multiTasks.length > 1) {
+    // }
   };
 
   // see handleAddPersonClick comment
@@ -142,7 +140,7 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         value={selectedLists}
         onChange={handleChangeList}
       />
-      <Typography variant="h4" className={classes.split}>
+      <Typography variant="h3" className={classes.split}>
         /
       </Typography>
       <Dropdown
@@ -153,7 +151,6 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         onChange={handleChangeSection}
       />
       <div className={classes.grow} />
-      <div>{addUsersModal && <AddUsersModal test="ok" />}</div>
       <div>
         {multiTasks.length > 1 ? (
           <Button variant="outlined" className={''}>
@@ -162,9 +159,19 @@ export default function TaskToolbar(props: TaskToolbarProps) {
         ) : null}
       </div>
       <div className={classes.action}>
-        <IconButton onClick={handleAddPersonClick} aria-label="filter list">
-          <PersonAdd />
-        </IconButton>
+        <div className={classes.relative}>
+          <IconButton 
+            aria-label="filter list"
+            onClick={handleAddPersonClick} 
+          >
+            <PersonAdd />
+          </IconButton>
+          {openAddUsersModal && (
+            <AddUsersModal 
+              setOpenAddUsersModal={setOpenAddUsersModal}
+            />
+          )}
+        </div>
         <IconButton aria-label="filter list">
           <AttachFile />
         </IconButton>

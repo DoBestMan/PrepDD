@@ -423,7 +423,7 @@ export default function Body() {
                     <UploadIcon style={{fontSize: '120px'}} />
                     <br />
                     <Typography
-                      variant="h4"
+                      variant="h3"
                       className={classes.uploadLabelColor}
                     >
                       Drag and Drop/

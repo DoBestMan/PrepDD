@@ -64,9 +64,6 @@ ActiveRecord::Schema.define(version: 2019_09_16_060852) do
     t.index ["owner_id"], name: "index_companies_on_owner_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "file_bases", force: :cascade do |t|
     t.boolean "is_active"
     t.boolean "is_template"

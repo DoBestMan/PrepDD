@@ -27,7 +27,7 @@ import {UserTasks_userTasks} from '../../../../../../graphql/queries/__generated
 import {
   SearchCompanyUsers_searchCompanyUsers_teams,
   SearchCompanyUsers_searchCompanyUsers_users,
-} from '../../../../../common/__generated__/SearchCompanyUsers';
+} from '../../../../../../helpers/__generated__/SearchCompanyUsers';
 import {useUpdateTask} from '../../../../../../graphql/mutations/UpdateTask';
 import {useAddTaskOwners} from '../../../../../../graphql/mutations/AddTaskOwners';
 

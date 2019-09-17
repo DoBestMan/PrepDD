@@ -36,7 +36,7 @@ import {
 import {
   SearchCompanyUsers_searchCompanyUsers_users,
   SearchCompanyUsers_searchCompanyUsers_teams,
-} from '../../../../common/__generated__/SearchCompanyUsers';
+} from '../../../../../helpers/__generated__/SearchCompanyUsers';
 import {TaskAttributes} from '../../../../../graphql/__generated__/globalTypes';
 
 const useStyles = makeStyles((theme: Theme) =>

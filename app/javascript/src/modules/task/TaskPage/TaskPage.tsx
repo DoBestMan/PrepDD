@@ -106,9 +106,6 @@ export default function TaskPage() {
   const openDeleteModal = () => setDeleteModal(true);
   const closeDeleteModal = () => setDeleteModal(false);
 
-  const openAddUsersModal = () => setAddUsersModal(true);
-  const closeAddUsersModal = () => setAddUsersModal(false);
-
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     event.persist();
     const scrollHeight = (event.target as HTMLDivElement).scrollHeight;
@@ -185,7 +182,6 @@ export default function TaskPage() {
             setSelectedSections={setSelectedSections}
             openDeleteModal={openDeleteModal}
             addUsersModal={addUsersModal}
-            openAddUsersModal={openAddUsersModal}
             multiTasks={multiTasks}
           />
           {deleteModal && (
@@ -214,6 +210,6 @@ export default function TaskPage() {
           setTasks={setTasks}
         />
       </div>
-    </ClickAwayListener>    
+    </ClickAwayListener>
   );
 }
