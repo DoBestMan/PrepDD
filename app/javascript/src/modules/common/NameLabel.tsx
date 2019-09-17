@@ -31,9 +31,13 @@ const useStyles = makeStyles((theme: Theme) =>
     teamImage: {
       width: '18px',
       height: '18px',
+      backgroundColor: '#FFFFFF', 
       border: '1px solid #2792A2',
       fontSize: '9px',
       marginRight: '6px',
+      '& p': {
+        color: '#2792A2', 
+      }
     },
     close: {
       fontSize: '12px',

@@ -277,7 +277,19 @@ export default function OverviewPane(props: OverviewPaneProps) {
     asyncSetState();
   };
 
-  const handleRemoveOwner = (removeId: number) => {};
+  const handleRemoveOwner = (removeId: number) => {
+    setOwners([
+      ...owners.slice(0, removeId), 
+      ...owners.slice(removeId + 1)
+    ]);
+  };
+
+  const handleRemoveReviewer = (removeId: number) => {
+    setReviewers([
+      ...reviewers.slice(0, removeId), 
+      ...reviewers.slice(removeId + 1)
+    ]);
+  };
 
   const handleChangePriority = (newPriority: string) => {
     const asyncSetState = async () => {
@@ -427,13 +439,13 @@ export default function OverviewPane(props: OverviewPaneProps) {
                       type="user"
                       label={reviewer.fullName}
                       logo={reviewer.profileUrl as string}
-                      onClose={() => handleRemoveOwner(index)}
+                      onClose={() => handleRemoveReviewer(index)}
                     />
                   ) : (
                     <NameLabel
                       key={index}
                       label={reviewer.name}
-                      onClose={() => handleRemoveOwner(index)}
+                      onClose={() => handleRemoveReviewer(index)}
                     />
                   );
                 }
@@ -456,7 +468,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
                       onMouseLeave={() => setMoreHover(false)}
                     >
                       {reviewers
-                        .slice(2)
+                        .slice(5)
                         .map(
                           (
                             reviewer:
@@ -470,13 +482,13 @@ export default function OverviewPane(props: OverviewPaneProps) {
                                 type="user"
                                 label={reviewer.fullName}
                                 logo={reviewer.profileUrl as string}
-                                onClose={() => handleRemoveOwner(index)}
+                                onClose={() => handleRemoveReviewer(index)}
                               />
                             ) : (
                               <NameLabel
                                 key={index}
                                 label={reviewer.name}
-                                onClose={() => handleRemoveOwner(index)}
+                                onClose={() => handleRemoveReviewer(index)}
                               />
                             );
                           }
