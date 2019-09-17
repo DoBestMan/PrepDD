@@ -7,7 +7,7 @@ class Company::CompanyS3BucketCreationWorker
     company = Company.find(company_id)
     if company && !company.s3_location
       s3 = Aws::S3::Client.new
-      bucket = s3.create_bucket(bucket: "prepdd-#{company.name.downcase}")
+      bucket = s3.create_bucket(bucket: company.name.downcase + "-prepdd-" + Rails.env)
 
       if bucket
         company.s3_location = bucket.location
