@@ -27,8 +27,13 @@ import {useDropzone} from 'react-dropzone';
 import {withRouter} from 'react-router';
 
 import * as cs from '../../../../../constants/theme';
-import {UserTasks_userTasks} from '../../../../../graphql/queries/__generated__/UserTasks';
+import {
+  UserTasks_userTasks,
+  UserTasks_userTasks_userOwners,
+  UserTasks_userTasks_teamOwners,
+} from '../../../../../graphql/queries/__generated__/UserTasks';
 import {useUpdateTask} from '../../../../../graphql/mutations/UpdateTask';
+import { useAddTaskOwners } from '../../../../../graphql/mutations/AddTaskOwners';
 
 const options = [
   {label: 'All', value: 'all'},
@@ -66,11 +71,18 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
     },
+    relative: {
+      position: 'relative', 
+    },
     image: {
+      position: 'absolute', 
+      right: '0px', 
       width: '24px',
       height: '24px',
       marginRight: '12px',
       backgroundColor: '#2792A2',
+      opacity: 0.6, 
+      borderRadius: '50%', 
     },
     rejectStatus: {
       position: 'absolute',
@@ -203,7 +215,29 @@ function TaskTable(props: any) {
 
   const handleClickRow = (e: any, task: UserTasks_userTasks) => {
     var pressed = e.nativeEvent.ctrlKey || e.nativeEvent.metaKey;
-    pressed ? updateMultipleSelection(task.id) : updateCurrentTask(task);
+    updateMultipleSelection(task.id);
+    if (!pressed) {
+      if (task.id === taskId) {
+        setMultiTasks([]);
+        setCurrentTask({
+          __typename: 'Task',
+          id: '',
+          name: '',
+          priority: '',
+          status: '',
+          dueDate: '',
+          updatedAt: '',
+          listNumber: null,
+          list: null,
+          userOwners: null,
+          teamOwners: null,
+          userReviewers: null,
+          teamReviewers: null,          
+        });
+      } else {
+        updateCurrentTask(task);
+      }
+    }
   };
 
   const updateCurrentTask = (task: UserTasks_userTasks) => {
@@ -220,7 +254,7 @@ function TaskTable(props: any) {
     }
   };
 
-  const renderOthers = (isSelected: boolean) => {
+  const renderOthers = (isSelected: boolean, task: UserTasks_userTasks) => {
     return (
       <div
         className={clsx(
@@ -228,7 +262,42 @@ function TaskTable(props: any) {
           isSelected ? classes.hoverRow : classes.unHoverRow
         )}
       >
-        <DefaultUserImage userName="F" className={classes.image} />
+        <div className={clsx(classes.flex, classes.relative)}>
+          {task.teamOwners && 
+            task.teamOwners.map((owner: UserTasks_userTasks_teamOwners, index: number) => {
+              const isEnd = task.userOwners && !task.userOwners.length && 
+                task.teamOwners && task.teamOwners.length === index + 1;
+
+              return (
+                <DefaultUserImage 
+                  key={owner.id} 
+                  userName={owner.name} 
+                  className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                  style={{right: `${index * 12}px`}}
+                />
+              )
+            })
+          }
+          {task.userOwners && task.userOwners.map((owner: UserTasks_userTasks_userOwners, index: number) => {            
+            const teamOwners = task.teamOwners && task.teamOwners.length || 0;
+            const isEnd = task.userOwners && task.userOwners.length === index + 1;
+
+            return owner.profileUrl ? (
+              <img 
+                src={owner.profileUrl} 
+                className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                style={{right: `${(index + teamOwners) * 12}px`}}
+              />
+            ) : (
+              <DefaultUserImage 
+                key={owner.id} 
+                className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                userName={owner.fullName} 
+                style={{right: `${(index + teamOwners) * 12}px`}}
+              />
+            )
+          })}
+        </div>
         <StyledBadge
           variant="dot"
           color="primary"
@@ -396,7 +465,7 @@ function TaskTableRow(props: any) {
         </div>
       </TableCell>
       <TableCell className={classes.noSelect}>{task.updatedAt}</TableCell>
-      <TableCell>{renderOthers(isSelected)}</TableCell>
+      <TableCell>{renderOthers(isSelected, task)}</TableCell>
     </TableRow>
   );
 }

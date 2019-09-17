@@ -25,15 +25,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface DefaultUserImageProps {
   className?: string;
+  style?: React.CSSProperties;
   userName: string;
 }
 
 export default function DefaultUserImage(props: DefaultUserImageProps) {
-  const {className, userName} = props;
+  const {className, style, userName} = props;
   const classes = useStyles();
 
+  console.log("Style: ", style);
+
   return (
-    <div className={clsx(classes.root, className)}>
+    <div className={clsx(classes.root, className)} style={style}>
       <p className={classes.label}>
         {userName
           .split(' ')
