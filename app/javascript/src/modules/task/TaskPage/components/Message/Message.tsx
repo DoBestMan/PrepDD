@@ -10,8 +10,10 @@ import DefaultUserImage from '../../../../common/DefaultUserImage';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '24px',
+      padding: '12px',
       borderRadius: '3px',
+    },
+    mb12: {
       marginBottom: '12px', 
     },
     flex: {
@@ -56,15 +58,16 @@ interface MessageProps {
     user: any;
     createdAt: string;
   };
+  padding?: boolean;
   className?: string;
 }
 
 export default function Message(props: MessageProps) {
-  const {data, className, ...others} = props;
+  const {data, className, padding, ...others} = props;
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.root, className)}>
+    <div className={clsx(classes.root, className, padding && classes.mb12)}>
       <div className={classes.flex}>
         <DefaultUserImage
           userName={(data.user && data.user.fullName) || ''}

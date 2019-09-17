@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     body: {
       height: 'calc(100vh - 254px)',
-      padding: '6px 24px',
+      padding: '12px 24px',
       borderBottom: '1px solid #D8D8D8',
       overflow: 'auto', 
     },
@@ -124,7 +124,7 @@ export default function InternalPane(props: InternalPaneProps) {
       <div className={classes.body}>
         {messages.map((message: any, index: number) => {
           return (
-            <Message key={index} data={message} className={classes.message} />
+            <Message key={index} data={message} className={classes.message} padding />
           );
         })}
       </div>

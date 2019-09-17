@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     body: {
       borderBottom: '1px solid #D8D8D8',
       height: 'calc(100vh - 254px)',
+      padding: '12px', 
       overflow: 'auto', 
     },
     miniBody: {
