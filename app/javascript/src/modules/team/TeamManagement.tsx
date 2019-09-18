@@ -93,7 +93,7 @@ interface UpdateTeamMemberProps {
   roles: CompanyUsers_companyUsers_users_roles[] | null;
 }
 
-export default function TeamManagement(props: {path?: string}) {
+export default function TeamManagement() {
   const classes = useStyles();
   const [selected, setSelected] = useState<string[]>([]);
   const [team, setTeam] = useState('');

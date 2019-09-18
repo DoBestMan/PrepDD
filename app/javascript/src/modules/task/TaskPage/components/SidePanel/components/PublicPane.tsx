@@ -10,7 +10,6 @@ import Message from '../../Message';
 import Alert from './Alert';
 
 import {UserTasks_userTasks as taskType} from '../../../../../../graphql/queries/__generated__/UserTasks';
-//import { publicTaskMessages_publicTaskMessages as taskMessagesType } from '../../../../../../graphql/queries/__generated__/publicTaskMessages';
 import PublicTaskMessages from '../../../../../../graphql/queries/PublicTaskMessages';
 
 import createPublicMessage from '../../../../../../graphql/mutations/CreatePublicTaskMessage';
@@ -23,17 +22,22 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     body: {
       borderBottom: '1px solid #D8D8D8',
-      height: 'calc(100vh - 364px)',
+      height: 'calc(100vh - 254px)',
+      padding: '12px', 
+      overflow: 'auto', 
+    },
+    miniBody: {
+      height: 'calc(100vh - 326px)',
     },
     footer: {
-      padding: '16px 24px',
+      padding: '6px 24px',
     },
     message: {
       backgroundColor: '#FFFFFF',
     },
     messageBox: {
       display: 'flex',
-      marginBottom: '12px',
+      alignItems: 'center', 
     },
     primary: {
       color: cs.COLORS.primary,
@@ -47,7 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
     input: {
       display: 'block',
       width: '100%',
-      marginTop: '6px',
       color: '#606060',
       fontFamily: cs.FONT.family,
       fontWeight: cs.FONT.weight.regular,
@@ -139,7 +142,7 @@ export default function InternalPane(props: InternalPaneProps) {
       aria-labelledby="Internal"
       elevation={0}
     >
-      <div className={classes.body}>
+      <div className={clsx(classes.body, showAlert && classes.miniBody)}>
         {messages.map((message: any, index: number) => {
           return (
             <Message key={index} data={message} className={classes.message} />
@@ -149,7 +152,7 @@ export default function InternalPane(props: InternalPaneProps) {
       <div className={classes.footer}>
         <div className={classes.messageBox}>
           <ClipIcon className={classes.icon} />
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{width: '100%'}}>
             <TextField
               id="new-message-input"
               autoComplete="off"
@@ -161,7 +164,7 @@ export default function InternalPane(props: InternalPaneProps) {
             />
           </form>
         </div>
-        {showAlert && <Alert onClick={handleSendClick} />}
+        {showAlert && <Alert onClick={handleSendClick} onCancel={handleCancelClick}/>}
       </div>
     </Paper>
   );

@@ -48,7 +48,7 @@ const Header = (props: any) => {
     <div className={classes.root}>
       <ArrowLeftIcon className={classes.secondary} />
       <Typography
-        variant="h4"
+        variant="h3"
         className={classes.back}
         onClick={handleClickBack}
       >

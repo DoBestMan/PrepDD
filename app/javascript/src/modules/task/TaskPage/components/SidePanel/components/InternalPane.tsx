@@ -13,11 +13,12 @@ import CreatePrivateTaskMessage from '../../../../../../graphql/mutations/Create
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      padding: '24px',
     },
     body: {
+      height: 'calc(100vh - 254px)',
+      padding: '12px 24px',
       borderBottom: '1px solid #D8D8D8',
-      height: 'calc(100vh - 364px)',
+      overflow: 'auto', 
     },
     invisible: {
       display: 'none',
@@ -26,16 +27,15 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: 'rgba(39, 146, 162, 0.1)',
     },
     footer: {
-      padding: '16px 24px',
+      padding: '6px 24px',
     },
     messageBox: {
       display: 'flex',
-      marginBottom: '12px',
+      alignItems: 'center', 
     },
     input: {
       display: 'block',
       width: '100%',
-      marginTop: '6px',
       color: '#606060',
       fontFamily: cs.FONT.family,
       fontWeight: cs.FONT.weight.regular,
@@ -124,13 +124,13 @@ export default function InternalPane(props: InternalPaneProps) {
       <div className={classes.body}>
         {messages.map((message: any, index: number) => {
           return (
-            <Message key={index} data={message} className={classes.message} />
+            <Message key={index} data={message} className={classes.message} padding />
           );
         })}
       </div>
       <div className={classes.footer}>
         <div className={classes.messageBox}>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{width: '100%'}}>
             <TextField
               id="new-message-input"
               autoComplete="off"

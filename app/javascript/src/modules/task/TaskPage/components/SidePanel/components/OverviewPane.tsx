@@ -27,7 +27,7 @@ import {UserTasks_userTasks} from '../../../../../../graphql/queries/__generated
 import {
   SearchCompanyUsers_searchCompanyUsers_teams,
   SearchCompanyUsers_searchCompanyUsers_users,
-} from '../../../../../common/__generated__/SearchCompanyUsers';
+} from '../../../../../../helpers/__generated__/SearchCompanyUsers';
 import {useUpdateTask} from '../../../../../../graphql/mutations/UpdateTask';
 import {useAddTaskOwners} from '../../../../../../graphql/mutations/AddTaskOwners';
 
@@ -110,6 +110,18 @@ const useStyles = makeStyles((theme: Theme) =>
         border: 'none',
       },
     },
+    morePaper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      width: '200px',
+      position: 'absolute',
+      top: '28px',
+      right: '3px',
+      padding: '9px',
+      boxSizing: 'border-box',
+      border: '2px solid #D8D8D8',
+      borderRadius: '3px',
+    },
   })
 );
 
@@ -127,6 +139,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
   const classes = useStyles();
 
   const [openPriority, setOpenPriority] = useState<boolean>(false);
+  const [moreHover, setMoreHover] = useState<boolean>(false);
 
   const [owners, setOwners] = useState<
     (
@@ -138,24 +151,7 @@ export default function OverviewPane(props: OverviewPaneProps) {
     (
       | SearchCompanyUsers_searchCompanyUsers_teams
       | SearchCompanyUsers_searchCompanyUsers_users)[]
-  >([
-    ...(task.userOwners || []).map(user => {
-      return {
-        __typename: 'User',
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-        profileUrl: user.profileUrl,
-      } as SearchCompanyUsers_searchCompanyUsers_users;
-    }),
-    ...(task.teamOwners || []).map(team => {
-      return {
-        __typename: 'Team',
-        id: team.id,
-        name: team.name,
-      } as SearchCompanyUsers_searchCompanyUsers_teams;
-    }),
-  ]);
+  >([]);
 
   const [
     updateTask,
@@ -176,11 +172,17 @@ export default function OverviewPane(props: OverviewPaneProps) {
     ) as SearchCompanyUsers_searchCompanyUsers_users[]).map(
       owner => owner.email || ''
     ),
-    userReviewers: [],
+    userReviewers: (reviewers.filter(
+      reviewer => reviewer.__typename === 'User'
+    ) as SearchCompanyUsers_searchCompanyUsers_users[]).map(
+      reviewer => reviewer.email || ''
+    ),
     teamOwners: owners
       .filter(owner => owner.__typename === 'Team')
       .map(owner => owner.id),
-    teamReviewers: [],
+    teamReviewers: reviewers
+      .filter(reviewer => reviewer.__typename === 'Team')
+      .map(reviewer => reviewer.id),
   });
 
   useEffect(() => {
@@ -209,6 +211,33 @@ export default function OverviewPane(props: OverviewPaneProps) {
       addTaskOwners();
     }
   }, [owners]);
+
+  useEffect(() => {
+    setReviewers([
+      ...(task.userReviewers || []).map(user => {
+        return {
+          __typename: 'User',
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          profileUrl: user.profileUrl,
+        } as SearchCompanyUsers_searchCompanyUsers_users;
+      }),
+      ...(task.teamReviewers || []).map(team => {
+        return {
+          __typename: 'Team',
+          id: team.id,
+          name: team.name,
+        } as SearchCompanyUsers_searchCompanyUsers_teams;
+      }),
+    ]);
+  }, [task.userReviewers, task.teamReviewers]);
+
+  useEffect(() => {
+    if (task.id) {
+      addTaskOwners();
+    }
+  }, [reviewers]);
 
   useEffect(() => {
     const fetchTask = idx(
@@ -248,7 +277,19 @@ export default function OverviewPane(props: OverviewPaneProps) {
     asyncSetState();
   };
 
-  const handleRemoveOwner = (removeId: number) => {};
+  const handleRemoveOwner = (removeId: number) => {
+    setOwners([
+      ...owners.slice(0, removeId), 
+      ...owners.slice(removeId + 1)
+    ]);
+  };
+
+  const handleRemoveReviewer = (removeId: number) => {
+    setReviewers([
+      ...reviewers.slice(0, removeId), 
+      ...reviewers.slice(removeId + 1)
+    ]);
+  };
 
   const handleChangePriority = (newPriority: string) => {
     const asyncSetState = async () => {
@@ -296,7 +337,9 @@ export default function OverviewPane(props: OverviewPaneProps) {
           </Typography>
           <div className={classes.flex} style={{flexWrap: 'wrap'}}>
             {owners &&
-              owners.map(
+              owners
+                .slice(0, 5)
+                .map(
                 (
                   owner:
                     | SearchCompanyUsers_searchCompanyUsers_users
@@ -320,6 +363,54 @@ export default function OverviewPane(props: OverviewPaneProps) {
                   );
                 }
               )}
+
+              {owners && owners.length > 5 && (
+                <div 
+                  onMouseOver={() => setMoreHover(true)}
+                  onMouseLeave={() => setMoreHover(false)}
+                  style={{position: 'relative'}}                  
+                >
+                  <NameLabel 
+                    label={`${owners.length - 5}`}
+                  />
+                  {moreHover && (
+                    <Paper
+                      className={classes.morePaper}
+                      elevation={0}
+                      onMouseOver={() => setMoreHover(true)}
+                      onMouseLeave={() => setMoreHover(false)}
+                    >
+                      {owners
+                        .slice(2)
+                        .map(
+                          (
+                            owner:
+                              | SearchCompanyUsers_searchCompanyUsers_users
+                              | SearchCompanyUsers_searchCompanyUsers_teams,
+                            index: number
+                          ) => {
+                            return owner.__typename === 'User' ? (
+                              <NameLabel
+                                key={index}
+                                type="user"
+                                label={owner.fullName}
+                                logo={owner.profileUrl as string}
+                                onClose={() => handleRemoveOwner(index)}
+                              />
+                            ) : (
+                              <NameLabel
+                                key={index}
+                                label={owner.name}
+                                onClose={() => handleRemoveOwner(index)}
+                              />
+                            );
+                          }
+                        )}
+                    </Paper>
+                  )}
+                </div>
+              )}
+
             <InviteForm owners={owners} setOwners={setOwners} size="small" />
           </div>
         </div>
@@ -333,7 +424,9 @@ export default function OverviewPane(props: OverviewPaneProps) {
           </Typography>
           <div className={classes.flex} style={{flexWrap: 'wrap'}}>
             {reviewers &&
-              reviewers.map(
+              reviewers
+                .slice(0, 5)
+                .map(
                 (
                   reviewer:
                     | SearchCompanyUsers_searchCompanyUsers_users
@@ -346,11 +439,63 @@ export default function OverviewPane(props: OverviewPaneProps) {
                       type="user"
                       label={reviewer.fullName}
                       logo={reviewer.profileUrl as string}
+                      onClose={() => handleRemoveReviewer(index)}
                     />
                   ) : (
-                    <NameLabel key={index} label={reviewer.name} selected />
+                    <NameLabel
+                      key={index}
+                      label={reviewer.name}
+                      onClose={() => handleRemoveReviewer(index)}
+                    />
                   );
                 }
+              )}
+
+              {reviewers && reviewers.length > 5 && (
+                <div 
+                  onMouseOver={() => setMoreHover(true)}
+                  onMouseLeave={() => setMoreHover(false)}
+                  style={{position: 'relative'}}                  
+                >
+                  <NameLabel 
+                    label={`${reviewers.length - 5}`}
+                  />
+                  {moreHover && (
+                    <Paper
+                      className={classes.morePaper}
+                      elevation={0}
+                      onMouseOver={() => setMoreHover(true)}
+                      onMouseLeave={() => setMoreHover(false)}
+                    >
+                      {reviewers
+                        .slice(5)
+                        .map(
+                          (
+                            reviewer:
+                              | SearchCompanyUsers_searchCompanyUsers_users
+                              | SearchCompanyUsers_searchCompanyUsers_teams,
+                            index: number
+                          ) => {
+                            return reviewer.__typename === 'User' ? (
+                              <NameLabel
+                                key={index}
+                                type="user"
+                                label={reviewer.fullName}
+                                logo={reviewer.profileUrl as string}
+                                onClose={() => handleRemoveReviewer(index)}
+                              />
+                            ) : (
+                              <NameLabel
+                                key={index}
+                                label={reviewer.name}
+                                onClose={() => handleRemoveReviewer(index)}
+                              />
+                            );
+                          }
+                        )}
+                    </Paper>
+                  )}
+                </div>
               )}
             <InviteForm
               owners={reviewers}

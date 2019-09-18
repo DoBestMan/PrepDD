@@ -222,7 +222,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
-    console.log('Accepted Files: ', acceptedFiles);
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
       form_data.append(`files[]`, file);
@@ -453,7 +452,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
           <Typography variant="h2">{selectedTemplate.name}</Typography>
           <div className={classes.grow} />
           {selected.length > 0 && (
-            <Typography variant="h4" className={classes.selection}>
+            <Typography variant="h3" className={classes.selection}>
               {selected.length} Task(s) Selected
             </Typography>
           )}
@@ -631,7 +630,7 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
                     <UploadIcon style={{fontSize: '120px'}} />
                     <br />
                     <Typography
-                      variant="h4"
+                      variant="h3"
                       className={classes.uploadLabelColor}
                     >
                       Drag and Drop/

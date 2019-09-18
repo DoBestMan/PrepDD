@@ -275,7 +275,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       searchResult.companies &&
       !searchResult.companies.length
     ) {
-      return <Typography variant="h4">No match result</Typography>;
+      return <Typography variant="h3">No match result</Typography>;
     } else {
       return null;
     }

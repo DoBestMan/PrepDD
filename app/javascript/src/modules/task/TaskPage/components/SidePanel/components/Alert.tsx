@@ -21,24 +21,31 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AlertProps {
   onClick?: () => void;
+  onCancel?: () => void;
 }
 
 export default function Alert(props: any) {
   const classes = useStyles();
-  const {onClick} = props;
+  const {onClick, onCancel} = props;
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    
+    if (onClick) onClick();
+  }
 
   return (
-    <div className={classes.root}>
+    <form className={classes.root} onSubmit={handleSubmit}>
       <WarningIcon />
       <Typography variant="h6" style={{marginLeft: '12px'}}>
         This message and its content will be visible to the public
       </Typography>
-      <Button variant="outlined" className={classes.mr12}>
+      <Button variant="outlined" className={classes.mr12} onClick={onCancel}>
         Cancel
       </Button>
-      <Button onClick={onClick} variant="contained">
+      <Button type="submit" variant="contained">
         Post
       </Button>
-    </div>
+    </form>
   );
 }

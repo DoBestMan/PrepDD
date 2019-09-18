@@ -47,29 +47,29 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function TaskPage() {
   const classes = useStyles();
   /* description of initial state */
-  const [openSidePanel, setOpenSidePanel] = useState<boolean>(false);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [addUsersModal, setAddUsersModal] = useState<boolean>(false);
   const [lists, setLists] = useState<UserLists_userLists_lists[]>([]);
   const [tasks, setTasks] = useState<UserTasks_userTasks[]>([]);
   const [selectedLists, setSelectedLists] = useState<string[]>([]);
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [multiTasks, setMultiTasks] = useState<any[]>([]);
+  const [multiTasks, setMultiTasks] = useState<string[]>([]);
   const [selectedTask, setSelectedTask] = useState<UserTasks_userTasks>({
-    __typename: "Task",
+    __typename: 'Task',
     id: '',
     name: '',
     priority: '',
-    status: '', 
+    status: '',
     dueDate: '',
     updatedAt: '',
-    listNumber: null, 
-    list: null, 
-    userOwners: null, 
-    teamOwners: null, 
-    userReviewers: null, 
-    teamReviewers: null, 
+    listNumber: null,
+    list: null,
+    userOwners: null,
+    teamOwners: null,
+    userReviewers: null,
+    teamReviewers: null,
   });
+  const [paneIndex, setPaneIndex] = useState<number>(0);
 
   const {loading, data, error} = useUserLists({});
   const {
@@ -106,9 +106,6 @@ export default function TaskPage() {
 
   const openDeleteModal = () => setDeleteModal(true);
   const closeDeleteModal = () => setDeleteModal(false);
-
-  const openAddUsersModal = () => setAddUsersModal(true);
-  const closeAddUsersModal = () => setAddUsersModal(false);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
     event.persist();
@@ -175,8 +172,8 @@ export default function TaskPage() {
   };
 
   return (
-    <div className={clsx(classes.paper, openSidePanel && classes.paperShift)}>
-      <ClickAwayListener onClickAway={handleClickAway}>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <div className={clsx(classes.paper, multiTasks.length && classes.paperShift)}>
         <div>
           <TaskToolbar
             lists={lists}
@@ -186,7 +183,6 @@ export default function TaskPage() {
             setSelectedSections={setSelectedSections}
             openDeleteModal={openDeleteModal}
             addUsersModal={addUsersModal}
-            openAddUsersModal={openAddUsersModal}
             multiTasks={multiTasks}
           />
           {deleteModal && (
@@ -203,19 +199,20 @@ export default function TaskPage() {
             taskId={selectedTask.id}
             multiTasks={multiTasks}
             setMultiTasks={setMultiTasks}
-            setOpen={setOpenSidePanel}
             setCurrentTask={setSelectedTask}
-            onScroll={handleScroll}
+            setPaneIndex={setPaneIndex}
+            onScroll={handleScroll}            
           />
         </div>
-      </ClickAwayListener>
-      <SidePanel
-        open={openSidePanel}
-        selectedTask={selectedTask}
-        setSelectedTask={setSelectedTask}
-        tasks={tasks}
-        setTasks={setTasks}
-      />
-    </div>
+        <SidePanel
+          open={multiTasks.length ? true : false}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+          tasks={tasks}
+          setTasks={setTasks}
+          paneIndex={paneIndex}
+        />
+      </div>
+    </ClickAwayListener>
   );
 }

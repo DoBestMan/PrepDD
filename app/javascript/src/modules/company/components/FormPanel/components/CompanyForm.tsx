@@ -381,7 +381,7 @@ export default function CompanyForm(props: CompanyFormProps) {
       !result.users.length
     ) {
       return (
-        <Typography variant="h4" style={{marginTop: '12px'}}>
+        <Typography variant="h3" style={{marginTop: '12px'}}>
           No match result
         </Typography>
       );

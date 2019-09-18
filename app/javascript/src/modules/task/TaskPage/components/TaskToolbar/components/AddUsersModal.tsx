@@ -1,183 +1,60 @@
-import React, {useState, useEffect} from 'react';
-import clsx from 'clsx';
+import React, {useState} from 'react';
 import idx from 'idx';
+import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
-import {
-  Paper,
-  Typography,
-  List,
-  ListItem,
+import { 
   ClickAwayListener,
+  Typography, 
 } from '@material-ui/core';
-import RightIcon from '@material-ui/icons/KeyboardArrowRightSharp';
 
-import DateFnsUtils from '@date-io/date-fns';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import Panel from '../../../../../common/Panel';
+import OwnerPane from './OwnerPane';
+import ReviewerPane from './ReviewerPane';
 
-import * as cs from '../../../../../../constants/theme';
-import InputForm from '../../../../../common/EditableInputForm';
-import InviteForm from '../../../../../common/InviteForm';
-import NameLabel from '../../../../../common/NameLabel';
-
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) => 
   createStyles({
     root: {
-      padding: '0px 24px 0px 24px',
-    },
-    invisible: {
-      display: 'none',
-    },
-    metaBox: {
-      borderBottom: '1px solid #D8D8D8',
-      marginTop: '24px',
-    },
-    metaForm: {
-      display: 'flex',
-      marginBottom: '24px',
-    },
-    flex: {
-      display: 'flex',
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    addButton: {
-      border: '1px solid #D8D8D8',
+      position: 'absolute', 
+      width: '300px', 
+      top: '45px', 
+      right: '12px',
+      backgroundColor: '#FFFFFF', 
+      border: '2px solid #D8D8D8', 
       borderRadius: '3px',
-      fontSize: '15px',
+      zIndex: 2, 
     },
-    secondary: {
-      color: '#606060',
-    },
-    label: {
-      minWidth: '80px',
-    },
-    priority: {
-      display: 'flex',
-      width: 'fit-content',
-      height: '28px',
-      cursor: 'pointer',
-      color: '#509E6D',
-      background: '#FFFFFF',
-      alignItems: 'center',
-      padding: '1px 6px 1px 0px',
-      marginRight: '60px',
-      border: '1px solid #D8D8D8',
-      borderRadius: '3px',
-    },
-    transform: {
-      textTransform: 'capitalize',
-      paddingLeft: '6px',
-    },
-    priorityDropdown: {
-      position: 'absolute',
-      top: '27px',
-      left: '0px',
-      width: 'max-content',
-      color: '#509E6D',
-      background: '#FFFFFF',
-      border: '1px solid #D8D8D8',
-      borderRadius: '3px',
-    },
-    date: {
-      '& .MuiInput-root': {
-        border: '1px solid #D8D8D8',
-        borderRadius: '3px',
-      },
-      '& input': {
-        fontFamily: cs.FONT.family,
-        fontWeight: cs.FONT.weight.regular,
-        fontSize: cs.FONT.size.xs,
-        textTransform: 'none',
-        paddingLeft: '12px',
-      },
-      '&:selected': {
-        color: '#3A84FF',
-      },
-      '& .MuiInput-underline:before, .MuiInput-underline:after, .MuiInput-underline:hover:not(.Mui-disabled):before': {
-        border: 'none',
-      },
-    },
+    title: {
+      padding: '24px 24px 0px 24px', 
+    }, 
   })
 );
 
+const labels = [
+  {label: 'Owner'}, 
+  {label: 'Reviewer'}, 
+];
+
 interface AddUsersModalProps {
-  test: string;
+  setOpenAddUsersModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AddUsersModal(props: AddUsersModalProps) {
+export default function AddUsersModal(props: AddUsersModalProps) {
+  const {setOpenAddUsersModal} = props;
   const classes = useStyles();
 
-  const [owners, setOwners] = useState<any>([]);
-  const [reviewers, setReviewers] = useState<any>([]);
-
-  const handleRemoveOwner = () => null;
-
   return (
-    <div>
-      <div className={classes.metaForm}>
-        <Typography
-          variant="h6"
-          className={clsx(classes.secondary, classes.label)}
-        >
-          Owner
-        </Typography>
-        <div className={classes.flex} style={{flexWrap: 'wrap'}}>
-          {owners &&
-            owners.map((owner: any, index: number) => {
-              return true ? (
-                <NameLabel
-                  key={index}
-                  type="user"
-                  label={owner.fullName}
-                  logo={owner.profileUrl as string}
-                  onClose={() => handleRemoveOwner()}
-                />
-              ) : (
-                <NameLabel
-                  key={index}
-                  label={owner.name}
-                  onClose={() => handleRemoveOwner()}
-                />
-              );
-            })}
-          <InviteForm owners={owners} setOwners={setOwners} size="small" />
+    <ClickAwayListener onClickAway={() => setOpenAddUsersModal(false)}>
+      <div className={classes.root}>
+        <div className={classes.title}>
+          <Typography variant="h4">
+            Task Assignments
+          </Typography>
         </div>
+        <Panel labels={labels} padding>
+          <OwnerPane />
+          <ReviewerPane />
+        </Panel>
       </div>
-
-      <div className={classes.metaForm}>
-        <Typography
-          variant="h6"
-          className={clsx(classes.secondary, classes.label)}
-        >
-          Reviewer
-        </Typography>
-        <div className={classes.flex} style={{flexWrap: 'wrap'}}>
-          {reviewers &&
-            reviewers.map((reviewer: any, index: number) => {
-              return reviewer.__typename === 'User' ? (
-                <NameLabel
-                  key={index}
-                  type="user"
-                  label={reviewer.fullName}
-                  logo={reviewer.profileUrl as string}
-                />
-              ) : (
-                <NameLabel key={index} label={reviewer.name} selected />
-              );
-            })}
-          <InviteForm
-            owners={reviewers}
-            setOwners={setReviewers}
-            size="small"
-          />
-        </div>
-      </div>
-    </div>
-  );
+    </ClickAwayListener>
+  )
 }
-
-export default AddUsersModal;

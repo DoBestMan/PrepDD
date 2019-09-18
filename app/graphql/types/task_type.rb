@@ -42,18 +42,14 @@ module Types
       object.task_owners.where(
         task_ownerable_type: 'User', owner_type: 'Reviewer'
       )
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def team_reviewers
       object.task_owners.where(
         task_ownerable_type: 'Team', owner_type: 'Reviewer'
       )
-        .map(
-        &:task_ownerable
-      )
+        .map(&:task_ownerable)
     end
 
     def messages

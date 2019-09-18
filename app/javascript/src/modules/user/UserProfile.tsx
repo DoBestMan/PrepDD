@@ -21,7 +21,10 @@ const useStyle = makeStyles({
   },
 });
 
-const labels = ['Personal Information', 'Notification Settings'];
+const labels = [
+  {label: 'Personal Information'}, 
+  {label: 'Notification Settings'},
+];
 
 export default function Profile(props: {path?: string}) {
   const classes = useStyle();

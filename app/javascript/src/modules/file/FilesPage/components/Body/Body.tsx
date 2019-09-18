@@ -20,7 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const labels = ['Single Task', 'Multiple Tasks'];
+const labels = [
+  { label: 'Single Task' },
+  { label: 'Multiple Tasks' },
+];
 
 export default function Body() {
   const classes = useStyles();

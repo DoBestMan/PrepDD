@@ -21,12 +21,23 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
       fontWeight: 600,
     },
-    image: {
+    userImage: {
       width: '18px',
       height: '18px',
       backgroundColor: '#2792A2',
       fontSize: '9px',
       marginRight: '6px',
+    },
+    teamImage: {
+      width: '18px',
+      height: '18px',
+      backgroundColor: '#FFFFFF', 
+      border: '1px solid #2792A2',
+      fontSize: '9px',
+      marginRight: '6px',
+      '& p': {
+        color: '#2792A2', 
+      }
     },
     close: {
       fontSize: '12px',
@@ -60,8 +71,10 @@ const NameLabel = React.forwardRef(
             alt={label}
           />
         ) : (
-          type === 'user' && (
-            <DefaultUserImage userName={label} className={classes.image} />
+          (type === 'user' || type === 'team') && (
+            <DefaultUserImage 
+              userName={label} 
+              className={clsx(type === 'user' ? classes.userImage : classes.teamImage)} />
           )
         )}
         <div className={classes.label}>{label}</div>

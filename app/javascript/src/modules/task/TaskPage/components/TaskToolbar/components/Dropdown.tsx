@@ -102,7 +102,7 @@ export default function Dropdown(props: DropdownProps) {
       className={clsx(classes.root, variant === 'outlined' && classes.outlined)}
     >
       <div className={classes.box} onClick={() => setOpen(!open)}>
-        <Typography variant="h4">{renderLabel()}</Typography>
+        <Typography variant="h3">{renderLabel()}</Typography>
         <ArrowDownIcon style={{marginLeft: '6px'}} />
       </div>
 
