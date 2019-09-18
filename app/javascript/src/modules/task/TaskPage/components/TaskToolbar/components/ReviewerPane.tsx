@@ -90,6 +90,23 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingLeft: '0px',
       paddingRight: '0px',
     },
+    relative: {
+      position: 'relative',
+    },
+    morePaper: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      width: '200px',
+      position: 'absolute',
+      top: '26px',
+      right: '5px',
+      padding: '9px',
+      boxSizing: 'border-box',
+      backgroundColor: '#FFFFFF',
+      border: '1px solid #D8D8D8',
+      borderRadius: '3px',
+      zIndex: 2, 
+    },
   })
 );
 
@@ -109,6 +126,7 @@ export default function NotificationPane(props: NotificationPaneProps) {
   const {state} = useGlobalState();
 
   const [openInvitePanel, setOpenInvitePanel] = useState<boolean>(false);
+  const [moreHover, setMoreHover] = useState<boolean>(false);
   const [reviewers, setReviewers] = useState<(SearchCompanyUsers_searchCompanyUsers_users | SearchCompanyUsers_searchCompanyUsers_teams)[]>([]);
   const [searchUsername, setSearchUsername] = useState<string>('');
   const [searchResult, setSearchResult] = useState<
@@ -276,6 +294,47 @@ export default function NotificationPane(props: NotificationPaneProps) {
                   />
                 );
               }
+            )}
+            {reviewers && reviewers.length > 2 && (
+              <div
+                className={classes.relative}
+                onMouseOver={() => setMoreHover(true)}
+                onMouseLeave={() => setMoreHover(false)}
+              >
+                <NameLabel label={`+${reviewers.length - 2}`} />
+                {moreHover && (
+                  <Paper
+                    className={classes.morePaper}
+                    elevation={0}
+                    onMouseOver={() => setMoreHover(true)}
+                    onMouseLeave={() => setMoreHover(false)}
+                  >
+                    {reviewers && reviewers.slice(2).map(      
+                      (
+                        reviewer:
+                          | SearchCompanyUsers_searchCompanyUsers_users
+                          | SearchCompanyUsers_searchCompanyUsers_teams,
+                        index: number
+                      ) => {
+                        return reviewer.__typename === 'User' ? (
+                          <NameLabel
+                            key={index}
+                            type="user"
+                            label={reviewer.fullName}
+                            logo={reviewer.profileUrl as string}
+                          />
+                        ) : (
+                          <NameLabel
+                            key={index}
+                            type="team"
+                            label={reviewer.name}
+                          />
+                        );
+                      }
+                    )}
+                  </Paper>
+                )}
+              </div>
             )}
         </div>
 
