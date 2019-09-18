@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
       opacity: 0.5,
     },
     content: {
+      overflowWrap: 'break-word', 
       marginTop: '12px',
       marginLeft: '30px',
     },
