@@ -33,8 +33,6 @@ export default function DefaultUserImage(props: DefaultUserImageProps) {
   const {className, style, userName} = props;
   const classes = useStyles();
 
-  console.log("Style: ", style);
-
   return (
     <div className={clsx(classes.root, className)} style={style}>
       <p className={classes.label}>

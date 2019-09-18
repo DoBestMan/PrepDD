@@ -91,12 +91,20 @@ interface TaskDetailPageProps {
   open: boolean;
   selectedTask: UserTasks_userTasks;
   tasks: UserTasks_userTasks[];
+  paneIndex: number;
   setSelectedTask: React.Dispatch<React.SetStateAction<UserTasks_userTasks>>;
   setTasks: React.Dispatch<React.SetStateAction<UserTasks_userTasks[]>>;
 }
 
 export default function TaskDetailPage(props: TaskDetailPageProps) {
-  const {open, selectedTask, tasks, setSelectedTask, setTasks} = props;
+  const {
+    open, 
+    selectedTask, 
+    tasks, 
+    paneIndex, 
+    setSelectedTask, 
+    setTasks
+  } = props;
   const classes = useStyles();
 
   const [openStatus, setOpenStatus] = useState<boolean>(false);
@@ -182,7 +190,7 @@ export default function TaskDetailPage(props: TaskDetailPageProps) {
           <MoreIcon />
         </div>
       </div>
-      <Panel labels={labels} padding>
+      <Panel labels={labels} paneIndex={paneIndex} padding>
         <OverviewPane
           task={selectedTask}
           tasks={tasks}

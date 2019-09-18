@@ -222,7 +222,6 @@ export default function CreateTemplateStep(props: CreateTemplateStepProps) {
 
   const handleDrop = (acceptedFiles: File[]) => {
     // Handle importing templates
-    console.log('Accepted Files: ', acceptedFiles);
     const form_data = new FormData();
     acceptedFiles.map((file: File, index: number) => {
       form_data.append(`files[]`, file);

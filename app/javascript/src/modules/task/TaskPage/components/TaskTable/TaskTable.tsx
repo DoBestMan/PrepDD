@@ -144,6 +144,7 @@ function TaskTable(props: any) {
     setCurrentTask,
     onScroll,
     setMultiTasks,
+    setPaneIndex, 
     history,
   } = props;
   const classes = useStyles();
@@ -207,17 +208,41 @@ function TaskTable(props: any) {
         updatedTask.status = 'Completed';
         break;
       default:
-        updatedTask.status = 'Rejected';
+        updatedTask.status = 'Reject';
         break;
     }
     asyncSetState(updatedTask);
   };
 
+  const handleClickReject = (
+    event: React.MouseEvent<HTMLDivElement>,
+    task: UserTasks_userTasks
+  ) => {
+    const asyncSetState = async (task: UserTasks_userTasks) => {
+      let updatedTask = task;
+      
+      switch (task.status) {
+        case 'Deliver':
+          await setPaneIndex(2);
+          updatedTask.status = 'Reject';
+          break;
+        case 'Accept':
+          await setPaneIndex(3);
+          updatedTask.status = 'Reject';
+          break;
+      }
+
+      await setSelectedTask(updatedTask);
+      updateTask();
+    };
+    asyncSetState(task);
+  }
+
   const handleClickRow = (e: any, task: UserTasks_userTasks) => {
     var pressed = e.nativeEvent.ctrlKey || e.nativeEvent.metaKey;
     updateMultipleSelection(task.id);
     if (!pressed) {
-      if (task.id === taskId) {
+      if (task.id === taskId && task.status === 'Reject') {
         setMultiTasks([]);
         setCurrentTask({
           __typename: 'Task',
@@ -265,14 +290,14 @@ function TaskTable(props: any) {
         <div className={clsx(classes.flex, classes.relative)}>
           {task.teamOwners && 
             task.teamOwners.map((owner: UserTasks_userTasks_teamOwners, index: number) => {
-              const isEnd = task.userOwners && !task.userOwners.length && 
+              const isLast = task.userOwners && !task.userOwners.length && 
                 task.teamOwners && task.teamOwners.length === index + 1;
 
               return (
                 <DefaultUserImage 
                   key={owner.id} 
                   userName={owner.name} 
-                  className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                  className={clsx(classes.image, isLast && classes.hoverRow)} 
                   style={{right: `${index * 12}px`}}
                 />
               )
@@ -280,18 +305,18 @@ function TaskTable(props: any) {
           }
           {task.userOwners && task.userOwners.map((owner: UserTasks_userTasks_userOwners, index: number) => {            
             const teamOwners = task.teamOwners && task.teamOwners.length || 0;
-            const isEnd = task.userOwners && task.userOwners.length === index + 1;
+            const isLast = task.userOwners && task.userOwners.length === index + 1;
 
             return owner.profileUrl ? (
               <img 
                 src={owner.profileUrl} 
-                className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                className={clsx(classes.image, isLast && classes.hoverRow)} 
                 style={{right: `${(index + teamOwners) * 12}px`}}
               />
             ) : (
               <DefaultUserImage 
                 key={owner.id} 
-                className={clsx(classes.image, isEnd && classes.hoverRow)} 
+                className={clsx(classes.image, isLast && classes.hoverRow)} 
                 userName={owner.fullName} 
                 style={{right: `${(index + teamOwners) * 12}px`}}
               />
@@ -372,6 +397,7 @@ function TaskTable(props: any) {
 
               return (
                 <TaskTableRow
+                  key={index}
                   taskId={taskId}
                   history={history}
                   onClick={(e: any) => handleClickRow(e, task)}
@@ -379,8 +405,8 @@ function TaskTable(props: any) {
                   index={index}
                   task={task}
                   isSelected={isSelected}
-                  key={index}
                   handleClickPriority={handleClickPriority}
+                  handleClickReject={handleClickReject}
                   renderOthers={renderOthers}
                   classes={classes}
                   multiTasks={multiTasks}
@@ -400,6 +426,7 @@ function TaskTableRow(props: any) {
     isSelected,
     classes,
     handleClickPriority,
+    handleClickReject,
     renderOthers,
     onClick,
     onMouseOver,
@@ -457,8 +484,9 @@ function TaskTableRow(props: any) {
           {isSelected &&
             (task.status === 'Deliver' || task.status === 'Accept') && (
               <StyledItem
-                currentStatus="Rejected"
+                currentStatus="Reject"
                 className={classes.rejectStatus}
+                onClick={(event: React.MouseEvent<HTMLDivElement>) => handleClickReject(event, task)}
                 selected
               />
             )}

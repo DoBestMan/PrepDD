@@ -69,6 +69,7 @@ export default function TaskPage() {
     userReviewers: null,
     teamReviewers: null,
   });
+  const [paneIndex, setPaneIndex] = useState<number>(0);
 
   const {loading, data, error} = useUserLists({});
   const {
@@ -199,7 +200,8 @@ export default function TaskPage() {
             multiTasks={multiTasks}
             setMultiTasks={setMultiTasks}
             setCurrentTask={setSelectedTask}
-            onScroll={handleScroll}
+            setPaneIndex={setPaneIndex}
+            onScroll={handleScroll}            
           />
         </div>
         <SidePanel
@@ -208,6 +210,7 @@ export default function TaskPage() {
           setSelectedTask={setSelectedTask}
           tasks={tasks}
           setTasks={setTasks}
+          paneIndex={paneIndex}
         />
       </div>
     </ClickAwayListener>

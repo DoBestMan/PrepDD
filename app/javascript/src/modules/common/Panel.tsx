@@ -1,4 +1,4 @@
-import React, {ReactComponentElement} from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import {Theme, makeStyles, createStyles} from '@material-ui/core/styles';
 import {Tabs, Tab} from '@material-ui/core';
@@ -42,6 +42,7 @@ interface PanelProps {
   children: React.ReactNode;
   title?: string;
   labels: any[];
+  paneIndex?: number;
   padding?: boolean;
 }
 
@@ -53,9 +54,14 @@ interface NewPaneType {
 }
 
 export default function Panel(props: PanelProps) {
-  const {children, title, labels, padding, ...others} = props;
+  const {children, title, labels, paneIndex, padding, ...others} = props;
   const classes = useStyles();
   const [index, setIndex] = React.useState<number>(0);
+
+  useEffect(() => {
+    if (paneIndex) 
+      setIndex(paneIndex);
+  }, [paneIndex])
 
   const handleChange = (event: unknown, newIndex: number) => setIndex(newIndex);
 
